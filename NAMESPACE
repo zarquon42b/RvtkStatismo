@@ -1,3 +1,4 @@
 export(vtkSimpleMesh)
+export(vtkWrite)
 importFrom(Rcpp,evalCpp)
 useDynLib(Rvtk)
