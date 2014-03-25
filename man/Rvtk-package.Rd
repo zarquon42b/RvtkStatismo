@@ -1,40 +1,23 @@
-\name{Rvtk-package}
-\alias{Rvtk-package}
-\alias{Rvtk}
 \docType{package}
-\title{
-What the package does (short line)
-}
+\name{Rvtk-package}
+\alias{Rvtk}
+\alias{Rvtk-package}
+\title{Interface between R and vtk-libraries for mesh operations}
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Aims to provide meshing functionality from vtk for R.
 }
 \details{
-\tabular{ll}{
-Package: \tab Rvtk\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-03-25\cr
-License: \tab What Licence is it under ?\cr
-}
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+\tabular{ll}{ Package: \tab Rvtk\cr Type: \tab Package\cr
+Version: \tab 0.1\cr Date: \tab 2014-03-25\cr License: \tab
+GPL\cr LazyLoad: \tab yes\cr }
 }
 \author{
-Who wrote it
+Stefan Schlager
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Maintainer: Stefan Schlager <zarquon42@gmail.com>
 }
 \references{
-~~ Literature or other references for background information ~~
+To be announced
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
-~~ the R documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-%% ~~ simple examples of the most important functions ~~
-}
+\keyword{package}
+

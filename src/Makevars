@@ -1,5 +1,4 @@
 PKG_CPPFLAGS=-I/usr/include/vtk-5.8
-
 LIBPATH = -L/usr/lib -L/usr/lib/vtk-5.8
-
-PKG_LIBS = $(LIBPATH) -lvtkVolumeRendering -lvtkRendering -lvtkIO -lvtkGraphics -lvtkImaging -lvtkFiltering -lvtkCommon -lvtksys -lX11 -lXt -lGL -lstdc++
+PKG_LIBS = $(LIBPATH) -lvtkCommon -lvtkIO -lvtkRendering
+#-lvtkVolumeRendering -lvtkRendering -lvtkIO -lvtkGraphics -lvtkImaging -lvtkFiltering -lvtkCommon -lvtksys -lX11 -lXt -lGL -lstdc++

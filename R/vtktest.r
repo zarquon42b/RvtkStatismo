@@ -1,7 +1,7 @@
 vtkSimple <- function(file) {
   a <- .Call("vtkSP",as.character(file))
 }
-
+#' @export
 vtkSimpleMesh <- function(mesh) {
     vb <- mesh$vb[1:3,]
     it <- mesh$it-1
