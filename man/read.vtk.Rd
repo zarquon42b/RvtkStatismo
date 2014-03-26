@@ -1,0 +1,16 @@
+\name{read.vtk}
+\alias{read.vtk}
+\title{imports vtk and vtp files}
+\usage{
+read.vtk(filename)
+}
+\arguments{
+  \item{filename}{character string}
+}
+\value{
+list of class mesh3d
+}
+\description{
+imports vtk and vtp files
+}
+

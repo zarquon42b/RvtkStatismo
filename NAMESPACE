@@ -1,4 +1,5 @@
-export(vtkSimpleMesh)
-export(vtkWrite)
+export(mesh2vtp)
+export(read.vtk)
+export(vtkRenderMesh)
 importFrom(Rcpp,evalCpp)
 useDynLib(Rvtk)

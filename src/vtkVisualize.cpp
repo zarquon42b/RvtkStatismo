@@ -17,10 +17,11 @@
 #include <vtkXMLPolyDataWriter.h>
 using namespace Rcpp;
 
-RcppExport SEXP vtkSPMat(SEXP vb_, SEXP it_)
+RcppExport SEXP vtkVisualize(SEXP vb_, SEXP it_, SEXP size_)
 {
   NumericMatrix vb(vb_);
   IntegerMatrix it(it_);
+  int size = as<int>(size_);
   vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
   //points->SetNumberOfPoints(vb.ncol());
   vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
@@ -57,8 +58,7 @@ RcppExport SEXP vtkSPMat(SEXP vb_, SEXP it_)
       triangles->InsertNextCell (triangle);
       index->InsertNextValue(i);
     }
-  }
-  
+  }  
   vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
  
   // Set the points and vertices we created as the geometry and topology of the polydata
@@ -68,10 +68,6 @@ RcppExport SEXP vtkSPMat(SEXP vb_, SEXP it_)
     polydata->SetVerts(vertices);
   if (hasFaces)
     polydata->SetPolys(triangles);
-  vtkSmartPointer<vtkXMLPolyDataWriter> writer =  vtkSmartPointer<vtkXMLPolyDataWriter>::New();
-  writer->SetFileName("test.vtp");
-  writer->SetInput(polydata);
-  //writer->Write();
   // Visualize
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInput(polydata);
@@ -79,7 +75,7 @@ RcppExport SEXP vtkSPMat(SEXP vb_, SEXP it_)
   vtkSmartPointer<vtkActor> actor =
     vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
-  actor->GetProperty()->SetPointSize(20);
+  actor->GetProperty()->SetPointSize(size);
  
   vtkSmartPointer<vtkRenderer> renderer =
     vtkSmartPointer<vtkRenderer>::New();

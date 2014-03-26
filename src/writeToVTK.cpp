@@ -35,7 +35,7 @@ RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_)
   //int pointId = 0;
   vtkSmartPointer<vtkIntArray> indexv = vtkSmartPointer<vtkIntArray>::New();
   indexv->SetNumberOfComponents(1);
-  indexv->SetName("index");
+  indexv->SetName("indexv");
   for (int i = 0; i < vb.ncol();i++) {
   
     float p[3];
@@ -70,10 +70,10 @@ RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_)
  
   // Set the points and vertices we created as the geometry and topology of the polydata
   polydata->SetPoints(points);
-  polydata->GetCellData()->AddArray(index);
-  if (!hasFaces)
-     polydata->SetVerts(vertices);    
-    polydata->GetCellData()->AddArray(indexv);
+  if (!hasFaces) {
+  polydata->SetVerts(vertices);    
+  polydata->GetCellData()->AddArray(indexv);
+  }
   if (hasFaces) {
     polydata->SetPolys(triangles);
     polydata->GetCellData()->AddArray(index);
@@ -81,8 +81,7 @@ RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_)
   vtkSmartPointer<vtkXMLPolyDataWriter> writer =  vtkSmartPointer<vtkXMLPolyDataWriter>::New();
   writer->SetFileName(filename[0]);
   writer->SetInput(polydata);
-  writer->Write();
-  
+  writer->Write();  
   return  wrap(EXIT_SUCCESS);
 }
  
