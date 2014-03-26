@@ -50,7 +50,7 @@ AC_DEFUN([AM_PATH_VTK],
     dnl A path was provided in $with_vtk...try hard to find the VTK library {{{
     VTK_PREFIX="$with_vtk"
 
-    AC_CHECK_FILE([$VTK_PREFIX/include/vtk$vtk_suffix/vtkCommonInstantiator.h], [vtkFound="OK"])
+    AC_CHECK_FILE([$VTK_PREFIX/include/vtk$vtk_suffix/vtkCommand.h], [vtkFound="OK"])
     AC_MSG_CHECKING([if VTK is installed in $VTK_PREFIX])
 
     if test -z "$vtkFound"; then
@@ -66,13 +66,14 @@ AC_DEFUN([AM_PATH_VTK],
       AC_MSG_RESULT([yes])
 
       dnl these are the VTK libraries of a default build
+      dnl VTK_LIBS="-lvtkCommon -lvtkIO -lvtkRendering"
       VTK_LIBS="-lvtkCommon -lvtkIO -lvtkRendering"
 
       dnl set VTK c,cpp,ld flags
       VTK_CFLAGS="-I$VTK_PREFIX/include/vtk$vtk_suffix"
       VTK_CXXFLAGS="$VTK_CFLAGS"
       VTK_LDFLAGS="-L$VTK_PREFIX/lib/vtk$vtk_suffix $VTK_LIBS"
-
+     					    
       dnl now, eventually check version {{{
       if test -n "$1"; then
         dnl
@@ -85,6 +86,7 @@ AC_DEFUN([AM_PATH_VTK],
         AC_MSG_CHECKING([if VTK version is at least $maj.$min.$rel])
         dnl }}}
 
+	     	 	
         dnl Compare required version of VTK against installed version: {{{
         dnl
         dnl Note that in order to be able to compile the following test program,
@@ -106,11 +108,9 @@ AC_DEFUN([AM_PATH_VTK],
                 printf("VTK version is: %d.%d.%d", VTK_MAJOR_VERSION, VTK_MINOR_VERSION, VTK_BUILD_VERSION);
                 #if VTK_MAJOR_VERSION < $maj
                 #error Installed VTK is too old !
-                #endif
-                #if VTK_MINOR_VERSION < $min
-                #error Installed VTK is too old !
-                #endif
-                #if VTK_BUILD_VERSION < $rel
+		#elif VTK_MAJOR_VERSION == $maj && VTK_MINOR_VERSION < $min
+              	#error Installed VTK is too old !
+                #elif VTK_MAJOR_VERSION == $maj && VTK_MINOR_VERSION == $min && VTK_BUILD_VERSION < $rel
                 #error Installed VTK is too old !
                 #endif
               ])
@@ -121,7 +121,7 @@ AC_DEFUN([AM_PATH_VTK],
         CXXFLAGS=$OLD_CXXFLAGS
         LDFLAGS=$OLD_LDFLAGS
         dnl }}}
-
+	
         dnl Execute $2 if version is ok, otherwise execute $3 {{{
         if test "$vtkVersion" = "OK"; then
           AC_MSG_RESULT([yes])
@@ -154,6 +154,7 @@ AC_DEFUN([AM_PATH_VTK],
     fi
     dnl }}}
     dnl
+    
   fi
 
 ])# AM_PATH_VTK
