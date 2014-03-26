@@ -5,13 +5,19 @@ vtkSimple <- function(file) {
 vtkRenderMesh <- function(mesh,size=5) {
     if (inherits(mesh,"mesh3d")) {
         vb <- mesh$vb[1:3,]
-        it <- mesh$it-1
+        if(!is.null(mesh$it))
+            it <- mesh$it-1
+        else
+            it <- matrix(0,0,0)
+        
     } else if (is.matrix(mesh)){
         vb <- t(mesh)
         it <- matrix(0,0,0)
     }
-        
-    storage.mode(it) <- "integer"
+    if (!is.numeric(vb) || !is.matrix(vb))
+        stop("no vertices to render")
+   if (!is.numeric(it) || !is.matrix(it))
+        stop("faces must be integer matrix")
     
     b <- .Call("vtkVisualize",vb, it,size)
 }
