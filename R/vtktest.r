@@ -56,7 +56,19 @@ read.vtk <- function(filename) {
     
     out <- .Call("vtkRead",filename,legacy)
     out$vb <- rbind(out$vb,1)
-    out$it <- out$it+1
+    if (ncol(out$it) == 0)
+        out$it <- NULL
+    else
+        out$it <- out$it+1
     class(out) <- "mesh3d"
     return(out)
+}
+vtkUpdateNormals <- function(mesh) {
+     
+        vb <- mesh$vb[1:3,]
+        if(!is.null(mesh$it))
+            it <- mesh$it-1
+        else
+            stop("mesh contains no faces")
+         out <- .Call("vtkWrite",filename,vb,it)
 }
