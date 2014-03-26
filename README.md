@@ -15,8 +15,8 @@ __Rvtk__ is an R-package aiming to provide some fuctionality from [VTK](http://w
 ##### install Rvcg #####
 Run the following command in R:
         
-        require(devtools)
+       require(devtools)
        install_github("zarquon42b/Rvtk", local=FALSE, args="--configure-args='--with-vtk=/usr --with-vtk-version=-5.8'" )
+       ## 'args' must specify the location and version of your VTK installation.
 
-where args must specify the location and version of your VTK installation.
-    
+
