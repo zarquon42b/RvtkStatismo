@@ -70,7 +70,12 @@ RcppExport SEXP vtkVisualize(SEXP vb_, SEXP it_, SEXP size_)
     polydata->SetPolys(triangles);
   // Visualize
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInput(polydata);
+#if VTK_MAJOR_VERSION <= 5
+  mapper->SetInputConnection(polydata->GetProducerPort());
+#else
+  mapper->SetInputData(polydata);
+#endif
+  //mapper->SetInput(polydata);
 
   vtkSmartPointer<vtkActor> actor =
     vtkSmartPointer<vtkActor>::New();

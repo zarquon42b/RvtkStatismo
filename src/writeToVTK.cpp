@@ -80,7 +80,12 @@ RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_)
   }
   vtkSmartPointer<vtkXMLPolyDataWriter> writer =  vtkSmartPointer<vtkXMLPolyDataWriter>::New();
   writer->SetFileName(filename[0]);
+#if VTK_MAJOR_VERSION <= 5
   writer->SetInput(polydata);
+#else
+  writer->SetInputData(polydata);
+#endif
+ 
   writer->Write();  
   return  wrap(EXIT_SUCCESS);
 }
