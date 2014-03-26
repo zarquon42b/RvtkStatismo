@@ -1,4 +1,4 @@
-AC_INIT([RVCG], 0.6) 
+AC_INIT([RVTK], 0.1) 
 
 m4_include([src/m4/ax_cxx_compile_stdcxx_11.m4])
 m4_include([src/m4/vtk.m4])
