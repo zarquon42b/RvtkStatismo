@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 project(Rvtk)
 set(VTK_DIR ".")
-execute_process(COMMAND ./getenv 1 OUTPUT_VARIABLE RDIR)
-execute_process(COMMAND ./getenv 2 OUTPUT_VARIABLE SITELIB)
-execute_process(COMMAND ./getenv 3 OUTPUT_VARIABLE RCPP_DIR)
+execute_process(COMMAND scripts/getenv.sh 1 OUTPUT_VARIABLE RDIR)
+execute_process(COMMAND scripts/getenv.sh 2 OUTPUT_VARIABLE SITELIB)
+execute_process(COMMAND scripts/getenv.sh 3 OUTPUT_VARIABLE RCPP_DIR)
 MESSAGE("${RCPP_DIR}")
 
 execute_process(COMMAND R RHOME OUTPUT_VARIABLE RHOME OUTPUT_STRIP_TRAILING_WHITESPACE )
