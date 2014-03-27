@@ -19,6 +19,6 @@
 #' @references To be announced
 #' @keywords package
 #' @importFrom Rcpp evalCpp 
-#' @useDynLib Rvtk
+#' @useDynLib libRvtk
 NULL
 
