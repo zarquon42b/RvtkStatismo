@@ -583,6 +583,7 @@ PACKAGE_URL=''
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+VTK_DYNLIBS
 VTK_LDFLAGS
 VTK_CFLAGS
 VTK_LIBS
@@ -2344,7 +2345,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
   if test "$with_vtk" != no; then
             VTK_PREFIX="$with_vtk"
-
+    VTK_DYNLIBS="$VTK_PREFIX/lib"
     as_ac_File=`$as_echo "ac_cv_file_$VTK_PREFIX/include/vtk$vtk_suffix/vtkCommand.h" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $VTK_PREFIX/include/vtk$vtk_suffix/vtkCommand.h" >&5
 $as_echo_n "checking for $VTK_PREFIX/include/vtk$vtk_suffix/vtkCommand.h... " >&6; }
@@ -2455,6 +2456,7 @@ $as_echo "no" >&6; }
 
 # check C++11 compliance and flags
 #AX_CXX_COMPILE_STDCXX_11([noext],)
+
 
 
 

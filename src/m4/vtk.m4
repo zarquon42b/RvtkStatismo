@@ -49,10 +49,10 @@ AC_DEFUN([AM_PATH_VTK],
     dnl
     dnl A path was provided in $with_vtk...try hard to find the VTK library {{{
     VTK_PREFIX="$with_vtk"
-
+    VTK_DYNLIBS="$VTK_PREFIX/lib"
     AC_CHECK_FILE([$VTK_PREFIX/include/vtk$vtk_suffix/vtkCommand.h], [vtkFound="OK"])
     AC_MSG_CHECKING([if VTK is installed in $VTK_PREFIX])
-
+    
     if test -z "$vtkFound"; then
       dnl
       dnl VTK was not found! ...execute $3 unconditionally {{{
