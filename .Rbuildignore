@@ -1,2 +1,3 @@
 src/CMakeList.txt
 src/getenv
+src/upOBJ.sh

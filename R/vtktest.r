@@ -1,6 +1,3 @@
-vtkSimple <- function(file) {
-  a <- .Call("vtkSP",as.character(file))
-}
 #' @export
 vtkRenderMesh <- function(mesh,size=5) {
     if (inherits(mesh,"mesh3d")) {
