@@ -6,7 +6,12 @@ __Rvtk__ is an R-package aiming to provide some fuctionality from [VTK](http://w
 * Install VTK (headers and library) and CMake.
    On Ubuntu/Debian, this can be easily accomplished by:
 	
-		sudo apt-get install libvtk5-dev cmake
+		sudo apt-get install libvtk5-dev cmake r-base-dev
+
+* Install Rcpp: In R 
+
+  	  	install.packages("Rcpp")
+
 
 
 #### Installation of the-R package "Rvtk" using *devtools* (this automatically installs the dependency Rcpp): ####
