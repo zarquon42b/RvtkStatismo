@@ -1,0 +1,20 @@
+# obtain and export Rs environment variables
+export R_HOME
+CXX=$(${R_HOME}/bin${R_ARCH_BIN}/R CMD config CXX)
+CXXFLAGS=$(${R_HOME}/bin${R_ARCH_BIN}/R CMD config CXXFLAGS)
+CPPFLAGS=$(${R_HOME}/bin${R_ARCH_BIN}/R CMD config CPPFLAGS)
+BLAS_LIBS=$(${R_HOME}/bin${R_ARCH_BIN}/R CMD config BLAS_LIBS)
+LAPACK_LIBS=$(${R_HOME}/bin${R_ARCH_BIN}/R CMD config LAPACK_LIBS)
+export CXX
+export CXXFLAGS
+export CPPFLAGS
+export BLAS_LIBS
+export LAPACK_LIBS
+export R_INCLUDE_DIR
+RCPP_DIR=$(${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe -e "cat(system.file(package='Rcpp'))")
+export RCPP_DIR
+export R_ARCH_BIN
+cd src
+cmake . -G "MSYS Makefiles"
+cp Makefile Makefile.win
+

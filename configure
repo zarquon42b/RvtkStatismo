@@ -1,4 +1,21 @@
 #! /bin/sh
+# obtain and export Rs environment variables
+export R_HOME
+CXX=$(R CMD config CXX)
+CXXFLAGS=$(R CMD config CXXFLAGS)
+CPPFLAGS=$(R CMD config CPPFLAGS)
+BLAS_LIBS=$(R CMD config BLAS_LIBS)
+LAPACK_LIBS=$(R CMD config LAPACK_LIBS)
+export CXX
+export CXXFLAGS
+export CPPFLAGS
+export BLAS_LIBS
+export LAPACK_LIBS
+export R_INCLUDE_DIR
+export R_INCLUDE_DIR
+RCPP_DIR=$(Rscript -e "cat(system.file(package='Rcpp'))")
+export RCPP_DIR
 cd src
 cmake .
+
 
