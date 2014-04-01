@@ -25,5 +25,8 @@ include_directories(${R_INCLUDE_DIR} ${RCPP_DIR})
 include(${VTK_USE_FILE})
 add_library(Rvtk SHARED R2vtk.cpp readVTP.cpp vtkVisualize.cpp writeToVTK.cpp)
 set(CMAKE_SHARED_LINKER_FLAGS "${BLAS_LIBS} ${LAPACK_LIBS}")
+if (WIN32)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libstdc++")
+endif()
 target_link_libraries(Rvtk ${VTK_LIBRARIES} R)
 
