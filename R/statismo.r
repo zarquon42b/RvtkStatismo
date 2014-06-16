@@ -33,6 +33,7 @@ statismoBuildModel <- function(array,representer,sigma=0) {
 #' align meshes stored in a list by their vertices
 #' @param meshlist list containing triangular meshes of class "mesh3d"
 #' @param scale logical: request scaling during alignment
+#' @importFrom Morpho vert2points bindArr ProcGPA
 #' @export
 meshalign <- function(meshlist,scale=TRUE) {
     vertlist <- lapply(1:length(meshlist),function(x) vert2points(meshlist[[x]]))

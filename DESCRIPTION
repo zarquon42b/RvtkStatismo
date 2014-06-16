@@ -9,6 +9,7 @@ Description: I am trying to create an interface between meshes compatible with
     rgl and vtk
 License: GPL >=2
 Imports:
-    Rcpp (>= 0.11.1)
+    Rcpp (>= 0.11.1),
+    Morpho
 LinkingTo: Rcpp
 SystemRequirement: VTK5.8
