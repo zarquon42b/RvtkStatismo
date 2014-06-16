@@ -3,7 +3,7 @@
 \alias{meshalign}
 \title{align meshes stored in a list by their vertices}
 \usage{
-meshalign(meshlist, scale = TRUE)
+meshalign(meshlist, scale = TRUE, tol = 1e-05)
 }
 \arguments{
 \item{meshlist}{list containing triangular meshes of class "mesh3d"}

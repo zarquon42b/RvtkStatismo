@@ -9,12 +9,15 @@ array2meshlist <- function(x) {
 #' align meshes stored in a list by their vertices
 #' @param meshlist list containing triangular meshes of class "mesh3d"
 #' @param scale logical: request scaling during alignment
-#' @importFrom Morpho vert2points bindArr ProcGPA
+#' @importFrom Morpho vert2points ProcGPA
 #' @export
-meshalign <- function(meshlist,scale=TRUE) {
-    vertlist <- lapply(1:length(meshlist),function(x) vert2points(meshlist[[x]]))
-    vertlist <- bindArr(vertlist,along=3)
-    dimnames(vertlist)[[3]] <- names(meshlist)
-    out <- ProcGPA(vertlist,scale=scale, CSinit = FALSE,silent = TRUE)$rotated
+meshalign <- function(meshlist,scale=TRUE,tol=1e-5) {
+    n <- length(meshlist)
+    k <- ncol(meshlist[[1]]$vb)
+    vertarr <- array(NA,dim=c(k,3,n))
+    for (i in 1:n)
+        vertarr[,,i] <- vert2points(meshlist[[i]])
+    dimnames(vertarr)[[3]] <- names(meshlist)
+    out <- ProcGPA(vertarr,scale=scale, CSinit = FALSE,silent = F,tol=tol)$rotated
     return(out)
 }
