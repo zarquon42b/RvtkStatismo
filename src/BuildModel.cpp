@@ -4,6 +4,7 @@
 #include "VTK/vtkStandardMeshRepresenter.h"
 #include "R2vtk.h"
 #include <memory>
+#include <RcppEigen.h>
 
 using namespace statismo;
 using std::auto_ptr;
@@ -19,6 +20,7 @@ RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   double sigma = as<double>(sigma_);
   unsigned int ndata = myshapelist.size();
   std::vector<std::string> nam = myshapelist.names();
+
   try{
   SEXP vbref = myreference["vb"];
   SEXP itref = myreference["it"];
@@ -37,7 +39,15 @@ RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   }
   auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
   auto_ptr<StatisticalModelType> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma));
-  model->Save("test.h5");
+  Eigen::MatrixXf PCBasisOrtho = model->GetOrthonormalPCABasisMatrix();
+  Eigen::MatrixXf PCBasis = model->GetPCABasisMatrix();
+
+  Eigen::VectorXf PCVariance = model->GetPCAVarianceVector();
+  return List::create(Named("PCBasis")=PCBasis,
+		      Named("PCBasisOrtho")=PCBasisOrtho,
+		      Named("PCVariance")=PCVariance
+		      );
+
   }
   catch (StatisticalModelException& e) {
     Rprintf("Exception occured while building the shape model\n");

@@ -11,5 +11,5 @@ License: GPL >=2
 Imports:
     Rcpp (>= 0.11.1),
     Morpho
-LinkingTo: Rcpp
-SystemRequirement: VTK5.8
+LinkingTo: Rcpp,RcppEigen
+SystemRequirement: VTK5.8, statismo

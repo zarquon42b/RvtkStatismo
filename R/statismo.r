@@ -20,5 +20,6 @@ statismoBuildModel <- function(array,representer,sigma=0) {
     }
     
     out <- .Call("BuildModel",mylist,representer,sigma)
+    return(out)
 }
 
