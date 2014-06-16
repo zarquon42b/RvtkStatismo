@@ -18,7 +18,7 @@ You will also need to build and install **[statismo](https://github.com/statismo
 
 **Install Rcpp:** Issue the following command in your R-terminal:
 
-	install.packages(c("Rcpp","Morpho"))
+	install.packages(c("Rcpp","Morpho","RcppEigen"))
 
 
 
