@@ -1,28 +1,32 @@
-__RvtkStatismo__ is an R-package aiming to integrate Statismo and some fuctionality from [VTK](http://www.vtk.org) library.
+__RvtkStatismo__ is an R-package aiming to integrate [Statismo](https://github.com/statismo/statismo) and some fuctionality from [VTK](http://www.vtk.org) library.
 
 ### Install prerequisites ###
 
-**Linux/OSX:** Install VTK (headers and library), CMake and R build environment.
+
+
+* **Linux/OSX:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment.
 
 On Ubuntu/Debian, this can be easily accomplished by:
 	
-	sudo apt-get install libvtk5-dev cmake r-base-dev
-
-
-You will also need to build and install **[statismo](https://github.com/statismo/statismo)**
-
-
-**Windows:** install [CMake](http://cmake.org/cmake/resources/software.html) and [MinGW](http://www.mingw.org/) (including MSYS) and make sure the respective paths are included in the PATH variable). Then download  [VTK](http://www.vtk.org/VTK/resources/software.html) source code and build it. If you build VTK static libraries, the R-package will be portable.
+	sudo apt-get install libvtk5-dev cmake r-base-dev libhdf5-dev
 
 
 
-**Install Rcpp:** Issue the following command in your R-terminal:
+
+
+* **Windows:** install [CMake](http://cmake.org/cmake/resources/software.html) and [MinGW](http://www.mingw.org/) (including MSYS) and make sure the respective paths are included in the PATH variable). Then download  [VTK](http://www.vtk.org/VTK/resources/software.html) source code and build it. If you build VTK static libraries, the R-package will be portable.
+
+
+**Build and install **[Statismo](https://github.com/statismo/statismo)** **
+
+
+**Install R-dependencies:** Issue the following command in your R-terminal:
 
 	install.packages(c("Rcpp","Morpho","RcppEigen"))
 
 
 
-### Installation of the-R package "Rvtk" using *devtools* (this automatically installs the dependency Rcpp) ###
+### Installation of the R-package "Rvtk" using *devtools* (this automatically installs the required R-packages) ###
 
 
 
