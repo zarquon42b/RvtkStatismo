@@ -44,7 +44,7 @@ pPCA <- function(array, sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
     procMod$scale <- scale
     class(procMod) <- "pPCA"
     if (is.null(refmesh))
-        refmesh <- list(vb=procMod$mshape,it=matrix(0,0,0))
+        refmesh <- list(vb=t(procMod$mshape),it=matrix(0,0,0))
     procMod$refmesh <- refmesh
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
     return(procMod)
@@ -88,7 +88,7 @@ pPCAcond <- function(array, missingIndex,deselect=FALSE,sigma=NULL, exVar=1,refm
     class(procMod) <- "pPCAcond"
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
     if (is.null(refmesh))
-        refmesh <- list(vb=procMod$mshape,it=matrix(0,0,0))
+        refmesh <- list(vb=t(procMod$mshape),it=matrix(0,0,0))
     procMod$refmesh <- refmesh
     return(procMod)
 }

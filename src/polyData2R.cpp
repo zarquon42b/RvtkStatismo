@@ -26,9 +26,9 @@ Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
       break;
     } 
     if(npts == 3){
-      it(0,i) = pts[0];
-      it(1,i) = pts[1];
-      it(2,i) = pts[2]; 
+      it(0,i) = pts[0]+1;
+      it(1,i) = pts[1]+1;
+      it(2,i) = pts[2]+1; 
     }
   }
   List out = List::create(Named("vb")=vb,

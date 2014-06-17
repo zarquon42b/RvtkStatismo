@@ -19,9 +19,9 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   Map<VectorXd> meanshape0(as<Map<VectorXd> >(PCA["center"]));
   
   MatrixXf PCBasis = PCBasis0.cast<float>();
-  MatrixXf PCVariance = PCVariance0.cast<float>();
+  VectorXf PCVariance = PCVariance0.cast<float>();
   VectorXf meanshape = meanshape0.cast<float>();
-  
+  PCVariance = PCVariance.array().pow(2);
   double sigma = as<double>(pPCA["sigma"]);
   auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasis,PCVariance,sigma));
   if (! Rf_isNull(PCA["x"])) {

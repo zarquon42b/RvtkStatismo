@@ -5,6 +5,7 @@
 #' @param array array of aligned 3D-coordinates (e.g. the vertices of meshes)
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
+#' @importFrom Morpho bindArr
 #' @export
 
 statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
@@ -69,5 +70,7 @@ statismo2pPCA <- function(statismodel) {
     out1$Win <- (t(out1$Win)*1/Wval)
     out1$PCA$x <- t(statismodel$scores)
     out1$refmesh <- statismodel$refmesh
+    if (inherits(out1$refmesh,"mesh3d"))
+        out1$refmesh$vb <- rbind(out1$refmesh$vb,1)
     return(out1)
 }
