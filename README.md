@@ -1,4 +1,4 @@
-__RvtkStatismo__ is an R-package aiming to integrate [Statismo](https://github.com/statismo/statismo) and some fuctionality from [VTK](http://www.vtk.org) library.
+__RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github.com/statismo/statismo)** (a C++ library to calculate and modify statistical shape models) and some fuctionality from [VTK](http://www.vtk.org) library.
 
 ### Install prerequisites ###
 
