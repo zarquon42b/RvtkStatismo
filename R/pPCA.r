@@ -35,10 +35,11 @@
 pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
     k <- dim(array)[1]
     if (align)
-        procMod <- ProcGPA(array,scale=scale,CSinit=F,reflection=F) ##register all data using Procrustes fitting
+        procMod <- ProcGPA(array,scale=scale,CSinit=F,reflection=F,silent = T) ##register all data using Procrustes fitting
     else
         procMod <- list(rotated=array,mshape=arrMean3(array))
-    PCA <- prcomp(vecx(procMod$rotated,byrow = T),tol = sqrt(.Machine$double.eps)) ## calculate PCA
+    rawdata <- vecx(procMod$rotated,byrow=T)
+    PCA <- prcomp(rawdata,tol = sqrt(.Machine$double.eps)) ## calculate PCA
     sds <- PCA$sdev^2
     good <- which(sds > 1e-13)
     sds <- sds[good] ## remove PCs with very little variability
@@ -50,6 +51,7 @@ pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
     if (is.null(refmesh))
         refmesh <- list(vb=t(procMod$mshape),it=matrix(0,0,0))
     procMod$refmesh <- refmesh
+    procMod$rawdata <- sweep(rawdata,2,colMeans(rawdata))
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
     return(procMod)
 
@@ -82,9 +84,9 @@ pPCAcond <- function(array,align=TRUE, missingIndex,deselect=FALSE,sigma=NULL, e
     }
     procMod$use.lm <- use.lm
     procMod$scale <- scale
-   
+    rawdata <- vecx(procMod$rotated,byrow=T)
     procMod$missingIndex <- missingIndex
-    PCA <- prcomp(vecx(procMod$rotated,byrow = T),tol = sqrt(.Machine$double.eps)) ## calculate PCA
+    PCA <- prcomp(rawdata,tol = sqrt(.Machine$double.eps)) ## calculate PCA
     sel <- missingIndex*3
     sel <- sort(c(sel, sel-1, sel-2))
     sds <- PCA$sdev^2
@@ -95,10 +97,12 @@ pPCAcond <- function(array,align=TRUE, missingIndex,deselect=FALSE,sigma=NULL, e
     procMod$PCA <- PCA
     procMod$sel <- sel
     class(procMod) <- "pPCAcond"
+    procMod$rawdata <- sweep(rawdata,2,colMeans(rawdata))
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
     if (is.null(refmesh))
         refmesh <- list(vb=t(procMod$mshape),it=matrix(0,0,0))
     procMod$refmesh <- refmesh
+    
     return(procMod)
 }
 #' @rdname pPCA
@@ -123,10 +127,6 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
         warning(paste("sigma > overall variance set to",sdsum/2))
         sigma <- sdsum/2
     }
-        
-    Variance <- data.frame(eigenvalue=sds,exVar=sdVar, cumVar=sdCum) ##make Variance table 
-    procMod$Variance <- Variance
-    
     if (sigma == 0)
         siginv <- 1e13
     else
@@ -139,9 +139,20 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     procMod$exVar <- sdCum[max(usePC)]##calculate variance explained by that model compared to that of the training sample
     procMod$sigma <- sigma
     W <- t(t(PCA$rotation[,usePC])*sqrt(sigest[usePC])) ##Matrix to project scaled PC-scores back into the config space
-    Win <- (t(PCA$rotation[,usePC])*(1/sqrt(sigest[usePC]))) ##Matrix to project from config space into the scaled PC-space
+    Win <- (t(PCA$rotation[,usePC])*(1/sqrt(sds)[usePC])) ##Matrix to project from config space into the scaled PC-space
+    ##Matrix to project from config space into the scaled PC-space
     procMod$W <- W
     procMod$Win <- Win
+    procMod$PCA$rotation <- PCA$rotation[,usePC]
+    procMod$PCA$sdev <- sqrt(sigest[usePC])
+    procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
+    sds <- sigest[usePC]
+    sdsum <- sum(sds)
+    sdVar <- sds/sdsum
+    sdCum <- cumsum(sdVar)
+    Variance <- data.frame(eigenvalue=sds,exVar=sdVar, cumVar=sdCum) ##make Variance table 
+    procMod$Variance <- Variance
+    print(procMod,Variance=FALSE)
     return(procMod)
 }
 
@@ -179,13 +190,23 @@ setMod.pPCAcond <- function(procMod,sigma=NULL,exVar=1) {
     usePC <- 1:min(length(usePC),length(sigest))
     procMod$usePC <- usePC
     procMod$exVar <- sdCum[max(usePC)]
-
+    sds <- sigest[usePC]
+    sdsum <- sum(sds)
+    sdVar <- sds/sdsum
+    sdCum <- cumsum(sdVar)
+    Variance <- data.frame(eigenvalue=sds,exVar=sdVar, cumVar=sdCum) ##make Variance table 
+    procMod$Variance <- Variance
     W <- t(t(PCA$rotation[,usePC])*sqrt(sigest[usePC]))
     Wb <- W[-sel,]
     WbtWb <- crossprod(Wb)
     M <- siginv*WbtWb
     diag(M) <- diag(M)+1
     procMod$W <- W ##Matrix to project scaled PC-scores back into the config space
+    ##Matrix to project from config space into the scaled PC-space
+    procMod$Win <- (t(PCA$rotation[,usePC])*(1/sqrt(sds)[usePC])) ##Matrix to project from config space into the scaled PC-space
+    procMod$PCA$rotation <- PCA$rotation[,usePC]
+    procMod$PCA$sdev <- sqrt(sigest[usePC])
+    procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
     procMod$Wb <- Wb
     procMod$WbtWb <- WbtWb
     procMod$M <- M
@@ -206,7 +227,7 @@ setMod.pPCAcond <- function(procMod,sigma=NULL,exVar=1) {
 print.pPCAcond <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste("   sigma =",x$sigma,"\n"))
     cat(paste("   exVar =",x$exVar,"\n\n"))
-    cat(paste(" first",length(x$usePC),"of",ncol(x$PCA$rotation),"PCs used\n"))
+    cat(paste(" first",length(x$usePC),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
         print(x$Variance)
@@ -216,7 +237,7 @@ print.pPCAcond <- function(x, digits = getOption("digits"), Variance=TRUE,...){
 print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste("   sigma =",x$sigma,"\n"))
     cat(paste("   exVar =",x$exVar,"\n\n"))
-    cat(paste(" first",length(x$usePC),"of",ncol(x$PCA$rotation),"PCs used\n"))
+    cat(paste(" first",length(x$usePC),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
         print(x$Variance)
