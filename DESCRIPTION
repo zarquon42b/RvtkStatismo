@@ -1,7 +1,7 @@
 Package: RvtkStatismo
 Type: Package
 Title: Integrates statismo and R using the statismo vtk-mesh representer
-Version: 0.2
+Version: 0.2.140617
 Date: 2014-06-17
 Author: Stefan Schlager
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
