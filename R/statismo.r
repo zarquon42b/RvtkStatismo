@@ -8,8 +8,20 @@
 #' @export
 
 statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
+    m <- dim(array)[2]
+    if (m == 2) {
+        zeros <- array(0,dim=c(dim(array)[1],1,dim(array)[3]))
+        array <- bindArr(array,zeros,along=2)
+        print(dim(array)[2])
+    } else if (dim(array)[2] != 3)
+        stop("only 2D and 3D configs allowed")
+    
     mylist <- array2meshlist(array)
+    
     names(mylist) <- dimnames(array)[[3]]
+    if (is.null(names(mylist)))
+        names(mylist) <- paste("specimen",1:length(mylist),sep="_")
+    
     if (is.matrix(representer))
         representer <- list(vb=t(representer),it=matrix(0,0,0))
     else if (is.list(representer)) {

@@ -31,10 +31,12 @@ Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
       it(2,i) = pts[2]; 
     }
   }
-  
-  return  List::create(Named("vb")=vb,
+  List out = List::create(Named("vb")=vb,
 		       Named("it")=it
 		       );
+  if (it.ncol() > 0)
+    out.attr("class") = "mesh3d";
+  return  out;
 } 
 
  
