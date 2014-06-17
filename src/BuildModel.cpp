@@ -1,18 +1,8 @@
-#include "statismo/PCAModelBuilder.h"
-#include "statismo/StatisticalModel.h"
-#include "statismo/DataManager.h"
-#include "VTK/vtkStandardMeshRepresenter.h"
-#include "R2vtk.h"
+#include "VTKTypes.h"
 #include <memory>
 #include <RcppEigen.h>
+#include "pPCA2statismo.h"
 
-using namespace statismo;
-using std::auto_ptr;
-
-typedef vtkStandardMeshRepresenter RepresenterType;
-typedef DataManager<vtkPolyData> DataManagerType;
-typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
-typedef StatisticalModel<vtkPolyData> StatisticalModelType;
 
 RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   List myshapelist(myshapelist_);
@@ -39,14 +29,7 @@ RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   }
   auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
   auto_ptr<StatisticalModelType> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma));
-  Eigen::MatrixXf PCBasisOrtho = model->GetOrthonormalPCABasisMatrix();
-  Eigen::MatrixXf PCBasis = model->GetPCABasisMatrix();
-
-  Eigen::VectorXf PCVariance = model->GetPCAVarianceVector();
-  return List::create(Named("PCBasis")=PCBasis,
-		      Named("PCBasisOrtho")=PCBasisOrtho,
-		      Named("PCVariance")=PCVariance
-		      );
+  return statismo2pPCA(model);
 
   }
   catch (StatisticalModelException& e) {
@@ -55,4 +38,5 @@ RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   }
   return wrap(1);
 }
+
   

@@ -43,6 +43,8 @@ pPCA <- function(array, sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
     procMod$PCA <- PCA
     procMod$scale <- scale
     class(procMod) <- "pPCA"
+    if (is.null(refmesh))
+        refmesh <- list(vb=procMod$mshape,it=matrix(0,0,0))
     procMod$refmesh <- refmesh
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
     return(procMod)
@@ -85,6 +87,8 @@ pPCAcond <- function(array, missingIndex,deselect=FALSE,sigma=NULL, exVar=1,refm
     procMod$sel <- sel
     class(procMod) <- "pPCAcond"
     procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
+    if (is.null(refmesh))
+        refmesh <- list(vb=procMod$mshape,it=matrix(0,0,0))
     procMod$refmesh <- refmesh
     return(procMod)
 }
@@ -389,6 +393,7 @@ as.pPCA.pPCAcond <- function(x, newMean,...) { #convert a pPCAcond to a pPCA by 
     procMod$W <- t(t(newW)*sqrt(sds))
     procMod$Win <- t(newW)/sqrt(sds)
     procMod$PCA$rotation <- newW
+    procMod$PCA$center <- as.vector(t(newMean))
     class(procMod) <- "pPCA"
     allNames <- names(procMod)
     rem <- which(allNames %in% c("M","Minv","Wb","WbtWb","missingIndex","sel","alphamean"))

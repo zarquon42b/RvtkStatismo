@@ -3,7 +3,7 @@
 \alias{statismoBuildModel}
 \title{generate a statistical model using an array of superimposed landmarks and save it}
 \usage{
-statismoBuildModel(array, representer, sigma = 0)
+statismoBuildModel(array, representer, sigma = 0, scale = TRUE)
 }
 \arguments{
 \item{array}{array of aligned 3D-coordinates (e.g. the vertices of meshes)}

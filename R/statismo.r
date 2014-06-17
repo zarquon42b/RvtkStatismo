@@ -7,7 +7,7 @@
 #' @param sigma noise in the data
 #' @export
 
-statismoBuildModel <- function(array,representer,sigma=0) {
+statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
     mylist <- array2meshlist(array)
     names(mylist) <- dimnames(array)[[3]]
     if (is.matrix(representer))
@@ -15,11 +15,46 @@ statismoBuildModel <- function(array,representer,sigma=0) {
     else if (is.list(representer)) {
         if (!is.numeric(representer$vb) || !is.integer(representer$it))
             stop("representer needs vertices and faces")
-        else
+        else if (ncol(representer$it > 0))
             representer$it <- representer$it-1
     }
     
     out <- .Call("BuildModel",mylist,representer,sigma)
-    return(out)
+    if (is.list(out)) {
+        out1 <- statismo2pPCA(out)
+        return(out1)
+    } else {
+        warning("something went wrong")
+    }
 }
 
+#' save a statistical model of class pPCA to statismo hdf5 format
+#'
+#' save a statistical model of class pPCA to statismo hdf5 format
+#' @param model object of class pPCA
+#' @param modelname filename to save to
+#' @export
+statismoSaveModel <- function(model, modelname) {
+    storage.mode(modelname) <- "character"
+    if (!inherits(model,"pPCA"))
+        stop("model must be of class pPCA")
+    out <- .Call("SaveModel",model,modelname)
+}
+
+statismo2pPCA <- function(statismodel) {
+    out1 <- list()
+    out1$mshape <- matrix(statismodel$mshape,length(statismodel$mshape)/statismodel$dim,byrow = T)
+    out1$PCA <- list();class(out1) <- "pPCA"
+    out1$PCA$sdev <- sqrt(statismodel$PCVariance)
+    out1$PCA$rotation <- statismodel$PCBasisOrtho
+    out1$PCA$center <- statismodel$mshape
+    out1$scale <- scale
+    out1$W <- statismodel$PCBasis
+    out1$usePC <- 1:ncol(out1$W)
+    out1$sigma <- statismodel$sigma
+    Wval <- apply(out1$W,2,function(x) x <- sqrt(sum(crossprod(x))))
+    out1$Win <- out1$PCA$rotation[,out1$usePC]
+    out1$Win <- (t(out1$Win)*1/Wval)
+    out1$PCA$x <- t(statismodel$scores)
+    return(out1)
+}
