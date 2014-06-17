@@ -14,14 +14,14 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     reference = R2vtk(reflist["vb"]);
   }
   auto_ptr<RepresenterType> representer(RepresenterType::Create(reference));
-  Map<MatrixXd> PCBasis0(as<Map<MatrixXd> >(PCA["rotation"]));
-  Map<VectorXd> PCVariance0(as<Map<VectorXd> >(PCA["sdev"]));
-  Map<VectorXd> meanshape0(as<Map<VectorXd> >(PCA["center"]));
-  
+  Map<MatrixXd> PCBasis0(as<Map<MatrixXd> >(pPCA["W"]));
+  VectorXf meanshape = PCA["center"];
+  //VectorXf PCVariance = PCA["sdev"];
+  typedef Eigen::MatrixXf fMat;
+  typedef Eigen::Map<fMat> MfMat;
   MatrixXf PCBasis = PCBasis0.cast<float>();
-  VectorXf PCVariance = PCVariance0.cast<float>();
-  VectorXf meanshape = meanshape0.cast<float>();
-  PCVariance = PCVariance.array().pow(2);
+  VectorXf PCVariance = PCBasis.colwise().norm();
+  //PCVariance = PCVariance.array().pow(2);
   double sigma = as<double>(pPCA["sigma"]);
   auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasis,PCVariance,sigma));
   if (! Rf_isNull(PCA["x"])) {

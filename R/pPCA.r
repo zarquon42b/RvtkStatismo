@@ -4,6 +4,7 @@
 #' 
 #' @encoding utf8
 #' @param array array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.
+#' @param align logical: if TRUE, the data will be aligned first
 #' @param missingIndex integer vector: specifies which points are missing in the conditional model
 #' @param deselect logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.
 #' @param procMod object of class "procMod" as returned by pPCAcond or setMod
@@ -31,9 +32,12 @@
 #' @importFrom Rvcg vcgUpdateNormals
 #' @rdname pPCA
 #' @export
-pPCA <- function(array, sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
+pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
     k <- dim(array)[1]
-    procMod <- ProcGPA(array,scale=scale,CSinit=F,reflection=F) ##register all data using Procrustes fitting
+    if (align)
+        procMod <- ProcGPA(array,scale=scale,CSinit=F,reflection=F) ##register all data using Procrustes fitting
+    else
+        procMod <- list(rotated=array,mshape=arrMean3(array))
     PCA <- prcomp(vecx(procMod$rotated,byrow = T),tol = sqrt(.Machine$double.eps)) ## calculate PCA
     sds <- PCA$sdev^2
     good <- which(sds > 1e-13)
@@ -52,24 +56,29 @@ pPCA <- function(array, sigma=NULL,exVar=1,scale=TRUE,refmesh=NULL) {
 }
 #' @rdname pPCA
 #' @export
-pPCAcond <- function(array, missingIndex,deselect=FALSE,sigma=NULL, exVar=1,refmesh=NULL,scale=TRUE,fullfit=FALSE) {
+pPCAcond <- function(array,align=TRUE, missingIndex,deselect=FALSE,sigma=NULL, exVar=1,refmesh=NULL,scale=TRUE,fullfit=FALSE) {
+    
     k <- dim(array)[1]
     if (deselect) {
         missingIndex <- c(1:k)[-missingIndex]
     }
     use.lm=c(1:k)[-missingIndex]
-    if (!fullfit) {
-        procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
-        tmp <- array
-        a.list <-  1:(dim(array)[3])
-        tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[,,i],scale=scale,reflection = F);return(mat)})
-        tmp1 <- array
-        for (i in 1:length(a.list))
-            tmp1[,,i] <- tmp[[i]]
-        procMod$rotated <- tmp1
-        procMod$mshape <- arrMean3(tmp1)
+    if (align) {
+        if (!fullfit) {
+            procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
+            tmp <- array
+            a.list <-  1:(dim(array)[3])
+            tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[,,i],scale=scale,reflection = F);return(mat)})
+            tmp1 <- array
+            for (i in 1:length(a.list))
+                tmp1[,,i] <- tmp[[i]]
+            procMod$rotated <- tmp1
+            procMod$mshape <- arrMean3(tmp1)
+        } else {
+            procMod <- ProcGPA(array,scale=scale,CSinit = F,reflection = F,silent = T)
+        }
     } else {
-        procMod <- ProcGPA(array,scale=scale,CSinit = F,reflection = F,silent = T)
+        procMod <- list(rotated=array,mshape=arrMean3(array))
     }
     procMod$use.lm <- use.lm
     procMod$scale <- scale
@@ -123,7 +132,7 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     else
         siginv <- sigma^-2
 
-    sigest <- (sds - sigma^2)
+    sigest <- (sds - sigma)
     sigest <- sigest[which(sigest > 0)]
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
     procMod$usePC <- usePC
@@ -165,7 +174,7 @@ setMod.pPCAcond <- function(procMod,sigma=NULL,exVar=1) {
     else
         siginv <- sigma^-2
 
-    sigest <- (sds - sigma^2)
+    sigest <- (sds - sigma)
     sigest <- sigest[which(sigest > 0)]
     usePC <- 1:min(length(usePC),length(sigest))
     procMod$usePC <- usePC
