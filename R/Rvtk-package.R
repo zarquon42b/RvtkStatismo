@@ -11,7 +11,7 @@
 #' LazyLoad: \tab yes\cr }
 #' 
 #' @name Rvtk-package
-#' @aliases Rvtk-package Rvtk
+#' @aliases RvtkStatismo-package RvtkStatismo
 #' @docType package
 #' @author Stefan Schlager
 #' 
@@ -19,6 +19,6 @@
 #' @references To be announced
 #' @keywords package
 #' @importFrom Rcpp evalCpp 
-#' @useDynLib libRvtk
+#' @useDynLib libRvtkStatismo
 NULL
 

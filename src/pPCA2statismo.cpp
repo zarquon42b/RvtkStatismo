@@ -1,4 +1,5 @@
 #include "pPCA2statismo.h"
+#include "polyData2R.h"
 
 
 using namespace Eigen;
@@ -35,13 +36,16 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
 }
 
 Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
+  vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+  
   return List::create(Named("PCBasis") = model->GetPCABasisMatrix(),
 		      Named("PCBasisOrtho") = model->GetOrthonormalPCABasisMatrix(),
 		      Named("PCVariance")= model->GetPCAVarianceVector(),
 		      Named("sigma")= model->GetNoiseVariance(),
 		      Named("mshape")= model->GetMeanVector(),
 		      Named("dim")=model->GetRepresenter()->GetDimensions(),
-		      Named("scores")=model->GetModelInfo().GetScoresMatrix()
+		      Named("scores")=model->GetModelInfo().GetScoresMatrix(),
+		      Named("refmesh")=polyData2R(reference)
 		      );
   
 }

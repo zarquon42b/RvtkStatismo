@@ -56,5 +56,6 @@ statismo2pPCA <- function(statismodel) {
     out1$Win <- out1$PCA$rotation[,out1$usePC]
     out1$Win <- (t(out1$Win)*1/Wval)
     out1$PCA$x <- t(statismodel$scores)
+    out1$refmesh <- statismodel$refmesh
     return(out1)
 }
