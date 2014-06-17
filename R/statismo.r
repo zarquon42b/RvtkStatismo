@@ -5,7 +5,17 @@
 #' @param array array of aligned 3D-coordinates (e.g. the vertices of meshes)
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
+#' @examples
+#' require(Morpho)
+#' data(boneData)
+#' align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+#' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+#' ## save it
+#' statismoSaveModel(mymod,"mymod.h5")
+#'
+#' 
 #' @importFrom Morpho bindArr
+#' 
 #' @export
 
 statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
