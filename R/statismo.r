@@ -28,18 +28,24 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
         stop("only 2D and 3D configs allowed")
     
     mylist <- array2meshlist(array)
-    
+    if (missing(representer))
+        representer <- array[,,1]
     names(mylist) <- dimnames(array)[[3]]
     if (is.null(names(mylist)))
         names(mylist) <- paste("specimen",1:length(mylist),sep="_")
     
-    if (is.matrix(representer))
+    if (is.matrix(representer)) {
+        chk <- prod(dim(representer) == dim(array)[1:2])
+        if (!chk)
+            stop("representer must be of same dimensionality as array")
         representer <- list(vb=t(representer),it=matrix(0,0,0))
-    else if (is.list(representer)) {
+    } else if (is.list(representer)) {
         if (!is.numeric(representer$vb) || !is.numeric(representer$it))
             stop("representer needs vertices and faces")
         else if (ncol(representer$it > 0))
             representer$it <- representer$it
+    } else {
+        stop("representer must be a matrix or a mesh")
     }
     
     out <- .Call("BuildModelExport",mylist,representer,sigma)
@@ -78,6 +84,7 @@ statismo2pPCA <- function(statismodel) {
     out1$PCA$sdev <- sqrt(statismodel$PCVariance)
     out1$PCA$rotation <- statismodel$PCBasisOrtho
     out1$PCA$center <- statismodel$mshape
+    out1$PCA$x <- t(statismodel$scores)
     out1$scale <- scale
     out1$W <- statismodel$PCBasis
     out1$usePC <- 1:ncol(out1$W)
@@ -85,10 +92,12 @@ statismo2pPCA <- function(statismodel) {
     Wval <- apply(out1$W,2,function(x) x <- sqrt(sum(crossprod(x))))
     out1$Win <- out1$PCA$rotation[,out1$usePC]
     out1$Win <- (t(out1$Win)*1/Wval)
-    out1$PCA$x <- t(statismodel$scores)
+    out1$Variance <- createVarTable(out1$PCA$sdev)
     out1$representer <- statismodel$representer
     if (inherits(out1$representer,"mesh3d"))
         out1$representer$vb <- rbind(out1$representer$vb,1)
+    else
+        out1$representer$it <- matrix(0,0,0)
     return(out1)
 }
 #' @export
