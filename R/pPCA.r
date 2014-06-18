@@ -7,13 +7,12 @@
 #' @param align logical: if TRUE, the data will be aligned first
 #' @param missingIndex integer vector: specifies which points are missing in the constrained model
 #' @param deselect logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.
-#' @param procMod object of class "procMod" as returned by pPCAconstr or setMod
+#' @param procMod object of class "pPCA" or "pPCAconstr"
 #' @param sigma estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)
 #' @param exVar numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}
 #' @param scale logical: allow scaling in Procrustes fitting
 #' @param fullfit logical: if FALSE only the non-missing points will be used for registration.
-#' @param model probabilistic model of class "pPCA" or "pPCAconstr"
 #' @return \code{pPCA} and \code{pPCAconstr} return a probabilistic PCA model of class "pPCA" or "pPCAconstr" respectively. 
 #' \code{predictPCA} and \code{predictPCAcond} select the most probable shape within a given model (within defined boundaries),
 #' \code{setMod} is used to modify existing models by changing sigma and exVar.

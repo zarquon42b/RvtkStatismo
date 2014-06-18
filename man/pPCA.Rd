@@ -30,7 +30,7 @@ setMod(procMod, sigma, exVar)
 
 \item{deselect}{logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.}
 
-\item{procMod}{object of class "procMod" as returned by pPCAconstr or setMod}
+\item{procMod}{object of class "pPCA" or "pPCAconstr"}
 
 \item{sigma}{estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)}
 
@@ -41,8 +41,6 @@ setMod(procMod, sigma, exVar)
 \item{scale}{logical: allow scaling in Procrustes fitting}
 
 \item{fullfit}{logical: if FALSE only the non-missing points will be used for registration.}
-
-\item{model}{probabilistic model of class "pPCA" or "pPCAconstr"}
 }
 \value{
 \code{pPCA} and \code{pPCAconstr} return a probabilistic PCA model of class "pPCA" or "pPCAconstr" respectively.
