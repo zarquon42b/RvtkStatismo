@@ -12,12 +12,26 @@ array2meshlist <- function(x) {
 #' @importFrom Morpho vert2points ProcGPA
 #' @export
 meshalign <- function(meshlist,scale=TRUE,tol=1e-5) {
+    vertarr <- meshlist2array(meshlist)
+    out <- ProcGPA(vertarr,scale=scale, CSinit = FALSE,silent = F,tol=tol)$rotated
+    return(out)
+}
+
+#' convert meshes to array consisting of vertexc coordinates
+#'
+#' convert meshes to array consisting of vertexc coordinates
+#' @param meshlist list containing triangular meshes of class "mesh3d"
+#' @return returns an array with k x 3 x n dimensions where k=number of vertices, and n=sample size.
+#' @importFrom Morpho vert2points
+#' @export
+meshlist2array <- function(meshlist) {
     n <- length(meshlist)
     k <- ncol(meshlist[[1]]$vb)
     vertarr <- array(NA,dim=c(k,3,n))
     for (i in 1:n)
         vertarr[,,i] <- vert2points(meshlist[[i]])
     dimnames(vertarr)[[3]] <- names(meshlist)
-    out <- ProcGPA(vertarr,scale=scale, CSinit = FALSE,silent = F,tol=tol)$rotated
-    return(out)
+    if (is.null(names(meshlist)))
+        dimnames(vertarr)[[3]] <- paste("specimen",1:n,sep="_")
+    return(vertarr)
 }
