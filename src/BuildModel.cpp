@@ -3,8 +3,17 @@ typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 
 
 SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
+  
   auto_ptr<StatisticalModelType> model = BuildModel(myshapelist_,myreference_, sigma_);
-  return statismo2pPCA(model);
+  try{
+    return statismo2pPCA(model);
+    
+  }
+  catch (int e) {
+    Rprintf("Exception occured while building the shape model\n");
+    //Rprintf("%s\n",  e.what());
+    return wrap(1);
+  }
 }
 
   
@@ -14,12 +23,12 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
   double sigma = as<double>(sigma_);
   unsigned int ndata = myshapelist.size();
   std::vector<std::string> nam = myshapelist.names();
-  
-  try{
   SEXP vbref = myreference["vb"];
   SEXP itref = myreference["it"];
   vtkSmartPointer<vtkPolyData> reference = R2vtk(vbref,itref);
   auto_ptr<RepresenterType> representer(RepresenterType::Create(reference));
+  try{
+  
   auto_ptr<DataManagerType> dataManager(DataManagerType::Create(representer.get()));
   for (unsigned int i = 0; i < ndata; i++) {
     List tmplist = myshapelist[i];
@@ -39,7 +48,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
   catch (StatisticalModelException& e) {
     Rprintf("Exception occured while building the shape model\n");
     Rprintf("%s\n",  e.what());
-    auto_ptr<StatisticalModelType> model;
+    auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer));
     return model;
   }
 }
