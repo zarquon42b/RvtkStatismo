@@ -54,3 +54,12 @@ getUseLM <- function(missingIndex,shape) {
 
 
 
+createVarTable <- function(sdev,square=TRUE) {
+    if (square)
+        sdev <- sdev^2
+    sdsum <- sum(sdev)
+    sdVar <- sdev/sdsum
+    sdCum <- cumsum(sdVar)
+    Variance <- data.frame(eigenvalue=sdev,exVar=sdVar, cumVar=sdCum)
+    return(Variance)
+}

@@ -137,12 +137,11 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     procMod$Win <- Win
     procMod$PCA$rotation <- PCA$rotation[,usePC]
     procMod$PCA$sdev <- sqrt(sigest[usePC])
-    procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
-    sds <- sigest[usePC]
-    sdsum <- sum(sds)
-    sdVar <- sds/sdsum
-    sdCum <- cumsum(sdVar)
-    Variance <- data.frame(eigenvalue=sds,exVar=sdVar, cumVar=sdCum) ##make Variance table 
+    if (!is.null(procMod$rawdata))
+        procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
+    else
+        procMod$PCA$x <- 0
+    Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
     procMod$Variance <- Variance
                                         #print(procMod,Variance=FALSE)
     return(procMod)
@@ -458,6 +457,8 @@ getCoefficients <- function(x, model,use.lm=NULL) {
 #' get per coordinate variance from a statistical model
 #'
 #' @param model object of class pPCA
+#' @note calculates the per-coordinate variance as described in Luethi(2009)
+#' @references \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
 #' @export
 getCoordVar <- function(model) {
     if (!inherits(model,"pPCA"))
