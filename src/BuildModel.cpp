@@ -1,4 +1,5 @@
 #include "BuildModel.h"
+typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 
 
 SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {

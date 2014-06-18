@@ -5,7 +5,7 @@
 using namespace Eigen;
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   List pPCA(pPCA_);
-  List reflist = pPCA["refmesh"];  
+  List reflist = pPCA["representer"];  
   List PCA = pPCA["PCA"];
   vtkSmartPointer<vtkPolyData> reference;
   if (! Rf_isNull(reflist["it"])) {
@@ -45,7 +45,7 @@ Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
 		      Named("mshape")= model->GetMeanVector(),
 		      Named("dim")=model->GetRepresenter()->GetDimensions(),
 		      Named("scores")=model->GetModelInfo().GetScoresMatrix(),
-		      Named("refmesh")=polyData2R(reference)
+		      Named("representer")=polyData2R(reference)
 		      );
   
 }

@@ -79,8 +79,30 @@ statismo2pPCA <- function(statismodel) {
     out1$Win <- out1$PCA$rotation[,out1$usePC]
     out1$Win <- (t(out1$Win)*1/Wval)
     out1$PCA$x <- t(statismodel$scores)
-    out1$refmesh <- statismodel$refmesh
-    if (inherits(out1$refmesh,"mesh3d"))
-        out1$refmesh$vb <- rbind(out1$refmesh$vb,1)
+    out1$representer <- statismodel$representer
+    if (inherits(out1$representer,"mesh3d"))
+        out1$representer$vb <- rbind(out1$representer$vb,1)
     return(out1)
+}
+#' @export
+statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10) {
+    ncomp <- as.integer(ncomp)
+    if (!inherits(model,"pPCA"))
+        stop("please provide model of class 'pPCA'")
+    if (!is.list(kernel))
+        stop("kernel needs to be a list of two-entry vectors")
+    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp))
+    return(out)
+                         
+}
+statismoDrawMean <- function(model) {
+    if (!inherits(model,"pPCA"))
+        stop("please provide model of class 'pPCA'")
+    out <- (.Call("DrawMean",model))
+}
+
+statismoLoadModel <- function(modelname) {
+    storage.mode(modelname) <- "character"
+    out <- statismo2pPCA(.Call("LoadModel",modelname))
+    return(out)
 }

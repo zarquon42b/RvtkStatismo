@@ -8,6 +8,5 @@ using std::auto_ptr;
 
 typedef vtkStandardMeshRepresenter RepresenterType;
 typedef DataManager<vtkPolyData> DataManagerType;
-typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 typedef StatisticalModel<vtkPolyData> StatisticalModelType;
 

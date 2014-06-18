@@ -32,7 +32,7 @@ setMod(procMod, sigma, exVar)
 
 \item{procMod}{object of class "procMod" as returned by pPCAconstr or setMod}
 
-\item{sigma}{estimate error variance (sensible is a value estimating coordinate error in terms of observer error)}
+\item{sigma}{estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)}
 
 \item{exVar}{numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance}
 
