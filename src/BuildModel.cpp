@@ -1,16 +1,19 @@
-#include "VTKTypes.h"
-#include <memory>
-#include <RcppEigen.h>
-#include "pPCA2statismo.h"
+#include "BuildModel.h"
 
 
-RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
+SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
+  auto_ptr<StatisticalModelType> model = BuildModel(myshapelist_,myreference_, sigma_);
+  return statismo2pPCA(model);
+}
+
+  
+auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_){
   List myshapelist(myshapelist_);
   List myreference(myreference_);
   double sigma = as<double>(sigma_);
   unsigned int ndata = myshapelist.size();
   std::vector<std::string> nam = myshapelist.names();
-
+  
   try{
   SEXP vbref = myreference["vb"];
   SEXP itref = myreference["it"];
@@ -29,14 +32,12 @@ RcppExport SEXP BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   }
   auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
   auto_ptr<StatisticalModelType> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma));
-  return statismo2pPCA(model);
+  return model;
 
   }
   catch (StatisticalModelException& e) {
     Rprintf("Exception occured while building the shape model\n");
     Rprintf("%s\n",  e.what());
+    return auto_ptr<StatisticalModelType> model;
   }
-  return wrap(1);
 }
-
-  

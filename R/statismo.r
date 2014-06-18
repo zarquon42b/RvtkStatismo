@@ -36,13 +36,13 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
     if (is.matrix(representer))
         representer <- list(vb=t(representer),it=matrix(0,0,0))
     else if (is.list(representer)) {
-        if (!is.numeric(representer$vb) || !is.integer(representer$it))
+        if (!is.numeric(representer$vb) || !is.numeric(representer$it))
             stop("representer needs vertices and faces")
         else if (ncol(representer$it > 0))
             representer$it <- representer$it-1
     }
     
-    out <- .Call("BuildModel",mylist,representer,sigma)
+    out <- .Call("BuildModelExport",mylist,representer,sigma)
     if (is.list(out)) {
         out1 <- statismo2pPCA(out)
         return(out1)
