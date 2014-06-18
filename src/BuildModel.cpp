@@ -5,15 +5,8 @@ typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_) {
   
   auto_ptr<StatisticalModelType> model = BuildModel(myshapelist_,myreference_, sigma_);
-  try{
-    return statismo2pPCA(model);
-    
-  }
-  catch (int e) {
-    Rprintf("Exception occured while building the shape model\n");
-    //Rprintf("%s\n",  e.what());
-    return wrap(1);
-  }
+  return statismo2pPCA(model);
+  
 }
 
   
@@ -48,7 +41,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
   catch (StatisticalModelException& e) {
     Rprintf("Exception occured while building the shape model\n");
     Rprintf("%s\n",  e.what());
-    auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer));
+    auto_ptr<StatisticalModelType> model;
     return model;
   }
 }

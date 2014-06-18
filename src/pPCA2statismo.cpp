@@ -36,6 +36,7 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
 }
 
 Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
+  if (model.get()) {
   vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
   
   return List::create(Named("PCBasis") = model->GetPCABasisMatrix(),
@@ -47,5 +48,8 @@ Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
 		      Named("scores")=model->GetModelInfo().GetScoresMatrix(),
 		      Named("representer")=polyData2R(reference)
 		      );
-  
+  } else {
+    Rprintf("Invalid model\n");
+    return wrap(1);
+  }
 }
