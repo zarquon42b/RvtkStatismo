@@ -38,6 +38,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
   catch (StatisticalModelException& e) {
     Rprintf("Exception occured while building the shape model\n");
     Rprintf("%s\n",  e.what());
-    return auto_ptr<StatisticalModelType> model;
+    auto_ptr<StatisticalModelType> model;
+    return model;
   }
 }
