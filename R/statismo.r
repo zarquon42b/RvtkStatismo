@@ -39,7 +39,7 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
         if (!is.numeric(representer$vb) || !is.numeric(representer$it))
             stop("representer needs vertices and faces")
         else if (ncol(representer$it > 0))
-            representer$it <- representer$it-1
+            representer$it <- representer$it
     }
     
     out <- .Call("BuildModelExport",mylist,representer,sigma)
