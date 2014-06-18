@@ -72,12 +72,14 @@ RcppExport SEXP DrawMean(SEXP pPCA_){
   List out = polyData2R(reference);
   return out;
 }
+
 RcppExport SEXP LoadModel(SEXP modelname_){
   CharacterVector modelname(modelname_);
   vtkStandardMeshRepresenter* representer = vtkStandardMeshRepresenter::Create();
   std::string modelFilename = as<std::string>(modelname);
-  auto_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));;
   
+
+  auto_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
   List out = statismo2pPCA(model);
   return out;
 }

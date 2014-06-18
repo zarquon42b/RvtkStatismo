@@ -99,6 +99,8 @@ statismoDrawMean <- function(model) {
     if (!inherits(model,"pPCA"))
         stop("please provide model of class 'pPCA'")
     out <- (.Call("DrawMean",model))
+    out$vb <- rbind(out$vb,1)
+    return(out)
 }
 
 statismoLoadModel <- function(modelname) {

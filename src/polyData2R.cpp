@@ -27,9 +27,9 @@ Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
     //  break;
     //} 
     if(npts == 3){
-      it.push_back(pts[0]+1);
-      it.push_back(pts[1]+1);
-      it.push_back(pts[2]+1); 
+      it.push_back(pts[0]);
+      it.push_back(pts[1]);
+      it.push_back(pts[2]); 
     }
   }
   int ll = it.size()/3;
