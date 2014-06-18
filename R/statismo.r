@@ -51,11 +51,12 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
     }
 }
 
-#' save a statistical model of class pPCA to statismo hdf5 format
+#' save and load a statistical model of class pPCA to statismo hdf5 format
 #'
-#' save a statistical model of class pPCA to statismo hdf5 format
+#' save and load a statistical model of class pPCA to statismo hdf5 format
 #' @param model object of class pPCA
-#' @param modelname filename to save to
+#' @param modelname filename to read/save
+#' @return statismoLoadModel returns an object of class "pPCA"
 #' @export
 statismoSaveModel <- function(model, modelname) {
     storage.mode(modelname) <- "character"
@@ -64,6 +65,12 @@ statismoSaveModel <- function(model, modelname) {
     out <- .Call("SaveModel",model,modelname)
 }
 
+#' @export
+statismoLoadModel <- function(modelname) {
+    storage.mode(modelname) <- "character"
+    out <- statismo2pPCA(.Call("LoadModel",modelname))
+    return(out)
+}
 statismo2pPCA <- function(statismodel) {
     out1 <- list()
     out1$mshape <- matrix(statismodel$mshape,length(statismodel$mshape)/statismodel$dim,byrow = T)
@@ -95,6 +102,7 @@ statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10) {
     return(out)
                          
 }
+#' @export
 statismoDrawMean <- function(model) {
     if (!inherits(model,"pPCA"))
         stop("please provide model of class 'pPCA'")
@@ -103,8 +111,4 @@ statismoDrawMean <- function(model) {
     return(out)
 }
 
-statismoLoadModel <- function(modelname) {
-    storage.mode(modelname) <- "character"
-    out <- statismo2pPCA(.Call("LoadModel",modelname))
-    return(out)
-}
+
