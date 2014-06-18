@@ -26,7 +26,8 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
         print(dim(array)[2])
     } else if (dim(array)[2] != 3)
         stop("only 2D and 3D configs allowed")
-    
+    rawdata <- vecx(array,byrow=TRUE)
+    rawdata <- sweep(rawdata,2,colMeans(rawdata))
     mylist <- array2meshlist(array)
     if (missing(representer))
         representer <- array[,,1]
@@ -51,6 +52,7 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
     out <- .Call("BuildModelExport",mylist,representer,sigma)
     if (is.list(out)) {
         out1 <- statismo2pPCA(out)
+        out1$rawdata <- rawdata
         return(out1)
     } else {
         warning("something went wrong")
