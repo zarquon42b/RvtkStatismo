@@ -7,25 +7,24 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     // get the empiric kernel
-    auto_ptr<MatrixValuedKernelType> statModelKernel(new StatisticalModelKernel<vtkPolyData>(model.get()));
+    MatrixValuedKernelType* statModelKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
     // set up the gaussian kernel to be incremented over a list of parameters
     NumericVector params = kernels[0];
-    auto_ptr<GaussianKernel> gk(new GaussianKernel(params[0]));
-    auto_ptr<MatrixValuedKernelType> mvKernel(new UncorrelatedMatrixValuedKernel<vtkPoint>(gk.get(), model->GetRepresenter()->GetDimensions()));
+    GaussianKernel* gk = new GaussianKernel(params[0]);
+    MatrixValuedKernelType* mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
     
-    auto_ptr<MatrixValuedKernelType> sumKernel(new ScaledKernel<vtkPoint>(mvKernel.get(), params[1]));
+    MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
     //iterate over the remaining kernel parameters
     for (unsigned int i = 1; i < kernels.size();i++) {
       params = kernels[i];
-      auto_ptr<GaussianKernel> gkNew(new GaussianKernel(params[0]));
-      auto_ptr<MatrixValuedKernelType> mvGk(new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew.get(), model->GetRepresenter()->GetDimensions()));
-      auto_ptr<MatrixValuedKernelType> scaledGk(new ScaledKernel<vtkPoint>(mvGk.get(), params[1]));
-      auto_ptr<MatrixValuedKernelType> dump = sumKernel;
-      sumKernel.reset(new SumKernel<vtkPoint>(dump.get(), scaledGk.get()));
+      GaussianKernel* gkNew = new GaussianKernel(params[0]);
+      MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
+      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
+      //MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(scaledGk, params[1]);
+      MatrixValuedKernelType* sumKernel = new SumKernel<vtkPoint>(scaledGk, scaledGk);
     }
     // add the empiric kernel on top
-    auto_ptr<MatrixValuedKernelType> dump = sumKernel;
-    sumKernel.reset(new SumKernel<vtkPoint>(dump.get(), statModelKernel.get()));
+    sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
     
     //build new model
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
@@ -42,6 +41,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
 RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_){
   
   auto_ptr<StatisticalModelType> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_);
+//return statismo2pPCA(model);
   return statismo2pPCA(model);
   
 }
