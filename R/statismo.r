@@ -123,6 +123,7 @@ statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) 
     if (!is.list(kernel))
         stop("kernel needs to be a list of two-entry vectors")
     nystroem <- min(ncol(model$representer$vb),nystroem)
+    ncomp <- min(ncomp,ncol(model$W)/2)
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
