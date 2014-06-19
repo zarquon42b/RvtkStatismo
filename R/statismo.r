@@ -122,9 +122,10 @@ statismo2pPCA <- function(statismodel) {
 #' @examples
 #' require(Morpho)
 #' data(boneData)
-#' mod <- statismoBuildModel(boneLM)
-#' GPmod <- statismoGPmodel(mod,kernel=list(c(1,0.1)))##extend flexibility
-#' PC1 <- predictpPCA(2,GPmod)
+#' align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+#' mod <- statismoBuildModel(align)
+#' GPmod <- statismoGPmodel(mod,kernel=list(c(10,1)))##extend flexibility
+#' PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC
 #' deformGrid3d(PC1,GPmod$mshape,ngrid=0)
 #' @export
 statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) {

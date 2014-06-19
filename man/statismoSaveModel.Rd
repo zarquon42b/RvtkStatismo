@@ -3,7 +3,7 @@
 \alias{statismoSaveModel}
 \title{save and load a statistical model of class pPCA to statismo hdf5 format}
 \usage{
-statismoSaveModel(model, modelname)
+statismoSaveModel(model, modelname = dataname)
 }
 \arguments{
 \item{model}{object of class pPCA}

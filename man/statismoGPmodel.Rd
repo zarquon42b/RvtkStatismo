@@ -17,12 +17,17 @@ statismoGPmodel(model, kernel = list(c(100, 70)), ncomp = 10,
 }
 \value{
 returns a shape model of class "pPCA"
-require(Morpho)
-data(boneData)
-mod <- pPCA(boneLM)
-GPmod <- statismoGPmodel(mod)##extend flexibility
 }
 \description{
 expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA
+}
+\examples{
+require(Morpho)
+data(boneData)
+align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+mod <- statismoBuildModel(align)
+GPmod <- statismoGPmodel(mod,kernel=list(c(10,1)))##extend flexibility
+PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC
+deformGrid3d(PC1,GPmod$mshape,ngrid=0)
 }
 
