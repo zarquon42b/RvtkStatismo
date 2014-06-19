@@ -66,7 +66,9 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
 #' @param modelname filename to read/save
 #' @return statismoLoadModel returns an object of class "pPCA"
 #' @export
-statismoSaveModel <- function(model, modelname) {
+statismoSaveModel <- function(model, modelname=dataname) {
+    dataname <- deparse(substitute(model))
+    dataname <- paste0(dataname,".h5")
     storage.mode(modelname) <- "character"
     if (!inherits(model,"pPCA"))
         stop("model must be of class pPCA")
@@ -75,7 +77,13 @@ statismoSaveModel <- function(model, modelname) {
 
 #' @export
 statismoLoadModel <- function(modelname) {
+    modelname <- path.expand(modelname)
+    if (length(modelname) != 1)
+        stop("only one file at a time please")
+    if (! file.exists(modelname))
+        stop(paste0("file ", modelname," does not exist"))
     storage.mode(modelname) <- "character"
+    
     out <- statismo2pPCA(.Call("LoadModel",modelname))
     return(out)
 }
@@ -111,10 +119,13 @@ statismo2pPCA <- function(statismodel) {
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @return returns a shape model of class "pPCA"
+#' @examples
 #' require(Morpho)
 #' data(boneData)
-#' mod <- pPCA(boneLM)
-#' GPmod <- statismoGPmodel(mod)##extend flexibility
+#' mod <- statismoBuildModel(boneLM)
+#' GPmod <- statismoGPmodel(mod,kernel=list(c(1,0.1)))##extend flexibility
+#' PC1 <- predictpPCA(2,GPmod)
+#' deformGrid3d(PC1,GPmod$mshape,ngrid=0)
 #' @export
 statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
     ncomp <- as.integer(ncomp)
@@ -123,10 +134,8 @@ statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) 
     if (!is.list(kernel))
         stop("kernel needs to be a list of two-entry vectors")
     k <- ncol(model$representer$vb)
-    print(k)
     nystroem <- min(k,nystroem)
     ncomp <- min(ncomp,floor(k/2))
-    print(ncomp)
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
