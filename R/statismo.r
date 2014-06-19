@@ -102,14 +102,32 @@ statismo2pPCA <- function(statismodel) {
         out1$representer$it <- matrix(0,0,0)
     return(out1)
 }
+#' expands a models variability by adding a Gaussian kernel function
+#'
+#' expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA
+#'
+#' @param model shape model of class "pPCA"
+#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels (currently only the first list entry is used)
+#' @param ncomp integer: number of PCs to approximate
+#' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
+#' @return returns a shape model of class "pPCA"
+#' require(Morpho)
+#' data(boneData)
+#' mod <- pPCA(boneLM)
+#' GPmod <- statismoGPmodel(mod)##extend flexibility
 #' @export
-statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10) {
+statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
     ncomp <- as.integer(ncomp)
     if (!inherits(model,"pPCA"))
         stop("please provide model of class 'pPCA'")
     if (!is.list(kernel))
         stop("kernel needs to be a list of two-entry vectors")
-    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp))
+    nystroem <- min(ncol(model$representer$vb),nystroem)
+    storage.mode(nystroem) <- "integer"
+    chk <- lapply(kernel,length)
+    if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
+        stop("only provide two-valued vectors in kernel")
+    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp,nystroem))
     return(out)
                          
 }

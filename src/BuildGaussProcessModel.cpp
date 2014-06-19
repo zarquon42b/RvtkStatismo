@@ -1,37 +1,8 @@
-#include "VTKTypes.h"
-#include "pPCA2statismo.h"
-#include "statismo/LowRankGPModelBuilder.h"
-#include "polyData2R.h"
-class GaussianKernel: public ScalarValuedKernel<vtkPoint> {
-public:
+#include "BuildGaussProcessModel.h"
 
-  GaussianKernel(double sigma) : m_sigma(sigma), m_sigma2(sigma * sigma) {
-  }
-
-  inline double operator()(const vtkPoint& x, const vtkPoint& y) const {
-    VectorType r(3);
-    r << x[0] - y[0], x[1] - y[1], x[2] - y[2];
-    return exp(-r.dot(r) / m_sigma2);
-  }
-
-  std::string GetKernelInfo() const {
-    std::ostringstream os;
-    os << "GaussianKernel(" << m_sigma << ")";
-    return os.str();
-  }
-
-private:
-
-  double m_sigma;
-  double m_sigma2;
-};
-
-typedef GaussianKernel GaussianKernelType;
-typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
-typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
-
-auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_) {
-  int numberOfComponents = as<int>(ncomp_);
+auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_) {
+  unsigned int nystroem = as<unsigned int>(nystroem_);
+  unsigned int numberOfComponents = as<unsigned int>(ncomp_);
   List kernels(kernels_);
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
@@ -47,7 +18,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
     const MatrixValuedKernelType& combinedModelAndGaussKernel = SumKernel<vtkPoint>(&statModelKernel, &scaledGk);
 
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), combinedModelAndGaussKernel, numberOfComponents));
+    auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), combinedModelAndGaussKernel, numberOfComponents,nystroem));
     //combinedModel->Save("test.h5");
     return combinedModel;
   }
@@ -58,11 +29,10 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
     return model;
   }
 }
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_){
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_){
   
-  auto_ptr<StatisticalModelType> model = BuildGPModel(pPCA_,kernels_,ncomp_);
+  auto_ptr<StatisticalModelType> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_);
 //return statismo2pPCA(model);
-  vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
   return statismo2pPCA(model);
   
 }
