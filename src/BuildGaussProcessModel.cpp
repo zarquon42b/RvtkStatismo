@@ -6,20 +6,29 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
   List kernels(kernels_);
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
-    const MatrixValuedKernelType& statModelKernel = StatisticalModelKernel<vtkPolyData>(model.get());
-    //for (unsigned int i = 0; i < kernels.size();i++) {
-    NumericVector kerntmp = kernels[0];
-    double gaussianKernelSigma = kerntmp[0];
-    double gaussianKernelScale = kerntmp[1];
-    const GaussianKernel gk = GaussianKernel(gaussianKernelSigma);
-    const MatrixValuedKernelType& mvGk = UncorrelatedMatrixValuedKernel<vtkPoint>(&gk, model->GetRepresenter()->GetDimensions());
-    const MatrixValuedKernelType& scaledGk = ScaledKernel<vtkPoint>(&mvGk, gaussianKernelScale);
-      
-    const MatrixValuedKernelType& combinedModelAndGaussKernel = SumKernel<vtkPoint>(&statModelKernel, &scaledGk);
-
+    // get the empiric kernel
+    MatrixValuedKernelType* statModelKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
+    // set up the gaussian kernel to be incremented over a list of parameters
+    NumericVector params = kernels[0];
+    GaussianKernel* gk = new GaussianKernel(params[0]);
+    MatrixValuedKernelType* mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+    
+    MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
+    //iterate over the remaining kernel parameters
+    for (unsigned int i = 1; i < kernels.size();i++) {
+      params = kernels[i];
+      GaussianKernel* gkNew = new GaussianKernel(params[0]);
+      MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
+      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
+      //MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(scaledGk, params[1]);
+      MatrixValuedKernelType* sumKernel = new SumKernel<vtkPoint>(scaledGk, scaledGk);
+    }
+    // add the empiric kernel on top
+    sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
+    
+    //build new model
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), combinedModelAndGaussKernel, numberOfComponents,nystroem));
-    //combinedModel->Save("test.h5");
+    auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
     return combinedModel;
   }
   catch (StatisticalModelException& e) {
