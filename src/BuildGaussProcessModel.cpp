@@ -3,6 +3,9 @@
 auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_) {
   unsigned int nystroem = as<unsigned int>(nystroem_);
   unsigned int numberOfComponents = as<unsigned int>(ncomp_);
+  std::list<MatrixValuedKernelType*> mKerns;
+  std::list<GaussianKernel*> gKerns;
+
   List kernels(kernels_);
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
@@ -11,6 +14,8 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
     // set up the gaussian kernel to be incremented over a list of parameters
     NumericVector params = kernels[0];
     GaussianKernel* gk = new GaussianKernel(params[0]);
+    gKerns.push_back(gk);
+    mKerns.push_back(statModelKernel);
     MatrixValuedKernelType* mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
     
     MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
@@ -21,15 +26,29 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
       MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
       MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
       //MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(scaledGk, params[1]);
+      gKerns.push_back(gkNew);
+      mKerns.push_back(mvGk);
+      mKerns.push_back(scaledGk);
       sumKernel = new SumKernel<vtkPoint>(sumKernel, scaledGk);
+      
     }
     // add the empiric kernel on top
     sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
-    
+    mKerns.push_back(sumKernel);
     //build new model
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
     auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
-    
+    //tidy up
+    for (std::list<MatrixValuedKernelType*>::iterator it = mKerns.begin(); it != mKerns.end(); it++) {
+       if (*it != NULL) {
+	 delete *it;
+       }
+    }
+    for (std::list<GaussianKernel*>::iterator it = gKerns.begin(); it != gKerns.end(); it++) {
+      if (*it != NULL) {
+	delete *it;
+      }
+    }
     return combinedModel;
   }
   catch (StatisticalModelException& e) {
@@ -38,6 +57,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
     auto_ptr<StatisticalModelType> model;
     return model;
   }
+ 
 }
 RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_){
   
