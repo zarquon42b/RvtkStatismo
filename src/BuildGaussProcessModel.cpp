@@ -21,7 +21,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
       MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
       MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
       //MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(scaledGk, params[1]);
-      MatrixValuedKernelType* sumKernel = new SumKernel<vtkPoint>(scaledGk, scaledGk);
+      sumKernel = new SumKernel<vtkPoint>(sumKernel, scaledGk);
     }
     // add the empiric kernel on top
     sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
@@ -29,6 +29,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
     //build new model
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
     auto_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
+    
     return combinedModel;
   }
   catch (StatisticalModelException& e) {
