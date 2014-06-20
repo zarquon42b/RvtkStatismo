@@ -12,23 +12,21 @@
 predictpPCAconstr(x, model, representer, origSpace = TRUE, pPCA = FALSE,
   ...)
 
-\method{predictpPCAconstr}{matrix}(x, model, representer = FALSE,
+\method{predictpPCAconstr}{matrix}(x, model, representer = TRUE,
   origSpace = TRUE, pPCA = FALSE, ...)
 
-\method{predictpPCAconstr}{mesh3d}(x, model, representer = FALSE, sdmax,
+\method{predictpPCAconstr}{mesh3d}(x, model, representer = TRUE, sdmax,
   origSpace = TRUE, pPCA = FALSE, ...)
 
-predictpPCA(x, model, representer = FALSE, ...)
+predictpPCA(x, model, representer = TRUE, ...)
 
-\method{predictpPCA}{matrix}(x, model, representer = FALSE,
-  origSpace = TRUE, use.lm = NULL, sdmax, mahaprob = c("none", "chisq",
-  "dist"), ...)
+\method{predictpPCA}{matrix}(x, model, representer = TRUE, origSpace = TRUE,
+  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"), ...)
 
-\method{predictpPCA}{mesh3d}(x, model, representer = FALSE,
-  origSpace = TRUE, use.lm = NULL, sdmax, mahaprob = c("none", "chisq",
-  "dist"), ...)
+\method{predictpPCA}{mesh3d}(x, model, representer = TRUE, origSpace = TRUE,
+  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"), ...)
 
-\method{predictpPCA}{numeric}(x, model, representer = FALSE, ...)
+\method{predictpPCA}{numeric}(x, model, representer = TRUE, ...)
 }
 \arguments{
 \item{x}{a matrix, a mesh3d or a vector (for pPCA models) containing standardized variables within the PC-space}

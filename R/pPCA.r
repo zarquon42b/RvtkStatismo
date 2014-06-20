@@ -231,7 +231,7 @@ predictpPCAconstr <- function(x, model, representer, origSpace=TRUE, pPCA=FALSE,
 
 #' @rdname predictpPCA
 #' @export
-predictpPCAconstr.matrix <- function(x, model,representer=FALSE,origSpace=TRUE,pPCA=FALSE,...) {
+predictpPCAconstr.matrix <- function(x, model,representer=TRUE,origSpace=TRUE,pPCA=FALSE,...) {
     mshape <- model$mshape
     missingIndex <- model$missingIndex
     use.lm <- getUseLM(missingIndex,mshape)
@@ -262,7 +262,7 @@ predictpPCAconstr.matrix <- function(x, model,representer=FALSE,origSpace=TRUE,p
 
 #' @rdname predictpPCA
 #' @export
-predictpPCAconstr.mesh3d <- function(x,model,representer=FALSE, sdmax, origSpace=TRUE,pPCA=FALSE,...) {
+predictpPCAconstr.mesh3d <- function(x,model,representer=TRUE, sdmax, origSpace=TRUE,pPCA=FALSE,...) {
     mat <- t(x$vb[1:3,])
     estim <- predictpPCAconstr(x=mat,model=model,representer=representer,sdmax=sdmax,origSpace=origSpace)
     return(estim)
@@ -271,11 +271,11 @@ predictpPCAconstr.mesh3d <- function(x,model,representer=FALSE, sdmax, origSpace
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA <- function(x,model,representer=FALSE,...)UseMethod("predictpPCA")
+predictpPCA <- function(x,model,representer=TRUE,...)UseMethod("predictpPCA")
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA.matrix <- function(x,model,representer=FALSE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
+predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- model$mshape
     if (is.null(use.lm)) {
@@ -335,7 +335,7 @@ predictpPCA.matrix <- function(x,model,representer=FALSE,origSpace=TRUE,use.lm=N
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA.mesh3d <- function(x,model,representer=FALSE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
+predictpPCA.mesh3d <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
     mat <- t(x$vb[1:3,])
     estim <- predictpPCA(vert2points(x),model=model,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,mahaprob=mahaprob,...)
     return(estim)
@@ -343,7 +343,7 @@ predictpPCA.mesh3d <- function(x,model,representer=FALSE,origSpace=TRUE,use.lm=N
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA.numeric <- function(x,model,representer=FALSE,...) {
+predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
     W <- model$W
     useit <- 1:(min(length(x),ncol(W)))
     if (length(useit) > 1)
