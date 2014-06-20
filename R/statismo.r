@@ -115,20 +115,28 @@ statismo2pPCA <- function(statismodel) {
 #' expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA
 #'
 #' @param model shape model of class "pPCA"
+#' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
 #' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels (currently only the first list entry is used)
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @return returns a shape model of class "pPCA"
 #' @examples
+#' ### this is a silly example with only 10 landmarks
 #' require(Morpho)
 #' data(boneData)
 #' align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
 #' mod <- statismoBuildModel(align)
-#' GPmod <- statismoGPmodel(mod,kernel=list(c(10,1)))##extend flexibility
-#' PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC
-#' deformGrid3d(PC1,GPmod$mshape,ngrid=0)
+#' GPmod <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)))##extend flexibility using two Gaussian kernels
+#' GPmodNoEmp <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)),useEmpiric = FALSE)##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
+#' PC1orig <- predictpPCA(2,mod)# get shape in 2sd of first PC of originial model
+#' PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC of the extended model
+#' PC1NoEmp <- predictpPCA(2,GPmodNoEmp)# get shape in 2sd of first PC
+#' ##visualize the differences from the mean (green spheres)
+#' deformGrid3d(PC1,GPmod$mshape,ngrid=0)##
+#' deformGrid3d(PC1NoEmp,GPmod$mshape,ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
+#' deformGrid3d(PC1orig,GPmod$mshape,ngrid=0,col1=5,add=TRUE)
 #' @export
-statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
+statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
     ncomp <- as.integer(ncomp)
     if (!inherits(model,"pPCA"))
         stop("please provide model of class 'pPCA'")
@@ -141,7 +149,7 @@ statismoGPmodel <- function(model,kernel=list(c(100,70)),ncomp=10,nystroem=500) 
     chk <- lapply(kernel,length)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued vectors in kernel")
-    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp,nystroem))
+    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric))
     return(out)
                          
 }
