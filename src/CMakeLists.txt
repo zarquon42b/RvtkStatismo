@@ -13,12 +13,16 @@ set(CXXFLAGS "$ENV{CXXFLAGS}")
 set(CPPFLAGS "$ENV{CPPFLAGS}")
 set(BLAS_LIBS "$ENV{BLAS_LIBS}")
 set(LAPACK_LIBS "$ENV{LAPACK_LIBS}")
-
 ## set variables accordingly
 set(CMAKE_CXX_FLAGS "${CXXFLAGS}")
 set(CMAKE_C_FLAGS "${CPPFLAGS} ${CFLAGS}")
 SET(CMAKE_CXX_COMPILER::string "${CXX}")
-SET(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
+option(HAS_CXX11_ASYNC "Statismo can make use of multi-threading in case the compiler supports std::async of the C++11 standard " OFF)
+if(HAS_CXX11_ASYNC )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  add_definitions( -DHAS_CXX11_ASYNC )
+endif(HAS_CXX11_ASYNC)
 project(RvtkStatismo CXX)
 find_package(VTK REQUIRED)
 ## look for statismo requirements
