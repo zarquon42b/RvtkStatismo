@@ -1,6 +1,6 @@
-__RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github.com/statismo/statismo)** (a C++ library to calculate and modify statistical shape models) and some functionality of [VTK](http://www.vtk.org) library.
+__RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github.com/statismo/statismo)** (a C++ library to calculate and modify statistical shape models) using vtkStandardMeshRepresenter and thus also includes some functionality of the **[VTK](http://www.vtk.org)** library.
 
-### Install prerequisites ###
+#### Install prerequisites ###
 
 
 
@@ -26,7 +26,7 @@ On Ubuntu/Debian, this can be easily accomplished by:
 
 
 
-### Installation of the R-package "Rvtk" using *devtools* (this automatically installs the required R-packages) ###
+#### Installation of the R-package "RvtkStatismo"  - using *devtools* (this automatically installs the required R-packages)
 
 
 
@@ -37,21 +37,23 @@ from within R (Ubuntu/Debian users will have to install *libcurl4-gnutls-dev* be
 	install.packages("devtools")
 
 
-##### install *Rvtk* #####
+##### Install *RvtkStatismo* #####
 Run the following command in R:
         
 	require(devtools)
 	install_github("zarquon42b/RvtkStatismo", local=FALSE)
    
-### Installation of the-R package from source ###
+#### Installation of the-R package from source ###
 
 1. Download tarball (and extract) or clone using git
 
-2. (optional) go to RvtkStatismo/src and customize VTK_DIR (either by editing CMakeList.txt or using ccmake)
+2. (optional) go to RvtkStatismo/src and customize cmake parameters (using ccmake or cmake-gui)
 
 3. run 
  
 		R CMD INSTALL .
 
 
-### Parallel computing: is set as default but requires the compiler to accept the c++11 flag. If you run into trouble, use ccmake (or cmake-gui) and set HAS_CXX11_ASYNC to OFF
+#### Parallel computing: 
+
+* is set as default but requires the compiler to accept the c++11 flag. If you run into trouble, use ccmake (or cmake-gui) and set HAS_CXX11_ASYNC to OFF
