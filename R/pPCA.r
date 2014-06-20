@@ -456,6 +456,7 @@ getCoefficients <- function(x, model,use.lm=NULL) {
 #'
 #' get per coordinate variance from a statistical model
 #'
+#' @encoding utf8
 #' @param model object of class pPCA
 #' @note calculates the per-coordinate variance as described in Luethi(2009)
 #' @references \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
