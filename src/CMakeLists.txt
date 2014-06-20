@@ -41,24 +41,23 @@ if(HAS_CXX11_ASYNC AND (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
 endif()
 ## look for VTK
 find_package(VTK REQUIRED)
-## look for statismo and requirements
+
+## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(STATISMO REQUIRED)
 find_path(HDF5_INCLUDE_DIR hdf5.h)
 find_path(HDF5_INCLUDE_DIR_CPP H5Cpp.h)
-find_library(HDF5_LIBRARY hdf5)
-find_library(HDF5_CPP_LIBRARY hdf5_cpp)
+find_library(HDF5_LIBRARY hdf5 PATHS ${CMAKE_SYSTEM_LIBRARY_PATH} "${STATISMO_DIR}/lib/hdf5")
+find_library(HDF5_CPP_LIBRARY hdf5_cpp PATHS ${CMAKE_SYSTEM_LIBRARY_PATH} "${STATISMO_DIR}/lib/hdf5")
 get_filename_component(HDF5_LIBRARY_DIR ${HDF5_LIBRARY} PATH)
-set(HDF5_LIBRARIES ${HDF5_LIBRARY} ${HDF5_CPP_LIBRARY})
-set(STATISMO_LIBRARY_DIR ${HDF5_LIBRARY_DIR})
 
 ## configure linker and include dirs
-LINK_DIRECTORIES(${RLIB})
-include_directories(${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR})
+LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR})
+include_directories(${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${VTK_INCLUDE_DIR})
 include(${VTK_USE_FILE})
 add_library(RvtkStatismo SHARED BuildGaussProcessModel.cpp BuildModel.cpp polyData2R.cpp pPCA2statismo.cpp R2vtk.cpp readVTP.cpp SaveModel.cpp vtkVisualize.cpp writeToVTK.cpp)
 set(CMAKE_SHARED_LINKER_FLAGS "${BLAS_LIBS} ${LAPACK_LIBS}")
 if (WIN32)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libstdc++")
 endif()
-target_link_libraries(RvtkStatismo ${VTK_LIBRARIES} ${HDF5_LIBRARIES} R)
+target_link_libraries(RvtkStatismo ${VTK_LIBRARIES} ${STATISMO_HDF5_LIBRARIES} R)
 
