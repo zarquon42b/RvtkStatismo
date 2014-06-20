@@ -147,8 +147,9 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
+    useEmpiric <- as.logical(useEmpiric)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
-        stop("only provide two-valued vectors in kernel")
+        stop("only provide two-valued numeric vectors in kernel")
     out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric))
     return(out)
                          
