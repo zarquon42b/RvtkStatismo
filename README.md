@@ -56,4 +56,4 @@ Run the following command in R:
 
 #### Parallel computing: 
 
-* is set as default but requires the compiler to accept the c++11 flag. If you run into trouble, use ccmake (or cmake-gui) and set HAS_CXX11_ASYNC to OFF
+* is set on default but requires the compiler to accept the c++11/c++0x flag. If you run into trouble, use ccmake (or cmake-gui) and set HAS_CXX11_ASYNC to OFF
