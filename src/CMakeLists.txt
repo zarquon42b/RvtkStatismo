@@ -19,36 +19,35 @@ set(LAPACK_LIBS "$ENV{LAPACK_LIBS}")
 set(CMAKE_CXX_FLAGS "${CXXFLAGS}")
 set(CMAKE_C_FLAGS "${CPPFLAGS} ${CFLAGS}")
 SET(CMAKE_CXX_COMPILER::string "${CXX}")
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 project(RvtkStatismo CXX)
+
+option(ENABLE_CXX11 "enable c++11 standard, needed for parallel computation" ON)
 #check c++11 compliance and enable to use parallel threading
-include(CheckCXXCompilerFlag)
+if(ENABLE_CXX11)
+  include(CheckCXXCompilerFlag)
 
 
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.Parallel threading disabled")
-endif()
-option(HAS_CXX11_ASYNC "make use of multi-threading in case the compiler supports std::async of the C++11 standard " ON)
-if(HAS_CXX11_ASYNC AND (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
-  add_definitions( -DHAS_CXX11_ASYNC )
-endif()
-## look for VTK
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+  else()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.Parallel threading disabled")
+  endif(COMPILER_SUPPORTS_CXX11)
+  option(HAS_CXX11_ASYNC "make use of multi-threading in case the compiler supports std::async of the C++11 standard " ON)
+  if(HAS_CXX11_ASYNC AND (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
+    add_definitions( -DHAS_CXX11_ASYNC )
+  endif()
+endif(ENABLE_CXX11)
+  ## look for VTK
 find_package(VTK REQUIRED)
 
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(STATISMO REQUIRED)
-find_path(HDF5_INCLUDE_DIR hdf5.h)
-find_path(HDF5_INCLUDE_DIR_CPP H5Cpp.h)
-find_library(HDF5_LIBRARY hdf5 PATHS ${CMAKE_SYSTEM_LIBRARY_PATH} "${STATISMO_DIR}/lib/hdf5")
-find_library(HDF5_CPP_LIBRARY hdf5_cpp PATHS ${CMAKE_SYSTEM_LIBRARY_PATH} "${STATISMO_DIR}/lib/hdf5")
-get_filename_component(HDF5_LIBRARY_DIR ${HDF5_LIBRARY} PATH)
 
 ## configure linker and include dirs
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR})
