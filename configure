@@ -20,5 +20,4 @@ export RCPP_DIR
 export RCPPEIGEN_DIR
 cd src
 cmake .
-
-
+cmake .
