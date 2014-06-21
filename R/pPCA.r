@@ -44,9 +44,9 @@ pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,representer=NUL
     sds <- PCA$sdev^2
     good <- which(sds > 1e-13)
     sds <- sds[good] ## remove PCs with very little variability
-    PCA$rotation <- PCA$rotation[,good]
+    PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     PCA$sdev <- PCA$sdev[good]
-    PCA$x <- PCA$x[,good]
+    PCA$x <- PCA$x[,good,drop=FALSE]
     procMod$PCA <- PCA
     procMod$scale <- scale
     class(procMod) <- "pPCA"
@@ -130,12 +130,12 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
     procMod$exVar <- sdCum[max(usePC)]##calculate variance explained by that model compared to that of the training sample
     procMod$sigma <- sigma
-    W <- t(t(PCA$rotation[,usePC])*sqrt(sigest[usePC])) ##Matrix to project scaled PC-scores back into the config space
-    Win <- (t(PCA$rotation[,usePC])*(1/sqrt(sigest)[usePC])) ##Matrix to project from config space into the scaled PC-space
+    W <- t(t(PCA$rotation[,usePC,drop=FALSE])*sqrt(sigest[usePC])) ##Matrix to project scaled PC-scores back into the config space
+    Win <- (t(PCA$rotation[,usePC,drop=FALSE])*(1/sqrt(sigest)[usePC])) ##Matrix to project from config space into the scaled PC-space
     ##Matrix to project from config space into the scaled PC-space
     procMod$W <- W
     procMod$Win <- Win
-    procMod$PCA$rotation <- PCA$rotation[,usePC]
+    procMod$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     procMod$PCA$sdev <- sqrt(sigest[usePC])
     if (!is.null(procMod$rawdata))
         procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
@@ -167,7 +167,7 @@ setMod.pPCAconstr <- function(procMod,sigma=NULL,exVar=1) {
     M <- siginv*WbtWb
     diag(M) <- diag(M)+1
     ##Matrix to project from config space into the scaled PC-space
-    procMod$Win <- (t(PCA$rotation[,])*(1/sqrt(sds)[])) ##Matrix to project from config space into the scaled PC-space
+    procMod$Win <- (t(PCA$rotation)*(1/sqrt(sds))) ##Matrix to project from config space into the scaled PC-space
     procMod$Wb <- Wb
     procMod$WbtWb <- WbtWb
     procMod$M <- M
@@ -376,7 +376,7 @@ as.pPCA.pPCAconstr <- function(x, newMean,...) { #convert a pPCAconstr to a pPCA
     good <- which(sds > 1e-15)
     sds[-good] <- 0
     procMod$PCA$sdev <- sqrt(sds)
-    newW <- procMod$PCA$rotation[,]%*%(Re(eigM$vectors[,]))[,good]
+    newW <- procMod$PCA$rotation%*%(Re(eigM$vectors))[,good,drop=FALSE]
     sds <- sds[good]
     procMod$W <- t(t(newW)*sqrt(sds))
     procMod$Win <- t(newW)/sqrt(sds)
