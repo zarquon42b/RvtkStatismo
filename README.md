@@ -47,11 +47,12 @@ Run the following command in R:
 
 1. Download tarball (and extract) or clone using git
 
-2. (optional) go to RvtkStatismo/src and customize cmake parameters (using ccmake or cmake-gui)
+2. (optional) go to RvtkStatismo/src and customize cmake parameters (using ccmake or cmake-gui), such as VTK or Statismo installation paths.
 
-3. run 
+3. within the base directory of RvtkStatismo run: 
  
-		R CMD INSTALL .
+		R CMD INSTALL . 
+ 
 
 
 #### Parallel computing: 
