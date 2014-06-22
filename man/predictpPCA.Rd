@@ -21,10 +21,12 @@ predictpPCAconstr(x, model, representer, origSpace = TRUE, pPCA = FALSE,
 predictpPCA(x, model, representer = TRUE, ...)
 
 \method{predictpPCA}{matrix}(x, model, representer = TRUE, origSpace = TRUE,
-  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"), ...)
+  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"),
+  align = TRUE, ...)
 
 \method{predictpPCA}{mesh3d}(x, model, representer = TRUE, origSpace = TRUE,
-  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"), ...)
+  use.lm = NULL, sdmax, mahaprob = c("none", "chisq", "dist"),
+  align = TRUE, ...)
 
 \method{predictpPCA}{numeric}(x, model, representer = TRUE, ...)
 }

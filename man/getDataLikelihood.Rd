@@ -12,7 +12,7 @@ getDataLikelihood(x, model, align = FALSE, use.lm)
 
 \method{getDataLikelihood}{mesh3d}(x, model, align = FALSE, use.lm = NULL)
 
-getCoefficients(x, model, use.lm = NULL)
+getCoefficients(x, model, align = TRUE, use.lm = NULL)
 }
 \arguments{
 \item{x}{matrix or mesh3d}
