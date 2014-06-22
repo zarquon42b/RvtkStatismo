@@ -35,3 +35,13 @@ meshlist2array <- function(meshlist) {
         dimnames(vertarr)[[3]] <- paste("specimen",1:n,sep="_")
     return(vertarr)
 }
+#' @importFrom Rvcg meshintegrity
+checkmeshlist <- function(x) {
+    verts <- unlist(lapply(x,function(y) y <- ncol(y$vb)))
+    chk <- prod(verts==verts[1])
+    if (!chk)
+        stop("all meshes need to have the same amount of vertices")
+    else
+        return(lapply(x,meshintegrity))
+}
+    

@@ -130,15 +130,15 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
     procMod$exVar <- sdCum[max(usePC)]##calculate variance explained by that model compared to that of the training sample
     procMod$sigma <- sigma
-    W <- t(t(PCA$rotation[,usePC,drop=FALSE])*sqrt(sigest[usePC])) ##Matrix to project scaled PC-scores back into the config space
-    Win <- (t(PCA$rotation[,usePC,drop=FALSE])*(1/sqrt(sigest)[usePC])) ##Matrix to project from config space into the scaled PC-space
+    #W <- t(t(PCA$rotation[,usePC,drop=FALSE])*sqrt(sigest[usePC])) ##Matrix to project scaled PC-scores back into the config space
+    #Win <- (t(PCA$rotation[,usePC,drop=FALSE])*(1/sqrt(sigest)[usePC])) ##Matrix to project from config space into the scaled PC-space
     ##Matrix to project from config space into the scaled PC-space
-    procMod$W <- W
-    procMod$Win <- Win
+    #procMod$W <- W
+    #procMod$Win <- Win
     procMod$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     procMod$PCA$sdev <- sqrt(sigest[usePC])
     if (!is.null(procMod$rawdata))
-        procMod$PCA$x <- procMod$rawdata%*%t(procMod$Win)
+        procMod$PCA$x <- procMod$rawdata%*%GetPCABasisMatrix(procMod)
     else
         procMod$PCA$x <- 0
     Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
@@ -160,14 +160,14 @@ setMod.pPCAconstr <- function(procMod,sigma=NULL,exVar=1) {
     else
         siginv <- 1/sigma
     
-    W <- procMod$W
+    W <- GetPCABasisMatrix(procMod)
     ## get constrained space
     Wb <- W[-sel,]
     WbtWb <- crossprod(Wb)
     M <- siginv*WbtWb
     diag(M) <- diag(M)+1
     ##Matrix to project from config space into the scaled PC-space
-    procMod$Win <- (t(PCA$rotation)*(1/sqrt(sds))) ##Matrix to project from config space into the scaled PC-space
+    #procMod$Win <- (t(PCA$rotation)*(1/sqrt(sds))) ##Matrix to project from config space into the scaled PC-space
     procMod$Wb <- Wb
     procMod$WbtWb <- WbtWb
     procMod$M <- M
@@ -188,7 +188,7 @@ setMod.pPCAconstr <- function(procMod,sigma=NULL,exVar=1) {
 print.pPCAconstr <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste("   sigma =",x$sigma,"\n"))
     cat(paste("   exVar =",x$exVar,"\n\n"))
-    cat(paste(" first",ncol(x$W),"PCs used\n"))
+    cat(paste(" first",length(x$PCA$sdev),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
         print(x$Variance)
@@ -198,7 +198,7 @@ print.pPCAconstr <- function(x, digits = getOption("digits"), Variance=TRUE,...)
 print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste("   sigma =",x$sigma,"\n"))
     cat(paste("   exVar =",x$exVar,"\n\n"))
-    cat(paste(" first",ncol(x$W),"PCs used\n"))
+    cat(paste(" first",length(x$PCA$sdev),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
         print(x$Variance)
@@ -241,7 +241,7 @@ predictpPCAconstr.matrix <- function(x, model,representer=TRUE,origSpace=TRUE,pP
     alpha <- model$alphamean%*%as.vector(t(sbres))
     
     ##as.vector(W[,good]%*%alpha)
-    estim <- t(as.vector(model$W%*%alpha)+t(mshape))
+    estim <- t(as.vector(GetPCABasisMatrix(model)%*%alpha)+t(mshape))
     if (pPCA)
         procMod <- as.pPCA(model,estim)
 
@@ -275,9 +275,10 @@ predictpPCA <- function(x,model,representer=TRUE,...)UseMethod("predictpPCA")
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
+predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- model$mshape
+    if (align) {
     if (is.null(use.lm)) {
         rotsb <- rotonto(mshape,x,scale=model$scale,reflection = F)
         sb <- rotsb$yrot
@@ -285,14 +286,16 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
         rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model$scale,reflection=F)
         sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
     }
+} else
+    sb <- x
     sbres <- sb-mshape
                                         # W <- model$W
-    alpha <- model$Win%*%as.vector(t(sbres))
-    sdl <- nrow(model$Win)
+    alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
+    sdl <- length(model$PCA$sdev)
     
     if (!missing(sdmax)) {
         if (mahaprob != "n") {
-            sdl <- nrow(model$W)
+            sdl <- length(model$PCA$sdev)
             probs <- sum(alpha^2)
             if (mahaprob == "c") {
                 Mt <- qchisq(1-2*pnorm(sdmax,lower.tail=F),df=sdl)
@@ -319,7 +322,7 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
         return(alpha)
         
     } else {
-        estim <- t(as.vector(model$W%*%alpha)+t(mshape))
+        estim <- t(as.vector(GetPCABasisMatrix(model)%*%alpha)+t(mshape))
         if (origSpace)
             estim <- rotreverse(estim,rotsb)
         
@@ -335,17 +338,17 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
 
 #' @rdname predictpPCA
 #' @export
-predictpPCA.mesh3d <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),...) {
+predictpPCA.mesh3d <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mat <- t(x$vb[1:3,])
-    estim <- predictpPCA(vert2points(x),model=model,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,mahaprob=mahaprob,...)
+    estim <- predictpPCA(vert2points(x),model=model,align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,mahaprob=mahaprob,...)
     return(estim)
 }
 
 #' @rdname predictpPCA
 #' @export
 predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
-    W <- model$W
-    useit <- 1:(min(length(x),ncol(W)))
+    W <- GetPCABasisMatrix(model)
+    useit <- 1:(min(length(x),length(model$PCA$sdev)))
     if (length(useit) > 1)
         estim <- as.vector(W[,useit]%*%x)
     else
@@ -377,9 +380,11 @@ as.pPCA.pPCAconstr <- function(x, newMean,...) { #convert a pPCAconstr to a pPCA
     sds[-good] <- 0
     procMod$PCA$sdev <- sqrt(sds)
     newW <- procMod$PCA$rotation%*%(Re(eigM$vectors))[,good,drop=FALSE]
-    sds <- sds[good]
-    procMod$W <- t(t(newW)*sqrt(sds))
-    procMod$Win <- t(newW)/sqrt(sds)
+    newVar <- apply(newW,2,function(x) x <- sqrt(sum(x^2)))
+    sds <- sds[good]*newVar
+    #procMod$W <- t(t(newW)*sqrt(sds))
+    #procMod$Win <- t(newW)/sqrt(sds)
+    procMod$PCA$sdev <- sqrt(sds)
     procMod$PCA$rotation <- newW
     procMod$PCA$center <- as.vector(t(newMean))
     procMod$PCA$x <- 0
@@ -435,8 +440,8 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
     }
     sbres <- sb-mshape
                                         # W <- model$W
-    alpha <- model$Win%*%as.vector(t(sbres))
-    sdl <- nrow(model$Win)
+    alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
+    sdl <- length(model$PCA$sdev)
     probs <- sum(alpha^2)
     probout <- pchisq(probs,lower.tail = F,df=sdl)
     return(probout)
@@ -452,8 +457,8 @@ getDataLikelihood.mesh3d <- function(x,model,align=FALSE,use.lm=NULL) {
 
 #' @rdname getDataLikelihood
 #' @export
-getCoefficients <- function(x, model,use.lm=NULL) {
-    out <- predictpPCA(x,model,use.lm,coeffs=NULL)
+getCoefficients <- function(x, model,align=TRUE, use.lm=NULL) {
+    out <- predictpPCA(x,model,use.lm,coeffs=NULL,align=align)
     return(out)
 }
 
@@ -469,7 +474,7 @@ getCoefficients <- function(x, model,use.lm=NULL) {
 getCoordVar <- function(model) {
     if (!inherits(model,"pPCA"))
         stop("please provide model of class pPCA")
-    W <- model$W
+    W <- GetPCABasisMatrix(model)
     m <- ncol(model$mshape)
     cov0 <- apply((W*W),1,function(x) sum(x))
     mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = T)

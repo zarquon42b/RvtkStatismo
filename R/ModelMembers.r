@@ -35,3 +35,14 @@ GetPCABasisMatrixIn <- function(model) {
     Win <- (t(model$PCA$rotation)*(1/(model$PCA$sdev+model$sigma))) ##Matrix to project scaled PC-scores back into the config space
     return(Win)
 }
+#' @export
+DrawMean <- function(model) {
+    if (!inherits(model,"pPCA"))
+        stop("please provide model of class 'pPCA'")
+    out <- (.Call("DrawMean",model))
+    if (inherits(out,"mesh3d"))
+        out$vb <- rbind(out$vb,1)
+    else
+        out <- t(out$vb)
+    return(out)
+}

@@ -1,10 +1,11 @@
-#' generate a statistical model using an array of superimposed landmarks and save it
+#' generate a statistical model using an array of superimposed landmarks or a list of meshes
 #'
-#' generate a statistical model using an array of superimposed landmarks and save it
+#' generate a statistical model using an array of superimposed landmarks
 #'
-#' @param array array of aligned 3D-coordinates (e.g. the vertices of meshes)
+#' @param x array of aligned 3D-coordinates (e.g. the vertices of meshes)
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
+#' @param scale logical: set to TRUE, if scaling was involved in the registration.
 #' @examples
 #' require(Morpho)
 #' data(boneData)
@@ -18,25 +19,32 @@
 #' 
 #' @export
 
-statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
-    m <- dim(array)[2]
-    if (m == 2) {
-        zeros <- array(0,dim=c(dim(array)[1],1,dim(array)[3]))
-        array <- bindArr(array,zeros,along=2)
-        print(dim(array)[2])
-    } else if (dim(array)[2] != 3)
+statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
+    if (is.array(x)) {
+        m <- dim(x)[2]
+        if (m == 2) {
+            zeros <- array(0,dim=c(dim(x)[1],1,dim(x)[3]))
+            x <- bindArr(x,zeros,along=2)
+        } else if (dim(x)[2] != 3)
         stop("only 2D and 3D configs allowed")
-    rawdata <- vecx(array,byrow=TRUE)
+    rawdata <- vecx(x,byrow=TRUE)
     rawdata <- sweep(rawdata,2,colMeans(rawdata))
-    mylist <- array2meshlist(array)
+    mylist <- array2meshlist(x)
     if (missing(representer))
-        representer <- array[,,1]
-    names(mylist) <- dimnames(array)[[3]]
+        representer <- x[,,1]
+    names(mylist) <- dimnames(x)[[3]]
+    } else if (is.list(x)) {
+        mylist <-checkmeshlist(x)
+        if (missing(representer))
+            representer <- x[[1]]
+        rawdata <- vecx(meshlist2array(mylist),byrow=TRUE)
+        rawdata <- sweep(rawdata,2,colMeans(rawdata))
+    }
     if (is.null(names(mylist)))
         names(mylist) <- paste("specimen",1:length(mylist),sep="_")
     
     if (is.matrix(representer)) {
-        chk <- prod(dim(representer) == dim(array)[1:2])
+        chk <- prod(dim(representer) == dim(x)[1:2])
         if (!chk)
             stop("representer must be of same dimensionality as array")
         representer <- list(vb=t(representer),it=matrix(0,0,0))
@@ -51,6 +59,7 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
     
     out <- .Call("BuildModelExport",mylist,representer,sigma)
     if (is.list(out)) {
+        out$scale <- scale
         out1 <- statismo2pPCA(out)
         out1$rawdata <- rawdata
         return(out1)
@@ -64,7 +73,8 @@ statismoBuildModel <- function(array,representer,sigma=0,scale=TRUE) {
 #' save and load a statistical model of class pPCA to statismo hdf5 format
 #' @param model object of class pPCA
 #' @param modelname filename to read/save
-#' @return statismoLoadModel returns an object of class "pPCA"
+#' @return statismoLoadModel returns an object of class "pPCA" while statismoSaveModel saves an object of class pPCA to disk in the statismo file format.
+#' @rdname statismoIO
 #' @export
 statismoSaveModel <- function(model, modelname=dataname) {
     dataname <- deparse(substitute(model))
@@ -75,8 +85,9 @@ statismoSaveModel <- function(model, modelname=dataname) {
     out <- .Call("SaveModel",model,modelname)
 }
 
+#' @rdname statismoIO
 #' @export
-statismoLoadModel <- function(modelname) {
+statismoLoadModel <- function(modelname,scale=TRUE) {
     modelname <- path.expand(modelname)
     if (length(modelname) != 1)
         stop("only one file at a time please")
@@ -95,13 +106,9 @@ statismo2pPCA <- function(statismodel) {
     out1$PCA$rotation <- statismodel$PCBasisOrtho
     out1$PCA$center <- statismodel$mshape
     out1$PCA$x <- t(statismodel$scores)
-    out1$scale <- scale
-    out1$W <- statismodel$PCBasis
-    out1$usePC <- 1:ncol(out1$W)
+    out1$scale <- statismodel$scale
+    out1$exVar <- 1
     out1$sigma <- statismodel$sigma
-    Wval <- apply(out1$W,2,function(x) x <- sqrt(sum(crossprod(x))))
-    out1$Win <- out1$PCA$rotation[,out1$usePC]
-    out1$Win <- (t(out1$Win)*1/Wval)
     out1$Variance <- createVarTable(out1$PCA$sdev)
     out1$representer <- statismodel$representer
     if (inherits(out1$representer,"mesh3d"))
@@ -154,13 +161,6 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     return(out)
                          
 }
-#' @export
-statismoDrawMean <- function(model) {
-    if (!inherits(model,"pPCA"))
-        stop("please provide model of class 'pPCA'")
-    out <- (.Call("DrawMean",model))
-    out$vb <- rbind(out$vb,1)
-    return(out)
-}
+
 
 

@@ -3,10 +3,18 @@
 #include "polyData2R.h"
 
 RcppExport SEXP DrawMean(SEXP pPCA_){
+  try {
   auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
   vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
   List out = polyData2R(reference);
   return out;
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
 }
 
 RcppExport SEXP LoadModel(SEXP modelname_){
