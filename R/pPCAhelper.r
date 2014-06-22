@@ -63,3 +63,16 @@ createVarTable <- function(sdev,square=TRUE) {
     Variance <- data.frame(eigenvalue=sdev,exVar=sdVar, cumVar=sdCum)
     return(Variance)
 }
+
+#' @importFrom Rvcg meshintegrity
+dataset2representer <- function(x) {
+    if (is.matrix(x))
+        out <- list(vb=t(x),it=matrix(0,0,0))
+    else if (inherits(x,"mesh3d"))
+        out <- meshintegrity(x)
+    else
+        stop("unknown representer type")
+    return(out)
+}
+        
+    

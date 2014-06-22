@@ -79,20 +79,4 @@ RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP ny
   return statismo2pPCA(model);
   
 }
-RcppExport SEXP DrawMean(SEXP pPCA_){
-  auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
-  vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
-  List out = polyData2R(reference);
-  return out;
-}
 
-RcppExport SEXP LoadModel(SEXP modelname_){
-  CharacterVector modelname(modelname_);
-  vtkStandardMeshRepresenter* representer = vtkStandardMeshRepresenter::Create();
-  std::string modelFilename = as<std::string>(modelname);
-  
-
-  auto_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
-  List out = statismo2pPCA(model);
-  return out;
-}

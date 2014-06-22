@@ -27,7 +27,7 @@
 #' @references
 #' \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
 #' 
-#' @importFrom Morpho ProcGPA rotonmat arrMean3 vecx
+#' @importFrom Morpho ProcGPA rotonmat arrMean3 vecx rotonto rotreverse
 #' @importFrom Rvcg vcgUpdateNormals
 #' @rdname pPCA
 #' @export
@@ -412,21 +412,26 @@ as.pPCAconstr.pPCA <- function(x,missingIndex,deselect=FALSE) {
 #' calculate probability for a matrix/mesh given a statistical model
 #' @param x matrix or mesh3d
 #' @param model a model of class pPCA
+#' @param align logical: if TRUE the data will be aligned to the model's mean
 #' @param use.lm integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
 #' @return \code{getProb} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
 #' @export
-getProb <- function(x,model,use.lm) UseMethod("getProb")
+getDataLikelihood <- function(x,model,align=FALSE,use.lm) UseMethod("getProb")
 
-#' @rdname getProb
+#' @rdname getDataLikelihood
 #' @export
-getProb.matrix <- function(x,model,use.lm=NULL) {
+getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
     mshape <- model$mshape
-    if (is.null(use.lm)) {
-        rotsb <- rotonto(mshape,x,scale=model$scale,reflection = F)
-        sb <- rotsb$yrot
+    if (align) {
+        if (is.null(use.lm)) {
+            rotsb <- rotonto(mshape,x,scale=model$scale,reflection = F)
+            sb <- rotsb$yrot
+        } else {
+            rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model$scale,reflection=F)
+            sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
+        }
     } else {
-        rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model$scale,reflection=F)
-        sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
+        sb <- x
     }
     sbres <- sb-mshape
                                         # W <- model$W
@@ -437,15 +442,15 @@ getProb.matrix <- function(x,model,use.lm=NULL) {
     return(probout)
 }
 
-#' @rdname getProb
+#' @rdname getDataLikelihood
 #' @export
-getProb.mesh3d <- function(x,model,use.lm=NULL) {
+getDataLikelihood.mesh3d <- function(x,model,align=FALSE,use.lm=NULL) {
     x <- vert2points(x)
-    out <- getProb(x,model=model,use.lm=use.lm)
+    out <- getProb(x,model=model,align=align,use.lm=use.lm)
     return(out)
 }
 
-#' @rdname getProb
+#' @rdname getDataLikelihood
 #' @export
 getCoefficients <- function(x, model,use.lm=NULL) {
     out <- predictpPCA(x,model,use.lm,coeffs=NULL)

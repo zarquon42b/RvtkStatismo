@@ -20,3 +20,18 @@ GetMeanVector <- function(model) {
 GetPCAVarianceVector <- function(model) {
     return(model$PCA$sdev^2)
 }
+#' @export
+ComputeLogProbabilityOfDataset <- function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),TRUE)
+    return(out)
+}
+#' @export
+ComputeProbabilityOfDataset <- function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
+    return(out)
+}
+GetPCABasisMatrixIn <- function(model) {
+    
+    Win <- (t(model$PCA$rotation)*(1/(model$PCA$sdev+model$sigma))) ##Matrix to project scaled PC-scores back into the config space
+    return(Win)
+}
