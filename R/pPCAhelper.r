@@ -63,9 +63,3 @@ createVarTable <- function(sdev,square=TRUE) {
     Variance <- data.frame(eigenvalue=sdev,exVar=sdVar, cumVar=sdCum)
     return(Variance)
 }
-
-GetPCABasisMatrix <- function(model) {
-    
-    W <- t(t(model$PCA$rotation)*model$PCA$sdev) ##Matrix to project scaled PC-scores back into the config space
-    return(W)
-}
