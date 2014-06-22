@@ -46,7 +46,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
     return model;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    StatisticalModelType> model(NULL);    
+    auto_ptr<StatisticalModelType> model(NULL);    
     return model;
   } catch (...) {
     ::Rf_error("unknown exception");
