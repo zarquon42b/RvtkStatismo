@@ -64,7 +64,6 @@ createVarTable <- function(sdev,square=TRUE) {
     return(Variance)
 }
 
-#' @importFrom Rvcg meshintegrity
 dataset2representer <- function(x) {
     if (is.matrix(x))
         out <- list(vb=t(x),it=matrix(0,0,0))
