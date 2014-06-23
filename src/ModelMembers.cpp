@@ -46,8 +46,27 @@ RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP g
       prob = model->ComputeLogProbabilityOfDataset(datasetRef);
     else
       prob = model->ComputeProbabilityOfDataset(datasetRef);
-  
+    //return List::create(Named
     return wrap(prob);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+
+}
+
+RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
+  try {
+    List dataset(dataset_);
+    double prob;
+    const vtkSmartPointer<vtkPolyData> datasetRef = R2vtk(dataset["vb"],dataset["it"]);
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    Eigen::VectorXf out = model->ComputeCoefficientsForDataset(datasetRef);	
+    //return List::create(Named
+    return wrap(out);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
     return wrap(1);
