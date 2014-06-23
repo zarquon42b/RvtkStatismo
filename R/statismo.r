@@ -9,7 +9,7 @@
 #' @examples
 #' require(Morpho)
 #' data(boneData)
-#' align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+#' align <- rigidAlign(boneLM)$rotated
 #' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 #' ## save it
 #' statismoSaveModel(mymod,"mymod.h5")

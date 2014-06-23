@@ -5,8 +5,9 @@ Version: 0.2.140623
 Date: 2014-06-23
 Author: Stefan Schlager, the authors of Statismo
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
-Description: I am trying to create an interface between meshes compatible with
-    rgl and vtk
+Description: Integrates statismo and R using the vtkStandardMeshRepresenter.
+    Statismo shape models will be stored as objects of class "pPCA". (this is
+    work in progress).
 License: GPL >=2
 Imports:
     Rcpp (>= 0.11.1),

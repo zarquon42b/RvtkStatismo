@@ -5,6 +5,7 @@
 #' @param dataset an (already aligned) mesh or k x 3 matrix containing the datasets coordinates.
 #' @return functions return matrices, (log)-probabilties or coefficients for specific dataset
 #' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+#' @name StatismoModelMembers
 #' @rdname statismoMembers
 #' @export
 GetPCABasisMatrix <- function(model) {

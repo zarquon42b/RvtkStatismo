@@ -1,6 +1,6 @@
-#' Interface between R and vtk-libraries for mesh operations
+#' Integrates statismo and R using the vtkStandardMeshRepresente
 #' 
-#' Aims to provide meshing functionality from vtk for R.
+#' Integrates statismo and R using the vtkStandardMeshRepresenter. Statismo shape models will be stored as objects of class "pPCA". (this is work in progress). 
 #' 
 #' \tabular{ll}{
 #' Package: \tab Rvtk\cr
