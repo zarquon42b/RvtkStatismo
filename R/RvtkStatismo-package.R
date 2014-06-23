@@ -3,7 +3,7 @@
 #' Integrates statismo and R using the vtkStandardMeshRepresenter. Statismo shape models will be stored as objects of class "pPCA". (this is work in progress). 
 #' 
 #' \tabular{ll}{
-#' Package: \tab Rvtk\cr
+#' Package: \tab RvtkStatismo\cr
 #' Type: \tab Package\cr
 #' Version: \tab 0.2.140623\cr
 #' Date: \tab 2014-06-23\cr
