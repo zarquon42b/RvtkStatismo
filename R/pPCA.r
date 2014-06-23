@@ -46,7 +46,7 @@ pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,representer=NUL
     sds <- sds[good] ## remove PCs with very little variability
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     PCA$sdev <- PCA$sdev[good]
-    PCA$x <- PCA$x[,good,drop=FALSE]
+    PCA$x <- 0
     procMod$PCA <- PCA
     procMod$scale <- scale
     class(procMod) <- "pPCA"
@@ -138,7 +138,7 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     procMod$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     procMod$PCA$sdev <- sqrt(sigest[usePC])
     if (!is.null(procMod$rawdata))
-        procMod$PCA$x <- procMod$rawdata%*%GetPCABasisMatrix(procMod)
+        procMod$PCA$x <- procMod$rawdata%*%t(GetPCABasisMatrixIn(procMod))
     else
         procMod$PCA$x <- 0
     Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
