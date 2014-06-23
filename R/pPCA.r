@@ -29,6 +29,7 @@
 #' 
 #' @importFrom Morpho ProcGPA rotonmat arrMean3 vecx rotonto rotreverse
 #' @importFrom Rvcg vcgUpdateNormals
+#' @name pPCA/pPCAconstr
 #' @rdname pPCA
 #' @export
 pPCA <- function(array, align=TRUE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
@@ -224,7 +225,7 @@ print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
 #'
 #' \item{pPCA}{if \code{pPCA = TRUE} a pPCA model representing the gaussian subspace given the constraints is returned}
 #' \item{rot}{the transformation of x into the modelspace that can be reverted by calling \code{rotreverse} from the package Morpho} 
-
+#' @name predictpPCA/predictpPCAconstr
 #' @rdname predictpPCA
 #' @export
 predictpPCAconstr <- function(x, model, representer, origSpace=TRUE, pPCA=FALSE,...) UseMethod("predictpPCAconstr")

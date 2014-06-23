@@ -33,6 +33,7 @@ GetMeanVector <- function(model) {
 GetPCAVarianceVector <- function(model) {
     return(model$PCA$sdev^2)
 }
+#' @rdname statismoMembers
 #' @export
 ComputeLogProbabilityOfDataset <- function(model,dataset) {
     out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),TRUE)
@@ -44,6 +45,7 @@ ComputeProbabilityOfDataset <- function(model,dataset) {
     out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
     return(out)
 }
+
 GetPCABasisMatrixIn <- function(model) {
     ##this the more complicated version directly from StatisticalModel.txx
     WT <- t(GetPCABasisMatrix(model))

@@ -2,7 +2,7 @@
 #'
 #' generate a statistical model using an array of superimposed landmarks
 #'
-#' @param x array of aligned 3D-coordinates (e.g. the vertices of meshes)
+#' @param x array of aligned 3D-coordinates or a list of aligned registered meshes.
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
@@ -74,6 +74,7 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
 #' @param model object of class pPCA
 #' @param modelname filename to read/save
 #' @return statismoLoadModel returns an object of class "pPCA" while statismoSaveModel saves an object of class pPCA to disk in the statismo file format.
+#' @name statismoLoadModel/statismoSaveModel
 #' @rdname statismoIO
 #' @export
 statismoSaveModel <- function(model, modelname=dataname) {

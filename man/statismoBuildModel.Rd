@@ -6,7 +6,7 @@
 statismoBuildModel(x, representer, sigma = 0, scale = TRUE)
 }
 \arguments{
-\item{x}{array of aligned 3D-coordinates (e.g. the vertices of meshes)}
+\item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}
 
 \item{representer}{matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.}
 
