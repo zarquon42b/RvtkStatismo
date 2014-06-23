@@ -31,9 +31,9 @@ vtkSmartPointer<vtkPolyData> R2vtk(SEXP vb_, SEXP it_) {
       // get faces
       if (hasFaces) {
 	for (int i = 0; i < it.ncol();i++) {
-	  triangle->GetPointIds()->SetId (0, it(0,i));
-	  triangle->GetPointIds()->SetId (1, it(1,i));
-	  triangle->GetPointIds()->SetId (2, it(2,i));
+	  triangle->GetPointIds()->SetId (0, it(0,i)-1);
+	  triangle->GetPointIds()->SetId (1, it(1,i)-1);
+	  triangle->GetPointIds()->SetId (2, it(2,i)-1);
 	  triangles->InsertNextCell (triangle);
 	  index->InsertNextValue(i);
 	}
