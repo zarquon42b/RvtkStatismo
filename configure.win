@@ -11,8 +11,12 @@ export CPPFLAGS
 export BLAS_LIBS
 export LAPACK_LIBS
 export R_INCLUDE_DIR
+
 RCPP_DIR=$(${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe -e "cat(system.file(package='Rcpp'))")
+RCPPEIGEN_DIR=$(${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe -e "cat(system.file(package='RcppEigen'))")
+
 export RCPP_DIR
+export RCPPEIGEN_DIR
 export R_ARCH_BIN
 cd src
 cmake . -G "MSYS Makefiles"

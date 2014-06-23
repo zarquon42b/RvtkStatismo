@@ -12,12 +12,13 @@ export CPPFLAGS
 export BLAS_LIBS
 export LAPACK_LIBS
 export R_INCLUDE_DIR
-export R_INCLUDE_DIR
+
 RCPP_DIR=$(Rscript -e "cat(system.file(package='Rcpp'))")
 RCPPEIGEN_DIR=$(Rscript -e "cat(system.file(package='RcppEigen'))")
 
 export RCPP_DIR
 export RCPPEIGEN_DIR
 cd src
+
 cmake .
 cmake .
