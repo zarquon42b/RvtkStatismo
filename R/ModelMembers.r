@@ -31,8 +31,13 @@ ComputeProbabilityOfDataset <- function(model,dataset) {
     return(out)
 }
 GetPCABasisMatrixIn <- function(model) {
-    
-    Win <- (t(model$PCA$rotation)*(1/(model$PCA$sdev+model$sigma))) ##Matrix to project scaled PC-scores back into the config space
+    ##this the more complicated version directly from StatisticalModel.txx
+    WT <- t(GetPCABasisMatrix(model))
+    Mmatrix <- crossprod(GetPCABasisMatrix(model))
+    diag(Mmatrix) <- diag(Mmatrix)+model$sigma
+    Mmatrixinv <- solve(Mmatrix)
+    Win <- Mmatrixinv%*%WT
+    #Win <- (t(model$PCA$rotation)*(1/sqrt(model$PCA$sdev^2+model$sigma))) ##Matrix to project scaled PC-scores back into the config space
     return(Win)
 }
 #' @export
