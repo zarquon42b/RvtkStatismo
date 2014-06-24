@@ -55,14 +55,16 @@ The class \code{"pPCA"} is a list containing the follwing items (still not yet s
 \item{sdev: the square roots of the covariance matrix' eigenvalues}
 \item{rotation: matrix containing the orthonormal PCBasis vectos}
 \item{x: the scores within the latent space(scaled by 1/sdev)}
-\item{center: a vector of the mean shape in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
-\item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)} }
+\item{center: a vector of the mean shape in with coordinates ordered
+
+\code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
+ }
 }
-}
-\item{scale}{logical: if the data was aligned including scaling}
+\item{scale}{logical: indicating if the data was aligned including scaling}
 \item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
 \item{sigma}{the noise estimation of the data}
 \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
+\item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 }
 \description{
 calculate or modify a probablistic PCA based on 3D-coordinates
