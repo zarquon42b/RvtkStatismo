@@ -92,10 +92,13 @@ calcSdev <- function(model) {
 }
 
 ### get matrices nessesary to calculate a model of the constrained space
-getSubCov <- function(model,missingIndex,deselect=FALSE) {
-    k <- ncol(model$representer)
-    if (deselect) {
-        missingIndex <- c(1:k)[-missingIndex]
+getSubCov <- function(model,use.lm,deselect=FALSE) {
+    use.lm <- unique(sort(use.lm))
+    k <- ncol(model$representer$vb)
+    if (!deselect) {
+        missingIndex <- c(1:k)[-use.lm]
+    } else {
+        missingIndex <- use.lm
     }
     if (model$sigma == 0)
         siginv <- 1e13
@@ -109,10 +112,7 @@ getSubCov <- function(model,missingIndex,deselect=FALSE) {
     WbtWb <- crossprod(Wb)
     M <- siginv*WbtWb
     diag(M) <- diag(M)+1
-    #out$Wb <- Wb
-    #out$WbtWb <- WbtWb
-    #out$M <- M
-    stry <- try(Minv <- solve(M)) 
+        stry <- try(Minv <- solve(M)) 
     if (inherits(stry,"try-error")) {
         Minv <- Morpho:::armaGinv(M)
         message("singular Matrix")
