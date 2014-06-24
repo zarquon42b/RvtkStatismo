@@ -37,7 +37,7 @@ setMod(procMod, sigma, exVar)
 
 \item{exVar}{numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance}
 
-\item{representer}{a triangular mesh, where the vertices correspond to the coordinates in \code{array}}
+\item{representer}{a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.}
 
 \item{scale}{logical: allow scaling in Procrustes fitting}
 
@@ -47,6 +47,22 @@ setMod(procMod, sigma, exVar)
 \code{pPCA} and \code{pPCAconstr} return a probabilistic PCA model of class "pPCA" or "pPCAconstr" respectively.
 \code{predictPCA} and \code{predictPCAcond} select the most probable shape within a given model (within defined boundaries),
 \code{setMod} is used to modify existing models by changing sigma and exVar.
+
+
+The class \code{"pPCA"} is a list containing the follwing items (still not yet set in stone)
+\item{PCA}{a list containing
+\itemize{
+\item{sdev: the square roots of the covariance matrix' eigenvalues}
+\item{rotation: matrix containing the orthonormal PCBasis vectos}
+\item{x: the scores within the latent space(scaled by 1/sdev)}
+\item{center: a vector of the mean shape in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
+\item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)} }
+}
+}
+\item{scale}{logical: if the data was aligned including scaling}
+\item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
+\item{sigma}{the noise estimation of the data}
+\item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
 }
 \description{
 calculate or modify a probablistic PCA based on 3D-coordinates
@@ -57,6 +73,12 @@ data(boneData)
 model <- pPCAconstr(boneLM[,,-1],missingIndex=3:4)
 ## change parameters without recomputing Procrustes fit
 model1 <- setMod(model, sigma=1, exVar=0.8)
+## predict the left out shape from the constrained model
+boneLM1 <- predictpPCAconstr(boneLM[-c(3:4),,1],model)
+\dontrun{
+##visualize prediction error
+deformGrid3d(boneLM1,boneLM[,,1],ngrid=0)
+}
 }
 \references{
 \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264

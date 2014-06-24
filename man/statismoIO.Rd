@@ -10,14 +10,18 @@ statismoSaveModel(model, modelname = dataname)
 statismoLoadModel(modelname, scale = TRUE)
 }
 \arguments{
-\item{model}{object of class pPCA}
+\item{model}{object of class \code{\link{pPCA}}}
 
 \item{modelname}{filename to read/save}
 }
 \value{
-statismoLoadModel returns an object of class "pPCA" while statismoSaveModel saves an object of class pPCA to disk in the statismo file format.
+statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.
 }
 \description{
 save and load a statistical model of class pPCA to statismo hdf5 format
 }
+\seealso{
+\code{\link{pPCA}}
+}
+\keyword{StatisticalModel<representer>}
 

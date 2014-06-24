@@ -31,7 +31,7 @@ DrawMean(model)
 ComputeCoefficientsForDataset(model, dataset)
 }
 \arguments{
-\item{model}{object of class "pPCA"}
+\item{model}{object of class \code{\link{pPCA}}}
 
 \item{dataset}{an (already aligned) mesh or k x 3 matrix containing the datasets coordinates.}
 }
@@ -44,4 +44,5 @@ Implementation/Emulation of the statsimo StatisticalModel class.
 \details{
 see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 }
+\keyword{StatisticalModel<representer>}
 

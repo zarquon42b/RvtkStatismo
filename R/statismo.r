@@ -127,7 +127,7 @@ statismo2pPCA <- function(statismodel) {
 #'
 #' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
-#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels (currently only the first list entry is used)
+#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @return returns a shape model of class \code{\link{pPCA}}
@@ -135,7 +135,7 @@ statismo2pPCA <- function(statismodel) {
 #' ### this is a silly example with only 10 landmarks
 #' require(Morpho)
 #' data(boneData)
-#' align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+#' align <- rigidAlign(boneLM)$rotated
 #' mod <- statismoBuildModel(align)
 #' GPmod <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)))##extend flexibility using two Gaussian kernels
 #' GPmodNoEmp <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)),useEmpiric = FALSE)##extend flexibility using two Gaussian kernels but ignoring empiric covariance.

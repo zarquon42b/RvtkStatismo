@@ -7,18 +7,18 @@ statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
   ncomp = 10, nystroem = 500)
 }
 \arguments{
-\item{model}{shape model of class "pPCA"}
+\item{model}{shape model of class \code{\link{pPCA}}}
 
 \item{useEmpiric}{logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.}
 
-\item{kernel}{a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels (currently only the first list entry is used)}
+\item{kernel}{a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.}
 
 \item{ncomp}{integer: number of PCs to approximate}
 
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
 }
 \value{
-returns a shape model of class "pPCA"
+returns a shape model of class \code{\link{pPCA}}
 }
 \description{
 expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA
@@ -27,7 +27,7 @@ expands a models variability by adding a Gaussian kernel function to the empiric
 ### this is a silly example with only 10 landmarks
 require(Morpho)
 data(boneData)
-align <- ProcGPA(boneLM,CSinit=FALSE, scale=TRUE,silent = TRUE)$rotated
+align <- rigidAlign(boneLM)$rotated
 mod <- statismoBuildModel(align)
 GPmod <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)))##extend flexibility using two Gaussian kernels
 GPmodNoEmp <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)),useEmpiric = FALSE)##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
@@ -39,4 +39,8 @@ deformGrid3d(PC1,GPmod$mshape,ngrid=0)##
 deformGrid3d(PC1NoEmp,GPmod$mshape,ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
 deformGrid3d(PC1orig,GPmod$mshape,ngrid=0,col1=5,add=TRUE)
 }
+\seealso{
+\code{\link{pPCA}}
+}
+\keyword{StatisticalModel<representer>}
 

@@ -14,6 +14,9 @@ statismoBuildModel(x, representer, sigma = 0, scale = TRUE)
 
 \item{scale}{logical: set to TRUE, if scaling was involved in the registration.}
 }
+\value{
+an object of class \code{\link{pPCA}}
+}
 \description{
 generate a statistical model using an array of superimposed landmarks
 }
@@ -25,4 +28,8 @@ mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 ## save it
 statismoSaveModel(mymod,"mymod.h5")
 }
+\seealso{
+\code{\link{pPCA}}
+}
+\keyword{StatisticalModel<representer>}
 
