@@ -21,7 +21,7 @@ predictpPCA(x, model, representer = TRUE, ...)
 \arguments{
 \item{x}{a matrix, a mesh3d or a vector (for pPCA models) containing standardized variables within the PC-space}
 
-\item{model}{model of class pPCA or pPCAconstr}
+\item{model}{model of class \code{pPCA}}
 
 \item{representer}{if TRUE and the model contains a representer mesh, a surface mesh will be returned, coordinate matrix otherwise.}
 
@@ -39,12 +39,6 @@ be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probab
 }
 \value{
 \code{predictpPCA} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
-
-\code{predictpPCAconstr} returns a list with
-\item{estim}{matrix/mesh3d representing the mean of the restricted space}
-
-\item{pPCA}{if \code{pPCA = TRUE} a pPCA model representing the gaussian subspace given the constraints is returned}
-\item{rot}{the transformation of x into the modelspace that can be reverted by calling \code{rotreverse} from the package Morpho}
 }
 \description{
 predict or restrict a mesh or matrix based on a statistical model

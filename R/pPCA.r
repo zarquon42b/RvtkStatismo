@@ -7,24 +7,23 @@
 #' @param align logical: if TRUE, the data will be aligned first
 #' @param missingIndex integer vector: specifies which points are missing in the constrained model
 #' @param deselect logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.
-#' @param procMod object of class "pPCA" or "pPCAconstr"
+#' @param procMod object of class \code{pPCA}
 #' @param sigma estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)
 #' @param exVar numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param scale logical: allow scaling in Procrustes fitting
 #' @param fullfit logical: if FALSE only the non-missing points will be used for registration.
-#' @return \code{pPCA} and \code{pPCAconstr} return a probabilistic PCA model of class "pPCA" or "pPCAconstr" respectively. 
-#' \code{predictPCA} and \code{predictPCAcond} select the most probable shape within a given model (within defined boundaries),
+#' @return returns a probabilistic PCA model of class "pPCA".
 #' \code{setMod} is used to modify existing models by changing sigma and exVar.
 #'
 #' 
 #' The class \code{"pPCA"} is a list containing the follwing items (still not yet set in stone)
 #' \item{PCA}{a list containing
 #' \itemize{
-#' \item{sdev: the square roots of the covariance matrix' eigenvalues}
-#' \item{rotation: matrix containing the orthonormal PCBasis vectos}
-#' \item{x: the scores within the latent space(scaled by 1/sdev)}
-#' \item{center: a vector of the mean shape in with coordinates ordered
+#' \item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
+#' \item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
+#' \item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
+#' \item{\code{center}: a vector of the mean shape in with coordinates ordered
 #'
 #' \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 #'  }
@@ -162,7 +161,7 @@ print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
 #'
 #' predict or restrict a mesh or matrix based on a statistical model
 #' @param x a matrix, a mesh3d or a vector (for pPCA models) containing standardized variables within the PC-space
-#' @param model model of class pPCA or pPCAconstr
+#' @param model model of class \code{pPCA}
 #' @param representer if TRUE and the model contains a representer mesh, a surface mesh will be returned, coordinate matrix otherwise.
 #' @param origSpace logical: rotate the estimation back into the original coordinate system.
 #' @param pPCA logical: if TRUE, a constrained pPCA model is returned.
@@ -173,11 +172,6 @@ print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
 #' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space.
 #' @return \code{predictpPCA} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
 #'
-#' \code{predictpPCAconstr} returns a list with
-#' \item{estim}{matrix/mesh3d representing the mean of the restricted space}
-#'
-#' \item{pPCA}{if \code{pPCA = TRUE} a pPCA model representing the gaussian subspace given the constraints is returned}
-#' \item{rot}{the transformation of x into the modelspace that can be reverted by calling \code{rotreverse} from the package Morpho} 
 #' @name predictpPCA
 #' @rdname predictpPCA
 #' @export

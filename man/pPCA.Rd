@@ -22,7 +22,7 @@ setMod(procMod, sigma, exVar)
 
 \item{deselect}{logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.}
 
-\item{procMod}{object of class "pPCA" or "pPCAconstr"}
+\item{procMod}{object of class \code{pPCA}}
 
 \item{sigma}{estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)}
 
@@ -35,18 +35,17 @@ setMod(procMod, sigma, exVar)
 \item{fullfit}{logical: if FALSE only the non-missing points will be used for registration.}
 }
 \value{
-\code{pPCA} and \code{pPCAconstr} return a probabilistic PCA model of class "pPCA" or "pPCAconstr" respectively.
-\code{predictPCA} and \code{predictPCAcond} select the most probable shape within a given model (within defined boundaries),
+returns a probabilistic PCA model of class "pPCA".
 \code{setMod} is used to modify existing models by changing sigma and exVar.
 
 
 The class \code{"pPCA"} is a list containing the follwing items (still not yet set in stone)
 \item{PCA}{a list containing
 \itemize{
-\item{sdev: the square roots of the covariance matrix' eigenvalues}
-\item{rotation: matrix containing the orthonormal PCBasis vectos}
-\item{x: the scores within the latent space(scaled by 1/sdev)}
-\item{center: a vector of the mean shape in with coordinates ordered
+\item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
+\item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
+\item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
+\item{\code{center}: a vector of the mean shape in with coordinates ordered
 
 \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
  }
