@@ -90,3 +90,50 @@ calcSdev <- function(model) {
     sdevorig <- sqrt(model$PCA$sdev^2+model$sigma)
     return(sdevorig)
 }
+
+### get matrices nessesary to calculate a model of the constrained space
+getSubCov <- function(model,missingIndex,deselect=FALSE) {
+    k <- ncol(model$representer)
+    if (deselect) {
+        missingIndex <- c(1:k)[-missingIndex]
+    }
+    if (model$sigma == 0)
+        siginv <- 1e13
+    else
+        siginv <- 1/model$sigma
+    sel <- getSel(missingIndex,getMeanMatrix(model))
+    W <- GetPCABasisMatrix(model)
+    out <- list()
+    ## get constrained space
+    Wb <- W[-sel,]
+    WbtWb <- crossprod(Wb)
+    M <- siginv*WbtWb
+    diag(M) <- diag(M)+1
+    out$Wb <- Wb
+    out$WbtWb <- WbtWb
+    out$M <- M
+    stry <- try(Minv <- solve(M)) 
+    if (inherits(stry,"try-error")) {
+        Minv <- Morpho:::armaGinv(M)
+        message("singular Matrix")
+    }
+    Minv <- (Minv+t(Minv))/2
+    out$Minv <- Minv ## covariance structure of the alpha under the restriction based on non-missing data.
+    out$alphamean <- siginv*Minv%*%t(Wb) ## the general mean of the constrained distribution
+    sds <- model$PCA$sdev^2
+    udut <- t(t(Minv)*sds)
+    eigM <- eigen(udut,symmetric = T)
+    sds <- Re(eigM$values)
+    good <- which(sds > 1e-15)
+    sds[-good] <- 0
+    newW <- model$PCA$rotation%*%(Re(eigM$vectors))[,good,drop=FALSE]
+    #newVar <- apply(newW,2,function(x) x <- sqrt(sum(x^2)))
+    #print(newVar)
+    sds <- sds[good]
+    out$PCA <- list()
+    out$PCA$sdev <- sqrt(sds)
+    out$PCA$rotation <- newW
+    #out$PCA$center <- as.vector(t(newMean))
+    out$PCA$x <- 0
+    return(out)
+}

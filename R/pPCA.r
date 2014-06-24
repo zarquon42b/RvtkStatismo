@@ -480,7 +480,6 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
         sb <- x
     }
     sbres <- sb-mshape
-                                        # W <- model$W
     alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
     sdl <- length(model$PCA$sdev)
     probs <- sum(alpha^2)
