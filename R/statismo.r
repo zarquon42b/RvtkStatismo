@@ -6,6 +6,7 @@
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
+#' @return an object of class \code{\link{pPCA}}
 #' @examples
 #' require(Morpho)
 #' data(boneData)
@@ -13,8 +14,8 @@
 #' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 #' ## save it
 #' statismoSaveModel(mymod,"mymod.h5")
-#'
-#' 
+#' @keywords StatisticalModel<representer>
+#' @seealso \code{\link{pPCA}}
 #' @importFrom Morpho bindArr
 #' 
 #' @export
@@ -71,10 +72,12 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
 #' save and load a statistical model of class pPCA to statismo hdf5 format
 #'
 #' save and load a statistical model of class pPCA to statismo hdf5 format
-#' @param model object of class pPCA
+#' @param model object of class \code{\link{pPCA}}
 #' @param modelname filename to read/save
-#' @return statismoLoadModel returns an object of class "pPCA" while statismoSaveModel saves an object of class pPCA to disk in the statismo file format.
+#' @return statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.
 #' @name statismoLoadModel/statismoSaveModel
+#' @seealso \code{\link{pPCA}}
+#' @keywords StatisticalModel<representer>
 #' @rdname statismoIO
 #' @export
 statismoSaveModel <- function(model, modelname=dataname) {
@@ -101,33 +104,33 @@ statismoLoadModel <- function(modelname,scale=TRUE) {
 }
 statismo2pPCA <- function(statismodel) {
     out1 <- list()
-    out1$mshape <- matrix(statismodel$mshape,length(statismodel$mshape)/statismodel$dim,byrow = T)
+                                        #out1$mshape <- matrix(statismodel$mshape,length(statismodel$mshape)/statismodel$dim,byrow = T)
     out1$PCA <- list();class(out1) <- "pPCA"
     out1$PCA$sdev <- sqrt(statismodel$PCVariance)
     out1$PCA$rotation <- statismodel$PCBasisOrtho
     out1$PCA$center <- statismodel$mshape
     out1$PCA$x <- t(statismodel$scores)
     out1$scale <- statismodel$scale
-    out1$exVar <- 1
-    out1$sigma <- statismodel$sigma
-    out1$Variance <- createVarTable(out1$PCA$sdev)
-    out1$representer <- statismodel$representer
+        out1$representer <- statismodel$representer
     if (inherits(out1$representer,"mesh3d"))
         out1$representer$vb <- rbind(out1$representer$vb,1)
     else
         out1$representer$it <- matrix(0,0,0)
+    #out1$exVar <- 1
+    out1$sigma <- statismodel$sigma
+    out1$Variance <- createVarTable(out1$PCA$sdev)
     return(out1)
 }
 #' expands a models variability by adding a Gaussian kernel function
 #'
 #' expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA
 #'
-#' @param model shape model of class "pPCA"
+#' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
 #' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels (currently only the first list entry is used)
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
-#' @return returns a shape model of class "pPCA"
+#' @return returns a shape model of class \code{\link{pPCA}}
 #' @examples
 #' ### this is a silly example with only 10 landmarks
 #' require(Morpho)
@@ -143,6 +146,8 @@ statismo2pPCA <- function(statismodel) {
 #' deformGrid3d(PC1,GPmod$mshape,ngrid=0)##
 #' deformGrid3d(PC1NoEmp,GPmod$mshape,ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
 #' deformGrid3d(PC1orig,GPmod$mshape,ngrid=0,col1=5,add=TRUE)
+#' @seealso \code{\link{pPCA}}
+#' @keywords StatisticalModel<representer>
 #' @export
 statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
     ncomp <- as.integer(ncomp)
