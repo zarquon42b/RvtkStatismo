@@ -109,16 +109,16 @@ getSubCov <- function(model,missingIndex,deselect=FALSE) {
     WbtWb <- crossprod(Wb)
     M <- siginv*WbtWb
     diag(M) <- diag(M)+1
-    out$Wb <- Wb
-    out$WbtWb <- WbtWb
-    out$M <- M
+    #out$Wb <- Wb
+    #out$WbtWb <- WbtWb
+    #out$M <- M
     stry <- try(Minv <- solve(M)) 
     if (inherits(stry,"try-error")) {
         Minv <- Morpho:::armaGinv(M)
         message("singular Matrix")
     }
     Minv <- (Minv+t(Minv))/2
-    out$Minv <- Minv ## covariance structure of the alpha under the restriction based on non-missing data.
+    #out$Minv <- Minv ## covariance structure of the alpha under the restriction based on non-missing data.
     out$alphamean <- siginv*Minv%*%t(Wb) ## the general mean of the constrained distribution
     sds <- model$PCA$sdev^2
     udut <- t(t(Minv)*sds)
