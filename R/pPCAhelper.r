@@ -53,7 +53,7 @@ getUseLM <- function(missingIndex,shape) {
  }
 
 
-
+# create a neat variance table
 createVarTable <- function(sdev,square=TRUE) {
     if (square)
         sdev <- sdev^2
@@ -63,7 +63,7 @@ createVarTable <- function(sdev,square=TRUE) {
     Variance <- data.frame(eigenvalue=sdev,exVar=sdVar, cumVar=sdCum)
     return(Variance)
 }
-
+# convert a mesh/matrix to a valid representer
 dataset2representer <- function(x) {
     if (is.matrix(x))
         out <- list(vb=t(x),it=matrix(0,0,0))
@@ -74,7 +74,7 @@ dataset2representer <- function(x) {
     return(out)
 }
         
-    
+# get matrix of mean shape    
 getMeanMatrix <- function(model,transpose=TRUE) {
     nvb <- ncol(model$representer$vb)
     
@@ -85,3 +85,8 @@ getMeanMatrix <- function(model,transpose=TRUE) {
     return(x)
 }
     
+## get the original standard deviations from a model given model the damped values and the estimated noiseVariance
+calcSdev <- function(model) {
+    sdevorig <- sqrt(model$PCA$sdev^2+model$sigma)
+    return(sdevorig)
+}
