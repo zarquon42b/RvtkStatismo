@@ -75,3 +75,13 @@ dataset2representer <- function(x) {
 }
         
     
+getMeanMatrix <- function(model,transpose=TRUE) {
+    nvb <- ncol(model$representer$vb)
+    
+    x <- matrix(model$PCA$center,3,nvb)
+    if (transpose)
+        x <- t(x)
+    
+    return(x)
+}
+    
