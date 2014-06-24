@@ -49,7 +49,7 @@ find_package(VTK REQUIRED)
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(STATISMO REQUIRED)
 ## until statismo has fixed its cmake generation
-set(STATISMO_HDF5_LIBRARY_DIR ${HDF5_LIBRARY_DIR} "${STATISMO_DIR}/lib/hdf5")
+set(STATISMO_HDF5_LIBRARY_DIR "${STATISMO_DIR}/lib/hdf5" ${STATISMO_HDF5_LIBRARY_DIR})
 ## configure linker and include dirs
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR})
 include_directories(${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS}  ${STATISMO_INCLUDE_DIRS} ${VTK_INCLUDE_DIR})
