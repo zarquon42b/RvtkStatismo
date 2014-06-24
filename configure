@@ -19,8 +19,6 @@ RCPPEIGEN_DIR=$(Rscript -e "cat(system.file(package='RcppEigen'))")
 export RCPP_DIR
 export RCPPEIGEN_DIR
 cd src
-if [ ! -f Makefile ];then
-    cmake .
-    cmake .
-fi
 
+cmake .
+cmake .
