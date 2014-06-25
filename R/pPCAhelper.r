@@ -50,3 +50,17 @@ calcSdev <- function(model) {
     return(sdevorig)
 }
 
+#' get the representer from a model of class "pPCA"
+#'
+#' get the representer from a model of class "pPCA"
+#' @param model object of class \code{\link{pPCA}}
+#' @return an object of class mesh3d or matrix, depending whether a point cloud or a triangular mesh is the model's representer.
+#'
+#'  @export
+representer2sample <- function(model) {
+    if (inherits(model$representer,"mesh3d"))
+        representer <- model$representer
+    else
+        representer <- vert2points(model$representer)
+    return(representer)
+}
