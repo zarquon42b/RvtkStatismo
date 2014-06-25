@@ -4,6 +4,7 @@
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeProbabilityOfDataset}
 \alias{DrawMean}
+\alias{DrawSample}
 \alias{GetMeanVector}
 \alias{GetNoiseVariance}
 \alias{GetOrthonormalPCABasisMatrix}
@@ -28,15 +29,21 @@ ComputeProbabilityOfDataset(model, dataset)
 
 DrawMean(model)
 
+DrawSample(model, coefficients = NULL, addNoise = FALSE)
+
 ComputeCoefficientsForDataset(model, dataset)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
 
 \item{dataset}{an (already aligned) mesh or k x 3 matrix containing the datasets coordinates.}
+
+\item{coefficients}{specify coefficients in the latent space to draw a sample}
+
+\item{addNoise}{logical: if TRUE noise as specified in the model will be added to the returned sample}
 }
 \value{
-functions return matrices, (log)-probabilties or coefficients for specific dataset
+functions return matrices, (log)-probabilties, coefficients or sample (mesh3d or matrix) for specific dataset
 }
 \description{
 Implementation/Emulation of the statsimo StatisticalModel class.

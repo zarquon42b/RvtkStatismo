@@ -7,6 +7,8 @@
 
 RcppExport SEXP DrawMean(SEXP pPCA_);
 
+RcppExport SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_=wrap(false));
+
 RcppExport SEXP LoadModel(SEXP modelname_);
 
 RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
