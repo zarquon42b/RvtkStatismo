@@ -254,7 +254,8 @@ predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
 #' @param model a model of class pPCA
 #' @param align logical: if TRUE the data will be aligned to the model's mean
 #' @param use.lm integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
-#' @return \code{getProb} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
+#' @return \code{getDataLikelihood} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
+#' @details \code{getDataLikelihood} estimates the likelihood of a dataset for belonging to the model by exploiting the \eqn{\chi^2}{Chi-square}-distribution of the (squared) Mahalanobisdistance, which, in turn, is simply the squared norm of the sample's coefficients in the latent space.
 #' @export
 getDataLikelihood <- function(x,model,align=FALSE,use.lm) UseMethod("getDataLikelihood")
 

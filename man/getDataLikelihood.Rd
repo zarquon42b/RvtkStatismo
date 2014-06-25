@@ -24,9 +24,12 @@ getCoefficients(x, model, align = TRUE, use.lm = NULL)
 \item{use.lm}{integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.}
 }
 \value{
-\code{getProb} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
+\code{getDataLikelihood} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
 }
 \description{
 calculate probability for a matrix/mesh given a statistical model
+}
+\details{
+\code{getDataLikelihood} estimates the likelihood of a dataset for belonging to the model by exploiting the \eqn{\chi^2}{Chi-square}-distribution of the (squared) Mahalanobisdistance, which, in turn, is simply the squared norm of the sample's coefficients in the latent space.
 }
 
