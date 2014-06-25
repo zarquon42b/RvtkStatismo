@@ -1,6 +1,6 @@
-#include "R2vtk.h"
+#include "R2polyData.h"
 
-vtkSmartPointer<vtkPolyData> R2vtk(SEXP vb_, SEXP it_) {
+vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_) {
   try {
     NumericMatrix vb(vb_);
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();

@@ -4,7 +4,7 @@
 #include "statismo/DataManager.h"
 #include <memory>
 #include <RcppEigen.h>
-#include "R2vtk.h"
+#include "R2polyData.h"
 
 using namespace Rcpp;
 

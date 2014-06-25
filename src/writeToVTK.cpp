@@ -15,13 +15,13 @@
 #include <vtkPolyData.h>
 #include <vtkTriangle.h>
 #include <vtkXMLPolyDataWriter.h>
-#include "R2vtk.h"
+#include "R2polyData.h"
 using namespace Rcpp;
 
 RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_)
 {
   CharacterVector filename(filename_);
-  vtkSmartPointer<vtkPolyData> polydata = R2vtk(vb_, it_);
+  vtkSmartPointer<vtkPolyData> polydata = R2polyData(vb_, it_);
   vtkSmartPointer<vtkXMLPolyDataWriter> writer =  vtkSmartPointer<vtkXMLPolyDataWriter>::New();
   writer->SetFileName(filename[0]);
 #if VTK_MAJOR_VERSION <= 5

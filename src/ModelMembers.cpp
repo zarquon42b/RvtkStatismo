@@ -40,7 +40,7 @@ RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP g
     bool getlog = as<bool>(getlog_);
     List dataset(dataset_);
     double prob;
-    const vtkSmartPointer<vtkPolyData> datasetRef = R2vtk(dataset["vb"],dataset["it"]);
+    const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     if (getlog)
       prob = model->ComputeLogProbabilityOfDataset(datasetRef);
@@ -62,7 +62,7 @@ RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
   try {
     List dataset(dataset_);
     double prob;
-    const vtkSmartPointer<vtkPolyData> datasetRef = R2vtk(dataset["vb"],dataset["it"]);
+    const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     Eigen::VectorXf out = model->ComputeCoefficientsForDataset(datasetRef);	
     //return List::create(Named

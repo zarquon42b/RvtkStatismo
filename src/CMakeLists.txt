@@ -54,7 +54,7 @@ set(STATISMO_HDF5_LIBRARY_DIR "${STATISMO_DIR}/lib/hdf5" ${STATISMO_HDF5_LIBRARY
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR})
 include_directories(${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS}  ${STATISMO_INCLUDE_DIRS} ${VTK_INCLUDE_DIR})
 include(${VTK_USE_FILE})
-add_library(RvtkStatismo SHARED BuildGaussProcessModel.cpp BuildModel.cpp ModelMembers.cpp polyData2R.cpp pPCA2statismo.cpp R2vtk.cpp readVTP.cpp SaveModel.cpp vtkpoly2unstruct.cpp vtkVisualize.cpp writeToVTK.cpp)
+add_library(RvtkStatismo SHARED BuildGaussProcessModel.cpp BuildModel.cpp ModelMembers.cpp polyData2R.cpp pPCA2statismo.cpp R2polyData.cpp readVTP.cpp SaveModel.cpp vtkpoly2unstruct.cpp vtkVisualize.cpp writeToVTK.cpp)
 set(CMAKE_SHARED_LINKER_FLAGS "${BLAS_LIBS} ${LAPACK_LIBS}")
 if (WIN32)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libstdc++")

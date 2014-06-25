@@ -17,7 +17,7 @@
 #include <vtkTriangle.h>
 using namespace Rcpp;
 
-#ifndef __R2vtk_H_
-#define __R2vtk_H_
-vtkSmartPointer<vtkPolyData> R2vtk(SEXP vb_, SEXP it_= Rcpp::NumericMatrix(0,0));
+#ifndef __R2polyData_H_
+#define __R2polyData_H_
+vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_= Rcpp::NumericMatrix(0,0));
 #endif 

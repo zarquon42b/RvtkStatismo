@@ -10,9 +10,9 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     List PCA = pPCA["PCA"];
     vtkSmartPointer<vtkPolyData> reference;
     if (! Rf_isNull(reflist["it"])) {
-      reference = R2vtk(reflist["vb"],reflist["it"]);
+      reference = R2polyData(reflist["vb"],reflist["it"]);
     } else {
-      reference = R2vtk(reflist["vb"]);
+      reference = R2polyData(reflist["vb"]);
     }
     auto_ptr<RepresenterType> representer(RepresenterType::Create(reference));
     VectorXf meanshape = PCA["center"];

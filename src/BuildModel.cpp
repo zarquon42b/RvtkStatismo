@@ -20,7 +20,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
     std::vector<std::string> nam = myshapelist.names();
     SEXP vbref = myreference["vb"];
     SEXP itref = myreference["it"];
-    vtkSmartPointer<vtkPolyData> reference = R2vtk(vbref,itref);
+    vtkSmartPointer<vtkPolyData> reference = R2polyData(vbref,itref);
     auto_ptr<RepresenterType> representer(RepresenterType::Create(reference));
   
   
@@ -30,7 +30,7 @@ auto_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SE
       //IntegerMatrix
       SEXP vb = tmplist["vb"];
       SEXP it = tmplist["it"];
-      vtkSmartPointer<vtkPolyData> dataset = R2vtk(vb,it);
+      vtkSmartPointer<vtkPolyData> dataset = R2polyData(vb,it);
       std::string myname = nam[i];
       dataManager->AddDataset(dataset,myname);
     

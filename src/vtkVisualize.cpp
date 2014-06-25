@@ -15,13 +15,13 @@
 #include <vtkPolyData.h>
 #include <vtkTriangle.h>
 #include <vtkXMLPolyDataWriter.h>
-#include "R2vtk.h"
+#include "R2polyData.h"
 
 using namespace Rcpp;
 
 RcppExport SEXP vtkVisualize(SEXP vb_, SEXP it_, SEXP size_)
 {
-  vtkSmartPointer<vtkPolyData> polydata = R2vtk(vb_, it_);
+  vtkSmartPointer<vtkPolyData> polydata = R2polyData(vb_, it_);
   int size = as<int>(size_);
  
   // Visualize
