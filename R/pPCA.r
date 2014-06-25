@@ -5,14 +5,14 @@
 #' @encoding utf8
 #' @param array array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.
 #' @param align logical: if TRUE, the data will be aligned first
-#' @param missingIndex integer vector: specifies which points are missing in the constrained model
-#' @param deselect logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.
-#' @param procMod object of class \code{pPCA}
+#' @param use.lm integer vector: specifies the indices of the points that are to be used in the constrained model
+#' @param deselect logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.
 #' @param sigma estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)
 #' @param exVar numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance
-#' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param scale logical: allow scaling in Procrustes fitting
 #' @param fullfit logical: if FALSE only the non-missing points will be used for registration.
+#' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
+#' @param model object of class \code{pPCA}
 #' @return returns a probabilistic PCA model of class "pPCA".
 #' \code{setMod} is used to modify existing models by changing sigma and exVar.
 #'
@@ -42,15 +42,6 @@
 #' ## change parameters without recomputing Procrustes fit
 #' model1 <- setMod(model, sigma=1, exVar=0.8)
 #'
-#' ## create a model superimposed with missing landmarks 3 and 4
-#' newmod <- pPCA(boneLM[,,-1],sigma=0,scale=TRUE,use.lm = 3:4,deselect=TRUE)
-#' ## predict the left out shape from the constrained model
-#' boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=T,origSpace=TRUE)
-#' ## the coordinates of the estimated complete config are now stored in the representer's vertices
-#' \dontrun{
-#' ##visualize prediction error
-#' deformGrid3d(vert2points(boneLM1$representer),boneLM[,,1],ngrid=0)
-#' }
 #' 
 #' @references
 #' \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
@@ -62,25 +53,7 @@
 #' @export
 pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
     if (align) {
-        k <- dim(array)[1]
-        if (!is.null(use.lm)) {
-            
-            use.lm <- unique(sort(use.lm))
-            if (deselect) {
-                use.lm <- c(1:k)[-use.lm]
-            }
-            procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
-            tmp <- array
-            a.list <-  1:(dim(array)[3])
-            tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[,,i],scale=scale,reflection = F);return(mat)})
-            tmp1 <- array
-            for (i in 1:length(a.list))
-                tmp1[,,i] <- tmp[[i]]
-            procMod$rotated <- tmp1
-                                        #procMod$mshape <- arrMean3(tmp1)
-        } else {
-            procMod <- ProcGPA(array,scale=scale,CSinit = F,reflection = F,silent = T)
-        }
+        procMod <- rigidAlign(array,scale=scale,use.lm=use.lm,deselect=deselect)
     } else {
         procMod <- list(rotated=array)
     }
@@ -114,11 +87,11 @@ setMod <- function(procMod, sigma, exVar)UseMethod("setMod")
 
 #' @rdname pPCA
 #' @export
-setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
-    k <- ncol(procMod$representer$vb)
-    PCA <- procMod$PCA
-    if (!is.null(procMod$sigma))
-        sds <- calcSdev(procMod)^2
+setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
+    k <- ncol(model$representer$vb)
+    PCA <- model$PCA
+    if (!is.null(model$sigma))
+        sds <- calcSdev(model)^2
     else
         sds <- PCA$sdev^2
     sdsum <- sum(sds)
@@ -134,17 +107,17 @@ setMod.pPCA <- function(procMod,sigma=NULL,exVar=1) {
     sigest <- (sds - sigma)
     sigest <- sigest[which(sigest > 0)]
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
-    procMod$sigma <- sigma
-    procMod$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
-    procMod$PCA$sdev <- sqrt(sigest[usePC])
-    if (!is.null(procMod$rawdata))
-        procMod$PCA$x <- procMod$rawdata%*%t(GetPCABasisMatrixIn(procMod))
+    model$sigma <- sigma
+    model$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
+    model$PCA$sdev <- sqrt(sigest[usePC])
+    if (!is.null(model$rawdata))
+        model$PCA$x <- model$rawdata%*%t(GetPCABasisMatrixIn(model))
     else
-        procMod$PCA$x <- 0
+        model$PCA$x <- 0
     Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
-    procMod$Variance <- Variance
-                                        #print(procMod,Variance=FALSE)
-    return(procMod)
+    model$Variance <- Variance
+                                        #print(model,Variance=FALSE)
+    return(model)
 }
 
 
@@ -273,54 +246,7 @@ predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
     }
     return(estim)
 }
-#' Constrains a model of class pPCA by a subset of coordinates
-#'
-#' Constrains a model of class pPCA by a subset of coordinates
-#' @param x a k x 3 matrix containing the coordinates of the reduces model
-#' @param model an object of class \code{\link{pPCA}}
-#' @param align logical: if TRUE, \code{x} will be aligned to the models mean
-#' @param use.lm integer vector, specifying which coordinates from the full model are to be used/missing
-#' @param deselect logical: if TRUE, use.lm specifies the missing coordinates instead of those present.
-#' @param origSpace logical: if align=TRUE and origSpace=TRUE, the representer of the returned model will contain the estimated full shape in the original coordinate system of \code{x}
-#' @return an object of class pPCA constrained to \code{x}
-#' @export
-ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,origSpace=FALSE) {
-    mshape <- getMeanMatrix(model,transpose=TRUE)
-    k <- ncol(model$representer$vb)
-    if (missing(use.lm))
-        use.lm <- 1:nrow(x)
-    if (deselect)
-        use.lm <- c(1:nrow(mshape))[-use.lm]
-    if (align) {
-        rotsb <- rotonto(mshape[use.lm,],x,scale=model$scale,reflection = F)
-        sb <- rotsb$yrot
-    }  else {
-        sb <- x
-    }
-     if (!deselect) {
-            oldsort <- cbind(use.lm,1:nrow(x))
-            oldsort <- oldsort[order(oldsort[,1]),]
-            sb <- sb[oldsort[,2],]
-        }
-    sbres <- sb-mshape[sort(use.lm),]
-            
-            
-    subspace <- getSubCov(model,use.lm = use.lm,deselect = F)
-    out <- list(PCA=subspace$PCA)
-    alpha <- subspace$alphamean%*%as.vector(t(sbres))
-    estim <- t(as.vector(GetPCABasisMatrix(model)%*%alpha)+t(mshape))
-    out$PCA$x <- 0
-    out$PCA$center <- as.vector(t(estim))
-    if (align && origSpace)    
-        estim <- rotreverse(estim,rotsb)
 
-    out$representer <- model$representer
-    out$representer$vb[1:3,] <- t(estim)
-    class(out) <- "pPCA"
-    return(out)
-}
-        
-        
 #' calculate probability/coefficients for a matrix/mesh given a statistical model
 #'
 #' calculate probability for a matrix/mesh given a statistical model

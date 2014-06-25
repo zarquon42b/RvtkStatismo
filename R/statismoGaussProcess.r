@@ -1,73 +1,3 @@
-#' generate a statistical model using an array of superimposed landmarks or a list of meshes
-#'
-#' generate a statistical model using an array of superimposed landmarks
-#'
-#' @param x array of aligned 3D-coordinates or a list of aligned registered meshes.
-#' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
-#' @param sigma noise in the data
-#' @param scale logical: set to TRUE, if scaling was involved in the registration.
-#' @return an object of class \code{\link{pPCA}}
-#' @examples
-#' require(Morpho)
-#' data(boneData)
-#' align <- rigidAlign(boneLM)$rotated
-#' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
-#' ## save it
-#' statismoSaveModel(mymod,"mymod.h5")
-#' @keywords StatisticalModel<representer>
-#' @seealso \code{\link{pPCA}}
-#' @importFrom Morpho bindArr
-#' 
-#' @export
-
-statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
-    if (is.array(x)) {
-        m <- dim(x)[2]
-        if (m == 2) {
-            zeros <- array(0,dim=c(dim(x)[1],1,dim(x)[3]))
-            x <- bindArr(x,zeros,along=2)
-        } else if (dim(x)[2] != 3)
-        stop("only 2D and 3D configs allowed")
-    rawdata <- vecx(x,byrow=TRUE)
-    rawdata <- sweep(rawdata,2,colMeans(rawdata))
-    mylist <- array2meshlist(x)
-    if (missing(representer))
-        representer <- x[,,1]
-    names(mylist) <- dimnames(x)[[3]]
-    } else if (is.list(x)) {
-        mylist <-checkmeshlist(x)
-        if (missing(representer))
-            representer <- x[[1]]
-        rawdata <- vecx(meshlist2array(mylist),byrow=TRUE)
-        rawdata <- sweep(rawdata,2,colMeans(rawdata))
-    }
-    if (is.null(names(mylist)))
-        names(mylist) <- paste("specimen",1:length(mylist),sep="_")
-    
-    if (is.matrix(representer)) {
-        chk <- prod(dim(representer) == dim(x)[1:2])
-        if (!chk)
-            stop("representer must be of same dimensionality as array")
-        representer <- list(vb=t(representer),it=matrix(0,0,0))
-    } else if (is.list(representer)) {
-        if (!is.numeric(representer$vb) || !is.numeric(representer$it))
-            stop("representer needs vertices and faces")
-        else if (ncol(representer$it > 0))
-            representer$it <- representer$it
-    } else {
-        stop("representer must be a matrix or a mesh")
-    }
-    
-    out <- .Call("BuildModelExport",mylist,representer,sigma)
-    if (is.list(out)) {
-        out$scale <- scale
-        out1 <- statismo2pPCA(out)
-        out1$rawdata <- rawdata
-        return(out1)
-    } else {
-        warning("something went wrong")
-    }
-}
 
 #' save and load a statistical model of class pPCA to statismo hdf5 format
 #'
@@ -102,25 +32,7 @@ statismoLoadModel <- function(modelname,scale=TRUE) {
     out <- statismo2pPCA(.Call("LoadModel",modelname))
     return(out)
 }
-statismo2pPCA <- function(statismodel) {
-    out1 <- list()
-                                        #out1$mshape <- matrix(statismodel$mshape,length(statismodel$mshape)/statismodel$dim,byrow = T)
-    out1$PCA <- list();class(out1) <- "pPCA"
-    out1$PCA$sdev <- sqrt(statismodel$PCVariance)
-    out1$PCA$rotation <- statismodel$PCBasisOrtho
-    out1$PCA$center <- statismodel$mshape
-    out1$PCA$x <- t(statismodel$scores)
-    out1$scale <- statismodel$scale
-        out1$representer <- statismodel$representer
-    if (inherits(out1$representer,"mesh3d"))
-        out1$representer$vb <- rbind(out1$representer$vb,1)
-    else
-        out1$representer$it <- matrix(0,0,0)
-    #out1$exVar <- 1
-    out1$sigma <- statismodel$sigma
-    out1$Variance <- createVarTable(out1$PCA$sdev)
-    return(out1)
-}
+
 #' expands a models variability by adding a Gaussian kernel function
 #'
 #' expands a models variability by adding a Gaussian kernel function to the empiric covariance matrix and builds a low-rank approximation of the resulting PCA

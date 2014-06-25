@@ -1,31 +1,8 @@
+### convert arrays into a list to be converted to vtk-PolyData
 array2meshlist <- function(x) {
     n <- dim(x)[3]
     out <- lapply(1:n,function(i) {out <- list(vb=t(x[,,i]),it= matrix(0,0,0))})
     return(out)
-}
-
-#' align meshes stored in a list by their vertices
-#' 
-#' align meshes stored in a list by their vertices
-#' @param meshlist list containing triangular meshes of class "mesh3d"
-#' @param scale logical: request scaling during alignment
-#' @param array logical: if TRUE the superimposed vertices will be returned as 3D array.
-#' @return returns a list of aligned meshes or an array of dimensions k x 3 x n, where k=number of vertices and n=sample size.
-#' @importFrom Morpho vert2points ProcGPA
-#' @export
-meshalign <- function(meshlist,scale=TRUE,array=FALSE) {
-    vertarr <- meshlist2array(meshlist)
-    out <- rigidAlign(vertarr,scale=scale)$rotated
-    if (array) {
-        return(out)
-    } else {
-        out <- lapply(1:length(meshlist),function(i){ res <- meshlist[[i]]
-                                                      res$vb[1:3,] <- t(out[,,i])
-                                                      res$normals <- NULL
-                                                      return(res)})
-        names(out) <- names(meshlist)
-        return(out)
-    }
 }
 
 #' convert meshes to array consisting of vertex coordinates
@@ -47,6 +24,7 @@ meshlist2array <- function(meshlist) {
     return(vertarr)
 }
 
+## check if the list of meshes is valid to send to statismo
 checkmeshlist <- function(x) {
     verts <- unlist(lapply(x,function(y) y <- ncol(y$vb)))
     chk <- prod(verts==verts[1])
@@ -55,4 +33,21 @@ checkmeshlist <- function(x) {
     else
         return(lapply(x,meshintegrity))
 }
-    
+##converts the returned model from statismo to class pPCA   
+statismo2pPCA <- function(statismodel) {
+    out1 <- list()
+    out1$PCA <- list();class(out1) <- "pPCA"
+    out1$PCA$sdev <- sqrt(statismodel$PCVariance)
+    out1$PCA$rotation <- statismodel$PCBasisOrtho
+    out1$PCA$center <- statismodel$mshape
+    out1$PCA$x <- t(statismodel$scores)
+    out1$scale <- statismodel$scale
+        out1$representer <- statismodel$representer
+    if (inherits(out1$representer,"mesh3d"))
+        out1$representer$vb <- rbind(out1$representer$vb,1)
+    else
+        out1$representer$it <- matrix(0,0,0)
+    out1$sigma <- statismodel$sigma
+    out1$Variance <- createVarTable(out1$PCA$sdev)
+    return(out1)
+}
