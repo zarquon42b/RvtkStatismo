@@ -1,8 +1,6 @@
-#include "VTKTypes.h"
-#include "pPCA2statismo.h"
-#include "polyData2R.h"
+#include "ModelMembers.h"
 
-RcppExport SEXP DrawMean(SEXP pPCA_){
+SEXP DrawMean(SEXP pPCA_){
   try {
   auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
   vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
@@ -17,7 +15,7 @@ RcppExport SEXP DrawMean(SEXP pPCA_){
   }
 }
 
-RcppExport SEXP LoadModel(SEXP modelname_){
+SEXP LoadModel(SEXP modelname_){
   try {
     CharacterVector modelname(modelname_);
     vtkStandardMeshRepresenter* representer = vtkStandardMeshRepresenter::Create();
@@ -35,7 +33,7 @@ RcppExport SEXP LoadModel(SEXP modelname_){
   }
 }
 
-RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
+SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
   try {
     bool getlog = as<bool>(getlog_);
     List dataset(dataset_);
@@ -58,7 +56,7 @@ RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP g
 
 }
 
-RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
+SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
   try {
     List dataset(dataset_);
     double prob;
