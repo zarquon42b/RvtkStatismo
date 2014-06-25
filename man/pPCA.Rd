@@ -11,28 +11,28 @@ pPCA(array, align = TRUE, use.lm = NULL, deselect = FALSE, sigma = NULL,
 
 setMod(procMod, sigma, exVar)
 
-\method{setMod}{pPCA}(procMod, sigma = NULL, exVar = 1)
+\method{setMod}{pPCA}(model, sigma = NULL, exVar = 1)
 }
 \arguments{
 \item{array}{array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.}
 
 \item{align}{logical: if TRUE, the data will be aligned first}
 
-\item{missingIndex}{integer vector: specifies which points are missing in the constrained model}
+\item{use.lm}{integer vector: specifies the indices of the points that are to be used in the constrained model}
 
-\item{deselect}{logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.}
-
-\item{procMod}{object of class \code{pPCA}}
+\item{deselect}{logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.}
 
 \item{sigma}{estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)}
 
 \item{exVar}{numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance}
 
-\item{representer}{a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.}
-
 \item{scale}{logical: allow scaling in Procrustes fitting}
 
 \item{fullfit}{logical: if FALSE only the non-missing points will be used for registration.}
+
+\item{representer}{a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.}
+
+\item{model}{object of class \code{pPCA}}
 }
 \value{
 returns a probabilistic PCA model of class "pPCA".
@@ -65,16 +65,6 @@ data(boneData)
 model <- pPCA(boneLM[,,])
 ## change parameters without recomputing Procrustes fit
 model1 <- setMod(model, sigma=1, exVar=0.8)
-
-## create a model superimposed with missing landmarks 3 and 4
-newmod <- pPCA(boneLM[,,-1],sigma=0,scale=TRUE,use.lm = 3:4,deselect=TRUE)
-## predict the left out shape from the constrained model
-boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=T,origSpace=TRUE)
-## the coordinates of the estimated complete config are now stored in the representer's vertices
-\dontrun{
-##visualize prediction error
-deformGrid3d(vert2points(boneLM1$representer),boneLM[,,1],ngrid=0)
-}
 }
 \references{
 \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264

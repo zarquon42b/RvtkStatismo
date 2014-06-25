@@ -13,7 +13,7 @@ ComputeConstrainedModel(x, model, align = FALSE, use.lm, deselect = FALSE,
 
 \item{align}{logical: if TRUE, \code{x} will be aligned to the models mean}
 
-\item{use.lm}{integer vector, specifying which coordinates from the full model are to be used/missing}
+\item{use.lm}{integer vector, specifying which coordinates from the full model are to be used/missing (see note)}
 
 \item{deselect}{logical: if TRUE, use.lm specifies the missing coordinates instead of those present.}
 
@@ -24,5 +24,19 @@ an object of class pPCA constrained to \code{x}
 }
 \description{
 Constrains a model of class pPCA by a subset of coordinates
+}
+\note{
+if deselect = F, the order of the entries in \code{use.lm} is important: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
+}
+\examples{
+## create a model superimposed with missing landmarks 3 and 4
+newmod <- pPCA(boneLM[,,-1],sigma=0,scale=TRUE,use.lm = 3:4,deselect=TRUE)
+## predict the left out shape from the constrained model
+boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=T,origSpace=TRUE)
+## the coordinates of the estimated complete config are now stored in the representer's vertices
+\dontrun{
+##visualize prediction error
+deformGrid3d(vert2points(boneLM1$representer),boneLM[,,1],ngrid=0)
+}
 }
 

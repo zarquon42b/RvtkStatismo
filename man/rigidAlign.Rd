@@ -3,16 +3,16 @@
 \alias{rigidAlign}
 \title{Fast Procrustes align of coordinates}
 \usage{
-rigidAlign(array, scale = TRUE, missingIndex, deselect = FALSE)
+rigidAlign(array, scale = TRUE, use.lm = NULL, deselect = FALSE)
 }
 \arguments{
 \item{array}{array of coordinates}
 
 \item{scale}{logical: request scaling during alignment}
 
-\item{missingIndex}{integer vector: specifies which points are missing (for building constrained model)}
+\item{use.lm}{integer vector: specifies the indices of the points that are to be used in the constrained model}
 
-\item{deselect}{logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.}
+\item{deselect}{logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.}
 }
 \value{
 a list containing

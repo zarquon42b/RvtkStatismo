@@ -3,12 +3,17 @@
 \alias{meshalign}
 \title{align meshes stored in a list by their vertices}
 \usage{
-meshalign(meshlist, scale = TRUE, array = FALSE)
+meshalign(meshlist, scale = TRUE, use.lm = NULL, deselect = FALSE,
+  array = FALSE)
 }
 \arguments{
 \item{meshlist}{list containing triangular meshes of class "mesh3d"}
 
 \item{scale}{logical: request scaling during alignment}
+
+\item{deselect}{logical: if TRUE, missingIndex references the existing coordinates instead of the missing ones.}
+
+\item{use.lm}{integer vector: specifies the indices of the points that are to be used in the constrained model}
 
 \item{array}{logical: if TRUE the superimposed vertices will be returned as 3D array.}
 }

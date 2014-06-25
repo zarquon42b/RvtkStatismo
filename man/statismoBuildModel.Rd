@@ -29,7 +29,7 @@ mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 statismoSaveModel(mymod,"mymod.h5")
 }
 \seealso{
-\code{\link{pPCA}}
+\code{\link{pPCA}, \link{rigidAlign}, \link{meshalign}}
 }
 \keyword{StatisticalModel<representer>}
 
