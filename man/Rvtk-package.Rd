@@ -12,8 +12,8 @@ Integrates statismo and R using the vtkStandardMeshRepresenter. Statismo shape m
 \tabular{ll}{
 Package: \tab RvtkStatismo\cr
 Type: \tab Package\cr
-Version: \tab 0.2.140624\cr
-Date: \tab 2014-06-24\cr
+Version: \tab 0.2.140625\cr
+Date: \tab 2014-06-25\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr }
 }

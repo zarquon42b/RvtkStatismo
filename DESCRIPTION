@@ -1,8 +1,8 @@
 Package: RvtkStatismo
 Type: Package
 Title: Integrates statismo and R using the vtkStandardMeshRepresenter
-Version: 0.2.140624
-Date: 2014-06-24
+Version: 0.2.140625
+Date: 2014-06-25
 Author: Stefan Schlager, the authors of Statismo
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
 Description: Integrates statismo and R using the vtkStandardMeshRepresenter.
