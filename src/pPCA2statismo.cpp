@@ -1,8 +1,15 @@
 #include "pPCA2statismo.h"
 #include "polyData2R.h"
 
+using Rcpp::List;
+using Rcpp::NumericMatrix;
+using Rcpp::IntegerMatrix;
+using Eigen::VectorXf;
+using Eigen::VectorXd;
+using Eigen::MatrixXf;
+using Eigen::MatrixXd;
+using Eigen::Map;
 
-using namespace Eigen;
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   try {
     List pPCA(pPCA_);

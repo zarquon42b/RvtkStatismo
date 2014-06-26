@@ -1,5 +1,9 @@
 #include "R2polyData.h"
 
+using Rcpp::List;
+using Rcpp::NumericMatrix;
+using Rcpp::IntegerMatrix;
+
 vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_) {
   try {
     NumericMatrix vb(vb_);

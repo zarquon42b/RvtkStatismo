@@ -1,3 +1,6 @@
+#ifndef _VTK_POLY2UNSTRUCT_H__
+#define _VTK_POLY2UNSTRUCT_H__
+
 #include <vtkVersion.h>
 #include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
@@ -9,8 +12,6 @@
 #include <vtkAppendFilter.h>
 
 
-#ifndef _VTK_POLY2UNSTRUCT_H__
-#define _VTK_POLY2UNSTRUCT_H__
 vtkSmartPointer<vtkUnstructuredGrid> poly2grid(vtkSmartPointer<vtkPolyData> polydata);
 
 vtkSmartPointer<vtkPolyData> grid2poly(vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid);

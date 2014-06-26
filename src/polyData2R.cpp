@@ -1,6 +1,6 @@
 #include "polyData2R.h"
 
-Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
+List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
   try {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     //polydata = reader->GetOutput();
