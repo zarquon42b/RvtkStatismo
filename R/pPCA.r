@@ -54,18 +54,10 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
     PCA$sdev <- PCA$sdev[good]
     PCA$x <- 0
     PCA <- unclass(PCA)
-    #model <- new("pPCA",PCA=PCA,scale=scale)
-    #procMod$PCA <- PCA
-    #procMod$scale <- scale
-    #class(procMod) <- "pPCA"
     if (is.null(representer) || is.matrix(representer))
         representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,0,0))
-    #procMod$representer <- representer
     model <- new("pPCA",PCA=PCA,scale=scale,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
     model <- setMod(model,sigma=sigma,exVar=exVar)
-    #procMod$rotated <- NULL
-    #procMod <- setMod(model,sigma=sigma,exVar=exVar)
-    #procMod$rawdata <- sweep(rawdata,2,colMeans(rawdata))
     return(model)
 
 }
@@ -91,15 +83,16 @@ setMethod("setMod", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) 
     sigest <- (sds - sigma)
     sigest <- sigest[which(sigest > 0)]
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
-    model@sigma <- sigma
-    model@PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
-    model@PCA$sdev <- sqrt(sigest[usePC])
+    SetNoiseVariance(model) <- sigma
+    PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
+    PCA$sdev <- sqrt(sigest[usePC])
     if (ncol(model@rawdata) > 0)
-        model@PCA$x <- model@rawdata%*%t(GetPCABasisMatrixIn(model))
+        PCA$x <- model@rawdata%*%t(GetPCABasisMatrixIn(model))
     else
-        model@PCA$x <- 0
+        PCA$x <- 0
+    SetPCA(model) <- PCA
     Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
-    model@Variance <- Variance
+    SetVariance(model) <- Variance
                                         #print(model,Variance=FALSE)
     return(model)
 })
