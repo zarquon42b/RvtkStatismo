@@ -12,9 +12,10 @@ using Eigen::Map;
 
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   try {
-    List pPCA(pPCA_);
-    List reflist = pPCA["representer"];  
-    List PCA = pPCA["PCA"];
+    S4 pPCA(pPCA_);
+    //List pPCA(pPCA_);
+    List reflist = pPCA.slot("representer");  
+    List PCA = pPCA.slot("PCA");
     vtkSmartPointer<vtkPolyData> reference;
     if (! Rf_isNull(reflist["it"])) {
       reference = R2polyData(reflist["vb"],reflist["it"]);
@@ -31,7 +32,7 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     MatrixXf PCBasisOrtho = PCBasisOrtho0.cast<float>();
     //VectorXf PCVariance = PCBasis.colwise().norm();
     PCVariance = PCVariance.array().pow(2);//get Variance from sdev
-    double sigma = as<double>(pPCA["sigma"]);
+    double sigma = as<double>(pPCA.slot("sigma"));
     auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
     if (! Rf_isNull(PCA["x"])) {
       Map<MatrixXd> scores0(as<Map<MatrixXd> >(PCA["x"]));
@@ -55,22 +56,32 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
  
   }
 
-
-  Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
-    if (model.get()) {
-      vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
-  
-      return List::create(Named("PCBasis") = model->GetPCABasisMatrix(),
-			  Named("PCBasisOrtho") = model->GetOrthonormalPCABasisMatrix(),
-			  Named("PCVariance")= model->GetPCAVarianceVector(),
-			  Named("sigma")= model->GetNoiseVariance(),
-			  Named("mshape")= model->GetMeanVector(),
-			  Named("dim")=model->GetRepresenter()->GetDimensions(),
-			  Named("scores")=model->GetModelInfo().GetScoresMatrix(),
-			  Named("representer")=polyData2R(reference)
-			  );
+S4 statismo2pPCA(auto_ptr<StatisticalModelType> model) {
+   try {
+     if (model.get()) {
+    vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+    List PCA = List::create(Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
+			    Named("center")= model->GetMeanVector(),
+			    Named("x")=model->GetModelInfo().GetScoresMatrix().transpose(),
+			    Named("sdev")= model->GetPCAVarianceVector().array().sqrt()
+			    );
+    Language pPCAcall("new", "pPCA");
+    Rcpp::S4 pPCA( pPCAcall.eval() );
+    //S4 pPCA;
+    pPCA.slot("PCA") = PCA;
+    pPCA.slot("sigma") = model->GetNoiseVariance();
+    pPCA.slot("representer")=polyData2R(reference);
+			
+    return pPCA;
     } else {
       Rprintf("Invalid model\n");
       return wrap(1);
     }
+}  catch (std::exception& e) {
+    ::Rf_error( e.what());
+     
+  } catch (...) {
+    ::Rf_error("unknown exception");
+     
+  }
   }

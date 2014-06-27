@@ -22,13 +22,13 @@
 #' @export
 ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,origSpace=FALSE) {
     mshape <- getMeanMatrix(model,transpose=TRUE)
-    k <- ncol(model$representer$vb)
+    k <- ncol(model@representer$vb)
     if (missing(use.lm))
         use.lm <- 1:nrow(x)
     if (deselect)
         use.lm <- c(1:nrow(mshape))[-use.lm]
     if (align) {
-        rotsb <- rotonto(mshape[use.lm,],x,scale=model$scale,reflection = F)
+        rotsb <- rotonto(mshape[use.lm,],x,scale=model@scale,reflection = F)
         sb <- rotsb$yrot
     }  else {
         sb <- x
@@ -50,7 +50,7 @@ ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,or
     if (align && origSpace)    
         estim <- rotreverse(estim,rotsb)
 
-    out$representer <- model$representer
+    out$representer <- model@representer
     out$representer$vb[1:3,] <- t(estim)
     class(out) <- "pPCA"
     return(out)
@@ -59,16 +59,16 @@ ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,or
 ### get matrices nessesary to calculate a model of the constrained space
 getSubCov <- function(model,use.lm,deselect=FALSE) {
     use.lm <- unique(sort(use.lm))
-    k <- ncol(model$representer$vb)
+    k <- ncol(model@representer$vb)
     if (!deselect) {
         missingIndex <- c(1:k)[-use.lm]
     } else {
         missingIndex <- use.lm
     }
-    if (model$sigma == 0)
+    if (model@sigma == 0)
         siginv <- 1e13
     else
-        siginv <- 1/model$sigma
+        siginv <- 1/model@sigma
     sel <- getSel(missingIndex,getMeanMatrix(model))
     W <- GetPCABasisMatrix(model)
     out <- list()
@@ -84,13 +84,13 @@ getSubCov <- function(model,use.lm,deselect=FALSE) {
     }
     Minv <- (Minv+t(Minv))/2
     out$alphamean <- siginv*Minv%*%t(Wb) ## the general mean of the constrained distribution
-    sds <- model$PCA$sdev^2
+    sds <- model@PCA$sdev^2
     udut <- t(t(Minv)*sds)
     eigM <- eigen(udut,symmetric = T)
     sds <- Re(eigM$values)
     good <- which(sds > 1e-15)
     sds[-good] <- 0
-    newW <- model$PCA$rotation%*%(Re(eigM$vectors))[,good,drop=FALSE]
+    newW <- model@PCA$rotation%*%(Re(eigM$vectors))[,good,drop=FALSE]
     sds <- sds[good]
     out$PCA <- list()
     out$PCA$sdev <- sqrt(sds)

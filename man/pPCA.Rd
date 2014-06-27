@@ -3,15 +3,12 @@
 \name{pPCA}
 \alias{pPCA}
 \alias{setMod}
-\alias{setMod.pPCA}
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
 pPCA(array, align = TRUE, use.lm = NULL, deselect = FALSE, sigma = NULL,
   exVar = 1, scale = TRUE, representer = NULL)
 
-setMod(procMod, sigma, exVar)
-
-\method{setMod}{pPCA}(model, sigma = NULL, exVar = 1)
+setMod(model, sigma = NULL, exVar = 1)
 }
 \arguments{
 \item{array}{array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.}
@@ -35,26 +32,8 @@ setMod(procMod, sigma, exVar)
 \item{model}{object of class \code{pPCA}}
 }
 \value{
-returns a probabilistic PCA model of class "pPCA".
+returns a probabilistic PCA model as S4 class "pPCA" (see \code{\link{pPCA-class}}).
 \code{setMod} is used to modify existing models by changing sigma and exVar.
-
-
-The class \code{"pPCA"} is a list containing the follwing items (still not yet set in stone)
-\item{PCA}{a list containing
-\itemize{
-\item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
-\item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
-\item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
-\item{\code{center}: a vector of the mean shape in with coordinates ordered
-
-\code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
- }
-}
-\item{scale}{logical: indicating if the data was aligned including scaling}
-\item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
-\item{sigma}{the noise estimation of the data}
-\item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
-\item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 }
 \description{
 calculate or modify a probablistic PCA based on 3D-coordinates

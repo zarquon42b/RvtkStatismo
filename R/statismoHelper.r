@@ -35,19 +35,20 @@ checkmeshlist <- function(x) {
 }
 ##converts the returned model from statismo to class pPCA   
 statismo2pPCA <- function(statismodel) {
-    out1 <- list()
-    out1$PCA <- list();class(out1) <- "pPCA"
-    out1$PCA$sdev <- sqrt(statismodel$PCVariance)
-    out1$PCA$rotation <- statismodel$PCBasisOrtho
-    out1$PCA$center <- statismodel$mshape
-    out1$PCA$x <- t(statismodel$scores)
-    out1$scale <- statismodel$scale
-        out1$representer <- statismodel$representer
-    if (inherits(out1$representer,"mesh3d"))
-        out1$representer$vb <- rbind(out1$representer$vb,1)
+    
+    PCA <- list()
+    PCA$sdev <- sqrt(statismodel$PCVariance)
+    PCA$rotation <- statismodel$PCBasisOrtho
+    PCA$center <- statismodel$mshape
+    PCA$x <- t(statismodel$scores)
+   
+    #ut1$scale <- statismodel$scale
+        representer <- statismodel$representer
+    if (inherits(representer,"mesh3d"))
+        representer$vb <- rbind(representer$vb,1)
     else
-        out1$representer$it <- matrix(0,0,0)
-    out1$sigma <- statismodel$sigma
-    out1$Variance <- createVarTable(out1$PCA$sdev)
+        representer$it <- matrix(0,0,0)
+    
+    out1 <- new("pPCA",PCA=PCA,representer=representer,sigma=statismodel$sigma,Variance=createVarTable(PCA$sdev))
     return(out1)
 }

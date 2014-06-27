@@ -6,7 +6,7 @@
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
-#' @return an object of class \code{\link{pPCA}}
+#' @return an object of class pPCA (\code{\link{pPCA-class}})
 #' @examples
 #' require(Morpho)
 #' data(boneData)
@@ -15,7 +15,7 @@
 #' ## save it
 #' statismoSaveModel(mymod,"mymod.h5")
 #' @keywords StatisticalModel<representer>
-#' @seealso \code{\link{pPCA}, \link{rigidAlign}, \link{meshalign}}
+#' @seealso \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
 #' @importFrom Morpho bindArr
 #' 
 #' @export
@@ -59,12 +59,8 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
     }
     
     out <- .Call("BuildModelExport",mylist,representer,sigma)
-    if (is.list(out)) {
-        out$scale <- scale
-        out1 <- statismo2pPCA(out)
-        out1$rawdata <- rawdata
-        return(out1)
-    } else {
-        warning("something went wrong")
-    }
+    out <- UpdateVariance(out)
+    return(out)
+    
+    
 }

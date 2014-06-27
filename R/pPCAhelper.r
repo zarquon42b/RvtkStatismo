@@ -35,9 +35,9 @@ dataset2representer <- function(x) {
         
 # get matrix of mean shape    
 getMeanMatrix <- function(model,transpose=TRUE) {
-    nvb <- ncol(model$representer$vb)
+    nvb <- ncol(model@representer$vb)
     
-    x <- matrix(model$PCA$center,3,nvb)
+    x <- matrix(model@PCA$center,3,nvb)
     if (transpose)
         x <- t(x)
     
@@ -46,7 +46,7 @@ getMeanMatrix <- function(model,transpose=TRUE) {
     
 ## get the original standard deviations from a model given model the damped values and the estimated noiseVariance
 calcSdev <- function(model) {
-    sdevorig <- sqrt(model$PCA$sdev^2+model$sigma)
+    sdevorig <- sqrt(model@PCA$sdev^2+model@sigma)
     return(sdevorig)
 }
 
@@ -57,10 +57,21 @@ calcSdev <- function(model) {
 #' @return an object of class mesh3d or matrix, depending whether a point cloud or a triangular mesh is the model's representer.
 #'
 #'  @export
-representer2sample <- function(model) {
-    if (inherits(model$representer,"mesh3d"))
-        representer <- model$representer
+setGeneric("representer2sample", function(model) {
+    standardGeneric("representer2sample")
+})
+setMethod("representer2sample", signature(model="pPCA"), function(model) {
+    if (inherits(model@representer,"mesh3d"))
+        representer <- model@representer
     else
-        representer <- vert2points(model$representer)
+        representer <- vert2points(model@representer)
     return(representer)
+})
+
+output2sample <- function(out) {
+    if (inherits(out,"mesh3d"))
+        out$vb <- rbind(out$vb,1)
+    else
+        out <- t(out$vb)
+    return(out)
 }
