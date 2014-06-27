@@ -55,10 +55,10 @@ statismoLoadModel <- function(modelname,scale=TRUE) {
 #' PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC of the extended model
 #' PC1NoEmp <- predictpPCA(2,GPmodNoEmp)# get shape in 2sd of first PC
 #' ##visualize the differences from the mean (green spheres)
-#' deformGrid3d(PC1,GPmod$mshape,ngrid=0)##
-#' deformGrid3d(PC1NoEmp,GPmod$mshape,ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
-#' deformGrid3d(PC1orig,GPmod$mshape,ngrid=0,col1=5,add=TRUE)
-#' @seealso \code{\link{pPCA}}
+#' deformGrid3d(PC1,DrawMean(GPmod),ngrid=0)##
+#' deformGrid3d(PC1NoEmp,DrawMean(GPmod),ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
+#' deformGrid3d(PC1orig,DrawMean(GPmod),ngrid=0,col1=5,add=TRUE)
+#' @seealso \code{\link{pPCA}, \link{pPCA-class}}
 #' @keywords StatisticalModel<representer>
 #' @export
 statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
@@ -67,7 +67,7 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
         stop("please provide model of class 'pPCA'")
     if (!is.list(kernel))
         stop("kernel needs to be a list of two-entry vectors")
-    k <- ncol(model$representer$vb)
+    k <- ncol(model@representer$vb)
     nystroem <- min(k,nystroem)
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"

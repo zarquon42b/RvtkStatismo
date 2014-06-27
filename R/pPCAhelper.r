@@ -57,10 +57,21 @@ calcSdev <- function(model) {
 #' @return an object of class mesh3d or matrix, depending whether a point cloud or a triangular mesh is the model's representer.
 #'
 #'  @export
-representer2sample <- function(model) {
+setGeneric("representer2sample", function(model) {
+    standardGeneric("representer2sample")
+})
+setMethod("representer2sample", signature(model="pPCA"), function(model) {
     if (inherits(model@representer,"mesh3d"))
         representer <- model@representer
     else
         representer <- vert2points(model@representer)
     return(representer)
+})
+
+output2sample <- function(out) {
+    if (inherits(out,"mesh3d"))
+        out$vb <- rbind(out$vb,1)
+    else
+        out <- t(out$vb)
+    return(out)
 }

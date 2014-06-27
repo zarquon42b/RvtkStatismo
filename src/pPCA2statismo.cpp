@@ -5,9 +5,10 @@
 using namespace Eigen;
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   try {
-    List pPCA(pPCA_);
-    List reflist = pPCA["representer"];  
-    List PCA = pPCA["PCA"];
+    S4 pPCA(pPCA_);
+    //List pPCA(pPCA_);
+    List reflist = pPCA.slot("representer");  
+    List PCA = pPCA.slot("PCA");
     vtkSmartPointer<vtkPolyData> reference;
     if (! Rf_isNull(reflist["it"])) {
       reference = R2polyData(reflist["vb"],reflist["it"]);
@@ -24,7 +25,7 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     MatrixXf PCBasisOrtho = PCBasisOrtho0.cast<float>();
     //VectorXf PCVariance = PCBasis.colwise().norm();
     PCVariance = PCVariance.array().pow(2);//get Variance from sdev
-    double sigma = as<double>(pPCA["sigma"]);
+    double sigma = as<double>(pPCA.slot("sigma"));
     auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
     if (! Rf_isNull(PCA["x"])) {
       Map<MatrixXd> scores0(as<Map<MatrixXd> >(PCA["x"]));

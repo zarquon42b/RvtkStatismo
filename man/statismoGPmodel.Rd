@@ -35,12 +35,12 @@ PC1orig <- predictpPCA(2,mod)# get shape in 2sd of first PC of originial model
 PC1 <- predictpPCA(2,GPmod)# get shape in 2sd of first PC of the extended model
 PC1NoEmp <- predictpPCA(2,GPmodNoEmp)# get shape in 2sd of first PC
 ##visualize the differences from the mean (green spheres)
-deformGrid3d(PC1,GPmod$mshape,ngrid=0)##
-deformGrid3d(PC1NoEmp,GPmod$mshape,ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
-deformGrid3d(PC1orig,GPmod$mshape,ngrid=0,col1=5,add=TRUE)
+deformGrid3d(PC1,DrawMean(GPmod),ngrid=0)##
+deformGrid3d(PC1NoEmp,DrawMean(GPmod),ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
+deformGrid3d(PC1orig,DrawMean(GPmod),ngrid=0,col1=5,add=TRUE)
 }
 \seealso{
-\code{\link{pPCA}}
+\code{\link{pPCA}, \link{pPCA-class}}
 }
 \keyword{StatisticalModel<representer>}
 

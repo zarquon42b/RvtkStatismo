@@ -42,7 +42,7 @@ statismo2pPCA <- function(statismodel) {
     PCA$center <- statismodel$mshape
     PCA$x <- t(statismodel$scores)
    
-    o#ut1$scale <- statismodel$scale
+    #ut1$scale <- statismodel$scale
         representer <- statismodel$representer
     if (inherits(representer,"mesh3d"))
         representer$vb <- rbind(representer$vb,1)

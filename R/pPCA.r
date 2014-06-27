@@ -13,26 +13,10 @@
 #' @param fullfit logical: if FALSE only the non-missing points will be used for registration.
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param model object of class \code{pPCA}
-#' @return returns a probabilistic PCA model of class "pPCA".
+#' @return returns a probabilistic PCA model as S4 class "pPCA" (see \code{\link{pPCA-class}}).
 #' \code{setMod} is used to modify existing models by changing sigma and exVar.
 #'
 #' 
-#' The class \code{"pPCA"} is a list containing the follwing items (still not yet set in stone)
-#' \item{PCA}{a list containing
-#' \itemize{
-#' \item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
-#' \item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
-#' \item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
-#' \item{\code{center}: a vector of the mean shape in with coordinates ordered
-#'
-#' \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
-#'  }
-#' }
-#' \item{scale}{logical: indicating if the data was aligned including scaling}
-#' \item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
-#' \item{sigma}{the noise estimation of the data}
-#' \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
-#' \item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 #' 
 #' 
 #' @examples
@@ -51,7 +35,7 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-"pPCA" <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
+pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
     if (align) {
         procMod <- rigidAlign(array,scale=scale,use.lm=use.lm,deselect=deselect)
     } else {
@@ -86,14 +70,8 @@
 
 }
 
-
-#' @rdname pPCA
-#' @export
-setMod <- function(procMod, sigma, exVar)UseMethod("setMod")
-
-#' @rdname pPCA
-#' @export
-setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
+###Modify an existing pPCA model
+setMethod("setMod", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
     k <- ncol(model@representer$vb)
     PCA <- model@PCA
     if (length(model@sigma))
@@ -124,7 +102,7 @@ setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
     model@Variance <- Variance
                                         #print(model,Variance=FALSE)
     return(model)
-}
+})
 
 
 #' @export
