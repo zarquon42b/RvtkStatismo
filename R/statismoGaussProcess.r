@@ -30,6 +30,7 @@ statismoLoadModel <- function(modelname,scale=TRUE) {
     storage.mode(modelname) <- "character"
     
     out <- (.Call("LoadModel",modelname))
+    out <- UpdateVariance(out)
     return(out)
 }
 
