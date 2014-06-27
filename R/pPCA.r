@@ -63,6 +63,11 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
 }
 
 ###Modify an existing pPCA model
+#' @rdname pPCA
+#' @export
+setGeneric("setMod", function(model,sigma=NULL,exVar=1) {
+    standardGeneric("setMod")
+})
 setMethod("setMod", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
     k <- ncol(model@representer$vb)
     PCA <- model@PCA
@@ -91,14 +96,11 @@ setMethod("setMod", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) 
     else
         PCA$x <- 0
     SetPCA(model) <- PCA
-    Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
-    SetVariance(model) <- Variance
-                                        #print(model,Variance=FALSE)
+    model <- UpdateVariance(model) ##create Variance table 
     return(model)
 })
 
 
-#' @export
 print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste("   sigma =",x@sigma,"\n"))
     cat(paste(" first",length(x@PCA$sdev),"PCs used\n"))

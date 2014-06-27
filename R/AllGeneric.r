@@ -74,9 +74,5 @@ setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
     standardGeneric("ComputeCoefficientsForDataset")
 })
 
-#' @rdname pPCA
-#' @export
-setGeneric("setMod", function(model,sigma=NULL,exVar=1) {
-    standardGeneric("setMod")
-})
+
 
