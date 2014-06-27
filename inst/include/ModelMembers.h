@@ -1,13 +1,17 @@
-#include "VTKTypes.h"
-#include "pPCA2statismo.h"
-#include "polyData2R.h"
-
 #ifndef _MODEL_MEMBERS_H__
 #define _MODEL_MEMBERS_H__
 
+
+#include "VTKTypes.h"
+#include "pPCA2statismo.h"
+#include "polyData2R.h"
+#include "Rcpp.h"
+
+
+
 RcppExport SEXP DrawMean(SEXP pPCA_);
 
-RcppExport SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_=wrap(false));
+RcppExport SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_= Rcpp::wrap(false));
 
 RcppExport SEXP LoadModel(SEXP modelname_);
 

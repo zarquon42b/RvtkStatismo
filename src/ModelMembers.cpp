@@ -1,7 +1,7 @@
 #include "ModelMembers.h"
-using Eigen::Map;
-using Eigen::VectorXf;
+using namespace Rcpp;
 using namespace Eigen;
+
 SEXP DrawMean(SEXP pPCA_){
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);

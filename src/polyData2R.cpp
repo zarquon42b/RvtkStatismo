@@ -1,6 +1,6 @@
 #include "polyData2R.h"
-#include <vtkSmartPointer.h>
-Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
+
+List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
   try {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     //polydata = reader->GetOutput();
@@ -14,7 +14,6 @@ Rcpp::List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
       for (int j=0; j<3; j++)
 	vb(j,i) = point[j];
     }
-  
     int h;
     vtkIdType npts=3,*pts; 
     int nit = polydata->GetNumberOfPolys();

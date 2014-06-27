@@ -1,10 +1,16 @@
+#ifndef _BUILD_GP_MODEL_H__
+#define _BUILD_GP_MODEL_H__
+
 #include "VTKTypes.h"
 #include "pPCA2statismo.h"
 #include "statismo/LowRankGPModelBuilder.h"
 #include "polyData2R.h"
 
-#ifndef _BUILD_GP_MODEL_H__
-#define _BUILD_GP_MODEL_H__
+
+
+using namespace Rcpp;
+using namespace statismo;
+
 class GaussianKernel: public ScalarValuedKernel<vtkPoint> {
 public:
 
