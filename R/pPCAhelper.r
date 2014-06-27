@@ -35,9 +35,9 @@ dataset2representer <- function(x) {
         
 # get matrix of mean shape    
 getMeanMatrix <- function(model,transpose=TRUE) {
-    nvb <- ncol(model$representer$vb)
+    nvb <- ncol(model@representer$vb)
     
-    x <- matrix(model$PCA$center,3,nvb)
+    x <- matrix(model@PCA$center,3,nvb)
     if (transpose)
         x <- t(x)
     
@@ -46,7 +46,7 @@ getMeanMatrix <- function(model,transpose=TRUE) {
     
 ## get the original standard deviations from a model given model the damped values and the estimated noiseVariance
 calcSdev <- function(model) {
-    sdevorig <- sqrt(model$PCA$sdev^2+model$sigma)
+    sdevorig <- sqrt(model@PCA$sdev^2+model@sigma)
     return(sdevorig)
 }
 
@@ -58,9 +58,9 @@ calcSdev <- function(model) {
 #'
 #'  @export
 representer2sample <- function(model) {
-    if (inherits(model$representer,"mesh3d"))
-        representer <- model$representer
+    if (inherits(model@representer,"mesh3d"))
+        representer <- model@representer
     else
-        representer <- vert2points(model$representer)
+        representer <- vert2points(model@representer)
     return(representer)
 }

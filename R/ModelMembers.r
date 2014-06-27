@@ -11,30 +11,42 @@
 #' @name StatismoModelMembers
 #' @rdname statismoMembers
 #' @export
-GetPCABasisMatrix <- function(model) {
-    
-    W <- t(t(model$PCA$rotation)*model$PCA$sdev) ##Matrix to project scaled PC-scores back into the config space
+setGeneric("GetPCABasisMatrix", function(model) {
+  standardGeneric("GetPCABasisMatrix")
+})
+setMethod("GetPCABasisMatrix", signature(model = "pPCA"), function(model) {
+   W <- t(t(model@PCA$rotation)*model@PCA$sdev) ##Matrix to project scaled PC-scores back into the config space
     return(W)
-}
+})
+
+#' @rdname statismoMembers
+#' @docType methods
+#' @export
+setGeneric("GetOrthonormalPCABasisMatrix", function(model) {
+  standardGeneric("GetOrthonormalPCABasisMatrix")
+})
+#' @export
+setMethod("GetOrthonormalPCABasisMatrix" ,signature(model="pPCA"),function(model) {
+    return(model@PCA$rotation)
+})
+
 #' @rdname statismoMembers
 #' @export
-GetOrthonormalPCABasisMatrix <- function(model) {
-    return(model$PCA$rotation)
-}
-#' @rdname statismoMembers
-#' @export
-GetNoiseVariance <- function(model) {
-    return(model$sigma)
-}
+setGeneric("GetNoiseVariance", function(model) {
+    standardGeneric("GetNoiseVariance")
+})
+setMethod("GetNoiseVariance",signature(model = "pPCA"), function(model) {
+    return(model@sigma)
+})
 #' @rdname statismoMembers
 #' @export
 GetMeanVector <- function(model) {
-    return(model$PCA$center)
+    return(model@PCA$center)
 }
 #' @rdname statismoMembers
 #' @export
 GetPCAVarianceVector <- function(model) {
-    return(model$PCA$sdev^2)
+    return(model@PCA$sdev^2)
 }
 #' @rdname statismoMembers
 #' @export
@@ -53,10 +65,10 @@ GetPCABasisMatrixIn <- function(model) {
     ##this the more complicated version directly from StatisticalModel.txx
     WT <- t(GetPCABasisMatrix(model))
     Mmatrix <- crossprod(GetPCABasisMatrix(model))
-    diag(Mmatrix) <- diag(Mmatrix)+model$sigma
+    diag(Mmatrix) <- diag(Mmatrix)+model@sigma
     Mmatrixinv <- solve(Mmatrix)
     Win <- Mmatrixinv%*%WT
-    #Win <- (t(model$PCA$rotation)*(1/sqrt(model$PCA$sdev^2+model$sigma))) ##Matrix to project scaled PC-scores back into the config space
+    #Win <- (t(model@PCA$rotation)*(1/sqrt(model@PCA$sdev^2+model@sigma))) ##Matrix to project scaled PC-scores back into the config space
     return(Win)
 }
 #' @rdname statismoMembers
@@ -69,10 +81,11 @@ DrawMean <- function(model) {
 }
 
 #' @rdname statismoMembers
+#' 
 #' @export
 DrawSample <- function(model, coefficients=NULL, addNoise=FALSE) {
     if (is.vector(coefficients)) {
-        npc <- ncol(model$PCA$rotation)
+        npc <- ncol(model@PCA$rotation)
         lcoeff <- length(coefficients)
         if (lcoeff < npc){
             zero <- rep(0,npc)

@@ -51,12 +51,14 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
+"pPCA" <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
     if (align) {
         procMod <- rigidAlign(array,scale=scale,use.lm=use.lm,deselect=deselect)
     } else {
         procMod <- list(rotated=array)
     }
+    if (is.null(sigma))
+        sigma <- numeric(0)
     procMod$mshape <- NULL
     rawdata <- vecx(procMod$rotated,byrow=T)
     PCA <- prcomp(rawdata,tol = sqrt(.Machine$double.eps)) ## calculate PCA
@@ -67,16 +69,20 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     PCA$sdev <- PCA$sdev[good]
     PCA$x <- 0
-    procMod$PCA <- PCA
-    procMod$scale <- scale
-    class(procMod) <- "pPCA"
+    PCA <- unclass(PCA)
+    #model <- new("pPCA",PCA=PCA,scale=scale)
+    #procMod$PCA <- PCA
+    #procMod$scale <- scale
+    #class(procMod) <- "pPCA"
     if (is.null(representer) || is.matrix(representer))
         representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,0,0))
-    procMod$representer <- representer
-    procMod$rotated <- NULL
-    procMod <- setMod(procMod,sigma=sigma,exVar=exVar)
-    procMod$rawdata <- sweep(rawdata,2,colMeans(rawdata))
-    return(procMod)
+    #procMod$representer <- representer
+    model <- new("pPCA",PCA=PCA,scale=scale,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
+    model <- setMod(model,sigma=sigma,exVar=exVar)
+    #procMod$rotated <- NULL
+    #procMod <- setMod(model,sigma=sigma,exVar=exVar)
+    #procMod$rawdata <- sweep(rawdata,2,colMeans(rawdata))
+    return(model)
 
 }
 
@@ -88,9 +94,9 @@ setMod <- function(procMod, sigma, exVar)UseMethod("setMod")
 #' @rdname pPCA
 #' @export
 setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
-    k <- ncol(model$representer$vb)
-    PCA <- model$PCA
-    if (!is.null(model$sigma))
+    k <- ncol(model@representer$vb)
+    PCA <- model@PCA
+    if (length(model@sigma))
         sds <- calcSdev(model)^2
     else
         sds <- PCA$sdev^2
@@ -98,7 +104,7 @@ setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
     sdVar <- sds/sdsum
     sdCum <- cumsum(sdVar)
     usePC <- which(sdCum <= exVar)
-    if (is.null(sigma))
+    if (!length(sigma))
         sigma <- 1/(3*k)*sum(sds[-usePC]) ##estimate sigma from remaining Variance
     if (sigma >= sdsum) {
         warning(paste("sigma > overall variance set to",sdsum/2))
@@ -107,15 +113,15 @@ setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
     sigest <- (sds - sigma)
     sigest <- sigest[which(sigest > 0)]
     usePC <- 1:max(1,min(length(usePC),length(sigest)))
-    model$sigma <- sigma
-    model$PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
-    model$PCA$sdev <- sqrt(sigest[usePC])
-    if (!is.null(model$rawdata))
-        model$PCA$x <- model$rawdata%*%t(GetPCABasisMatrixIn(model))
+    model@sigma <- sigma
+    model@PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
+    model@PCA$sdev <- sqrt(sigest[usePC])
+    if (ncol(model@rawdata) > 0)
+        model@PCA$x <- model@rawdata%*%t(GetPCABasisMatrixIn(model))
     else
-        model$PCA$x <- 0
+        model@PCA$x <- 0
     Variance <- createVarTable(sigest[usePC],square = FALSE) ##make Variance table 
-    model$Variance <- Variance
+    model@Variance <- Variance
                                         #print(model,Variance=FALSE)
     return(model)
 }
@@ -123,13 +129,14 @@ setMod.pPCA <- function(model,sigma=NULL,exVar=1) {
 
 #' @export
 print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
-    cat(paste("   sigma =",x$sigma,"\n"))
-    cat(paste(" first",length(x$PCA$sdev),"PCs used\n"))
+    cat(paste("   sigma =",x@sigma,"\n"))
+    cat(paste(" first",length(x@PCA$sdev),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
-        print(x$Variance)
+        print(x@Variance)
     }
 }
+setMethod("show", "pPCA", function(object){print.pPCA(object)})
 #' predict or restrict a mesh or matrix based on a statistical model
 #'
 #' predict or restrict a mesh or matrix based on a statistical model
@@ -161,24 +168,24 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
     mshape <- getMeanMatrix(model,transpose=TRUE)
     if (align) {
     if (is.null(use.lm)) {
-        rotsb <- rotonto(mshape,x,scale=model$scale,reflection = F)
+        rotsb <- rotonto(mshape,x,scale=model@scale,reflection = F)
         sb <- rotsb$yrot
     } else {
         use.lm <- unique(sort(use.lm))
         if (deselect)
             use.lm <- c(1:nrow(mshape))[-use.lm]
-        rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model$scale,reflection=F)
+        rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model@scale,reflection=F)
         sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
     }
 } else
     sb <- x
     sbres <- sb-mshape
     alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
-    sdl <- length(model$PCA$sdev)
+    sdl <- length(model@PCA$sdev)
     
     if (!missing(sdmax)) {
         if (mahaprob != "n") {
-            sdl <- length(model$PCA$sdev)
+            sdl <- length(model@PCA$sdev)
             probs <- sum(alpha^2)
             if (mahaprob == "c") {
                 Mt <- qchisq(1-2*pnorm(sdmax,lower.tail=F),df=sdl)
@@ -209,8 +216,8 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
         if (origSpace)
             estim <- rotreverse(estim,rotsb)
         
-        if (!is.null(model$representer) && class(model$representer) == "mesh3d" && representer) {
-            estimmesh <- model$representer
+        if (!is.null(model@representer) && class(model@representer) == "mesh3d" && representer) {
+            estimmesh <- model@representer
             estimmesh$vb[1:3,] <- t(estim)
             estimmesh <- vcgUpdateNormals(estimmesh)
             estim <- estimmesh
@@ -231,15 +238,15 @@ predictpPCA.mesh3d <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
 #' @export
 predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
     W <- GetPCABasisMatrix(model)
-    useit <- 1:(min(length(x),length(model$PCA$sdev)))
+    useit <- 1:(min(length(x),length(model@PCA$sdev)))
     if (length(useit) > 1)
         estim <- as.vector(W[,useit]%*%x)
     else
         estim <- as.vector(W[,useit]*x)
     
     estim <- t(estim+getMeanMatrix(model,transpose=FALSE))
-    if (!is.null(model$representer) && class(model$representer) == "mesh3d" && representer) {
-        estimmesh <- model$representer
+    if (!is.null(model@representer) && class(model@representer) == "mesh3d" && representer) {
+        estimmesh <- model@representer
         estimmesh$vb[1:3,] <- t(estim)
         estimmesh <- vcgUpdateNormals(estimmesh)
         estim <- estimmesh
@@ -265,10 +272,10 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
     mshape <- getMeanMatrix(model,transpose=TRUE)
     if (align) {
         if (is.null(use.lm)) {
-            rotsb <- rotonto(mshape,x,scale=model$scale,reflection = F)
+            rotsb <- rotonto(mshape,x,scale=model@scale,reflection = F)
             sb <- rotsb$yrot
         } else {
-            rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model$scale,reflection=F)
+            rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model@scale,reflection=F)
             sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
         }
     } else {
@@ -276,7 +283,7 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
     }
     sbres <- sb-mshape
     alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
-    sdl <- length(model$PCA$sdev)
+    sdl <- length(model@PCA$sdev)
     probs <- sum(alpha^2)
     probout <- pchisq(probs,lower.tail = F,df=sdl)
     return(probout)
@@ -310,7 +317,7 @@ getCoordVar <- function(model) {
     if (!inherits(model,"pPCA"))
         stop("please provide model of class pPCA")
     W <- GetPCABasisMatrix(model)
-    m <- ncol(model$representer$vb)
+    m <- ncol(model@representer$vb)
     cov0 <- apply((W*W),1,function(x) sum(x))
     mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = T)
     cov0 <- apply(mat,1,function(x) x <- sqrt(sum(x^2)))
