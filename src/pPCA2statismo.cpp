@@ -49,22 +49,32 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
  
   }
 
-
-  Rcpp::List statismo2pPCA(auto_ptr<StatisticalModelType> model) {
-    if (model.get()) {
-      vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
-  
-      return List::create(Named("PCBasis") = model->GetPCABasisMatrix(),
-			  Named("PCBasisOrtho") = model->GetOrthonormalPCABasisMatrix(),
-			  Named("PCVariance")= model->GetPCAVarianceVector(),
-			  Named("sigma")= model->GetNoiseVariance(),
-			  Named("mshape")= model->GetMeanVector(),
-			  Named("dim")=model->GetRepresenter()->GetDimensions(),
-			  Named("scores")=model->GetModelInfo().GetScoresMatrix(),
-			  Named("representer")=polyData2R(reference)
-			  );
+S4 statismo2pPCA(auto_ptr<StatisticalModelType> model) {
+   try {
+     if (model.get()) {
+    vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+    List PCA = List::create(Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
+			    Named("center")= model->GetMeanVector(),
+			    Named("x")=model->GetModelInfo().GetScoresMatrix().transpose(),
+			    Named("sdev")= model->GetPCAVarianceVector().array().sqrt()
+			    );
+    Language pPCAcall("new", "pPCA");
+    Rcpp::S4 pPCA( pPCAcall.eval() );
+    //S4 pPCA;
+    pPCA.slot("PCA") = PCA;
+    pPCA.slot("sigma") = model->GetNoiseVariance();
+    pPCA.slot("representer")=polyData2R(reference);
+			
+    return pPCA;
     } else {
       Rprintf("Invalid model\n");
       return wrap(1);
     }
+}  catch (std::exception& e) {
+    ::Rf_error( e.what());
+     
+  } catch (...) {
+    ::Rf_error("unknown exception");
+     
+  }
   }

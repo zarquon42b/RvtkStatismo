@@ -47,7 +47,7 @@ SEXP LoadModel(SEXP modelname_){
     std::string modelFilename = as<std::string>(modelname);
   
     auto_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
-    List out = statismo2pPCA(model);
+    S4 out = statismo2pPCA(model);
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());

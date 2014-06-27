@@ -25,3 +25,4 @@ setReplaceMethod("SetPCA", "pPCA",function(x, value) {x@PCA <- value; validObjec
 
 setGeneric("SetVariance<-", function(x, value) standardGeneric("SetVariance<-"))
 setReplaceMethod("SetVariance", "pPCA",function(x, value) {x@Variance <- value; validObject(x); x})
+

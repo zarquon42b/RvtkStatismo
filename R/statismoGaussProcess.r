@@ -29,7 +29,7 @@ statismoLoadModel <- function(modelname,scale=TRUE) {
         stop(paste0("file ", modelname," does not exist"))
     storage.mode(modelname) <- "character"
     
-    out <- statismo2pPCA(.Call("LoadModel",modelname))
+    out <- (.Call("LoadModel",modelname))
     return(out)
 }
 
@@ -75,7 +75,8 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     useEmpiric <- as.logical(useEmpiric)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
-    out <- statismo2pPCA(.Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric))
+    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric)
+    out <- UpdateVariance(out)
     return(out)
                          
 }

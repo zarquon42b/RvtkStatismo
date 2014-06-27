@@ -8,5 +8,5 @@
 
 using namespace Rcpp;
 
-List statismo2pPCA(auto_ptr<StatisticalModelType> model);
+S4 statismo2pPCA(auto_ptr<StatisticalModelType> model);
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_);

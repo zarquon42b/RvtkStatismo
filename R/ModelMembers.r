@@ -71,3 +71,9 @@ setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(mode
     return(out)
 })
 
+setGeneric("UpdateVariance", function(model) standardGeneric("UpdateVariance"))
+setMethod("UpdateVariance", "pPCA",function(model) {
+    Variance <- createVarTable(model@PCA$sdev,square=TRUE)
+    SetVariance(model) <- Variance
+    return(model)
+})
