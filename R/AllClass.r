@@ -42,3 +42,5 @@ setClass("pPCA",
         return(TRUE)
 }
 setValidity("pPCA", .pPCA.valid)
+
+setOldClass("mesh3d")

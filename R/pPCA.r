@@ -14,7 +14,7 @@
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param model object of class \code{pPCA}
 #' @return returns a probabilistic PCA model as S4 class "pPCA" (see \code{\link{pPCA-class}}).
-#' \code{setMod} is used to modify existing models by changing sigma and exVar.
+#' \code{UpdateModel} is used to modify existing models by changing sigma and exVar.
 #'
 #' 
 #' 
@@ -24,7 +24,7 @@
 #' data(boneData)
 #' model <- pPCA(boneLM[,,])
 #' ## change parameters without recomputing Procrustes fit
-#' model1 <- setMod(model, sigma=1, exVar=0.8)
+#' model1 <- UpdateModel(model, sigma=1, exVar=0.8)
 #'
 #' 
 #' @references
@@ -57,7 +57,7 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
     if (is.null(representer) || is.matrix(representer))
         representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,0,0))
     model <- new("pPCA",PCA=PCA,scale=scale,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
-    model <- setMod(model,sigma=sigma,exVar=exVar)
+    model <- UpdateModel(model,sigma=sigma,exVar=exVar)
     return(model)
 
 }
@@ -65,10 +65,10 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
 ###Modify an existing pPCA model
 #' @rdname pPCA
 #' @export
-setGeneric("setMod", function(model,sigma=NULL,exVar=1) {
-    standardGeneric("setMod")
+setGeneric("UpdateModel", function(model,sigma=NULL,exVar=1) {
+    standardGeneric("UpdateModel")
 })
-setMethod("setMod", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
+setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
     k <- ncol(model@representer$vb)
     PCA <- model@PCA
     if (length(model@sigma))
@@ -113,8 +113,9 @@ setMethod("show", "pPCA", function(object){print.pPCA(object)})
 #' predict or restrict a mesh or matrix based on a statistical model
 #'
 #' predict or restrict a mesh or matrix based on a statistical model
-#' @param x a matrix, a mesh3d or a vector (for pPCA models) containing standardized variables within the PC-space
+
 #' @param model model of class \code{pPCA}
+#' @param dataset a matrix or a mesh3d
 #' @param representer if TRUE and the model contains a representer mesh, a surface mesh will be returned, coordinate matrix otherwise.
 #' @param origSpace logical: rotate the estimation back into the original coordinate system.
 #' @param pPCA logical: if TRUE, a constrained pPCA model is returned.
@@ -123,35 +124,39 @@ setMethod("show", "pPCA", function(object){print.pPCA(object)})
 #' @param use.lm optional: integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
 #' @param sdmax maximum allowed standard deviation (per Principal axis) within the model space. Defines the probabilistic boundaries.
 #' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space.
-#' @return \code{predictpPCA} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
+#' @return \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
 #'
-#' @name predictpPCA
-#' @rdname predictpPCA
+#' @seealso \code{\link{StatismoModelMembers}}
+#' @name PredictSample
+#' @rdname PredictSample
 #' @export
 
 
-#' @rdname predictpPCA
+#' @rdname PredictSample
 #' @export
-predictpPCA <- function(x,model,representer=TRUE,...)UseMethod("predictpPCA")
+setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
+    standardGeneric("PredictSample")
+})
+#PredictSample <- function(x,model,representer=TRUE,...)UseMethod("PredictSample")
 
-#' @rdname predictpPCA
+#' @rdname PredictSample
 #' @export
-predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
+setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     if (align) {
     if (is.null(use.lm)) {
-        rotsb <- rotonto(mshape,x,scale=model@scale,reflection = F)
+        rotsb <- rotonto(mshape,dataset,scale=model@scale,reflection = F)
         sb <- rotsb$yrot
     } else {
         use.lm <- unique(sort(use.lm))
         if (deselect)
             use.lm <- c(1:nrow(mshape))[-use.lm]
-        rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model@scale,reflection=F)
-        sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
+        rotsb <- rotonto(mshape[use.lm,],dataset[use.lm,],scale=model@scale,reflection=F)
+        sb <- rotonmat(dataset,dataset[use.lm,],rotsb$yrot)
     }
 } else
-    sb <- x
+    sb <- dataset
     sbres <- sb-mshape
     alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
     sdl <- length(model@PCA$sdev)
@@ -197,35 +202,17 @@ predictpPCA.matrix <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NU
         }
         return(estim)
     }
-}
+})
 
-#' @rdname predictpPCA
+
+#' @rdname PredictSample
 #' @export
-predictpPCA.mesh3d <- function(x,model,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d",representer="logical"), function(model,dataset,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mat <- t(x$vb[1:3,])
-    estim <- predictpPCA(vert2points(x),model=model,align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,deselect=deselect,mahaprob=mahaprob,...)
+    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,deselect=deselect,mahaprob=mahaprob,...)
     return(estim)
-}
+})
 
-#' @rdname predictpPCA
-#' @export
-predictpPCA.numeric <- function(x,model,representer=TRUE,...) {
-    W <- GetPCABasisMatrix(model)
-    useit <- 1:(min(length(x),length(model@PCA$sdev)))
-    if (length(useit) > 1)
-        estim <- as.vector(W[,useit]%*%x)
-    else
-        estim <- as.vector(W[,useit]*x)
-    
-    estim <- t(estim+getMeanMatrix(model,transpose=FALSE))
-    if (!is.null(model@representer) && class(model@representer) == "mesh3d" && representer) {
-        estimmesh <- model@representer
-        estimmesh$vb[1:3,] <- t(estim)
-        estimmesh <- vcgUpdateNormals(estimmesh)
-        estim <- estimmesh
-    }
-    return(estim)
-}
 
 #' calculate probability/coefficients for a matrix/mesh given a statistical model
 #'
@@ -273,7 +260,7 @@ getDataLikelihood.mesh3d <- function(x,model,align=FALSE,use.lm=NULL) {
 #' @rdname getDataLikelihood
 #' @export
 getCoefficients <- function(x, model,align=TRUE, use.lm=NULL) {
-    out <- predictpPCA(x,model,use.lm,coeffs=NULL,align=align)
+    out <- PredictSample(x,model,use.lm,coeffs=NULL,align=align)
     return(out)
 }
 
