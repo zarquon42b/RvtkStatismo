@@ -67,6 +67,8 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     PCA$sdev <- PCA$sdev[good]
     PCA$x <- 0
+    PCA$scale <- NULL
+    PCA <- unclass(PCA)
     procMod$PCA <- PCA
     procMod$scale <- scale
     class(procMod) <- "pPCA"
