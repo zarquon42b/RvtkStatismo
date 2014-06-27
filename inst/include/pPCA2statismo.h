@@ -10,7 +10,7 @@
 #include "R2polyData.h"
 
 
-using Rcpp::List;
+using namespace Rcpp;
 
 S4 statismo2pPCA(auto_ptr<StatisticalModelType> model);
 auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_);

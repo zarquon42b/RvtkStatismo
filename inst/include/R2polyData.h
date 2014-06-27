@@ -21,7 +21,7 @@
 #include <vtkTriangle.h>
 #include <Rcpp.h>
 
-
+using namespace Rcpp;
 vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_= Rcpp::NumericMatrix(0,0));
 #endif 
 //NOTE: always!! include statismo stuff before this header!!!
