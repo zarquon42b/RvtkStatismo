@@ -2,11 +2,11 @@
 
 List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
   try {
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    //polydata = reader->GetOutput();
+    //vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    //poltOutput();
   
     int np = polydata->GetNumberOfPoints();
-    points=polydata->GetPoints();
+    vtkPoints* points=polydata->GetPoints();
     NumericMatrix vb(3,np);
     double point[3];
     for (int i=0; i< np;i++) {
@@ -14,6 +14,7 @@ List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
       for (int j=0; j<3; j++)
 	vb(j,i) = point[j];
     }
+    points->Delete();
     int h;
     vtkIdType npts=3,*pts; 
     int nit = polydata->GetNumberOfPolys();
