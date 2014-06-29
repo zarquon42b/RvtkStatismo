@@ -70,10 +70,19 @@ setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(mode
     out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
     return(out)
 })
-
 setGeneric("UpdateVariance", function(model) standardGeneric("UpdateVariance"))
 setMethod("UpdateVariance", "pPCA",function(model) {
     Variance <- createVarTable(model@PCA$sdev,square=TRUE)
     SetVariance(model) <- Variance
     return(model)
+})
+
+setMethod("GetDomainPoints", signature(model="pPCA"), function(model) {
+    out <- t(.Call("GetDomainPoints",model))
+    return(out)
+})
+
+setMethod("GetDomainSize", signature(model="pPCA"), function(model) {
+    out <- ncol(model@representer$vb)
+    return(out)
 })

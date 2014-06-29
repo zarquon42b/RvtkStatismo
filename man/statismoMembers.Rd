@@ -6,6 +6,8 @@
 \alias{ComputeProbabilityOfDataset}
 \alias{DrawMean}
 \alias{DrawSample}
+\alias{GetDomainPoints}
+\alias{GetDomainSize}
 \alias{GetMeanVector}
 \alias{GetNoiseVariance}
 \alias{GetOrthonormalPCABasisMatrix}
@@ -32,6 +34,10 @@ DrawMean(model)
 DrawSample(model, coefficients = NULL, addNoise = FALSE)
 
 ComputeCoefficientsForDataset(model, dataset)
+
+GetDomainPoints(model)
+
+GetDomainSize(model)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

@@ -74,5 +74,10 @@ setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
     standardGeneric("ComputeCoefficientsForDataset")
 })
 
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetDomainPoints",function(model) standardGeneric("GetDomainPoints"))
 
-
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetDomainSize",function(model) standardGeneric("GetDomainSize"))

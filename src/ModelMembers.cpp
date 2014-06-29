@@ -99,3 +99,18 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
   }
 
 }
+typedef std::vector<vtkPoint> DomainPointsListType;
+SEXP GetDomainPoints(SEXP pPCA_) {
+  
+  auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+  const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
+  unsigned int siz = model->GetDomain().GetNumberOfPoints();
+  NumericMatrix out(3,siz);
+  for (unsigned int i = 0; i < siz; i++) {
+    vtkPoint mypoint = domainPoints[i];
+    for (int j = 0; j < 3;j++) {
+      out(j,i) = mypoint[j];
+    }
+  }
+  return out;
+}

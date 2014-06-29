@@ -21,4 +21,6 @@ RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
 
 RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
 
+RcppExport SEXP GetDomainPoints(SEXP pPCA_);
+
 #endif// _MODEL_MEMBERS_H__
