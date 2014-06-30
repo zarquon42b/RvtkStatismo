@@ -106,11 +106,11 @@ SEXP GetDomainPoints(SEXP pPCA_) {
   const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
   unsigned int siz = model->GetDomain().GetNumberOfPoints();
   NumericMatrix out(3,siz);
+  NumericVector test1;
+  
   for (unsigned int i = 0; i < siz; i++) {
-    vtkPoint mypoint = domainPoints[i];
-    for (int j = 0; j < 3;j++) {
-      out(j,i) = mypoint[j];
-    }
+    const double *a = domainPoints[i].data();
+    out(_,i) = NumericVector(&a[0],&a[3]);
   }
   return out;
 }
