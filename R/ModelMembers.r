@@ -70,12 +70,6 @@ setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(mode
     out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
     return(out)
 })
-setGeneric("UpdateVariance", function(model) standardGeneric("UpdateVariance"))
-setMethod("UpdateVariance", "pPCA",function(model) {
-    Variance <- createVarTable(model@PCA$sdev,square=TRUE)
-    SetVariance(model) <- Variance
-    return(model)
-})
 
 setMethod("GetDomainPoints", signature(model="pPCA"), function(model) {
     out <- t(.Call("GetDomainPoints",model))
@@ -84,5 +78,42 @@ setMethod("GetDomainPoints", signature(model="pPCA"), function(model) {
 
 setMethod("GetDomainSize", signature(model="pPCA"), function(model) {
     out <- ncol(model@representer$vb)
+    return(out)
+})
+
+setMethod("GetCovarianceAtPoint", signature(model="pPCA",pt1="numeric",pt2="numeric"), function(model,pt1,pt2) {
+    if (length(pt1) == 1 && length(pt2)==1) {
+        out <- .Call("GetCovarianceAtPointId",model,pt1-1,pt2-1)
+    } else if (length(pt1) == 3 && length(pt2)==3) {
+        out <- .Call("GetCovarianceAtPointPt",model,pt1,pt2)
+    } else {
+        stop("either provide 2 integers or 2 3D-vectors")
+    }
+    return(out)
+})
+
+setMethod("GetCovarianceMatrix", signature(model="pPCA"), function(model) {
+    out <- .Call("GetCovarianceMatrix",model)
+    return(out)
+})
+
+setMethod("GetJacobian", signature(model="pPCA", pt="numeric"), function(model,pt) {
+    if (length(pt) == 1)
+        pt <- GetDomainPoints(model)[pt,]
+    out <- .Call("GetJacobian",model,pt)
+    return(out)
+})
+
+setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="matrix",ids="integer"), function(model,sample,ids) {
+    sample <- t(sample)
+    mean <- t(GetDomainPoints(model))[,ids]
+    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean)
+    return(out)
+})
+
+setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="matrix",ids="matrix"), function(model,sample,ids) {
+    sample <- t(sample)
+    mean <- t(ids)
+    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean)
     return(out)
 })

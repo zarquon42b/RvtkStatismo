@@ -1,0 +1,10 @@
+#ifndef _HELPERS_H__
+#define _HELPERS_H__
+#include "VTKTypes.h"
+
+
+vtkPoint NumVec2vtkPoint(NumericVector vec);
+
+vtkPoint SEXP2vtkPoint(SEXP vec);
+
+#endif

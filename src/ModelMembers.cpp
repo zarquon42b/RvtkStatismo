@@ -1,4 +1,6 @@
 #include "ModelMembers.h"
+#include "Helpers.h"
+
 using namespace Rcpp;
 using namespace Eigen;
 
@@ -101,16 +103,119 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
 }
 typedef std::vector<vtkPoint> DomainPointsListType;
 SEXP GetDomainPoints(SEXP pPCA_) {
-  
-  auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
-  const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
-  unsigned int siz = model->GetDomain().GetNumberOfPoints();
-  NumericMatrix out(3,siz);
-  NumericVector test1;
-  
-  for (unsigned int i = 0; i < siz; i++) {
-    const double *a = domainPoints[i].data();
-    out(_,i) = NumericVector(&a[0],&a[3]);
-  }
+  try {
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
+    unsigned int siz = model->GetDomain().GetNumberOfPoints();
+    NumericMatrix out(3,siz);
+    NumericVector test1;
+    
+    for (unsigned int i = 0; i < siz; i++) {
+      const double *a = domainPoints[i].data();
+      out(_,i) = NumericVector(&a[0],&a[3]);
+    }
   return out;
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+}
+
+  
+RcppExport SEXP GetCovarianceAtPointId(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
+   try {
+  unsigned int ptId1 = as<unsigned int>(pt1_);
+  unsigned int ptId2 = as<unsigned int>(pt2_);
+  auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+  MatrixXf cov = model->GetCovarianceAtPoint(ptId1,ptId2);
+  
+  return wrap(cov);
+ } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+
+}
+RcppExport SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
+  try {
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    vtkPoint pt1 = SEXP2vtkPoint(pt1_);
+    vtkPoint pt2 = SEXP2vtkPoint(pt2_);
+    MatrixXf cov =model->GetCovarianceAtPoint(pt1,pt2);
+  
+    return wrap(cov);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+
+}
+RcppExport SEXP GetCovarianceMatrix(SEXP pPCA_) {
+  try {
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    MatrixXf cov = model->GetCovarianceMatrix();
+  
+    return wrap(cov);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+}
+
+RcppExport SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
+  try {
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    vtkPoint pt = SEXP2vtkPoint(pt_);
+    MatrixXf cov = model->GetJacobian(pt);
+  
+    return wrap(cov);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+}
+
+typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
+typedef std::list<PointValuePairType> PointValueListType;
+RcppExport SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_) {
+  try {
+    NumericMatrix sample(sample_);
+    NumericMatrix mean(mean_);
+    //IntegerVector ids(ids_);
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    PointValueListType ptValueList;
+    for (int i = 0; i < mean.ncol();i++) {
+      
+      vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
+      vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+      
+      ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+    }
+    
+    VectorXf coeff = model->ComputeCoefficientsForPointValues(ptValueList,0);
+    
+  
+    return wrap(coeff);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
 }

@@ -2,18 +2,22 @@
 \docType{methods}
 \name{StatismoModelMembers}
 \alias{ComputeCoefficientsForDataset}
+\alias{ComputeCoefficientsForPointValues}
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeProbabilityOfDataset}
 \alias{DrawMean}
 \alias{DrawSample}
+\alias{GetCovarianceAtPoint}
+\alias{GetCovarianceMatrix}
 \alias{GetDomainPoints}
 \alias{GetDomainSize}
+\alias{GetJacobian}
 \alias{GetMeanVector}
 \alias{GetNoiseVariance}
 \alias{GetOrthonormalPCABasisMatrix}
 \alias{GetPCAVarianceVector}
 \alias{StatismoModelMembers}
-\title{Implementation/Emulation of the statsimo StatisticalModel class.}
+\title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
 GetPCABasisMatrix(model)
 
@@ -38,6 +42,14 @@ ComputeCoefficientsForDataset(model, dataset)
 GetDomainPoints(model)
 
 GetDomainSize(model)
+
+GetCovarianceAtPoint(model, pt1, pt2)
+
+GetCovarianceMatrix(model)
+
+GetJacobian(model, pt)
+
+ComputeCoefficientsForPointValues(model, sample, ids)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
@@ -52,7 +64,7 @@ GetDomainSize(model)
 functions return matrices, (log)-probabilties, coefficients or sample (mesh3d or matrix) for specific dataset
 }
 \description{
-Implementation/Emulation of the statsimo StatisticalModel class.
+Implementation/Emulation of the statismo StatisticalModel class.
 }
 \details{
 see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.

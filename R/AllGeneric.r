@@ -1,6 +1,6 @@
-#' Implementation/Emulation of the statsimo StatisticalModel class.
+#' Implementation/Emulation of the statismo StatisticalModel class.
 #'
-#' Implementation/Emulation of the statsimo StatisticalModel class.
+#' Implementation/Emulation of the statismo StatisticalModel class.
 #' @param model object of class \code{\link{pPCA}}
 #' @param dataset an (already aligned) mesh or k x 3 matrix containing the datasets coordinates.
 #' @param coefficients specify coefficients in the latent space to draw a sample
@@ -81,3 +81,19 @@ setGeneric("GetDomainPoints",function(model) standardGeneric("GetDomainPoints"))
 #' @rdname statismoMembers
 #' @export
 setGeneric("GetDomainSize",function(model) standardGeneric("GetDomainSize"))
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetCovarianceAtPoint",function(model,pt1,pt2) standardGeneric("GetCovarianceAtPoint"))
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetCovarianceMatrix",function(model) standardGeneric("GetCovarianceMatrix"))
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetJacobian",function(model,pt) standardGeneric("GetJacobian"))
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("ComputeCoefficientsForPointValues",function(model,sample,ids) standardGeneric("ComputeCoefficientsForPointValues"))
