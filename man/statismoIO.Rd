@@ -7,7 +7,7 @@
 \usage{
 statismoSaveModel(model, modelname = dataname)
 
-statismoLoadModel(modelname, scale = TRUE)
+statismoLoadModel(modelname, scale = FALSE)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

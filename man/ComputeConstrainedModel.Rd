@@ -7,7 +7,7 @@ ComputeConstrainedModel(x, model, align = FALSE, use.lm, deselect = FALSE,
   origSpace = FALSE)
 }
 \arguments{
-\item{x}{a k x 3 matrix containing the coordinates of the reduces model}
+\item{x}{a k x 3 matrix containing the sample's coordinates of the reduced model}
 
 \item{model}{an object of class \code{\link{pPCA}}}
 
@@ -26,7 +26,8 @@ an object of class pPCA constrained to \code{x}
 Constrains a model of class pPCA by a subset of coordinates
 }
 \note{
-if deselect = F, the order of the entries in \code{use.lm} is important: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
+if \code{deselect = FALSE}, the order of the entries in \code{use.lm} is interpreted as follows: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
+if \code{deselect = TRUE}, the i-th coordinate of x is linked to the i-th coordinate of the model's mean with \code{use.lm} removed.
 }
 \examples{
 ## create a model superimposed with missing landmarks 3 and 4
