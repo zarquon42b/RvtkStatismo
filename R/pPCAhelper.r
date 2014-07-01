@@ -61,9 +61,11 @@ setGeneric("representer2sample", function(model) {
     standardGeneric("representer2sample")
 })
 setMethod("representer2sample", signature(model="pPCA"), function(model) {
-    if (inherits(model@representer,"mesh3d"))
+    if (inherits(model@representer,"mesh3d")){
         representer <- model@representer
-    else
+        if (nrow(representer$vb) == 3)
+            representer$vb <- rbind(representer$vb,1)
+    }   else
         representer <- vert2points(model@representer)
     return(representer)
 })

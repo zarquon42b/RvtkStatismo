@@ -92,7 +92,7 @@ setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVa
     PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     PCA$sdev <- sqrt(sigest[usePC])
     if (ncol(model@rawdata) > 0)
-        PCA$x <- model@rawdata%*%t(GetPCABasisMatrixIn(model))
+        PCA$x <- model@rawdata%*%t(GetProjectionMatrix(model))
     else
         PCA$x <- 0
     SetPCA(model) <- PCA
@@ -158,7 +158,7 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
 } else
     sb <- dataset
     sbres <- sb-mshape
-    alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
+    alpha <- GetProjectionMatrix(model)%*%as.vector(t(sbres))
     sdl <- length(model@PCA$sdev)
     
     if (!missing(sdmax)) {
@@ -242,7 +242,7 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
         sb <- x
     }
     sbres <- sb-mshape
-    alpha <- GetPCABasisMatrixIn(model)%*%as.vector(t(sbres))
+    alpha <- GetProjectionMatrix(model)%*%as.vector(t(sbres))
     sdl <- length(model@PCA$sdev)
     probs <- sum(alpha^2)
     probout <- pchisq(probs,lower.tail = F,df=sdl)
