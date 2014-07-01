@@ -5,6 +5,7 @@
 \alias{DrawMeanAtPoint}
 \alias{DrawSample}
 \alias{DrawSampleAtPoint}
+\alias{DrawSampleVector}
 \alias{EvaluateSampleAtPoint}
 \alias{GetCovarianceAtPoint}
 \alias{GetDomainPoints}
@@ -17,6 +18,8 @@ DrawMean(model)
 DrawMeanAtPoint(model, pt)
 
 DrawSample(model, coefficients = NULL, addNoise = FALSE)
+
+DrawSampleVector(model, coefficients, addNoise = FALSE)
 
 DrawSampleAtPoint(model, coefficients, pt, addNoise = FALSE)
 
@@ -45,6 +48,8 @@ GetCovarianceAtPoint(model, pt1, pt2)
 }
 \value{
 \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
+\item{GetMeanVector}{Get the mean vector}
+\item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
 \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }

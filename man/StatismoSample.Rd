@@ -14,10 +14,13 @@ ComputeProbabilityOfDataset(model, dataset)
 \item{dataset}{a matrix or mesh3d aligned to the model's mean}
 }
 \value{
-\item{ComputeLogProbabilityOfDataset}{returns the log-probability density at that point}
-\item{ComputeProbabilityOfDataset}{returns the probability density at that point}
+\item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
 }
 \description{
 Retrieve information about a sample from the model
+}
+\seealso{
+\code{\link{getDataLikelihood}}
+\item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 }
 
