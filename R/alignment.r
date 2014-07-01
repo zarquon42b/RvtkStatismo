@@ -63,3 +63,37 @@ meshalign <- function(meshlist,scale=TRUE,use.lm=NULL,deselect=FALSE,array=FALSE
         return(out)
     }
 }
+
+#' align a sample to a model
+#'
+#' align a sample to a model
+#'
+#' @param model statistical model of class "pPCA"
+#' @param sample matrix or mesh3d
+#' @param scale logical: request scaling during alignment
+#' @param ptDomain integer vector: specifies the indices of the domain points that are to be used for registration (order is important).
+#' @param ptSample integer vector: specifies the indices of the sample that are to be used  for registration (order is important).
+#' @return a rotated (and scaled) mesh or matrix - depending on the input.
+#' @export
+setGeneric("align2domain", function(model,sample,scale=TRUE,ptDomain=NULL,ptSample=NULL) {
+    standardGeneric("align2domain")
+})
+setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
+    domain <- GetDomainPoints(model)
+    if (is.null(ptDomain))
+        ptDomain <- 1:nrow(domain)
+    if (is.null(ptSample))
+        ptSample <- 1:nrow(sample)
+    rot <- rotonto(domain[ptDomain,],sample[ptSample,],scale=scale)$yrot
+    return(rot)
+})
+
+#' @importFrom Morpho vert2points rotonto
+setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
+    
+    sample0 <- vert2points(sample)
+    rot <- align2domain(model,sample0,scale,ptDomain = ptDomain, ptSample = ptSample)
+    out <- list(vb=rbind(t(rot),1),it=sample$it)
+    class(out) <- "mesh3d"
+    return(out)
+})
