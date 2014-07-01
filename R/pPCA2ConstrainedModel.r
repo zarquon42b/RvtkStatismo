@@ -1,13 +1,14 @@
 #' Constrains a model of class pPCA by a subset of coordinates
 #'
 #' Constrains a model of class pPCA by a subset of coordinates
-#' @param x a k x 3 matrix containing the coordinates of the reduces model
+#' @param x a k x 3 matrix containing the sample's coordinates of the reduced model
 #' @param model an object of class \code{\link{pPCA}}
 #' @param align logical: if TRUE, \code{x} will be aligned to the models mean
 #' @param use.lm integer vector, specifying which coordinates from the full model are to be used/missing (see note)
 #' @param deselect logical: if TRUE, use.lm specifies the missing coordinates instead of those present.
 #' @param origSpace logical: if align=TRUE and origSpace=TRUE, the representer of the returned model will contain the estimated full shape in the original coordinate system of \code{x}
-#' @note if deselect = F, the order of the entries in \code{use.lm} is important: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
+#' @note if \code{deselect = FALSE}, the order of the entries in \code{use.lm} is interpreted as follows: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
+#' if \code{deselect = TRUE}, the i-th coordinate of x is linked to the i-th coordinate of the model's mean with \code{use.lm} removed.
 #' @return an object of class pPCA constrained to \code{x}
 #' @examples
 #' ## create a model superimposed with missing landmarks 3 and 4
@@ -42,17 +43,19 @@ ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,or
             
             
     subspace <- getSubCov(model,use.lm = use.lm,deselect = F)
-    out <- list(PCA=subspace$PCA)
+    out <- new("pPCA")
+    #out <- list(PCA=subspace$PCA)
     alpha <- subspace$alphamean%*%as.vector(t(sbres))
     estim <- t(as.vector(GetPCABasisMatrix(model)%*%alpha)+t(mshape))
-    out$PCA$x <- 0
-    out$PCA$center <- as.vector(t(estim))
+    subspace$PCA$x <- 0
+    subspace$PCA$center <- as.vector(t(estim))
+    SetPCA(out) <- subspace$PCA
     if (align && origSpace)    
         estim <- rotreverse(estim,rotsb)
-
-    out$representer <- model@representer
-    out$representer$vb[1:3,] <- t(estim)
-    class(out) <- "pPCA"
+    SetScale(out) <- model@scale
+    SetNoiseVariance(out) <- model@sigma
+    out@representer <- model@representer
+    out@representer$vb[1:3,] <- t(estim)
     return(out)
 }
 
