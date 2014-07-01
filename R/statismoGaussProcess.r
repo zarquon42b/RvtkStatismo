@@ -21,7 +21,7 @@ statismoSaveModel <- function(model, modelname=dataname) {
 
 #' @rdname statismoIO
 #' @export
-statismoLoadModel <- function(modelname,scale=TRUE) {
+statismoLoadModel <- function(modelname,scale=FALSE) {
     modelname <- path.expand(modelname)
     if (length(modelname) != 1)
         stop("only one file at a time please")
@@ -78,6 +78,7 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
         stop("only provide two-valued numeric vectors in kernel")
     out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric)
     out <- UpdateVariance(out)
+    SetScale(out) <- model@scale
     return(out)
                          
 }
