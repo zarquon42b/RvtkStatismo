@@ -15,12 +15,12 @@ ComputeProbabilityOfDataset(model, dataset)
 }
 \value{
 \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
+\item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 }
 \description{
 Retrieve information about a sample from the model
 }
 \seealso{
 \code{\link{getDataLikelihood}}
-\item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 }
 

@@ -172,8 +172,8 @@ setGeneric("GetPCAVarianceVector", function(model) {
 #' @rdname StatismoSample
 #' @return
 #' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
-#' @seealso \code{\link{getDataLikelihood}}
 #' \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
+#' @seealso \code{\link{getDataLikelihood}}
 #' @export
 setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeLogProbabilityOfDataset")
