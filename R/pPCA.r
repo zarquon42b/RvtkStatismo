@@ -278,9 +278,9 @@ getCoordVar <- function(model) {
         stop("please provide model of class pPCA")
     W <- GetPCABasisMatrix(model)
     m <- ncol(model@representer$vb)
-    cov0 <- apply((W*W),1,function(x) sum(x))
-    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = T)
-    cov0 <- apply(mat,1,function(x) x <- sqrt(sum(x^2)))
+    cov0 <- rowSums(W*W)
+    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = F)
+    cov0 <- apply(mat,2,function(x) x <- sqrt(sum(x^2)))
     return(cov0)
 }
 
