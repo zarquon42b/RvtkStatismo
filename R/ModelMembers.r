@@ -75,6 +75,22 @@ setMethod("DrawSample",  signature(model="pPCA"), function(model,coefficients=NU
     return(out)
 })
 
+setMethod("DrawSampleVector",  signature(model="pPCA"), function(model,coefficients, addNoise=FALSE) {
+    npc <- ncol(model@PCA$rotation)
+    lcoeff <- length(coefficients)
+    if (lcoeff < npc){
+        zero <- rep(0,npc)
+        zero[1:lcoeff] <- coefficients
+        coefficients <- zero
+    } else if (lcoeff > npc) {
+        coefficients <- coefficients[1:npc]
+        message(paste0("  NOTE: only first ", npc, " coefficients used"))
+    }
+    
+    out <- .Call("DrawSampleVector",model,coefficients,addNoise)
+    return(out)
+})
+
 setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt="numeric"), function(model,coefficients,pt, addNoise=FALSE) {
     npc <- ncol(model@PCA$rotation)
     lcoeff <- length(coefficients)

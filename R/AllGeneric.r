@@ -8,6 +8,8 @@
 #' @param ptNoise specify the noise estimated in the points.
 #' @return
 #' \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
+#' \item{GetMeanVector}{Get the mean vector}
+#' \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 #' \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
 #' \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 #' \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
@@ -37,6 +39,12 @@ setGeneric("DrawMeanAtPoint", function(model,pt) {
 #' @export
 setGeneric("DrawSample", function(model,coefficients=NULL, addNoise=FALSE) {
     standardGeneric("DrawSample")
+})
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("DrawSampleVector", function(model,coefficients, addNoise=FALSE) {
+    standardGeneric("DrawSampleVector")
 })
 
 #' @rdname statismoMembers
@@ -163,8 +171,9 @@ setGeneric("GetPCAVarianceVector", function(model) {
 #' @name StatismoSample
 #' @rdname StatismoSample
 #' @return
-#' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density at that point}
-#' \item{ComputeProbabilityOfDataset}{returns the probability density at that point}
+#' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
+#' @seealso \code{\link{getDataLikelihood}}
+#' \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 #' @export
 setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeLogProbabilityOfDataset")
