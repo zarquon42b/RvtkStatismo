@@ -279,8 +279,8 @@ getCoordVar <- function(model) {
     W <- GetPCABasisMatrix(model)
     m <- ncol(model@representer$vb)
     cov0 <- rowSums(W*W)
-    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = F)
-    cov0 <- apply(mat,2,function(x) x <- sqrt(sum(x^2)))
+    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = F)+model@sigma
+    cov0 <- apply(mat,2,function(x) x <- sqrt(sum(x)))
     return(cov0)
 }
 
