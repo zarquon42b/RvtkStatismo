@@ -100,7 +100,8 @@ setGeneric("EvaluateSampleAtPoint",function(model,sample,pt) standardGeneric("Ev
 #'  \item{GetCovarianceAtPoint}{returns the 3 x 3 covariance matrix for \code{pt1} and \code{pt2}}
 #' \item{GetJacobian}{ returns the 3 x 3 Jacobian matrix at \code{pt}}
 #' \item{GetProjectionMatrix}{ returns matrix to project a sample vector into the latent space (this is not a member function but might prove useful anyway)}
-#' 
+#'
+#' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @name StatismoMatrices
 #' @rdname StatismoMatrices
 NULL
@@ -151,6 +152,7 @@ setGeneric("GetProjectionMatrix", function(model) {
 #' \item{GetNoiseVariance}{returns the estimated noise in the model}
 #' \item{GetPCAVarianceVector}{returns the variance in the model}
 #' \item{GetMeanVector}{returns the model's mean vector}
+#' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @docType methods
 #' @name StatismoParameters
 #' @rdname statismoParameters

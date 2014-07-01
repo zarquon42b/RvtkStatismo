@@ -119,12 +119,13 @@ setMethod("show", "pPCA", function(object){print.pPCA(object)})
 #' @param dataset a matrix or a mesh3d
 #' @param representer if TRUE and the model contains a representer mesh, a surface mesh will be returned, coordinate matrix otherwise.
 #' @param origSpace logical: rotate the estimation back into the original coordinate system.
-#' @param pPCA logical: if TRUE, a constrained pPCA model is returned.
-#' "chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to
-#' be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.
 #' @param use.lm optional: integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
+#' @param deselect logical: if TRUE, all BUT the coordinates specified by \code{use.lm} will be used for alignment.
 #' @param sdmax maximum allowed standard deviation (per Principal axis) within the model space. Defines the probabilistic boundaries.
-#' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space.
+#' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space."chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.
+#' @param align if TRUE, the sample will be aligned to the mean.
+#' @param ... currently not in use.
+#' 
 #' @return \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
 #'
 #' @seealso \code{\link{StatismoModelMembers}}

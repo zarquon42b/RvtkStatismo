@@ -33,4 +33,7 @@ GetPCAVarianceVector(model)
 \description{
 Get model parameters such as variance or noise variance
 }
+\details{
+see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+}
 

@@ -25,15 +25,17 @@ PredictSample(model, dataset, representer = TRUE, ...)
 
 \item{origSpace}{logical: rotate the estimation back into the original coordinate system.}
 
-\item{pPCA}{logical: if TRUE, a constrained pPCA model is returned.
-"chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to
-be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.}
-
 \item{use.lm}{optional: integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.}
+
+\item{deselect}{logical: if TRUE, all BUT the coordinates specified by \code{use.lm} will be used for alignment.}
 
 \item{sdmax}{maximum allowed standard deviation (per Principal axis) within the model space. Defines the probabilistic boundaries.}
 
-\item{mahaprob}{character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space.}
+\item{mahaprob}{character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space."chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.}
+
+\item{align}{if TRUE, the sample will be aligned to the mean.}
+
+\item{...}{currently not in use.}
 }
 \value{
 \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
