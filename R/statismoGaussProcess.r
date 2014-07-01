@@ -4,6 +4,7 @@
 #' save and load a statistical model of class pPCA to statismo hdf5 format
 #' @param model object of class \code{\link{pPCA}}
 #' @param modelname filename to read/save
+#' @param scale specify if scaling was involved in model generation
 #' @return statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.
 #' @name statismoLoadModel/statismoSaveModel
 #' @seealso \code{\link{pPCA}}

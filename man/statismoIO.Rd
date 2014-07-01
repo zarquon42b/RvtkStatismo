@@ -13,6 +13,8 @@ statismoLoadModel(modelname, scale = FALSE)
 \item{model}{object of class \code{\link{pPCA}}}
 
 \item{modelname}{filename to read/save}
+
+\item{scale}{specify if scaling was involved in model generation}
 }
 \value{
 statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.

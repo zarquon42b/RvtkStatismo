@@ -55,11 +55,12 @@ calcSdev <- function(model) {
 #' get the representer from a model of class "pPCA"
 #' @param model object of class \code{\link{pPCA}}
 #' @return an object of class mesh3d or matrix, depending whether a point cloud or a triangular mesh is the model's representer.
-#'
-#'  @export
+#' @rdname representer2sample
+#' @export
 setGeneric("representer2sample", function(model) {
     standardGeneric("representer2sample")
 })
+#' @rdname representer2sample
 setMethod("representer2sample", signature(model="pPCA"), function(model) {
     if (inherits(model@representer,"mesh3d")){
         representer <- model@representer
@@ -77,6 +78,7 @@ output2sample <- function(out) {
         out <- t(out$vb)
     return(out)
 }
+
 
 setGeneric("UpdateVariance", function(model) standardGeneric("UpdateVariance"))
 setMethod("UpdateVariance", "pPCA",function(model) {

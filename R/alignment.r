@@ -74,10 +74,12 @@ meshalign <- function(meshlist,scale=TRUE,use.lm=NULL,deselect=FALSE,array=FALSE
 #' @param ptDomain integer vector: specifies the indices of the domain points that are to be used for registration (order is important).
 #' @param ptSample integer vector: specifies the indices of the sample that are to be used  for registration (order is important).
 #' @return a rotated (and scaled) mesh or matrix - depending on the input.
+#' @rdname align2domain
 #' @export
 setGeneric("align2domain", function(model,sample,scale=TRUE,ptDomain=NULL,ptSample=NULL) {
     standardGeneric("align2domain")
 })
+#' @rdname align2domain
 setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
     domain <- GetDomainPoints(model)
     if (is.null(ptDomain))
@@ -89,6 +91,7 @@ setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model
 })
 
 #' @importFrom Morpho vert2points rotonto
+#' @rdname align2domain
 setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
     
     sample0 <- vert2points(sample)

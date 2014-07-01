@@ -12,9 +12,11 @@
 #' @return an object of class pPCA constrained to \code{x}
 #' @examples
 #' ## create a model superimposed with missing landmarks 3 and 4
+#' require(Morpho)
+#' data(boneData)
 #' newmod <- pPCA(boneLM[,,-1],sigma=0,scale=TRUE,use.lm = 3:4,deselect=TRUE)
 #' ## predict the left out shape from the constrained model
-#' boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=T,origSpace=TRUE)
+#' boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=TRUE,origSpace=TRUE)
 #' ## the coordinates of the estimated complete config are now stored in the representer's vertices
 #' \dontrun{
 #' ##visualize prediction error

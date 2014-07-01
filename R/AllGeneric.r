@@ -6,6 +6,8 @@
 #' @param coefficients specify coefficients in the latent space to draw a sample
 #' @param addNoise logical: if TRUE noise as specified in the model will be added to the returned sample
 #' @param ptNoise specify the noise estimated in the points.
+#' @param sample depending on the function a matrix, a numeric vector or a mesh3d (see methods below)
+#' @param pt either an integer pointing to a coordinate or a 3D-vector containing the coordinates of the domain point of interest. For \code{ComputeCoefficientsForPointValues}, this can also specify a matrix of coordinates on the domain.
 #' @return
 #' \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
 #' \item{GetMeanVector}{Get the mean vector}
@@ -22,7 +24,10 @@
 #' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @keywords StatisticalModel<representer>
 #' @name StatismoModelMembers
+#' @docType methods
 #' @rdname statismoMembers
+NULL
+
 #' @rdname statismoMembers
 #' @export
 setGeneric("DrawMean", function(model) {
@@ -91,11 +96,15 @@ setGeneric("EvaluateSampleAtPoint",function(model,sample,pt) standardGeneric("Ev
 #' 
 #' \item{GetPCABasisMatrix}{returns the (scaled) Basis of the latent space}
 #' \item{GetOrthonormalPCABasisMatrix}{ returns the orthonormal Basis of the latent space}
+#' \item{GetCovarianceMatrix}{returns the covariance matrix - can be huge!!!}
 #'  \item{GetCovarianceAtPoint}{returns the 3 x 3 covariance matrix for \code{pt1} and \code{pt2}}
 #' \item{GetJacobian}{ returns the 3 x 3 Jacobian matrix at \code{pt}}
 #' \item{GetProjectionMatrix}{ returns matrix to project a sample vector into the latent space (this is not a member function but might prove useful anyway)}
 #' 
 #' @name StatismoMatrices
+#' @rdname StatismoMatrices
+NULL
+
 #' @rdname StatismoMatrices
 #' @export
 setGeneric("GetPCABasisMatrix", function(model) {
@@ -108,7 +117,7 @@ setGeneric("GetOrthonormalPCABasisMatrix", function(model) {
   standardGeneric("GetOrthonormalPCABasisMatrix")
 })
 
-#' @rdname statismoMembers
+#' @rdname StatismoMatrices
 #' @export
 setGeneric("GetCovarianceAtPoint",function(model,pt1,pt2) standardGeneric("GetCovarianceAtPoint"))
 
@@ -142,8 +151,11 @@ setGeneric("GetProjectionMatrix", function(model) {
 #' \item{GetNoiseVariance}{returns the estimated noise in the model}
 #' \item{GetPCAVarianceVector}{returns the variance in the model}
 #' \item{GetMeanVector}{returns the model's mean vector}
-#' 
+#' @docType methods
 #' @name StatismoParameters
+#' @rdname statismoParameters
+NULL
+
 #' @rdname statismoParameters
 #' @export
 setGeneric("GetNoiseVariance", function(model) {
@@ -168,12 +180,16 @@ setGeneric("GetPCAVarianceVector", function(model) {
 #'
 #' @param model model of class "pPCA"
 #' @param dataset a matrix or mesh3d aligned to the model's mean
-#' @name StatismoSample
-#' @rdname StatismoSample
 #' @return
 #' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
 #' \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 #' @seealso \code{\link{getDataLikelihood}}
+#' @docType methods
+#' @name StatismoSample
+#' @rdname StatismoSample
+NULL
+
+#' @rdname StatismoSample
 #' @export
 setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeLogProbabilityOfDataset")

@@ -10,7 +10,6 @@
 #' @param sigma estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)
 #' @param exVar numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance
 #' @param scale logical: allow scaling in Procrustes fitting
-#' @param fullfit logical: if FALSE only the non-missing points will be used for registration.
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param model object of class \code{pPCA}
 #' @return returns a probabilistic PCA model as S4 class "pPCA" (see \code{\link{pPCA-class}}).
@@ -68,6 +67,8 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
 setGeneric("UpdateModel", function(model,sigma=NULL,exVar=1) {
     standardGeneric("UpdateModel")
 })
+
+#' @rdname pPCA
 setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
     k <- ncol(model@representer$vb)
     PCA <- model@PCA
@@ -137,7 +138,6 @@ setMethod("show", "pPCA", function(object){print.pPCA(object)})
 setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
     standardGeneric("PredictSample")
 })
-#PredictSample <- function(x,model,representer=TRUE,...)UseMethod("PredictSample")
 
 #' @rdname PredictSample
 #' @export
@@ -253,7 +253,7 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
 #' @export
 getDataLikelihood.mesh3d <- function(x,model,align=FALSE,use.lm=NULL) {
     x <- vert2points(x)
-    out <- getProb(x,model=model,align=align,use.lm=use.lm)
+    out <- getDataLikelihood(x,model=model,align=align,use.lm=use.lm)
     return(out)
 }
 

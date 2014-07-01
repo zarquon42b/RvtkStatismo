@@ -1,36 +1,43 @@
+#### MODEL MATRICES #################
 
+#' @rdname StatismoMatrices
 setMethod("GetPCABasisMatrix", signature(model = "pPCA"), function(model) {
     W <- t(t(model@PCA$rotation)*model@PCA$sdev) ##Matrix to project scaled PC-scores back into the config space
     return(W)
 })
 
+#' @rdname StatismoMatrices
 setMethod("GetOrthonormalPCABasisMatrix" ,signature(model="pPCA"),function(model) {
     return(model@PCA$rotation)
 })
 
-setMethod("GetNoiseVariance",signature(model = "pPCA"), function(model) {
-    return(model@sigma)
-})
-
-setMethod("GetMeanVector",signature(model = "pPCA"), function(model) {
-    return(model@PCA$center)
-})
-
-setMethod("GetPCAVarianceVector", signature(model="pPCA"), function(model) {
-    return(model@PCA$sdev^2)
-})
-
-setMethod("ComputeLogProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),TRUE)
+#' @rdname StatismoMatrices
+setMethod("GetCovarianceAtPoint", signature(model="pPCA",pt1="numeric",pt2="numeric"), function(model,pt1,pt2) {
+    if (length(pt1) == 1 && length(pt2)==1) {
+        out <- .Call("GetCovarianceAtPointId",model,pt1-1,pt2-1)
+    } else if (length(pt1) == 3 && length(pt2)==3) {
+        out <- .Call("GetCovarianceAtPointPt",model,pt1,pt2)
+    } else {
+        stop("either provide 2 integers or 2 3D-vectors")
+    }
     return(out)
 })
 
-setMethod("ComputeProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
+#' @rdname StatismoMatrices
+setMethod("GetCovarianceMatrix", signature(model="pPCA"), function(model) {
+    out <- .Call("GetCovarianceMatrix",model)
     return(out)
 })
 
+#' @rdname StatismoMatrices
+setMethod("GetJacobian", signature(model="pPCA", pt="numeric"), function(model,pt) {
+    if (length(pt) == 1)
+        pt <- GetDomainPoints(model)[pt,]
+    out <- .Call("GetJacobian",model,pt)
+    return(out)
+})
 
+#' @rdname StatismoMatrices
 setMethod("GetProjectionMatrix", signature(model="pPCA"), function(model) {
     WT <- t(GetPCABasisMatrix(model))
     Mmatrix <- crossprod(GetPCABasisMatrix(model))
@@ -41,11 +48,44 @@ setMethod("GetProjectionMatrix", signature(model="pPCA"), function(model) {
 })
 
 
+####Statismo Parameters
+#' @rdname statismoParameters
+setMethod("GetNoiseVariance",signature(model = "pPCA"), function(model) {
+    return(model@sigma)
+})
+
+#' @rdname statismoParameters
+setMethod("GetMeanVector",signature(model = "pPCA"), function(model) {
+    return(model@PCA$center)
+})
+
+#' @rdname statismoParameters
+setMethod("GetPCAVarianceVector", signature(model="pPCA"), function(model) {
+    return(model@PCA$sdev^2)
+})
+
+### SAMPLE INFO
+
+#' @rdname StatismoSample
+setMethod("ComputeLogProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),TRUE)
+    return(out)
+})
+
+#' @rdname StatismoSample
+setMethod("ComputeProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
+    return(out)
+})
+
+
+#' @rdname statismoMembers
 setMethod("DrawMean",  signature(model="pPCA"), function(model) {
     out <- output2sample(.Call("DrawMean",model))
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("DrawMeanAtPoint",  signature(model="pPCA",pt="numeric"), function(model,pt) {
     if (length(pt) == 1)
         meanpt <- GetDomainPoints(model)[pt,]
@@ -57,7 +97,7 @@ setMethod("DrawMeanAtPoint",  signature(model="pPCA",pt="numeric"), function(mod
     return(out)
 })
 
-
+#' @rdname statismoMembers
 setMethod("DrawSample",  signature(model="pPCA"), function(model,coefficients=NULL, addNoise=FALSE) {
     if (is.vector(coefficients)) {
         npc <- ncol(model@PCA$rotation)
@@ -75,6 +115,7 @@ setMethod("DrawSample",  signature(model="pPCA"), function(model,coefficients=NU
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("DrawSampleVector",  signature(model="pPCA"), function(model,coefficients, addNoise=FALSE) {
     npc <- ncol(model@PCA$rotation)
     lcoeff <- length(coefficients)
@@ -91,6 +132,7 @@ setMethod("DrawSampleVector",  signature(model="pPCA"), function(model,coefficie
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt="numeric"), function(model,coefficients,pt, addNoise=FALSE) {
     npc <- ncol(model@PCA$rotation)
     lcoeff <- length(coefficients)
@@ -114,44 +156,25 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset) {
     out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("GetDomainPoints", signature(model="pPCA"), function(model) {
     out <- t(.Call("GetDomainPoints",model))
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("GetDomainSize", signature(model="pPCA"), function(model) {
     out <- ncol(model@representer$vb)
     return(out)
 })
 
-setMethod("GetCovarianceAtPoint", signature(model="pPCA",pt1="numeric",pt2="numeric"), function(model,pt1,pt2) {
-    if (length(pt1) == 1 && length(pt2)==1) {
-        out <- .Call("GetCovarianceAtPointId",model,pt1-1,pt2-1)
-    } else if (length(pt1) == 3 && length(pt2)==3) {
-        out <- .Call("GetCovarianceAtPointPt",model,pt1,pt2)
-    } else {
-        stop("either provide 2 integers or 2 3D-vectors")
-    }
-    return(out)
-})
-
-setMethod("GetCovarianceMatrix", signature(model="pPCA"), function(model) {
-    out <- .Call("GetCovarianceMatrix",model)
-    return(out)
-})
-
-setMethod("GetJacobian", signature(model="pPCA", pt="numeric"), function(model,pt) {
-    if (length(pt) == 1)
-        pt <- GetDomainPoints(model)[pt,]
-    out <- .Call("GetJacobian",model,pt)
-    return(out)
-})
-
+#' @rdname statismoMembers
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="matrix",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
     sample <- t(sample)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
@@ -159,13 +182,15 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="m
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="matrix",pt="matrix",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
     sample <- t(sample)
     mean <- t(pt)
-    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,addNoise)
+    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,ptNoise)
     return(out)
 })
 
+#' @rdname statismoMembers
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="numeric",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
     sample <- matrix(sample,3,1)
     if (length(pt) == 3)
@@ -179,7 +204,7 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="n
 })
 
 
-
+#' @rdname statismoMembers
 setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="matrix",pt="numeric"), function(model,sample,pt) {
     sample <- list(vb=t(sample),it=matrix(0,0,0))
     if (length(pt) == 1)
@@ -192,6 +217,7 @@ setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="matrix",pt="n
     return(out)
 })
 
+#' @rdname statismoMembers
 #' @importFrom Morpho vert2points
 setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="mesh3d",pt="numeric"), function(model,sample,pt) {
     sample <- vert2points(sample)
