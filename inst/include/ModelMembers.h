@@ -11,7 +11,13 @@
 
 RcppExport SEXP DrawMean(SEXP pPCA_);
 
+RcppExport SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_);
+
 RcppExport SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_= Rcpp::wrap(false));
+
+RcppExport SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_);
+
+RcppExport SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_);
 
 RcppExport SEXP LoadModel(SEXP modelname_);
 

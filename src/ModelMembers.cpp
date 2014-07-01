@@ -18,7 +18,8 @@ SEXP DrawMean(SEXP pPCA_){
     return wrap(1);
   }
 }
-RcppExport SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
+
+SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
   try {
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(meanpt_);
@@ -58,7 +59,26 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
     return wrap(1);
   }
 }
-RcppExport SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
+
+SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
+  try {
+    bool addNoise = as<bool>(addNoise_);
+    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
+    const VectorXf coeffs = coeffs0.cast<float>();
+    VectorXf out = model->DrawSampleVector(coeffs,addNoise);
+   
+    return wrap(out);
+
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+    return wrap(1);
+  } catch (...) {
+    ::Rf_error("unknown exception");
+    return wrap(1);
+  }
+}
+SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     vtkSmartPointer<vtkPolyData> reference;
@@ -140,6 +160,7 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
   }
 
 }
+
 typedef std::vector<vtkPoint> DomainPointsListType;
 SEXP GetDomainPoints(SEXP pPCA_) {
   try {
