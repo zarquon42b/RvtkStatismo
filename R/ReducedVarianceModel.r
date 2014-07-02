@@ -1,0 +1,35 @@
+#' Reduce an existing statistical shape model
+#'
+#' Reduce an existing statistical shape model either to first n PCs or by explained Variance
+#'
+#' @param model
+#' @param exVar restricts model by explained variance - with \code{0 < exVar < 1}
+#' @param npc number of PCs retained in the model (overrides \code{exVar})
+#' @param scores logical: request recomputation of PC-scores
+#' @examples
+#' require(Morpho)
+#' data(boneData)
+#' align <- rigidAlign(boneLM)$rotated
+#' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+#' reducemod <- statismoReducedVariance(mymod,0.5)
+#' @export
+setGeneric("statismoReducedVariance", function(model,exVar=1,npc=0,scores=TRUE){
+    standardGeneric("statismoReducedVariance")})
+
+setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0,scores=TRUE) {
+    modVar <- GetPCAVarianceVector(model)
+    modVar <- modVar/sum(modVar)
+    npc <- min(npc,length(modVar))
+    
+    if (exVar < modVar[1]) { 
+        exVar <- modVar[1]+1e-4
+        warning(paste0("exVar set to ",exVar))
+    }
+    if (length(modVar) < 2)
+        stop("there is nothing left to reduce")
+    
+    out <- .Call("ReducedModel",model,npc,exVar,scores)
+    out <- UpdateVariance(out)
+    return(out)
+})
+    
