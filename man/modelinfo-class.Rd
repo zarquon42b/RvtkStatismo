@@ -5,9 +5,12 @@
 \title{Documentation of class modelinfo}
 \description{
 Documentation of class modelinfo
+}
+\details{
+The class has the following slots
 \describe{
-\item{\code{datainfo}: a list containing 2-valued character vectors}
-\item{\code{paraminfo}: a list containing 2-valued character vectors}
+\item{datainfo}{a list containing 2-valued character vectors}
+\item{parminfo}{a list containing 2-valued character vectors}
 }
 }
 

@@ -4,12 +4,15 @@ setClassUnion("representer",c("list","mesh3d"))
 #' Documentation of class modelinfo
 #'
 #' Documentation of class modelinfo
+#'
+#' The class has the following slots
 #' \describe{
-#' \item{\code{datainfo}: a list containing 2-valued character vectors}
-#' \item{\code{paraminfo}: a list containing 2-valued character vectors}
+#' \item{datainfo}{a list containing 2-valued character vectors}
+#' \item{parminfo}{a list containing 2-valued character vectors}
 #' }
 #' @name modelinfo-class
 #' @rdname modelinfo-class
+#' @export
 setClass("modelinfo", slots=c(datainfo="list",paraminfo="list"),prototype=list(datainfo=list(),paraminfo=list())
          )
 
