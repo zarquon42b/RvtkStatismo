@@ -203,3 +203,11 @@ setGeneric("ComputeProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeProbabilityOfDataset")
 })
 
+
+### custom stuff
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetModelInfo", function(model) {
+    standardGeneric("GetModelInfo")
+})

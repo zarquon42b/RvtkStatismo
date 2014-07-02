@@ -24,6 +24,8 @@
 \alias{GetDomainPoints,pPCA-method}
 \alias{GetDomainSize}
 \alias{GetDomainSize,pPCA-method}
+\alias{GetModelInfo}
+\alias{GetModelInfo,pPCA-method}
 \alias{StatismoModelMembers}
 \title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
@@ -46,6 +48,8 @@ GetDomainPoints(model)
 GetDomainSize(model)
 
 EvaluateSampleAtPoint(model, sample, pt)
+
+GetModelInfo(model)
 
 \S4method{DrawMean}{pPCA}(model)
 
@@ -78,6 +82,8 @@ EvaluateSampleAtPoint(model, sample, pt)
 \S4method{EvaluateSampleAtPoint}{pPCA,matrix,numeric}(model, sample, pt)
 
 \S4method{EvaluateSampleAtPoint}{pPCA,mesh3d,numeric}(model, sample, pt)
+
+\S4method{GetModelInfo}{pPCA}(model)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

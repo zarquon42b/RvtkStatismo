@@ -8,18 +8,8 @@
 statismoSaveModel(model, modelname = dataname)
 
 statismoLoadModel(modelname, scale = FALSE)
-
-statismoSaveModel(model, modelname = dataname)
-
-statismoLoadModel(modelname, scale = FALSE)
 }
 \arguments{
-\item{model}{object of class \code{\link{pPCA}}}
-
-\item{modelname}{filename to read/save}
-
-\item{scale}{specify if scaling was involved in model generation}
-
 \item{model}{object of class \code{\link{pPCA}}}
 
 \item{modelname}{filename to read/save}
@@ -28,17 +18,11 @@ statismoLoadModel(modelname, scale = FALSE)
 }
 \value{
 statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.
-
-statismoLoadModel returns an object of class \code{\link{pPCA}} while statismoSaveModel saves an object of class \code{\link{pPCA}} to disk in the statismo file format.
 }
 \description{
 save and load a statistical model of class pPCA to statismo hdf5 format
-
-save and load a statistical model of class pPCA to statismo hdf5 format
 }
 \seealso{
-\code{\link{pPCA}}
-
 \code{\link{pPCA}}
 }
 \keyword{StatisticalModel<representer>}

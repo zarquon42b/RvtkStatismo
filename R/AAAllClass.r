@@ -1,8 +1,40 @@
 setOldClass("mesh3d")
 setClassUnion("representer",c("list","mesh3d"))
 
+#' Documentation of class modelinfo
+#'
+#' Documentation of class modelinfo
+#' \describe{
+#' \item{\code{datainfo}: a list containing 2-valued character vectors}
+#' \item{\code{paraminfo}: a list containing 2-valued character vectors}
+#' }
+#' @name modelinfo-class
+#' @rdname modelinfo-class
 setClass("modelinfo", slots=c(datainfo="list",paraminfo="list"),prototype=list(datainfo=list(),paraminfo=list())
          )
+
+.modelinfo.valid <- function(object) {
+    lendat <- lencheck(object@datainfo)
+    lenparam <- lencheck(object@paraminfo)
+    classdat <- classcheck(object@datainfo)
+    classparam <- classcheck(object@paraminfo)
+    if (!lendat || !classdat) {
+            return("datainfo is invalid")
+    }
+    else if (!classdat || !classparam) {
+            return("paraminfo is invalid")
+    }    
+    
+    else
+        return(TRUE)
+}
+
+lencheck <- function(x) {
+    return((prod(lapply(x,length) == 2)))
+}
+classcheck <- function(x) return(as.logical(prod(lapply(x,class) =="character")))
+setValidity("modelinfo", .modelinfo.valid)
+
 
 #' Documentation of class pPCA
 #'
@@ -13,7 +45,7 @@ setClass("modelinfo", slots=c(datainfo="list",paraminfo="list"),prototype=list(d
 #' \item{PCA}{a list containing
 #' \itemize{
 #' \item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
-#' \item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
+#' \item{\code{rotation}: matrix containing the orthonormal PCBasis vectors}
 #' \item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
 #' \item{\code{center}: a vector of the mean shape in with coordinates ordered
 #'

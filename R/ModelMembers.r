@@ -225,3 +225,20 @@ setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="mesh3d",pt="n
     return(out)
 })
 
+#' @rdname statismoMembers
+setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
+
+    datainfo <- unlist(model@modelinfo@datainfo)
+    if (!is.null(datainfo))
+        datainfoframe <- as.data.frame(matrix(datainfo,length(datainfo)/2,2,byrow = T))
+    else
+        datainfoframe <- data.frame()
+    
+    paraminfo <- unlist(model@modelinfo@paraminfo)
+    if (!is.null(paraminfo))
+        paraminfoframe <- as.data.frame(matrix(paraminfo,length(paraminfo)/2,2,byrow = T))
+    else
+        paraminfoframe <- data.frame()
+
+    return(list(paraminfo=paraminfoframe,datainfo=datainfoframe))
+})

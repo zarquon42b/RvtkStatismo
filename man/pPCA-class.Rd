@@ -12,7 +12,7 @@ The class contains the the follwing slots (still not yet set in stone)
 \item{PCA}{a list containing
 \itemize{
 \item{\code{sdev}: the square roots of the covariance matrix' eigenvalues}
-\item{\code{rotation}: matrix containing the orthonormal PCBasis vectos}
+\item{\code{rotation}: matrix containing the orthonormal PCBasis vectors}
 \item{\code{x}: the scores within the latent space(scaled by 1/sdev)}
 \item{\code{center}: a vector of the mean shape in with coordinates ordered
 
