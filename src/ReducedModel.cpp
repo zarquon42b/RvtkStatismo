@@ -1,4 +1,4 @@
-#include "statismoReducedModel.h"
+#include "ReducedModel.h"
 
 
 typedef ReducedVarianceModelBuilder<vtkPolyData> ModelBuilderType;
