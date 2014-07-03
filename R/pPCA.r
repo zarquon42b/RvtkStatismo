@@ -97,7 +97,6 @@ setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVa
     else
         PCA$x <- 0
     SetPCA(model) <- PCA
-    model <- UpdateVariance(model) ##create Variance table 
     return(model)
 })
 
@@ -107,7 +106,7 @@ print.pPCA <- function(x, digits = getOption("digits"), Variance=TRUE,...){
     cat(paste(" first",length(x@PCA$sdev),"PCs used\n"))
     if (Variance) {
         cat("\n\n Model Variance:\n")
-        print(x@Variance)
+        print(createVarTable(x@PCA$sdev,square=TRUE))
     }
 }
 setMethod("show", "pPCA", function(object){print.pPCA(object)})

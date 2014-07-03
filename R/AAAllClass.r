@@ -66,8 +66,8 @@ setValidity("modelinfo", .modelinfo.valid)
 #' @rdname pPCA-class
 #' @export
 setClass("pPCA",
-         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric",Variance="data.frame"),
-         prototype = list(PCA=list(sdev=0,rotation=0,x=0,center=0),scale=logical(),representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),Variance=data.frame(),modelinfo=new("modelinfo"))
+         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric"),
+         prototype = list(PCA=list(sdev=0,rotation=0,x=0,center=0),scale=FALSE,representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),modelinfo=new("modelinfo"))
          )
 
 

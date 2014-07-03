@@ -29,7 +29,6 @@ setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, ex
         stop("there is nothing left to reduce")
     
     out <- .Call("ReducedModel",model,npc,exVar,scores)
-    out <- UpdateVariance(out)
     return(out)
 })
     

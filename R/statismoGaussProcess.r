@@ -41,7 +41,6 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
     out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric)
-    out <- UpdateVariance(out)
     SetScale(out) <- model@scale
     return(out)
                          

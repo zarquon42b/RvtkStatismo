@@ -59,7 +59,6 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
     }
     
     out <- .Call("BuildModelExport",mylist,representer,sigma)
-    out <- UpdateVariance(out)
     SetScale(out) <- scale
     return(out)
     
