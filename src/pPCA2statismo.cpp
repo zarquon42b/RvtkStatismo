@@ -60,7 +60,8 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
 	for (int i = 0; i < paraminfo.size(); i++) {
 	  CharacterVector kval(paraminfo[i]);
 	  std::string kval0 = as<std::string>(kval[0]);
-	  KeyValuePair kpair(kval0,kval0);
+	  std::string kval1 = as<std::string>(kval[1]);
+	  KeyValuePair kpair(kval0,kval1);
 	  paraInfo.push_back(kpair);
 	}
       }
