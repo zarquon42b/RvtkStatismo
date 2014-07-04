@@ -58,7 +58,10 @@ setReplaceMethod("SetScores", "pPCA",function(x, value) {x@PCA$x <- value; valid
 setGeneric("SetScale<-", function(x, value) standardGeneric("SetScale<-"))
 #' @name Set-pPCA-class
 #' @rdname ppcasetters
-setReplaceMethod("SetScale", "pPCA",function(x, value) {x@scale <- value; validObject(x); x})
+setReplaceMethod("SetScale", "pPCA",function(x, value) {
+    x@scale <- value;
+    x <- AddModelInfoParams(x,c("scale",tolower(as.character(value))))
+    validObject(x); x})
 
 #' @rdname ppcasetters
 #' @export
@@ -74,3 +77,28 @@ setGeneric("SetVariance<-", function(x, value) standardGeneric("SetVariance<-"))
 #' @rdname ppcasetters
 setReplaceMethod("SetVariance", "pPCA",function(x, value) {x@Variance <- value; validObject(x); x})
 
+#' @rdname modelinfo-class
+#' @export
+setGeneric("AddModelInfoParams", function(x, value) standardGeneric("AddModelInfoParams"))
+#' @rdname modelinfo-class
+setMethod("AddModelInfoParams", signature("modelinfo"),function(x, value) {
+    if (!is.list(value))
+        value <- list(value)
+    x@paraminfo <-append(x@paraminfo,value); validObject(x);
+    return(x)
+})
+
+#' @rdname ppcasetters
+setMethod("AddModelInfoParams", signature("pPCA"),function(x, value) {
+    x@modelinfo <- AddModelInfoParams(x@modelinfo,value);validObject(x)
+    return(x)
+    
+})
+#' @rdname modelinfo-class
+#' @export
+setGeneric("SetModelInfoParams<-", function(x, value) standardGeneric("SetModelInfoParams<-"))
+#' @rdname modelinfo-class
+#' @name modelinfo-class
+setReplaceMethod("SetModelInfoParams", signature("modelinfo"),function(x, value) {
+    x@paraminfo <-value; validObject(x); x
+})

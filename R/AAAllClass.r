@@ -10,6 +10,10 @@ setClassUnion("representer",c("list","mesh3d"))
 #' \item{datainfo}{a list containing 2-valued character vectors}
 #' \item{parminfo}{a list containing 2-valued character vectors}
 #' }
+#' These can be modified using addParams and setParaminfo
+#' with
+#' @param an object of class "modelinfo"
+#' @param value  a list of or a single 2-valued character vectors 
 #' @name modelinfo-class
 #' @rdname modelinfo-class
 #' @export
@@ -66,8 +70,9 @@ setValidity("modelinfo", .modelinfo.valid)
 #' @rdname pPCA-class
 #' @export
 setClass("pPCA",
-         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric"),
-         prototype = list(PCA=list(sdev=0,rotation=0,x=0,center=0),scale=FALSE,representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),modelinfo=new("modelinfo"))
+         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric",modelinfo="modelinfo"),
+         prototype = list(PCA=list(sdev=0,rotation=as.matrix(0),x=0,center=0),scale=FALSE,representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),modelinfo=new("modelinfo")
+             )
          )
 
 
