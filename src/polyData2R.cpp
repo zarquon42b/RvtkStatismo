@@ -14,7 +14,7 @@ List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
       for (int j=0; j<3; j++)
 	vb(j,i) = point[j];
     }
-    points->Delete();
+    //points->Delete();
     int h;
     vtkIdType npts=3,*pts; 
     int nit = polydata->GetNumberOfPolys();
