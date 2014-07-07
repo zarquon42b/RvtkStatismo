@@ -12,7 +12,7 @@ setClassUnion("representer",c("list","mesh3d"))
 #' }
 #' These can be modified using addParams and setParaminfo
 #' with
-#' @param an object of class "modelinfo"
+#' @param x an object of class "modelinfo"
 #' @param value  a list of or a single 2-valued character vectors 
 #' @name modelinfo-class
 #' @rdname modelinfo-class

@@ -14,7 +14,7 @@ AddModelInfoParams(x, value)
 SetModelInfoParams(x) <- value
 }
 \arguments{
-\item{an}{object of class "modelinfo"}
+\item{x}{an object of class "modelinfo"}
 
 \item{value}{a list of or a single 2-valued character vectors}
 }

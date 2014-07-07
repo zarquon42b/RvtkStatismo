@@ -38,6 +38,8 @@ SetVariance(x) <- value
 \item{model}{of class "pPCA"}
 
 \item{value}{set the specific value}
+
+\item{x}{an object of class "modelinfo"}
 }
 \value{
 returns an updated pPCA object
