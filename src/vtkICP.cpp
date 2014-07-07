@@ -5,9 +5,11 @@
 #include <vtkMatrix4x4.h>
 #include "R2polyData.h"
 #include "polyData2R.h"
-RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP scale_) {
+RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_) {
   try {
-    bool scale = as<bool>(scale_);
+    std::string type = as<std::string>(type_);
+    int sample = as<int>(sample_);
+    bool center = as<bool>(center_);
     List refmesh(refmesh_);
     List tarmesh(tarmesh_);
     SEXP tarvb = tarmesh["vb"];
@@ -19,11 +21,15 @@ RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP sca
     vtkSmartPointer<vtkIterativeClosestPointTransform> icp = vtkSmartPointer<vtkIterativeClosestPointTransform>::New();
   icp->SetSource(source);
   icp->SetTarget(target);
-  if (!scale)
-    icp->GetLandmarkTransform()->SetModeToRigidBody();
-  else 
+  if (type == "a")
+    icp->GetLandmarkTransform()->SetModeToAffine();
+  else if (type == "s")
     icp->GetLandmarkTransform()->SetModeToSimilarity();
-  
+  else 
+    icp->GetLandmarkTransform()->SetModeToRigidBody();
+  if (center)
+    icp->StartByMatchingCentroidsOn();
+  icp->SetMaximumNumberOfLandmarks(sample);
   icp->SetMaximumNumberOfIterations(iterations);
   //icp->StartByMatchingCentroidsOn();
   icp->Modified();
