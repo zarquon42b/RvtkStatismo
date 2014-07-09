@@ -11,8 +11,6 @@ statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE)
 \item{exVar}{restricts model by explained variance - with \code{0 < exVar < 1}}
 
 \item{npc}{number of PCs retained in the model (overrides \code{exVar})}
-
-\item{scores}{logical: request recomputation of PC-scores}
 }
 \description{
 Reduce an existing statistical shape model either to first n PCs or by explained Variance
