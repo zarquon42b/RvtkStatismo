@@ -5,7 +5,6 @@
 #' @param model
 #' @param exVar restricts model by explained variance - with \code{0 < exVar < 1}
 #' @param npc number of PCs retained in the model (overrides \code{exVar})
-#' @param scores logical: request recomputation of PC-scores
 #' @examples
 #' require(Morpho)
 #' data(boneData)
@@ -16,19 +15,10 @@
 setGeneric("statismoReducedVariance", function(model,exVar=1,npc=0,scores=TRUE){
     standardGeneric("statismoReducedVariance")})
 
-setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0,scores=TRUE) {
+setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0) {
     modVar <- GetPCAVarianceVector(model)
-    modVar <- modVar/sum(modVar)
     npc <- min(npc,length(modVar))
-    
-    if (exVar < modVar[1]) { 
-        exVar <- modVar[1]+1e-4
-        warning(paste0("exVar set to ",exVar))
-    }
-    if (length(modVar) < 2)
-        stop("there is nothing left to reduce")
-    
-    out <- .Call("ReducedModel",model,npc,exVar,scores)
+    out <- .Call("ReducedModel",model,npc,exVar)
     return(out)
 })
     

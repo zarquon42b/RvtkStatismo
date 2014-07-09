@@ -3,21 +3,20 @@
 
 typedef ReducedVarianceModelBuilder<vtkPolyData> ModelBuilderType;
 
-SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_, SEXP scores_) {
+SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_) {
   try {
-    bool computeScores = as<bool>(scores_);
     unsigned int npc = as<unsigned int>(npc_);
     double exVar = as<double>(exVar_);
     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     //auto_ptr<StatisticalModelType> reducedModel;
     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     if (npc > 0) {
-      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc,computeScores));
+      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc));
       return statismo2pPCA(reducedModel);
     
       
     } else {
-      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar,computeScores));
+      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar));
       return statismo2pPCA(reducedModel);
 
     }

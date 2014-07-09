@@ -5,5 +5,6 @@
 #include <RcppEigen.h>
 #include "pPCA2statismo.h"
 
-RcppExport SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_, SEXP scores_);
+RcppExport SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_);
+
 #endif
