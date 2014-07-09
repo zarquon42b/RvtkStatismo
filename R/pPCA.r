@@ -96,7 +96,7 @@ setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVa
     if (ncol(model@rawdata) > 0)
         PCA$x <- model@rawdata%*%t(GetProjectionMatrix(model))
     else
-        PCA$x <- 0
+        PCA$x <- matrix(0,0,0)
     SetPCA(model) <- PCA
     return(model)
 })
