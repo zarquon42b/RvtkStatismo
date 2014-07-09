@@ -11,10 +11,14 @@
 #' align <- rigidAlign(boneLM)$rotated
 #' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 #' reducemod <- statismoReducedVariance(mymod,0.5)
+#' @rdname statismoReducedVariance
+#' @name statismoReducedVariance
 #' @export
 setGeneric("statismoReducedVariance", function(model,exVar=1,npc=0,scores=TRUE){
     standardGeneric("statismoReducedVariance")})
 
+#' @name statismoReducedVariance
+#' @rdname statismoReducedVariance
 setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0) {
     modVar <- GetPCAVarianceVector(model)
     npc <- min(npc,length(modVar))
