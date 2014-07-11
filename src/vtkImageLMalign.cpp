@@ -9,7 +9,6 @@
 #include <vtkImageReslice.h>
 #include <vtkXMLImageDataWriter.h>
 #include <vtkMetaImageWriter.h>
-
 #include <Rcpp.h>
 using namespace Rcpp;
 //transforms a 3 x k SEXP matrix into vtkPoints
@@ -58,7 +57,11 @@ RcppExport SEXP vtkLMTransfrorm(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP ou
             
       //transform image
       vtkSmartPointer<vtkImageReslice> transform2 = vtkSmartPointer<vtkImageReslice>::New(); // Apply transform
-      transform2->SetInput(image);
+#if VTK_MAJOR_VERSION <= 5  
+    transform2->SetInput(image);
+#else
+    transform2->SetInformationInput(image);
+#endif
       landmarkTransform->Inverse();
       transform2->SetResliceTransform(landmarkTransform);
       transform2->AutoCropOutputOn();
@@ -69,8 +72,11 @@ RcppExport SEXP vtkLMTransfrorm(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP ou
       //write image to file
       vtkSmartPointer<vtkMetaImageWriter> writermha = vtkSmartPointer<vtkMetaImageWriter>::New();
       writermha->SetFileName(outputFilename.c_str());
+#if VTK_MAJOR_VERSION <= 5
       writermha->SetInputConnection(transformImage->GetProducerPort());
-      
+#else
+      writermha->SetInputData(transformImage);
+#endif
       writermha->Write();
       imageReader->Delete();
       
