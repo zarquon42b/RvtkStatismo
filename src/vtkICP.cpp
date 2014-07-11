@@ -3,6 +3,7 @@
 #include <vtkLandmarkTransform.h>
 #include <vtkMath.h>
 #include <vtkMatrix4x4.h>
+#include <vtkVersion.h>
 #include "R2polyData.h"
 #include "polyData2R.h"
 RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_) {
