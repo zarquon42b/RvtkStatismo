@@ -8,6 +8,7 @@
 #include <vtkImageData.h>
 #include <vtkImageReslice.h>
 #include <vtkXMLImageDataWriter.h>
+#include <vtkImageWriter.h>
 #include <vtkMetaImageWriter.h>
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -70,7 +71,7 @@ RcppExport SEXP vtkLMTransfrorm(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP ou
       vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
     
       //write image to file
-      vtkSmartPointer<vtkMetaImageWriter> writermha = vtkSmartPointer<vtkMetaImageWriter>::New();
+      vtkSmartPointer<vtkImageWriter> writermha = vtkSmartPointer<vtkMetaImageWriter>::New();
       writermha->SetFileName(outputFilename.c_str());
 #if VTK_MAJOR_VERSION <= 5
       writermha->SetInputConnection(transformImage->GetProducerPort());
