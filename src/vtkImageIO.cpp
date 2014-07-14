@@ -1,6 +1,6 @@
 #include "vtkImageIO.h"
 #include "Rcpp.h"
-
+#include <vtkMatrix4x4.h>
 vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
   vtkSmartPointer<vtkImageData> image =vtkSmartPointer<vtkImageData>::New();
   vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
@@ -23,8 +23,16 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       niftiReader->Update();
       image = niftiReader->GetOutput();
       vtkSmartPointer<vtkTransform> niftiiTransform = vtkSmartPointer<vtkTransform>::New();
-      vtkSmartPointer<vtkMatrix4x4> iotrans = niftiReader->GetSFormMatrix();
+      vtkSmartPointer<vtkMatrix4x4> iotrans0 = niftiReader->GetQFormMatrix();
+      //iotrans0->Invert();
+      vtkSmartPointer<vtkMatrix4x4> ras =vtkSmartPointer<vtkMatrix4x4>::New();
+      ras->Identity();
+      ras->SetElement(0,0,-1);
+      ras->SetElement(1,1,-1);
+      vtkSmartPointer<vtkMatrix4x4> iotrans = vtkSmartPointer<vtkMatrix4x4>::New();
+      vtkMatrix4x4::Multiply4x4(ras,iotrans0,iotrans);
       niftiiTransform->SetMatrix(iotrans);
+      niftiiTransform->Inverse();
       vtkSmartPointer<vtkImageReslice> transform2 = vtkSmartPointer<vtkImageReslice>::New();
       transform2->SetResliceTransform(niftiiTransform);
       transform2->AutoCropOutputOn();
@@ -35,11 +43,13 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       transform2->SetInputData(image);
  #endif
       transform2->Update();
+      
       vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
       return transformImage;
     } else {
       ::Rf_error("image not readable");
       
+    }
     }
 #else
      else
