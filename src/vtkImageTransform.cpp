@@ -60,26 +60,7 @@ SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SE
     vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
     
     //write image to file
-    std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
-   
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
-    vtkSmartPointer<vtkImageWriter> writer;
-    if (ext.compare(".nii") ==0 || ext.compare(".gz") == 0) { 
-      writer = vtkSmartPointer<vtkNIFTIImageWriter>::New();
-    } else {
-      writer = vtkSmartPointer<vtkMetaImageWriter>::New();
-    }
-#else
-    vtkSmartPointer<vtkImageWriter> writer = vtkSmartPointer<vtkMetaImageWriter>::New();
-#endif
-    writer->SetFileName(outputFilename.c_str());
-#if VTK_MAJOR_VERSION <= 5
-    writer->SetInputConnection(transformImage->GetProducerPort());
-#else
-    writer->SetInputData(transformImage);
-#endif
-    writer->Write();
-    // delete image Reader
+    vtkImageWrite(transformImage,outputFilename);
     
     return wrap(0);
 } catch (std::exception& e) {

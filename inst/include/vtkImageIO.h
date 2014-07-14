@@ -1,3 +1,6 @@
+#ifndef _VTK_IMAGE_IO_H__
+#define _VTK_IMAGE_IO_H__
+
 #include <vtkSmartPointer.h>
 #include <vtkImageReader2Factory.h>
 #include <vtkImageReader2.h>
@@ -16,3 +19,7 @@
 #include <vtkTransform.h>
 
 vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) ;
+
+int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilename);
+
+#endif

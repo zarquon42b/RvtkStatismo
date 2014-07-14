@@ -1,7 +1,8 @@
 #include "vtkImageIO.h"
 #include "Rcpp.h"
-#include <vtkMatrix4x4.h>
+
 vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
+  
   vtkSmartPointer<vtkImageData> image =vtkSmartPointer<vtkImageData>::New();
   vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
   vtkImageReader2* imageReader = readerFactory->CreateImageReader2(inputFilename.c_str());
@@ -37,11 +38,11 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       transform2->SetResliceTransform(niftiiTransform);
       transform2->AutoCropOutputOn();
       transform2->SetInterpolationMode(2);
- #if VTK_MAJOR_VERSION <= 5  
+#if VTK_MAJOR_VERSION <= 5  
       transform2->SetInput(image);
- #else
+#else
       transform2->SetInputData(image);
- #endif
+#endif
       transform2->Update();
       
       vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
@@ -50,10 +51,44 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       ::Rf_error("image not readable");
       
     }
-    }
+  }
 #else
-     else
-       ::Rf_error("image not readable");
+  else
+    ::Rf_error("image not readable");
 #endif
     
+}
+
+//write images to MHA and NIFTI 
+int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilename) {
+  std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
+  std::string fname = vtksys::SystemTools::GetFilenameWithoutLastExtension(outputFilename);    
+  std::string ext1 = vtksys::SystemTools::GetFilenameLastExtension(fname);
+  std::string extext = ext1+ext;
+
+  vtkSmartPointer<vtkMatrix4x4> ras =vtkSmartPointer<vtkMatrix4x4>::New();
+  ras->Identity();
+  ras->SetElement(0,0,-1);
+  ras->SetElement(1,1,-1);
+#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
+  vtkSmartPointer<vtkImageWriter> writer;
+  if (ext.compare(".nii") ==0 || extext.compare("nii.gz") == 0) { 
+    vtkSmartPointer<vtkNIFTIImageWriter> writertmp = vtkSmartPointer<vtkNIFTIImageWriter>::New();
+    writertmp->SetQFormMatrix(ras);
+    writertmp->SetSFormMatrix(ras);
+    writer = writertmp;      
+  } else {
+    writer = vtkSmartPointer<vtkMetaImageWriter>::New();
+  }
+#else
+  vtkSmartPointer<vtkImageWriter> writer = vtkSmartPointer<vtkMetaImageWriter>::New();
+#endif
+  writer->SetFileName(outputFilename.c_str());
+#if VTK_MAJOR_VERSION <= 5
+  writer->SetInputConnection(image->GetProducerPort());
+#else
+  writer->SetInputData(image);
+#endif
+  writer->Write();
+  return 0;
 }
