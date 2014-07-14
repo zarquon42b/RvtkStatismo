@@ -1,15 +1,3 @@
-#include <vtkVersion.h>
-#include <vtkSmartPointer.h>
-#include <vtkPolyData.h>
-#include <vtkImageData.h>
-#include <vtkPointData.h>
-#include <vtkImageWriter.h>
-#include <vtkMetaImageWriter.h>
-#include <vtksys/SystemTools.hxx>
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
-#include <vtkNIFTIImageReader.h>
-#include <vtkNIFTIImageWriter.h>
-#endif
 #include "R2polyData.h"
 #include "vtkPolyData2vtkImageData.h"
 #include "vtkImageIO.h"
@@ -30,8 +18,6 @@ RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_) {
     spacing[2] = spacingtmp[2];
     
     vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing);
-    
-    std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
     int chk = vtkImageWrite(whiteImage,outputFilename);
 
     return wrap(0);

@@ -1,6 +1,6 @@
 #ifndef _VTK_IMAGE_IO_H__
 #define _VTK_IMAGE_IO_H__
-
+#include <vtkVersion.h>
 #include <vtkSmartPointer.h>
 #include <vtkImageReader2Factory.h>
 #include <vtkImageReader2.h>
