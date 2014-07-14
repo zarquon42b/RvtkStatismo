@@ -17,7 +17,7 @@
 #include <vtkNIFTIImageReader.h>
 #include <vtkNIFTIImageWriter.h>
 #endif
-
+#include "vtkImageTransform.h"
 #include "R2vtkPoints.h"
 #include <Rcpp.h>
 using namespace Rcpp;
