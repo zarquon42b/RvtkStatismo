@@ -69,19 +69,24 @@ int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilenam
   ras->Identity();
   ras->SetElement(0,0,-1);
   ras->SetElement(1,1,-1);
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
   vtkSmartPointer<vtkImageWriter> writer;
+#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
+  
   if (ext.compare(".nii") ==0 || extext.compare(".nii.gz") == 0) { 
     vtkSmartPointer<vtkNIFTIImageWriter> writertmp = vtkSmartPointer<vtkNIFTIImageWriter>::New();
     
     writertmp->SetQFormMatrix(ras);
     writertmp->SetSFormMatrix(ras);
     writer = writertmp;      
-  } else {
+  } else if (ext.compare(".mhd") ==0 || ext.compare(".mha") == 0) {
     writer = vtkSmartPointer<vtkMetaImageWriter>::New();
-  }
+  } else
+    ::Rf_error("Unsupported output format");
 #else
-  vtkSmartPointer<vtkImageWriter> writer = vtkSmartPointer<vtkMetaImageWriter>::New();
+  if (ext.compare(".mhd") ==0 || ext.compare(".mha") == 0)
+    writer = vtkSmartPointer<vtkMetaImageWriter>::New();
+  else 
+    ::Rf_error("Unsupported output format");
 #endif
   writer->SetFileName(outputFilename.c_str());
 #if VTK_MAJOR_VERSION <= 5
