@@ -18,23 +18,12 @@
 #include <vtkNIFTIImageWriter.h>
 #endif
 
+#include "R2vtkPoints.h"
 #include <Rcpp.h>
 using namespace Rcpp;
-//transforms a 3 x k SEXP matrix into vtkPoints
-vtkSmartPointer<vtkPoints> R2vtkPoints(SEXP vb_) {
-  NumericMatrix vb(vb_);
-  vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-  for (int i = 0; i < vb.ncol();i++) {
-    float p[3];
-    for (int j = 0;j < 3; j++) 
-      p[j] = vb(j,i);  
-    vtkIdType pid[1];
-    pid[0] = points->InsertNextPoint(p);
-  }
-  return points;
-}
 
-RcppExport SEXP vtkLMTransfrorm(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_) {
+
+SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_) {
   try{ 
     int interpolation = as<int>(interpolation_);
     std::string type = as<std::string>(type_);
@@ -91,22 +80,22 @@ RcppExport SEXP vtkLMTransfrorm(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP ou
 	std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
 
 #if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
-	vtkSmartPointer<vtkImageWriter> writermha;
+	vtkSmartPointer<vtkImageWriter> writer;
 	if (ext.compare(".nii") || ext.compare(".gz")) { 
-writermha = vtkSmartPointer<vtkNIFTIImageWriter>::New();
+writer = vtkSmartPointer<vtkNIFTIImageWriter>::New();
 	} else {
-	  writermha = vtkSmartPointer<vtkMetaImageWriter>::New();
+	  writer = vtkSmartPointer<vtkMetaImageWriter>::New();
 	}
 #else
-	vtkSmartPointer<vtkImageWriter> writermha = vtkSmartPointer<vtkMetaImageWriter>::New();
+	vtkSmartPointer<vtkImageWriter> writer = vtkSmartPointer<vtkMetaImageWriter>::New();
 #endif
-	writermha->SetFileName(outputFilename.c_str());
+	writer->SetFileName(outputFilename.c_str());
 #if VTK_MAJOR_VERSION <= 5
-	writermha->SetInputConnection(transformImage->GetProducerPort());
+	writer->SetInputConnection(transformImage->GetProducerPort());
 #else
-	writermha->SetInputData(transformImage);
+	writer->SetInputData(transformImage);
 #endif
-	writermha->Write();
+	writer->Write();
 	imageReader->Delete();
       
       } else {
