@@ -65,15 +65,15 @@ int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilenam
   std::string fname = vtksys::SystemTools::GetFilenameWithoutLastExtension(outputFilename);    
   std::string ext1 = vtksys::SystemTools::GetFilenameLastExtension(fname);
   std::string extext = ext1+ext;
-
   vtkSmartPointer<vtkMatrix4x4> ras =vtkSmartPointer<vtkMatrix4x4>::New();
   ras->Identity();
   ras->SetElement(0,0,-1);
   ras->SetElement(1,1,-1);
 #if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
   vtkSmartPointer<vtkImageWriter> writer;
-  if (ext.compare(".nii") ==0 || extext.compare("nii.gz") == 0) { 
+  if (ext.compare(".nii") ==0 || extext.compare(".nii.gz") == 0) { 
     vtkSmartPointer<vtkNIFTIImageWriter> writertmp = vtkSmartPointer<vtkNIFTIImageWriter>::New();
+    
     writertmp->SetQFormMatrix(ras);
     writertmp->SetSFormMatrix(ras);
     writer = writertmp;      
