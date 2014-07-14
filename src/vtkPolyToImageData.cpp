@@ -30,10 +30,11 @@ RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_) {
     
     vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing);
     
-    
+    std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
+
 #if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
     vtkSmartPointer<vtkImageWriter> writer;
-    if (ext.compare(".nii") || ext.compare(".gz")) { 
+    if (ext.compare(".nii") ==0 || ext.compare(".gz") == 0) { 
     writer = vtkSmartPointer<vtkNIFTIImageWriter>::New();
   } else {
     writer = vtkSmartPointer<vtkMetaImageWriter>::New();
