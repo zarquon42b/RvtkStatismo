@@ -12,6 +12,7 @@
 #endif
 #include "R2polyData.h"
 #include "vtkPolyData2vtkImageData.h"
+#include "vtkImageIO.h"
 
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -31,25 +32,8 @@ RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_) {
     vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing);
     
     std::string ext = vtksys::SystemTools::GetFilenameLastExtension(outputFilename);
+    int chk = vtkImageWrite(whiteImage,outputFilename);
 
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
-    vtkSmartPointer<vtkImageWriter> writer;
-    if (ext.compare(".nii") ==0 || ext.compare(".gz") == 0) { 
-    writer = vtkSmartPointer<vtkNIFTIImageWriter>::New();
-  } else {
-    writer = vtkSmartPointer<vtkMetaImageWriter>::New();
-  }
-#else
-    vtkSmartPointer<vtkImageWriter> writer = vtkSmartPointer<vtkMetaImageWriter>::New();
-#endif
-    writer->SetFileName(outputFilename.c_str());
-#if VTK_MAJOR_VERSION <= 5
-    writer->SetInputConnection(whiteImage->GetProducerPort());
-#else
-    writer->SetInputData(whiteImage);
-#endif
-
-    writer->Write();
     return wrap(0);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
