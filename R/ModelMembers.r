@@ -239,6 +239,6 @@ setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
         paraminfoframe <- as.data.frame(matrix(paraminfo,length(paraminfo)/2,2,byrow = T))
     else
         paraminfoframe <- data.frame()
-
-    return(list(paraminfo=paraminfoframe,datainfo=datainfoframe))
+    scores <- model@PCA$x
+    return(list(paraminfo=paraminfoframe,datainfo=datainfoframe,scores=scores))
 })
