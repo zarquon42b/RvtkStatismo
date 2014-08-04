@@ -26,13 +26,17 @@ vtkRenderMesh <- function(mesh,size=5) {
 #' @param mesh mesh of class mesh3d
 #' @param filename character
 #' @export
-mesh2vtp <- function(mesh, filename=dataname) {
+vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtp","vtk")) {
     dataname <- deparse(substitute(mesh))
     vb <- mesh$vb[1:3,]
-    it <- mesh$it-1
+    it <- mesh$it
+    type <- type[1]
     filename <- path.expand(as.character(filename))
-    filename <- paste(filename,".vtp",sep="")
-    out <- .Call("vtkWrite",filename,vb,it)
+    if (type %in% c("vtp","vtk"))
+        filename <- paste0(filename,".",type)
+    elsegit 
+        stop("unsupported file format")
+    out <- .Call("vtkWrite",filename,vb,it,type)
 }
 #' imports vtk and vtp files
 #'
