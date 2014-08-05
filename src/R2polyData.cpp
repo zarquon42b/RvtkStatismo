@@ -51,11 +51,11 @@ vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_) {
     polydata->SetPoints(points);
     if (!hasFaces) {
       polydata->SetVerts(vertices);    
-      polydata->GetCellData()->AddArray(indexv);
+      //polydata->GetCellData()->AddArray(indexv);
     }
     if (hasFaces) {
       polydata->SetPolys(triangles);
-      polydata->GetCellData()->AddArray(index);
+      //polydata->GetCellData()->AddArray(index);
     }
     return polydata;
   

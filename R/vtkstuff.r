@@ -34,7 +34,7 @@ vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtp","vtk")) {
     filename <- path.expand(as.character(filename))
     if (type %in% c("vtp","vtk"))
         filename <- paste0(filename,".",type)
-    elsegit 
+    else
         stop("unsupported file format")
     out <- .Call("vtkWrite",filename,vb,it,type)
 }
