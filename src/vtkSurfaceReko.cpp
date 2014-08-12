@@ -13,7 +13,7 @@
 #include <vtkMath.h>
 #include <vtkSmartPointer.h>
 #include <cmath>
- 
+ #include <vtkMarchingCubes.h>
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
 #include "Rcpp.h"
@@ -36,8 +36,10 @@ vtkSmartPointer<vtkPoints> points = R2vtkPoints(mesh["vb"]);
 #else
  surf->SetInputData(polydata);
 #endif
- vtkSmartPointer<vtkContourFilter> contourFilter = vtkSmartPointer<vtkContourFilter>::New();
+ 
+ vtkSmartPointer<vtkMarchingCubes> contourFilter = vtkSmartPointer<vtkMarchingCubes>::New();
   contourFilter->SetInputConnection(surf->GetOutputPort());
+  //contourFilter->UseScalarTreeOn();
   contourFilter->SetValue(0,0.0);
  
  
