@@ -21,11 +21,13 @@
 #include "polyData2R.h"
 #include "vtkpoly2unstruct.h"
 #include "R2vtkPoints.h"
+#include "vtkImageIO.h"
 
 static vtkSmartPointer<vtkPolyData> transform_back(vtkSmartPointer<vtkPoints> pt, vtkSmartPointer<vtkPolyData> pd);
 
-RcppExport SEXP vtkSurfaceReko(SEXP mesh_) {
+RcppExport SEXP vtkSurfaceReko(SEXP mesh_, SEXP sampSpace_=wrap(0)) {
 try {
+  double sampSpace = as<double>(sampSpace_);
   List mesh(mesh_);
 vtkSmartPointer<vtkPoints> points = R2vtkPoints(mesh["vb"]);
   vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
@@ -36,12 +38,16 @@ vtkSmartPointer<vtkPoints> points = R2vtkPoints(mesh["vb"]);
 #else
  surf->SetInputData(polydata);
 #endif
- 
+ if (sampSpace > 0)
+   surf->SetSampleSpacing(sampSpace);
+ surf->Update();
  vtkSmartPointer<vtkMarchingCubes> contourFilter = vtkSmartPointer<vtkMarchingCubes>::New();
   contourFilter->SetInputConnection(surf->GetOutputPort());
   //contourFilter->UseScalarTreeOn();
+  
   contourFilter->SetValue(0,0.0);
- 
+  vtkSmartPointer<vtkImageData> image = surf->GetOutput();
+  vtkImageWrite(image,"test.mha");
  
   // Sometimes the contouring algorithm can create a volume whose gradient
   // vector and ordering of polygon (using the right hand rule) are

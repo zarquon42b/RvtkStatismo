@@ -17,12 +17,13 @@ vtkExtractOutsideMesh <- function(x) {
 #'
 #' create surface from pointcloud or mesh
 #' @param x pointcloud or mesh
+#' @param sampleSpacing set spacing for contour creation (0=auto)
 #' @return mesh of class mesh3d
 #' @export
-vtkSurfaceReko <- function(x) {
+vtkSurfaceReko <- function(x,sampleSpacing=0) {
     if (is.matrix(x))
         x <- list(vb=t(x))
-    out <- .Call("vtkSurfaceReko",x)
+    out <- .Call("vtkSurfaceReko",x,sampleSpacing)
     out$vb <- rbind(out$vb,1)
     return(out)
 }

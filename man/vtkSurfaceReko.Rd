@@ -3,10 +3,12 @@
 \alias{vtkSurfaceReko}
 \title{create surface from pointcloud}
 \usage{
-vtkSurfaceReko(x)
+vtkSurfaceReko(x, sampleSpacing = 0)
 }
 \arguments{
 \item{x}{pointcloud or mesh}
+
+\item{sampleSpacing}{set spacing for contour creation (0=auto)}
 }
 \value{
 mesh of class mesh3d
