@@ -46,8 +46,8 @@ vtkSmartPointer<vtkPoints> points = R2vtkPoints(mesh["vb"]);
   //contourFilter->UseScalarTreeOn();
   
   contourFilter->SetValue(0,0.0);
-  vtkSmartPointer<vtkImageData> image = surf->GetOutput();
-  vtkImageWrite(image,"test.mha");
+  //vtkSmartPointer<vtkImageData> image = surf->GetOutput();
+  //vtkImageWrite(image,"test.mha");
  
   // Sometimes the contouring algorithm can create a volume whose gradient
   // vector and ordering of polygon (using the right hand rule) are
