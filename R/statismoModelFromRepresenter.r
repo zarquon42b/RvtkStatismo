@@ -15,15 +15,11 @@
 #' for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
 #' @export
 statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
-    if (inherits(representer,"mesh3d"))
-        center <- as.vector(representer$vb[1:3,])
-    else if (is.matrix(representer))
-        center <- as.vector(t(representer))
-    else
-        stop("representer must be mesh or matrix")
+    representer <- dataset2representer(representer)
+    center <- as.vector(representer$vb[1:3,])
     pp <- new("pPCA")
     pp@sigma <- 0
-    pp@PCA$center <- as.vector(representer$vb[1:3,])
+    pp@PCA$center <- center
     pp@PCA$sdev <- 1
     pp@representer <- representer
     pp@PCA$rotation <- matrix(0,length(pp@PCA$center),1)
