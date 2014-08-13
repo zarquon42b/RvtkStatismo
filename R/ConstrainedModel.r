@@ -18,7 +18,7 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="ma
     ptValueNoise <- max(1e-7,ptValueNoise)
     mean <- t(pt)
     sample <- t(sample)
-    out <- .Call("PosteriorModelBuilder",model,sample, mean,ptValueNoise)
+    out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise)
     return(out)
 })
 #' @rdname statismoConstrainModel
@@ -69,4 +69,24 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
     mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
     out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax)
 })
-    
+
+setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise,sdmax=5) {
+    ptValueNoise <- max(1e-12,ptValueNoise)
+    mean <- t(pt)
+    sample <- t(sample)
+    mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
+    out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax)
+})
+
+setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5) {
+    ptValueNoise <- max(1e-12,ptValueNoise)
+    sample <- matrix(sample,3,1)
+    if (length(pt) == 3)
+        mean <- matrix(pt,3,1)
+    else if (length(pt) == 1)
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        stop("in this case pt must be a vector of length 3 or an integer")
+    mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
+    out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax)
+})
