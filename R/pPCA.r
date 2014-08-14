@@ -160,7 +160,7 @@ setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,repre
     } else
         sb <- dataset
 
-    alpha <- ComputeCoefficientsForDataset(model,sb)%*%as.vector(t(sbres))
+    alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         if (mahaprob != "n") {
