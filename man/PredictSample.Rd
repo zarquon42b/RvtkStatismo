@@ -2,19 +2,20 @@
 \docType{methods}
 \name{PredictSample}
 \alias{PredictSample}
-\alias{PredictSample,pPCA,matrix,ANY-method}
+\alias{PredictSample,pPCA,ANY,ANY-method}
 \alias{PredictSample,pPCA,mesh3d,logical-method}
 \title{predict or restrict a mesh or matrix based on a statistical model}
 \usage{
 PredictSample(model, dataset, representer = TRUE, ...)
 
-\S4method{PredictSample}{pPCA,matrix,ANY}(model, dataset, representer = TRUE,
-  origSpace = TRUE, use.lm = NULL, deselect = FALSE, sdmax,
-  mahaprob = c("none", "chisq", "dist"), align = TRUE, ...)
+\S4method{PredictSample}{pPCA,ANY,ANY}(model, dataset, representer = TRUE,
+  origSpace = TRUE, use.lm = NULL, deselect = FALSE, sdmax = NULL,
+  mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
+  ...)
 
 \S4method{PredictSample}{pPCA,mesh3d,logical}(model, dataset,
   representer = TRUE, origSpace = TRUE, use.lm = NULL, deselect = FALSE,
-  sdmax, mahaprob = c("none", "chisq", "dist"), align = TRUE, ...)
+  sdmax = NULL, mahaprob = c("none", "chisq", "dist"), align = TRUE, ...)
 }
 \arguments{
 \item{model}{model of class \code{pPCA}}
@@ -34,6 +35,8 @@ PredictSample(model, dataset, representer = TRUE, ...)
 \item{mahaprob}{character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space."chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.}
 
 \item{align}{if TRUE, the sample will be aligned to the mean.}
+
+\item{addNoise}{re-add noise while reprojecting from latent into shape space.}
 
 \item{...}{currently not in use.}
 }
