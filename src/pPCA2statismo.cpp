@@ -1,6 +1,5 @@
 #include "pPCA2statismo.h"
 #include "polyData2R.h"
-#include "ModelInfo.h"
 using Rcpp::List;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerMatrix;

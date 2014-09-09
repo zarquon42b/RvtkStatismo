@@ -48,6 +48,13 @@ find_package(VTK REQUIRED)
 
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(STATISMO REQUIRED)
+message( ${STATISMO_MINOR_VERSION} ${STATISMO_PATCH_VERSION})
+if(9 GREATER ${STATISMO_MINOR_VERSION})
+  message(SEND_ERROR "your statismo version needs to be at least 0.9.1")
+elseif (1 GREATER ${STATISMO_PATCH_VERSION})
+  message(SEND_ERROR "your statismo version needs to be at least 0.9.1")
+endif()
+# || STATISMO_PATCH_VERSION < 1)
 ## until statismo has fixed its cmake generation
 #set(STATISMO_HDF5_LIBRARY_DIR "${STATISMO_DIR}/lib/hdf5" ${STATISMO_HDF5_LIBRARY_DIR})
 ## configure linker and include dirs

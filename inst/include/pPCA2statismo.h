@@ -2,6 +2,7 @@
 #define _STATISMO2PPCA_H__
 
 #include "VTKTypes.h"
+#include "statismo/ModelInfo.h"
 #include "statismo/PCAModelBuilder.h"
 #include "statismo/StatisticalModel.h"
 #include "statismo/DataManager.h"

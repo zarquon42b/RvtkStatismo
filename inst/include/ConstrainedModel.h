@@ -1,7 +1,7 @@
 #ifndef _CONSTRAINED_MODEL_H__
 #define _CONSTRAINED_MODEL_H__
 #include "VTKTypes.h"
-#include "PosteriorModelBuilder.h"
+#include "statismo/PosteriorModelBuilder.h"
 #include <RcppEigen.h>
 #include "pPCA2statismo.h"
 #include "Helpers.h"
