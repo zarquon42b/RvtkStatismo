@@ -4,7 +4,7 @@
 \title{expands a models variability by adding a Gaussian kernel function}
 \usage{
 statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
-  ncomp = 10, nystroem = 500)
+  ncomp = 10, nystroem = 500, combine = c("sum", "product"))
 }
 \arguments{
 \item{model}{shape model of class \code{\link{pPCA}}}
@@ -16,6 +16,8 @@ statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
 \item{ncomp}{integer: number of PCs to approximate}
 
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
+
+\item{combine}{character determining how to combine the kernels: "sum" or "product" are supported.}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}

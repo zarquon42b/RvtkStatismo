@@ -6,6 +6,7 @@
 #' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
+#' @param combine character determining how to combine the kernels: "sum" or "product" are supported.
 #' @return returns a shape model of class \code{\link{pPCA}}
 #' @examples
 #' require(Rvcg)
@@ -14,7 +15,7 @@
 #' require(rgl)
 #' for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
 #' @export
-statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500) {
+statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500,combine="sum") {
     representer <- dataset2representer(representer)
     center <- as.vector(representer$vb[1:3,])
     pp <- new("pPCA")
@@ -23,7 +24,7 @@ statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncom
     pp@PCA$sdev <- 1
     pp@representer <- representer
     pp@PCA$rotation <- matrix(0,length(pp@PCA$center),1)
-    out <- statismoGPmodel(pp,useEmpiric=FALSE,kernel=kernel,ncomp=ncomp,nystroem=nystroem)
+    out <- statismoGPmodel(pp,useEmpiric=FALSE,kernel=kernel,ncomp=ncomp,nystroem=nystroem,combine = combine)
     return(out)
 }
     

@@ -1,8 +1,9 @@
 #include "BuildGaussProcessModel.h"
 
-auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_) {
+auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_) {
   try { 
     bool useEmp = as<bool>(useEmp_);
+    int combine = as<int>(combine_);
     unsigned int nystroem = as<unsigned int>(nystroem_);
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
     std::list<MatrixValuedKernelType*> mKerns;
@@ -29,8 +30,10 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
       gKerns.push_back(gkNew);
       mKerns.push_back(mvGk);
       mKerns.push_back(scaledGk);
-      sumKernel = new SumKernel<vtkPoint>(sumKernel, scaledGk);
-      
+      if (combine == 0)
+	sumKernel = new SumKernel<vtkPoint>(sumKernel, scaledGk);
+      else
+	sumKernel = new ProductKernel<vtkPoint>(sumKernel, scaledGk);
     }
     if (useEmp) {
       // get the empiric kernel
@@ -72,7 +75,7 @@ auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp
   }
 }
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_){
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_){
   
   auto_ptr<StatisticalModelType> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_);
   //return statismo2pPCA(model);
