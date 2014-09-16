@@ -11,8 +11,8 @@
 #' data(dummyhead.mesh)
 #' vtkMesh2Image(dummyhead.mesh)
 #' @export
-vtkMesh2Image <- function(mesh,spacing=c(0.5,0.5,0.5),filename="default.mha",IJK2RAS=diag(c(-1,-1,1))) {
+vtkMesh2Image <- function(mesh,spacing=c(0.5,0.5,0.5),filename="default.mha",IJK2RAS=diag(c(-1,-1,1)),margin=0.1) {
     mesh$vb[1:3,] <- IJK2RAS%*%mesh$vb[1:3,]
-    out <- .Call("vtkPolyToImageData",mesh,filename,spacing)
+    out <- .Call("vtkPolyToImageData",mesh,filename,spacing,margin)
     return(!as.logical(out))
 }

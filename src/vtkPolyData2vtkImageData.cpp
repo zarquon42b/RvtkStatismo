@@ -1,11 +1,11 @@
 #include "vtkPolyData2vtkImageData.h"
 #include "Rcpp.h"
-vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing) {
+vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin) {
   vtkSmartPointer<vtkImageData> whiteImage = vtkSmartPointer<vtkImageData>::New();
   double bounds[6];
   pd->GetBounds(bounds);
   for (int i = 0; i < 6; i++)
-    bounds[i] *= 1.1;//add 10 % margin
+    bounds[i] *= margin;//add 10 % margin
   whiteImage->SetSpacing(spacing);
   int dim[3];
   for (int i = 0; i < 3; i++) {
