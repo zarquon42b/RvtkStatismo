@@ -78,12 +78,8 @@ shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     
   }  catch (std::exception& e) {
     ::Rf_error( e.what());
-    shared_ptr<StatisticalModelType> model(NULL);
-    return model;
   } catch (...) {
     ::Rf_error("unknown exception");
-    shared_ptr<StatisticalModelType> model(NULL);
-    return model;
   }
   
   

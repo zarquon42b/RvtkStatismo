@@ -42,15 +42,9 @@ shared_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,
   } catch (StatisticalModelException& e) {
     ::Rf_error("Exception occured while building the shape model\n");
     ::Rf_error("%s\n",  e.what());
-    shared_ptr<StatisticalModelType> model(NULL);
-    return model;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    shared_ptr<StatisticalModelType> model(NULL);    
-    return model;
   } catch (...) {
     ::Rf_error("unknown exception");
-    shared_ptr<StatisticalModelType> model(NULL);
-    return model;
   }
 }
