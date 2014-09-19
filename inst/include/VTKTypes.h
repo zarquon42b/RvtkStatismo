@@ -1,9 +1,9 @@
 #ifndef _VTK_TYPES_H__
 #define _VTK_TYPES_H__
-#include "Representers/VTK/vtkStandardMeshRepresenter.h"
-#include "statismo/PCAModelBuilder.h"
-#include "statismo/StatisticalModel.h"
-#include "statismo/DataManager.h"
+#include "vtkStandardMeshRepresenter.h"
+#include "PCAModelBuilder.h"
+#include "StatisticalModel.h"
+#include "DataManager.h"
 #include <boost/shared_ptr.hpp>
 
 

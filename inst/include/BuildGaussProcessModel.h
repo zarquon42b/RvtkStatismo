@@ -3,7 +3,8 @@
 
 #include "VTKTypes.h"
 #include "pPCA2statismo.h"
-#include "statismo/LowRankGPModelBuilder.h"
+#include "KernelCombinators.h"
+#include "LowRankGPModelBuilder.h"
 #include "polyData2R.h"
 
 
