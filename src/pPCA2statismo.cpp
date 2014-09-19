@@ -84,69 +84,67 @@ shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   
   
  
-  }
+}
 
 typedef  std::pair< std::string,std::string >  KeyValuePair;
 typedef std::list< KeyValuePair > KeyValueList;
 typedef KeyValueList::iterator keyiter;
 typedef std::vector<BuilderInfo> BuilderInfoList;
 S4 statismo2pPCA(shared_ptr<StatisticalModelType> model) {
-   try {
-     if (model.get()) {
-       vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
-       List PCA = List::create(Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
-			       Named("center")= model->GetMeanVector(),
-			       Named("x")=model->GetModelInfo().GetScoresMatrix().transpose(),
-			       Named("sdev")= model->GetPCAVarianceVector().array().sqrt()
-			       );
-       Language pPCAcall("new", "pPCA");
-       Rcpp::S4 pPCA( pPCAcall.eval() );
-       //S4 pPCA;
-       pPCA.slot("PCA") = PCA;
-       pPCA.slot("sigma") = model->GetNoiseVariance();
-       pPCA.slot("representer")=polyData2R(reference);
+  try {
+    if (model.get()) {
+      vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+      List PCA = List::create(Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
+			      Named("center")= model->GetMeanVector(),
+			      Named("x")=model->GetModelInfo().GetScoresMatrix().transpose(),
+			      Named("sdev")= model->GetPCAVarianceVector().array().sqrt()
+			      );
+      Language pPCAcall("new", "pPCA");
+      Rcpp::S4 pPCA( pPCAcall.eval() );
+      //S4 pPCA;
+      pPCA.slot("PCA") = PCA;
+      pPCA.slot("sigma") = model->GetNoiseVariance();
+      pPCA.slot("representer")=polyData2R(reference);
 
-       // get model info
-       //create S4 object modelinfo
-       Language modInfocall("new", "modelinfo");
-       S4 modelinfo(modInfocall.eval());
+      // get model info
+      //create S4 object modelinfo
+      Language modInfocall("new", "modelinfo");
+      S4 modelinfo(modInfocall.eval());
        
-       BuilderInfoList binfo = model->GetModelInfo().GetBuilderInfoList();
-       List datinfo;
-       List paraminfo;
-       if (binfo.size() > 0) {
-	 KeyValueList DataInfo = binfo[0].GetDataInfo();
-	 KeyValueList BuildInfo = binfo[0].GetParameterInfo();
+      BuilderInfoList binfo = model->GetModelInfo().GetBuilderInfoList();
+      List datinfo;
+      List paraminfo;
+      if (binfo.size() > 0) {
+	KeyValueList DataInfo = binfo[0].GetDataInfo();
+	KeyValueList BuildInfo = binfo[0].GetParameterInfo();
 	 
-	 keyiter it;
-	 for (it=DataInfo.begin(); it!= DataInfo.end();it++) {
-	   CharacterVector kval(2);
-	   kval[0] = (*it).first.c_str();
-	   kval[1] = (*it).second.c_str();
-	   datinfo.push_back(kval);
-	 }
+	keyiter it;
+	for (it=DataInfo.begin(); it!= DataInfo.end();it++) {
+	  CharacterVector kval(2);
+	  kval[0] = (*it).first.c_str();
+	  kval[1] = (*it).second.c_str();
+	  datinfo.push_back(kval);
+	}
 	
-	 for (it=BuildInfo.begin(); it!= BuildInfo.end();it++) {
-	   CharacterVector kval(2);
-	   kval[0] = (*it).first.c_str();
-	   kval[1] = (*it).second.c_str();
-	   paraminfo.push_back(kval);
-	 }
-       }
+	for (it=BuildInfo.begin(); it!= BuildInfo.end();it++) {
+	  CharacterVector kval(2);
+	  kval[0] = (*it).first.c_str();
+	  kval[1] = (*it).second.c_str();
+	  paraminfo.push_back(kval);
+	}
+      }
        
-       modelinfo.slot("datainfo") = datinfo;
-       modelinfo.slot("paraminfo") = paraminfo;
-    pPCA.slot("modelinfo") = modelinfo;
-    return pPCA;
+      modelinfo.slot("datainfo") = datinfo;
+      modelinfo.slot("paraminfo") = paraminfo;
+      pPCA.slot("modelinfo") = modelinfo;
+      return pPCA;
     } else {
       Rprintf("Invalid model\n");
       return wrap(1);
     }
-}  catch (std::exception& e) {
+  }  catch (std::exception& e) {
     ::Rf_error( e.what());
-     
   } catch (...) {
     ::Rf_error("unknown exception");
-     
   }
-  }
+}

@@ -15,10 +15,10 @@ export R_INCLUDE_DIR
 
 RCPP_DIR=$(Rscript -e "cat(system.file(package='Rcpp'))")
 RCPPEIGEN_DIR=$(Rscript -e "cat(system.file(package='RcppEigen'))")
-#BH_DIR=$(Rscript -e "cat(system.file(package='BH'))")
+BH_DIR=$(Rscript -e "cat(system.file(package='BH'))")
 export RCPP_DIR
 export RCPPEIGEN_DIR
-#export BH_DIR
+export BH_DIR
 cd src
 
 #cmake .
