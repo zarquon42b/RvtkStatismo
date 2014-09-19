@@ -13,7 +13,7 @@
 
 using namespace Rcpp;
 
-S4 statismo2pPCA(auto_ptr<StatisticalModelType> model);
-auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_);
+S4 statismo2pPCA(shared_ptr<StatisticalModelType> model);
+shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_);
 #endif // _STATISMO2PPCA_H__
 

@@ -6,7 +6,7 @@ using namespace Eigen;
 
 SEXP DrawMean(SEXP pPCA_){
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
     List out = polyData2R(reference);
     return out;
@@ -21,7 +21,7 @@ SEXP DrawMean(SEXP pPCA_){
 
 SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(meanpt_);
     vtkPoint samplept = model->DrawMeanAtPoint(pt);
     
@@ -40,7 +40,7 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     vtkSmartPointer<vtkPolyData> reference;
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     if (!Rf_isNull(coeffs_)) {
       
       Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
@@ -63,7 +63,7 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
 SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
     const VectorXf coeffs = coeffs0.cast<float>();
     VectorXf out = model->DrawSampleVector(coeffs,addNoise);
@@ -82,7 +82,7 @@ SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     vtkSmartPointer<vtkPolyData> reference;
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     
     Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
     const VectorXf coeffs = coeffs0.cast<float>();
@@ -107,7 +107,7 @@ SEXP LoadModel(SEXP modelname_){
     vtkStandardMeshRepresenter* representer = vtkStandardMeshRepresenter::Create();
     std::string modelFilename = as<std::string>(modelname);
   
-    auto_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
+    shared_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
     S4 out = statismo2pPCA(model);
     return out;
   } catch (std::exception& e) {
@@ -125,7 +125,7 @@ SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
     List dataset(dataset_);
     double prob;
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     if (getlog)
       prob = model->ComputeLogProbabilityOfDataset(datasetRef);
     else
@@ -147,7 +147,7 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
     List dataset(dataset_);
     double prob;
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     Eigen::VectorXf out = model->ComputeCoefficientsForDataset(datasetRef);	
     //return List::create(Named
     return wrap(out);
@@ -164,7 +164,7 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
 typedef std::vector<vtkPoint> DomainPointsListType;
 SEXP GetDomainPoints(SEXP pPCA_) {
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
     unsigned int siz = model->GetDomain().GetNumberOfPoints();
     NumericMatrix out(3,siz);
@@ -189,7 +189,7 @@ SEXP GetCovarianceAtPointId(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
   try {
     unsigned int ptId1 = as<unsigned int>(pt1_);
     unsigned int ptId2 = as<unsigned int>(pt2_);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     MatrixXf cov = model->GetCovarianceAtPoint(ptId1,ptId2);
   
     return wrap(cov);
@@ -204,7 +204,7 @@ SEXP GetCovarianceAtPointId(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
 }
 SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkPoint pt1 = SEXP2vtkPoint(pt1_);
     vtkPoint pt2 = SEXP2vtkPoint(pt2_);
     MatrixXf cov =model->GetCovarianceAtPoint(pt1,pt2);
@@ -221,7 +221,7 @@ SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
 }
 SEXP GetCovarianceMatrix(SEXP pPCA_) {
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     MatrixXf cov = model->GetCovarianceMatrix();
   
     return wrap(cov);
@@ -236,7 +236,7 @@ SEXP GetCovarianceMatrix(SEXP pPCA_) {
 
 SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
   try {
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(pt_);
     MatrixXf cov = model->GetJacobian(pt);
   
@@ -257,7 +257,7 @@ SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEX
     double noise = as<double>(noise_);
     NumericMatrix sample(sample_);
     NumericMatrix mean(mean_);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     PointValueListType ptValueList;
     for (int i = 0; i < mean.ncol();i++) {
       
@@ -284,7 +284,7 @@ SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_) {
   try {
     List dataset(dataset_);
     const vtkSmartPointer<vtkPolyData> sample = R2polyData(dataset["vb"],dataset["it"]);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(meanpt_);
     vtkPoint samplept = model->EvaluateSampleAtPoint(sample,pt);
     return NumericVector(&samplept[0],&samplept[3]);

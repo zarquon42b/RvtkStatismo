@@ -7,16 +7,16 @@ SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_) {
   try {
     unsigned int npc = as<unsigned int>(npc_);
     double exVar = as<double>(exVar_);
-    auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
-    //auto_ptr<StatisticalModelType> reducedModel;
-    auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    //shared_ptr<StatisticalModelType> reducedModel;
+    shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     if (npc > 0) {
-      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc));
+      shared_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc));
       return statismo2pPCA(reducedModel);
     
       
     } else {
-      auto_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar));
+      shared_ptr<StatisticalModelType> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar));
       return statismo2pPCA(reducedModel);
 
     }

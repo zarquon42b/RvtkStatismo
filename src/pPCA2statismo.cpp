@@ -13,7 +13,7 @@ typedef  std::pair< std::string,std::string >  KeyValuePair;
 typedef std::list< KeyValuePair > KeyValueList;
 typedef KeyValueList::iterator keyiter;
 typedef std::vector<BuilderInfo> BuilderInfoList;
-auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
+shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
   try {
     S4 pPCA(pPCA_);
     //List pPCA(pPCA_);
@@ -26,7 +26,7 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     } else {
       reference = R2polyData(reflist["vb"]);
     }
-    auto_ptr<RepresenterType> representer(RepresenterType::Create(reference));
+    shared_ptr<RepresenterType> representer(RepresenterType::Create(reference));
     VectorXf meanshape = PCA["center"];
     VectorXf PCVariance = PCA["sdev"];
     Map<MatrixXd> PCBasisOrtho0(as<Map<MatrixXd> >(PCA["rotation"]));
@@ -37,7 +37,7 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     //VectorXf PCVariance = PCBasis.colwise().norm();
     PCVariance = PCVariance.array().pow(2);//get Variance from sdev
     double sigma = as<double>(pPCA.slot("sigma"));
-    auto_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
+    shared_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
     //Get Scores
     Map<MatrixXd> scores0(as<Map<MatrixXd> >(PCA["x"]));
     MatrixXf scores = scores0.transpose().cast<float>();
@@ -78,11 +78,11 @@ auto_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     
   }  catch (std::exception& e) {
     ::Rf_error( e.what());
-    auto_ptr<StatisticalModelType> model(NULL);
+    shared_ptr<StatisticalModelType> model(NULL);
     return model;
   } catch (...) {
     ::Rf_error("unknown exception");
-    auto_ptr<StatisticalModelType> model(NULL);
+    shared_ptr<StatisticalModelType> model(NULL);
     return model;
   }
   
@@ -94,7 +94,7 @@ typedef  std::pair< std::string,std::string >  KeyValuePair;
 typedef std::list< KeyValuePair > KeyValueList;
 typedef KeyValueList::iterator keyiter;
 typedef std::vector<BuilderInfo> BuilderInfoList;
-S4 statismo2pPCA(auto_ptr<StatisticalModelType> model) {
+S4 statismo2pPCA(shared_ptr<StatisticalModelType> model) {
    try {
      if (model.get()) {
        vtkSmartPointer<vtkPolyData> reference = model->DrawMean();

@@ -22,9 +22,9 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_) {
      double ptValueNoise = as<double>(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
-     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+     shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
-     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
       for (int i = 0; i < mean.ncol();i++) {
       
       vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
@@ -32,7 +32,7 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_) {
       
       ptValueList.push_back(PointValuePairType(tmp1,tmp0));
       }
-      auto_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
+      shared_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
       
       return statismo2pPCA(postModel);
    }  catch (std::exception& e) {
@@ -53,9 +53,9 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
      double ptValueNoise = as<double>(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
-     auto_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+     shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
-     auto_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
       for (int i = 0; i < mean.ncol();i++) {
       
 	vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
@@ -64,7 +64,7 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
 	if (mahaget <= maha)
 	  ptValueList.push_back(PointValuePairType(tmp1,tmp0));
       }
-      auto_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
+      shared_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
       
       return statismo2pPCA(postModel);
    }  catch (std::exception& e) {

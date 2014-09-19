@@ -10,7 +10,7 @@ RcppExport SEXP SaveModel(SEXP pPCA_, SEXP filename_) {
     std::string str = Rcpp::as<std::string>(filename_);
     const char *filename = str.c_str();
     
-    auto_ptr<StatisticalModelType>model = pPCA2statismo(pPCA_);
+    shared_ptr<StatisticalModelType>model = pPCA2statismo(pPCA_);
     model->Save(filename);
     return wrap(1);
   } catch (std::exception& e) {
