@@ -194,7 +194,7 @@ setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,repre
             estim <- DrawSample(model,coefficients=alpha,addNoise = addNoise)
         else
             estim <- t(matrix(DrawSampleVector(model,coefficients=alpha,addNoise = addNoise),ncol(dataset),nrow(dataset)))
-        if (origSpace)
+        if (origSpace && align)
             estim <- rotreverse(estim,rotsb)
         return(estim)
     }
