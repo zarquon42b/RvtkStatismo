@@ -104,10 +104,10 @@ SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
 SEXP LoadModel(SEXP modelname_){
   try {
     CharacterVector modelname(modelname_);
-    vtkStandardMeshRepresenter* representer = vtkStandardMeshRepresenter::Create();
+    shared_ptr<vtkStandardMeshRepresenter> representer(vtkStandardMeshRepresenter::Create());
     std::string modelFilename = as<std::string>(modelname);
   
-    shared_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer, modelFilename));
+    shared_ptr<StatisticalModelType> model(StatisticalModelType::Load(representer.get(), modelFilename));
     S4 out = statismo2pPCA(model);
     return out;
   } catch (std::exception& e) {
