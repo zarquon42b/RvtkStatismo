@@ -3,7 +3,8 @@
 
 #include "VTKTypes.h"
 #include "pPCA2statismo.h"
-#include "statismo/LowRankGPModelBuilder.h"
+#include "KernelCombinators.h"
+#include "LowRankGPModelBuilder.h"
 #include "polyData2R.h"
 
 
@@ -39,7 +40,7 @@ typedef GaussianKernel GaussianKernelType;
 typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
 typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
 
-auto_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_= wrap(500), SEXP useEmp_ = wrap(true), SEXP combine_ = wrap(0), SEXP combineEmp_ = wrap(0));
+shared_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_= wrap(500), SEXP useEmp_ = wrap(true), SEXP combine_ = wrap(0), SEXP combineEmp_ = wrap(0));
 
 RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_= wrap(0), SEXP combineEmp_ = wrap(0));
 #endif //_BUILD_GP_MODEL_H__
