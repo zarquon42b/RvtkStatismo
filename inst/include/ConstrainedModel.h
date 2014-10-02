@@ -6,7 +6,7 @@
 #include "pPCA2statismo.h"
 #include "Helpers.h"
 
-double mahadist(const StatisticalModelType* model, vtkPoint targetPt, vtkPoint meanPt);
+double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt);
 
 RcppExport SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_);
 

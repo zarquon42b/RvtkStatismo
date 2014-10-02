@@ -1,6 +1,6 @@
 #include "BuildGaussProcessModel.h"
 
-shared_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_,SEXP combineEmp_) {
+shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_,SEXP combineEmp_) {
   try { 
     bool useEmp = as<bool>(useEmp_);
     int combine = as<int>(combine_);
@@ -12,7 +12,7 @@ shared_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP nco
 
     List kernels(kernels_);
   
-    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
    
     // set up the gaussian kernel to be incremented over a list of parameters
     NumericVector params = kernels[0];
@@ -49,7 +49,7 @@ shared_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP nco
     mKerns.push_back(sumKernel);
     //build new model
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    shared_ptr<StatisticalModelType> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
+    shared_ptr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
     //tidy up
     for (std::list<MatrixValuedKernelType*>::iterator it = mKerns.begin(); it != mKerns.end(); it++) {
       if (*it != NULL) {
@@ -66,22 +66,22 @@ shared_ptr<StatisticalModelType> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP nco
   } catch (StatisticalModelException& e) {
     ::Rf_error("Exception occured while building the shape model\n");
     ::Rf_error("%s\n",  e.what());
-    //shared_ptr<StatisticalModelType> model(NULL);
+    //shared_ptr<vtkMeshModel> model(NULL);
     //return model;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    //shared_ptr<StatisticalModelType> model(NULL);    
+    //shared_ptr<vtkMeshModel> model(NULL);    
     //return model;
   } catch (...) {
     ::Rf_error("unknown exception");
-    //shared_ptr<StatisticalModelType> model(NULL);
+    //shared_ptr<vtkMeshModel> model(NULL);
     //return model;
   }
 }
 
 RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_, SEXP combineEmp_){
   
-  shared_ptr<StatisticalModelType> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_);
+  shared_ptr<vtkMeshModel> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_);
   //return statismo2pPCA(model);
   return statismo2pPCA(model);
   

@@ -5,7 +5,7 @@ typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
 typedef std::list<PointValuePairType> PointValueListType;
 typedef PosteriorModelBuilder<vtkPolyData> ModelBuilderType;
 
-double mahadist(const StatisticalModelType* model, vtkPoint targetPt, vtkPoint meanPt) {
+double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt) {
     MatrixType cov = model->GetCovarianceAtPoint(meanPt, meanPt);
     int pointDim =3;
     VectorType x = VectorType::Zero(pointDim);
@@ -22,7 +22,7 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_) {
      double ptValueNoise = as<double>(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
-     shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
      shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
       for (int i = 0; i < mean.ncol();i++) {
@@ -32,7 +32,7 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_) {
       
       ptValueList.push_back(PointValuePairType(tmp1,tmp0));
       }
-      shared_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
+      shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
       
       return statismo2pPCA(postModel);
    }  catch (std::exception& e) {
@@ -53,7 +53,7 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
      double ptValueNoise = as<double>(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
-     shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
      shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
       for (int i = 0; i < mean.ncol();i++) {
@@ -64,7 +64,7 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
 	if (mahaget <= maha)
 	  ptValueList.push_back(PointValuePairType(tmp1,tmp0));
       }
-      shared_ptr<StatisticalModelType> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
+      shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
       
       return statismo2pPCA(postModel);
    }  catch (std::exception& e) {

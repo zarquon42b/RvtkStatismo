@@ -10,8 +10,8 @@
 using namespace statismo;
 using boost::shared_ptr;
 
-typedef vtkStandardMeshRepresenter RepresenterType;
-typedef DataManager<vtkPolyData> DataManagerType;
-typedef StatisticalModel<vtkPolyData> StatisticalModelType;
+typedef vtkStandardMeshRepresenter vtkMeshRepresenter;
+typedef DataManager<vtkPolyData> vtkMeshDataManager;
+typedef StatisticalModel<vtkPolyData> vtkMeshModel;
 
 #endif

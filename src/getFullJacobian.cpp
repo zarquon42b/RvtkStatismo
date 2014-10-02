@@ -7,7 +7,7 @@ using namespace Eigen;
 RcppExport SEXP GetFullJacobian(SEXP pPCA_, SEXP pts_) {
   try {
     NumericMatrix pts(pts_);
-    shared_ptr<StatisticalModelType> model = pPCA2statismo(pPCA_);
+    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     VectorXf pcavar = model->GetPCAVarianceVector();
     const int npc = pcavar.size();
 

@@ -13,7 +13,7 @@ typedef  std::pair< std::string,std::string >  KeyValuePair;
 typedef std::list< KeyValuePair > KeyValueList;
 typedef KeyValueList::iterator keyiter;
 typedef std::vector<BuilderInfo> BuilderInfoList;
-shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
+shared_ptr<vtkMeshModel> pPCA2statismo(SEXP pPCA_) {
   try {
     S4 pPCA(pPCA_);
     //List pPCA(pPCA_);
@@ -26,7 +26,7 @@ shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     } else {
       reference = R2polyData(reflist["vb"]);
     }
-    shared_ptr<RepresenterType> representer(RepresenterType::Create(reference));
+    shared_ptr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
     VectorXf meanshape = PCA["center"];
     VectorXf PCVariance = PCA["sdev"];
     Map<MatrixXd> PCBasisOrtho0(as<Map<MatrixXd> >(PCA["rotation"]));
@@ -37,7 +37,7 @@ shared_ptr<StatisticalModelType> pPCA2statismo(SEXP pPCA_) {
     //VectorXf PCVariance = PCBasis.colwise().norm();
     PCVariance = PCVariance.array().pow(2);//get Variance from sdev
     double sigma = as<double>(pPCA.slot("sigma"));
-    shared_ptr<StatisticalModelType> model(StatisticalModelType::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
+    shared_ptr<vtkMeshModel> model(vtkMeshModel::Create(representer.get(),meanshape,PCBasisOrtho,PCVariance,sigma));
     //Get Scores
     Map<MatrixXd> scores0(as<Map<MatrixXd> >(PCA["x"]));
     MatrixXf scores = scores0.transpose().cast<float>();
@@ -90,7 +90,7 @@ typedef  std::pair< std::string,std::string >  KeyValuePair;
 typedef std::list< KeyValuePair > KeyValueList;
 typedef KeyValueList::iterator keyiter;
 typedef std::vector<BuilderInfo> BuilderInfoList;
-S4 statismo2pPCA(shared_ptr<StatisticalModelType> model) {
+S4 statismo2pPCA(shared_ptr<vtkMeshModel> model) {
   try {
     if (model.get()) {
       vtkSmartPointer<vtkPolyData> reference = model->DrawMean();

@@ -11,7 +11,7 @@ using namespace Rcpp;
 using namespace statismo;
 
 RcppExport SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_);
-shared_ptr<StatisticalModelType> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_);
+shared_ptr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_);
 
 
 #endif //#ifndef _BUILD_MODEL_H__
