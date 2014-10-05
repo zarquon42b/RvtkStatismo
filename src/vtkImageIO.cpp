@@ -1,5 +1,5 @@
 #include "vtkImageIO.h"
-#include "Rcpp.h"
+#include "RcppEigen.h"
 
 vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
   

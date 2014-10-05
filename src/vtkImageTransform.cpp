@@ -17,7 +17,7 @@
 #endif
 #include "vtkImageTransform.h"
 #include "R2vtkPoints.h"
-#include <Rcpp.h>
+#include <RcppEigen.h>
 #include "vtkImageIO.h"
 
 using namespace Rcpp;

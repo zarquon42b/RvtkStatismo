@@ -2,7 +2,7 @@
 #include "vtkPolyData2vtkImageData.h"
 #include "vtkImageIO.h"
 
-#include <Rcpp.h>
+#include <RcppEigen.h>
 using namespace Rcpp;
 
 //transforms a 3 x k SEXP matrix into vtkPoints

@@ -19,7 +19,7 @@
 #include <string.h>
 #include <vtkPolyData.h>
 #include <vtkTriangle.h>
-#include <Rcpp.h>
+#include <RcppEigen.h>
 
 using namespace Rcpp;
 vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_= Rcpp::NumericMatrix(0,0));

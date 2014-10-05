@@ -10,7 +10,7 @@
 #include <vtkCellData.h>
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
-#include <Rcpp.h>
+#include <RcppEigen.h>
 #include <string.h>
 #include <vtkPolyData.h>
 #include <vtkTriangle.h>

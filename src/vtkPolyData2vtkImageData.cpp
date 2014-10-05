@@ -1,5 +1,5 @@
 #include "vtkPolyData2vtkImageData.h"
-#include "Rcpp.h"
+#include "RcppEigen.h"
 vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin) {
   vtkSmartPointer<vtkImageData> whiteImage = vtkSmartPointer<vtkImageData>::New();
   double bounds[6];

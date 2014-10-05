@@ -16,7 +16,7 @@
 #include <vtkTriangle.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkGenericDataObjectReader.h>
-#include <Rcpp.h>
+#include <RcppEigen.h>
 
 
 

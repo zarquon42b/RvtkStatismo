@@ -3,7 +3,7 @@
 #include <vtkPolyDataConnectivityFilter.h>
 #include <vtkCellLocator.h>
 #include <vtkTriangleFilter.h>
-#include "Rcpp.h"
+#include "RcppEigen.h"
 #include "R2polyData.h"
 #include "polyData2R.h"
 

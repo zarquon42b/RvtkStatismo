@@ -16,7 +16,7 @@
  #include <vtkMarchingCubes.h>
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
-#include "Rcpp.h"
+#include "RcppEigen.h"
 #include "R2polyData.h"
 #include "polyData2R.h"
 #include "vtkpoly2unstruct.h"

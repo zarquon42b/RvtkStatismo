@@ -21,7 +21,7 @@
 #endif
 
 #include "R2vtkPoints.h"
-#include <Rcpp.h>
+#include <RcppEigen.h>
 using namespace Rcpp;
 
 RcppExport SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_);

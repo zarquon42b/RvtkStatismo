@@ -1,7 +1,7 @@
 #ifndef _HELPERS_H__
 #define _HELPERS_H__
 #include "VTKTypes.h"
-#include "Rcpp.h"
+#include "RcppEigen.h"
 using namespace Rcpp;
 using namespace statismo;
 

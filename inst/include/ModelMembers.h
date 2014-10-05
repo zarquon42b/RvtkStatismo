@@ -5,7 +5,7 @@
 #include "VTKTypes.h"
 #include "pPCA2statismo.h"
 #include "polyData2R.h"
-#include "Rcpp.h"
+#include "RcppEigen.h"
 
 
 

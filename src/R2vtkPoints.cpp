@@ -1,7 +1,7 @@
 #include "R2vtkPoints.h"
 
 
-#include <Rcpp.h>
+#include <RcppEigen.h>
 using namespace Rcpp;
 //transforms a 3 x k SEXP matrix into vtkPoints
 vtkSmartPointer<vtkPoints> R2vtkPoints(SEXP vb_) {

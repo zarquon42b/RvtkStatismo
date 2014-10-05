@@ -10,7 +10,7 @@
 #endif
 
 
-#include <Rcpp.h>
+#include <RcppEigen.h>
 using namespace Rcpp;
 
 using namespace Rcpp;
