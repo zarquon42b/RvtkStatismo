@@ -10,7 +10,7 @@
 #' \item{mshape}{matrix containing meanshape}
 #'
 #' @export
-rigidAlign <- function(array,scale=TRUE,use.lm=NULL,deselect=FALSE) {
+rigidAlign <- function(array,scale=FALSE,use.lm=NULL,deselect=FALSE) {
     k <- dim(array)[1]
     if (!is.null(use.lm)) {
         use.lm <- unique(sort(use.lm))
@@ -21,7 +21,7 @@ rigidAlign <- function(array,scale=TRUE,use.lm=NULL,deselect=FALSE) {
     out <- partialAlign(array,use.lm = use.lm,scale=scale)
 }
 
-partialAlign <- function(array,use.lm=NULL,scale=TRUE) {
+partialAlign <- function(array,use.lm=NULL,scale=FALSE) {
     if (!is.null(use.lm)){
         procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
             tmp <- array
@@ -49,7 +49,7 @@ partialAlign <- function(array,use.lm=NULL,scale=TRUE) {
 #' @return returns a list of aligned meshes or an array of dimensions k x 3 x n, where k=number of vertices and n=sample size.
 #' @importFrom Morpho vert2points ProcGPA
 #' @export
-meshalign <- function(meshlist,scale=TRUE,use.lm=NULL,deselect=FALSE,array=FALSE) {
+meshalign <- function(meshlist,scale=FALSE,use.lm=NULL,deselect=FALSE,array=FALSE) {
     vertarr <- meshlist2array(meshlist)
     out <- rigidAlign(vertarr,scale=scale,use.lm=use.lm,deselect=FALSE)$rotated
     if (array) {
@@ -76,11 +76,11 @@ meshalign <- function(meshlist,scale=TRUE,use.lm=NULL,deselect=FALSE,array=FALSE
 #' @return a rotated (and scaled) mesh or matrix - depending on the input.
 #' @rdname align2domain
 #' @export
-setGeneric("align2domain", function(model,sample,scale=TRUE,ptDomain=NULL,ptSample=NULL) {
+setGeneric("align2domain", function(model,sample,scale=FALSE,ptDomain=NULL,ptSample=NULL) {
     standardGeneric("align2domain")
 })
 #' @rdname align2domain
-setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
+setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,scale=FALSE, ptDomain=NULL,ptSample=NULL) {
     domain <- GetDomainPoints(model)
     if (is.null(ptDomain))
         ptDomain <- 1:nrow(domain)
@@ -92,7 +92,7 @@ setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model
 
 #' @importFrom Morpho vert2points rotonto
 #' @rdname align2domain
-setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,scale=TRUE, ptDomain=NULL,ptSample=NULL) {
+setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,scale=FALSE, ptDomain=NULL,ptSample=NULL) {
     
     sample0 <- vert2points(sample)
     rot <- align2domain(model,sample0,scale,ptDomain = ptDomain, ptSample = ptSample)

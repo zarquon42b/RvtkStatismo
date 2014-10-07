@@ -3,7 +3,7 @@
 \alias{rigidAlign}
 \title{Fast Procrustes align of coordinates}
 \usage{
-rigidAlign(array, scale = TRUE, use.lm = NULL, deselect = FALSE)
+rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE)
 }
 \arguments{
 \item{array}{array of coordinates}

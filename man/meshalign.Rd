@@ -3,7 +3,7 @@
 \alias{meshalign}
 \title{align meshes stored in a list by their vertices}
 \usage{
-meshalign(meshlist, scale = TRUE, use.lm = NULL, deselect = FALSE,
+meshalign(meshlist, scale = FALSE, use.lm = NULL, deselect = FALSE,
   array = FALSE)
 }
 \arguments{

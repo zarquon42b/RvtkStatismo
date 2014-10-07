@@ -6,13 +6,13 @@
 \alias{align2domain,pPCA,mesh3d-method}
 \title{align a sample to a model}
 \usage{
-align2domain(model, sample, scale = TRUE, ptDomain = NULL,
+align2domain(model, sample, scale = FALSE, ptDomain = NULL,
   ptSample = NULL)
 
-\S4method{align2domain}{pPCA,matrix}(model, sample, scale = TRUE,
+\S4method{align2domain}{pPCA,matrix}(model, sample, scale = FALSE,
   ptDomain = NULL, ptSample = NULL)
 
-\S4method{align2domain}{pPCA,mesh3d}(model, sample, scale = TRUE,
+\S4method{align2domain}{pPCA,mesh3d}(model, sample, scale = FALSE,
   ptDomain = NULL, ptSample = NULL)
 }
 \arguments{

@@ -8,7 +8,7 @@
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
 pPCA(array, align = TRUE, use.lm = NULL, deselect = FALSE, sigma = NULL,
-  exVar = 1, scale = TRUE, representer = NULL)
+  exVar = 1, scale = FALSE, representer = NULL)
 
 UpdateModel(model, sigma = NULL, exVar = 1)
 

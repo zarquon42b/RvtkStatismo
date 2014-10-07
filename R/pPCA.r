@@ -34,7 +34,7 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=TRUE,representer=NULL) {
+pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
     if (align) {
         procMod <- rigidAlign(array,scale=scale,use.lm=use.lm,deselect=deselect)
     } else {
