@@ -20,19 +20,15 @@ SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_) {
       return statismo2pPCA(reducedModel);
 
     }
-    //return wrap(1);
   
   } catch (StatisticalModelException& e) {
     ::Rf_error("Exception occured while building the shape model\n");
     ::Rf_error("%s\n",  e.what());
-    return wrap(1);
     
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);   
   }
   
 }

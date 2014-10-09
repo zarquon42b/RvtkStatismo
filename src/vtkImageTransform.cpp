@@ -65,9 +65,7 @@ SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SE
     return wrap(0);
 } catch (std::exception& e) {
   ::Rf_error( e.what());
-  return wrap(1);
  } catch (...) {
   ::Rf_error("unknown exception");
-  return wrap(1);
  }
 }

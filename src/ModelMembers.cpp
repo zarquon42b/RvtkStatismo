@@ -12,10 +12,8 @@ SEXP DrawMean(SEXP pPCA_){
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -29,10 +27,8 @@ SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
 
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -53,10 +49,8 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -72,10 +66,8 @@ SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
 
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
@@ -92,10 +84,8 @@ SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
     
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -112,10 +102,8 @@ SEXP LoadModel(SEXP modelname_){
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -134,10 +122,8 @@ SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
     return wrap(prob);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 
 }
@@ -153,10 +139,8 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
     return wrap(out);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 
 }
@@ -177,10 +161,8 @@ SEXP GetDomainPoints(SEXP pPCA_) {
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -195,10 +177,8 @@ SEXP GetCovarianceAtPointId(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
     return wrap(cov);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 
 }
@@ -212,10 +192,8 @@ SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
     return wrap(cov);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 
 }
@@ -227,10 +205,8 @@ SEXP GetCovarianceMatrix(SEXP pPCA_) {
     return wrap(cov);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -243,10 +219,8 @@ SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
     return wrap(cov);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -273,10 +247,8 @@ SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEX
     return wrap(coeff);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }
 
@@ -292,9 +264,7 @@ SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_) {
   
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    return wrap(1);
   } catch (...) {
     ::Rf_error("unknown exception");
-    return wrap(1);
   }
 }

@@ -64,10 +64,8 @@ vtkSmartPointer<vtkPoints> points = R2vtkPoints(mesh["vb"]);
   return polyData2R(reverse->GetOutput());
  } catch (std::exception& e) {
   ::Rf_error( e.what());
-  return wrap(1);
  } catch (...) {
   ::Rf_error("unknown exception");
-  return wrap(1);
  }
 }
 
