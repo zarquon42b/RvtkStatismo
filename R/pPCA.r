@@ -119,8 +119,8 @@ setMethod("show", "pPCA", function(object){print.pPCA(object)})
 #' @param dataset a matrix or a mesh3d
 #' @param representer if TRUE and the model contains a representer mesh, a surface mesh will be returned, coordinate matrix otherwise.
 #' @param origSpace logical: rotate the estimation back into the original coordinate system.
-#' @param use.lm optional: integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
-#' @param deselect logical: if TRUE, all BUT the coordinates specified by \code{use.lm} will be used for alignment.
+#' @param lmDataset optional: landmarks on the dataset used for alignment.
+#' @param lmModel optional: landmarks on the model's mean used for alignment.
 #' @param sdmax maximum allowed standard deviation (per Principal axis) within the model space. Defines the probabilistic boundaries.
 #' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space."chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.
 #' @param align if TRUE, the sample will be aligned to the mean.
@@ -143,19 +143,19 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,...) {
+setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
+    hasLM <- FALSE
+    if (!is.null(lmDataset) && !is.null(lmModel))
+        hasLM <- TRUE
     if (align) {
-        if (is.null(use.lm)) {
+        if (!hasLM) {
             rotsb <- rotonto(mshape,dataset,scale=model@scale,reflection = F)
             sb <- rotsb$yrot
         } else {
-            use.lm <- unique(sort(use.lm))
-            if (deselect)
-                use.lm <- c(1:nrow(mshape))[-use.lm]
-            rotsb <- rotonto(mshape[use.lm,],dataset[use.lm,],scale=model@scale,reflection=F)
-            sb <- rotonmat(dataset,dataset[use.lm,],rotsb$yrot)
+            rotsb <- rotonto(lmModel,lmDataset,scale=model@scale,reflection=F)
+            sb <- rotonmat(dataset,lmDataset,rotsb$yrot)
         }
     } else
         sb <- dataset
@@ -203,9 +203,9 @@ setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,repre
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d",representer="logical"), function(model,dataset,representer=TRUE,origSpace=TRUE,use.lm=NULL,deselect=FALSE,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d",representer="logical"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mat <- t(dataset$vb[1:3,])
-    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,use.lm=use.lm,deselect=deselect,mahaprob=mahaprob,...)
+    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,...)
     return(estim)
 })
 
@@ -216,23 +216,26 @@ setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d",representer="l
 #' @param x matrix or mesh3d
 #' @param model a model of class pPCA
 #' @param align logical: if TRUE the data will be aligned to the model's mean
-#' @param use.lm integer vector specifying row indices of the coordinates to use for rigid registration on the model's meanshape.
+#' @param lmDataset optional: landmarks on the dataset used for alignment.
+#' @param lmModel optional: landmarks on the model's mean used for alignment.
 #' @return \code{getDataLikelihood} returns a probability, while \code{getCoefficients} returns the (scaled) scores in the pPCA space.
 #' @details \code{getDataLikelihood} estimates the likelihood of a dataset for belonging to the model by exploiting the \eqn{\chi^2}{Chi-square}-distribution of the (squared) Mahalanobisdistance, which, in turn, is simply the squared norm of the sample's coefficients in the latent space.
 #' @export
-getDataLikelihood <- function(x,model,align=FALSE,use.lm) UseMethod("getDataLikelihood")
+getDataLikelihood <- function(x,model,align=FALSE, lmDataset=NULL, lmModel=NULL) UseMethod("getDataLikelihood")
 
 #' @rdname getDataLikelihood
 #' @export
-getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
+getDataLikelihood.matrix <- function(x,model,align=FALSE, lmDataset=NULL, lmModel=NULL) {
     mshape <- getMeanMatrix(model,transpose=TRUE)
+    if (!is.null(lmDataset) && !is.null(lmModel))
+        hasLM <- TRUE
     if (align) {
-        if (is.null(use.lm)) {
+        if (!hasLM) {
             rotsb <- rotonto(mshape,x,scale=model@scale,reflection = F)
             sb <- rotsb$yrot
         } else {
-            rotsb <- rotonto(mshape[use.lm,],x[use.lm,],scale=model@scale,reflection=F)
-            sb <- rotonmat(x,x[use.lm,],rotsb$yrot)
+            rotsb <- rotonto(lmModel,lmDataset,scale=model@scale,reflection=F)
+            sb <- rotonmat(dataset,lmDataset,rotsb$yrot)
         }
     } else {
         sb <- x
@@ -247,16 +250,16 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE,use.lm=NULL) {
 
 #' @rdname getDataLikelihood
 #' @export
-getDataLikelihood.mesh3d <- function(x,model,align=FALSE,use.lm=NULL) {
+getDataLikelihood.mesh3d <- function(x,model,align=FALSE,lmDataset=NULL, lmModel=NULL) {
     x <- vert2points(x)
-    out <- getDataLikelihood(x,model=model,align=align,use.lm=use.lm)
+    out <- getDataLikelihood(x,model=model,align=align, lmDataset=lmDataset, lmModel=lmModel)
     return(out)
 }
 
 #' @rdname getDataLikelihood
 #' @export
-getCoefficients <- function(x, model,align=TRUE, use.lm=NULL) {
-    out <- PredictSample(x,model,use.lm,coeffs=NULL,align=align)
+getCoefficients <- function(x, model,align=TRUE, lmDataset=NULL, lmModel=NULL) {
+    out <- PredictSample(model,x,FALSE,lmDataset=lmDataset, lmModel=lmModel,coeffs=NULL,align=align)
     return(out)
 }
 
