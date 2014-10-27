@@ -5,7 +5,7 @@
 \usage{
 statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
   ncomp = 10, nystroem = 500, combine = c("sum", "product"),
-  combineEmp = "sum")
+  combineEmp = "sum", isoScale = 0, centroid = NULL)
 }
 \arguments{
 \item{model}{shape model of class \code{\link{pPCA}}}
@@ -21,6 +21,10 @@ statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
 \item{combine}{character: determining how to combine the kernels: "sum" or "product" are supported.}
 
 \item{combineEmp}{character: determining how the newly created kernel is combined to the one from the model: "sum" or "product" are supported.}
+
+\item{isoScale}{standard deviation of isotropic scaling.}
+
+\item{centroid}{specify the center of scaling. If NULL, the centroid will be used.}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}

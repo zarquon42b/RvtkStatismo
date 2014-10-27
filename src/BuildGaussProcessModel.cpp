@@ -1,15 +1,17 @@
 #include "BuildGaussProcessModel.h"
+#include "Helpers.h"
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_,SEXP combineEmp_) {
+shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_,SEXP combineEmp_, SEXP isoScale_, SEXP centroid_) {
   try { 
     bool useEmp = as<bool>(useEmp_);
     int combine = as<int>(combine_);
     int combineEmp = as<int>(combineEmp_);
+    double isoScale = as<double>(isoScale_);
     unsigned int nystroem = as<unsigned int>(nystroem_);
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
     std::list<MatrixValuedKernelType*> mKerns;
     std::list<GaussianKernel*> gKerns;
-
+    vtkPoint centroid = SEXP2vtkPoint(centroid_);
     List kernels(kernels_);
   
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
@@ -46,6 +48,11 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
       else
 	sumKernel = new ProductKernel<vtkPoint>(sumKernel, statModelKernel);
     }
+    if (isoScale > 0) {
+      MatrixValuedKernelType* isoKernel = new IsoKernel(3,isoScale,centroid);
+      mKerns.push_back(isoKernel);
+      sumKernel = new SumKernel<vtkPoint>(sumKernel, isoKernel);
+    }
     mKerns.push_back(sumKernel);
     //build new model
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
@@ -79,9 +86,9 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
   }
 }
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_, SEXP combineEmp_){
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_, SEXP combineEmp_,SEXP isoScale_,SEXP centroid_){
   
-  shared_ptr<vtkMeshModel> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_);
+  shared_ptr<vtkMeshModel> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_,combine_,combineEmp_,isoScale_,centroid_);
   //return statismo2pPCA(model);
   return statismo2pPCA(model);
   

@@ -36,11 +36,46 @@ private:
   double m_sigma2;
 };
 
+class IsoKernel: public MatrixValuedKernel<vtkPoint> {
+public:
+  
+  IsoKernel(unsigned dim, double sigma, vtkPoint centroid) :
+    MatrixValuedKernel<vtkPoint>(dim), m_sigma(sigma),m_sigma2(sigma*sigma), m_center(centroid) {}
+  
+  
+  inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
+    MatrixType covar(3,3);
+    VectorType x0(3), y0(3);
+    for (int i=0; i < 3;i++) {
+      y0[i] = y[i] - m_center[i];
+      x0[i] = x[i] - m_center[i];
+    }
+    //Rcout << m_center[0] << endl;
+    covar = (x0*y0.transpose())*m_sigma2;
+    //Rcout << covar << endl << endl;
+    return covar;
+  }
+
+  std::string GetKernelInfo() const {
+    std::ostringstream os;
+    os << "IsoKernel(" << m_sigma << ")";
+    return os.str();
+  }
+
+private:
+
+  double m_sigma;
+  double m_sigma2;
+  vtkPoint m_center;
+  
+  
+};
+
 typedef GaussianKernel GaussianKernelType;
 typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
 typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_= wrap(500), SEXP useEmp_ = wrap(true), SEXP combine_ = wrap(0), SEXP combineEmp_ = wrap(0));
+shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_ , SEXP isoScale_, SEXP centroid_);
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_= wrap(0), SEXP combineEmp_ = wrap(0));
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_,SEXP isoScale_, SEXP centroid_);
 #endif //_BUILD_GP_MODEL_H__

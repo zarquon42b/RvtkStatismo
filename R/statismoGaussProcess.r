@@ -9,6 +9,8 @@
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character: determining how to combine the kernels: "sum" or "product" are supported.
 #' @param combineEmp character: determining how the newly created kernel is combined to the one from the model: "sum" or "product" are supported.
+#' @param isoScale standard deviation of isotropic scaling. 
+#' @param centroid specify the center of scaling. If NULL, the centroid will be used.
 #' @return returns a shape model of class \code{\link{pPCA}}
 #' @examples
 #' ### this is a silly example with only 10 landmarks
@@ -28,7 +30,7 @@
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}}
 #' @keywords StatisticalModel<representer>
 #' @export
-statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500, combine=c("sum","product"),combineEmp="sum") {
+statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500, combine=c("sum","product"),combineEmp="sum", isoScale=0, centroid=NULL) {
     combine <- combine[1]
     if (combine == "sum")
         combine <- 0
@@ -50,10 +52,18 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
+    if (is.null(centroid)) {
+        if (isoScale == 0) {
+            centroid <- rep(0,3)
+        } else {
+            centroid <- apply(GetDomainPoints(model),2,mean)
+        }
+    }
     useEmpiric <- as.logical(useEmpiric)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
-    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric,combine, combineEmp)
+    
+    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric,combine, combineEmp,isoScale=isoScale,centroid=centroid)
     SetScale(out) <- model@scale
     return(out)
                          

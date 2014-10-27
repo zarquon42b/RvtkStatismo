@@ -4,7 +4,8 @@
 \title{generate model from a representer using gaussian kernels}
 \usage{
 statismoModelFromRepresenter(representer, kernel = list(c(100, 70)),
-  ncomp = 10, nystroem = 500, combine = "sum")
+  ncomp = 10, nystroem = 500, combine = "sum", isoScale = 0,
+  centroid = NULL)
 }
 \arguments{
 \item{representer}{mesh3d or matrix used as representer}
@@ -16,6 +17,10 @@ statismoModelFromRepresenter(representer, kernel = list(c(100, 70)),
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
 
 \item{combine}{character determining how to combine the kernels: "sum" or "product" are supported.}
+
+\item{isoScale}{standard deviation of isotropic scaling.}
+
+\item{centroid}{specify the center of scaling. If NULL, the centroid will be used.}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}
