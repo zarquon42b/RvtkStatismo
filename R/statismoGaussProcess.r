@@ -4,7 +4,7 @@
 #'
 #' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
-#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.
+#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels. 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character: determining how to combine the kernels: "sum" or "product" are supported.
@@ -47,11 +47,24 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
         stop("please provide model of class 'pPCA'")
     if (!is.list(kernel))
         stop("kernel needs to be a list of two-entry vectors")
-    k <- ncol(model@representer$vb)
+    k <- nrow(GetDomainPoints(model))
     nystroem <- min(k,nystroem)
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
+    kernelVec <- unlist(kernel)
+    chkZeroScale <- prod(kernelVec[!as.logical((1:length(kernelVec))%%2)])
+    chkZeroSigma <- prod(kernelVec[as.logical((1:length(kernelVec))%%2)])
+    if (chkZeroSigma == 0)
+        stop("kernels with zero sigma are not allowed. For using dummy kernels set scale=0")
+    if (chkZeroScale == 0 && !useEmpiric) {
+        if (isoScale > 0) {
+            message("found dummykernel: ncomp is set to 1")
+            ncomp <- 1
+        } else {
+            stop("dummy kernels are only allowed if isoScale > 0")
+        }
+    }
     if (is.null(centroid)) {
         if (isoScale == 0) {
             centroid <- rep(0,3)
@@ -62,6 +75,7 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     useEmpiric <- as.logical(useEmpiric)
     if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
+    
     
     out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,useEmpiric,combine, combineEmp,isoScale=isoScale,centroid=centroid)
     SetScale(out) <- model@scale
