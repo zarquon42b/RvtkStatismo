@@ -29,6 +29,7 @@ statismoLoadModel <- function(modelname,scale=FALSE) {
     storage.mode(modelname) <- "character"
     
     out <- (.Call("LoadModel",modelname))
-    SetScale(out) <- scale
+    if (!pairNameCheck(out@modelinfo@paraminfo,"scale"))
+        SetScale(out) <- scale
     return(out)
 }

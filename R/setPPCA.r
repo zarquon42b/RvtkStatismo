@@ -60,7 +60,14 @@ setGeneric("SetScale<-", function(x, value) standardGeneric("SetScale<-"))
 #' @rdname ppcasetters
 setReplaceMethod("SetScale", "pPCA",function(x, value) {
     x@scale <- value;
-    x <- AddModelInfoParams(x,c("scale",tolower(as.character(value))))
+    chk <- pairNameCheck(x@modelinfo@paraminfo,"scale")
+    if (!chk) {
+        x <- AddModelInfoParams(x,c("scale",tolower(as.character(value))))
+    } else {
+        x@modelinfo@paraminfo <- x@modelinfo@paraminfo[-chk]
+        x <- AddModelInfoParams(x,c("scale",tolower(as.character(value))))
+    }
+        
     validObject(x); x})
 
 #' @rdname ppcasetters
@@ -102,3 +109,14 @@ setGeneric("SetModelInfoParams<-", function(x, value) standardGeneric("SetModelI
 setReplaceMethod("SetModelInfoParams", signature("modelinfo"),function(x, value) {
     x@paraminfo <-value; validObject(x); x
 })
+
+pairNameCheck <- function(x,value) {
+    full <- unlist(x)
+    full <- full[ (1:length(full)) %% 2 != 0]
+    chk <- duplicated(c(value,full))
+    if (sum(chk > 0))
+        return(which(chk)-1)
+    else
+        return(FALSE)
+}
+    
