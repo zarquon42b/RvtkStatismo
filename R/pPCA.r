@@ -143,7 +143,7 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,...) {
+setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     hasLM <- FALSE
@@ -203,7 +203,7 @@ setMethod("PredictSample", signature(model="pPCA"),function(model, dataset,repre
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d",representer="logical"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mat <- t(dataset$vb[1:3,])
     estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,...)
     return(estim)
