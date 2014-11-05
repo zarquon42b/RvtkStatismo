@@ -2,21 +2,20 @@
 \docType{methods}
 \name{PredictSample}
 \alias{PredictSample}
-\alias{PredictSample,pPCA,ANY,ANY-method}
-\alias{PredictSample,pPCA,mesh3d,logical-method}
+\alias{PredictSample,pPCA,matrix-method}
+\alias{PredictSample,pPCA,mesh3d-method}
 \title{predict or restrict a mesh or matrix based on a statistical model}
 \usage{
 PredictSample(model, dataset, representer = TRUE, ...)
 
-\S4method{PredictSample}{pPCA,ANY,ANY}(model, dataset, representer = TRUE,
+\S4method{PredictSample}{pPCA,matrix}(model, dataset, representer = TRUE,
   origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
   mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
   ...)
 
-\S4method{PredictSample}{pPCA,mesh3d,logical}(model, dataset,
-  representer = TRUE, origSpace = TRUE, lmDataset = NULL,
-  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq", "dist"),
-  align = TRUE, ...)
+\S4method{PredictSample}{pPCA,mesh3d}(model, dataset, representer = TRUE,
+  origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
+  mahaprob = c("none", "chisq", "dist"), align = TRUE, ...)
 }
 \arguments{
 \item{model}{model of class \code{pPCA}}
