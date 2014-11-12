@@ -4,11 +4,13 @@ __RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github
 
 
 
-* **Linux/OSX:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment.
+* **Linux/OSX:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment and of course statismo
 
-On Ubuntu/Debian, this can be easily accomplished by:
+On Ubuntu (14.04/14.10), this can be easily accomplished by:
 	
-	sudo apt-get install libvtk5-dev cmake r-base-dev libhdf5-dev
+	sudo apt-add-repository ppa:zarquon42/ppa
+	sudo apt-get update
+	sudo apt-get install statismo r-base-dev
 
 
 
@@ -17,7 +19,7 @@ On Ubuntu/Debian, this can be easily accomplished by:
 * **Windows:** SUCKS BIG TIME!! <s>install [CMake](http://cmake.org/cmake/resources/software.html) and [MinGW](http://www.mingw.org/) (including MSYS) and make sure the respective paths are included in the PATH variable). Then download  [VTK](http://www.vtk.org/VTK/resources/software.html) source code and build it. If you build VTK static libraries, the R-package will be portable.</s>
 
 
-**Build and install [Statismo](https://github.com/statismo/statismo)**
+
 
 
 **Install R-dependencies:** Issue the following command in your R-terminal:
@@ -53,8 +55,3 @@ Run the following command in R:
  
 		R CMD INSTALL . 
  
-
-
-#### Parallel computing: 
-
-* is set on default but requires the compiler to accept the c++11/c++0x flag. If you run into trouble, use ccmake (or cmake-gui) and set HAS_CXX11_ASYNC to OFF
