@@ -63,6 +63,11 @@ setGeneric("DrawSampleAtPoint", function(model,coefficients,pt,addNoise=FALSE) {
 setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
     standardGeneric("ComputeCoefficientsForDataset")
 })
+#' @rdname statismoMembers
+#' @export
+setGeneric("RobustlyComputeCoefficientsForDataset", function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+    standardGeneric("RobustlyComputeCoefficientsForDataset")
+})
 
 #' @rdname statismoMembers
 #' @export
@@ -201,6 +206,12 @@ setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
 #' @export
 setGeneric("ComputeProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeProbabilityOfDataset")
+})
+
+#' @rdname StatismoSample
+#' @export
+setGeneric("ComputeMahalanobisDistanceForDataset", function(model,dataset) {
+    standardGeneric("ComputeMahalanobisDistanceForDataset")
 })
 
 

@@ -78,6 +78,11 @@ setMethod("ComputeProbabilityOfDataset",signature(model="pPCA"), function(model,
     return(out)
 })
 
+#' @rdname StatismoSample
+setMethod("ComputeMahalanobisDistanceForDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeMahalanobisDistanceForDataset",model,dataset2representer(dataset),FALSE)
+    return(out)
+})
 
 #' @rdname statismoMembers
 setMethod("DrawMean",  signature(model="pPCA"), function(model) {
@@ -159,6 +164,12 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt
 #' @rdname statismoMembers
 setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset) {
     out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("RobustlyComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+    out <- .Call("RobustlyComputeCoefficientsForDataset",model,dataset2representer(dataset),niterations, nu, sigma2)
     return(out)
 })
 

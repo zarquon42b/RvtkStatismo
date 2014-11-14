@@ -3,6 +3,8 @@
 \name{StatismoSample}
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeLogProbabilityOfDataset,pPCA-method}
+\alias{ComputeMahalanobisDistanceForDataset}
+\alias{ComputeMahalanobisDistanceForDataset,pPCA-method}
 \alias{ComputeProbabilityOfDataset}
 \alias{ComputeProbabilityOfDataset,pPCA-method}
 \alias{StatismoSample}
@@ -12,9 +14,13 @@ ComputeLogProbabilityOfDataset(model, dataset)
 
 ComputeProbabilityOfDataset(model, dataset)
 
+ComputeMahalanobisDistanceForDataset(model, dataset)
+
 \S4method{ComputeLogProbabilityOfDataset}{pPCA}(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA}(model, dataset)
+
+\S4method{ComputeMahalanobisDistanceForDataset}{pPCA}(model, dataset)
 }
 \arguments{
 \item{model}{model of class "pPCA"}

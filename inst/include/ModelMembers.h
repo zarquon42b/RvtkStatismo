@@ -23,9 +23,13 @@ RcppExport SEXP LoadModel(SEXP modelname_);
 
 RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
 
+RcppExport SEXP ComputeMahalanobisDistanceForDataset(SEXP pPCA_, SEXP dataset_);
+
 RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
 
 RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
+
+RcppExport SEXP RobustlyComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_);
 
 RcppExport SEXP GetDomainPoints(SEXP pPCA_);
 
