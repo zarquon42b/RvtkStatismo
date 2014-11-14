@@ -26,8 +26,6 @@
 \alias{GetDomainSize,pPCA-method}
 \alias{GetModelInfo}
 \alias{GetModelInfo,pPCA-method}
-\alias{RobustlyComputeCoefficientsForDataset}
-\alias{RobustlyComputeCoefficientsForDataset,pPCA-method}
 \alias{StatismoModelMembers}
 \title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
@@ -42,8 +40,6 @@ DrawSampleVector(model, coefficients, addNoise = FALSE)
 DrawSampleAtPoint(model, coefficients, pt, addNoise = FALSE)
 
 ComputeCoefficientsForDataset(model, dataset)
-
-RobustlyComputeCoefficientsForDataset(model, dataset, niterations, nu, sigma2)
 
 ComputeCoefficientsForPointValues(model, sample, pt, ptNoise = 0)
 
@@ -67,9 +63,6 @@ GetModelInfo(model)
   addNoise = FALSE)
 
 \S4method{ComputeCoefficientsForDataset}{pPCA}(model, dataset)
-
-\S4method{RobustlyComputeCoefficientsForDataset}{pPCA}(model, dataset,
-  niterations = 100, nu = 6, sigma2 = 1)
 
 \S4method{GetDomainPoints}{pPCA}(model)
 
@@ -122,6 +115,8 @@ GetModelInfo(model)
 }
 \description{
 Implementation/Emulation of the statismo StatisticalModel class.
+
+#
 }
 \details{
 see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.

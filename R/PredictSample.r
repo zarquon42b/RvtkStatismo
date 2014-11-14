@@ -30,7 +30,7 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,niterations=NULL, nu=NULL, sigma2=NULL, ...) {
+setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE, ...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     hasLM <- FALSE
@@ -47,10 +47,7 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
     } else
         sb <- dataset
 
-    if (is.numeric(niterations) && is.numeric(nu) && is.numeric(sigma2))
-        alpha <-  RobustlyComputeCoefficientsForDataset(model,sb,niterations,nu,sigma2)
-    else
-        alpha <- ComputeCoefficientsForDataset(model,sb)
+    alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         if (mahaprob != "n") {
@@ -93,9 +90,9 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, niterations=NULL, nu=NULL, sigma2=NULL,...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,...) {
     mat <- t(dataset$vb[1:3,])
-    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,niterations=niterations,nu=nu,sigma2=sigma2,...)
+    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,...)
     return(estim)
 })
 

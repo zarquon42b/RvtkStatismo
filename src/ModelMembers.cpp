@@ -170,7 +170,7 @@ SEXP RobustlyComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_, SEXP niter
     
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    Eigen::VectorXf out = model->ComputeCoefficientsForDataset(datasetRef);
+    Eigen::VectorXf out = model->RobustlyComputeCoefficientsForDataset(datasetRef,niterations,nu,sigma2);
     //return List::create(Named
     return wrap(out);
   } catch (std::exception& e) {

@@ -167,11 +167,11 @@ setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(mode
     return(out)
 })
 
-#' @rdname statismoMembers
-setMethod("RobustlyComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset,niterations=100, nu = 6, sigma2=1) {
-    out <- .Call("RobustlyComputeCoefficientsForDataset",model,dataset2representer(dataset),niterations, nu, sigma2)
-    return(out)
-})
+# #' @rdname statismoMembers
+# setMethod("RobustlyComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+#     out <- .Call("RobustlyComputeCoefficientsForDataset",model,dataset2representer(dataset),niterations, nu, sigma2)
+#    return(out)
+# })
 
 #' @rdname statismoMembers
 setMethod("GetDomainPoints", signature(model="pPCA"), function(model) {

@@ -63,11 +63,11 @@ setGeneric("DrawSampleAtPoint", function(model,coefficients,pt,addNoise=FALSE) {
 setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
     standardGeneric("ComputeCoefficientsForDataset")
 })
-#' @rdname statismoMembers
-#' @export
-setGeneric("RobustlyComputeCoefficientsForDataset", function(model,dataset,niterations=100, nu = 6, sigma2=1) {
-    standardGeneric("RobustlyComputeCoefficientsForDataset")
-})
+# # @rdname statismoMembers
+# # @export
+# setGeneric("RobustlyComputeCoefficientsForDataset", function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+#    standardGeneric("RobustlyComputeCoefficientsForDataset")
+#})
 
 #' @rdname statismoMembers
 #' @export
