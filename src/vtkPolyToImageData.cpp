@@ -17,7 +17,7 @@ RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_, SEX
     spacing[1] = spacingtmp[1];
     spacing[2] = spacingtmp[2];
     double margin = as<double>(margin_);
-    margin += 1;
+    //margin += 1;
     vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing,margin);
     int chk = vtkImageWrite(whiteImage,outputFilename);
 

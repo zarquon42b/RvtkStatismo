@@ -2,10 +2,20 @@
 #include "RcppEigen.h"
 vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin) {
   vtkSmartPointer<vtkImageData> whiteImage = vtkSmartPointer<vtkImageData>::New();
+  
   double bounds[6];
   pd->GetBounds(bounds);
-  for (int i = 0; i < 6; i++)
-    bounds[i] *= margin;//add 10 % margin
+  double dimbounds[6];
+  for (int i = 0; i < 3;i++) {
+    double tmp = abs(bounds[i*2]-bounds[i*2+1]);
+    dimbounds[i*2] = tmp;
+    dimbounds[i*2+1] = tmp;
+  }
+  //add margin for each dimension
+  for (int i = 0; i < 6; i++) {
+    double margintmp = std::pow(-1,i+1)*margin*dimbounds[i];
+    bounds[i] += margintmp;//add 10 % margin
+  }
   whiteImage->SetSpacing(spacing);
   int dim[3];
   for (int i = 0; i < 3; i++) {
@@ -42,6 +52,7 @@ vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyDa
 #else
     pol2stenc->SetInputData(pd);
 #endif
+    //pol2stenc->SetTolerance(0.0);
     pol2stenc->SetOutputOrigin(origin);
     pol2stenc->SetOutputSpacing(spacing);
     pol2stenc->SetOutputWholeExtent(whiteImage->GetExtent());
