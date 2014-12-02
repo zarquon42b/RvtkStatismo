@@ -21,6 +21,7 @@
 
 #' \item{GetDomainSize}{get the size of the model's domain}
 #' \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
+#' \item{GetPCScores}{get model's PC-scores}
 #' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @keywords StatisticalModel<representer>
 #' @name StatismoModelMembers
@@ -221,4 +222,10 @@ setGeneric("ComputeMahalanobisDistanceForDataset", function(model,dataset) {
 #' @export
 setGeneric("GetModelInfo", function(model) {
     standardGeneric("GetModelInfo")
+})
+
+#' @rdname statismoMembers
+#' @export
+setGeneric("GetPCScores", function(model) {
+    standardGeneric("GetPCScores")
 })

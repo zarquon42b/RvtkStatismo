@@ -253,3 +253,9 @@ setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
     scores <- model@PCA$x
     return(list(paraminfo=paraminfoframe,datainfo=datainfoframe,scores=scores))
 })
+
+#' @rdname statismoMembers
+setMethod("GetPCScores", signature(model="pPCA"), function(model) {
+    scores <- model@PCA$x
+    return(scores)
+})

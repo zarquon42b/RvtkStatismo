@@ -26,6 +26,8 @@
 \alias{GetDomainSize,pPCA-method}
 \alias{GetModelInfo}
 \alias{GetModelInfo,pPCA-method}
+\alias{GetPCScores}
+\alias{GetPCScores,pPCA-method}
 \alias{StatismoModelMembers}
 \title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
@@ -50,6 +52,8 @@ GetDomainSize(model)
 EvaluateSampleAtPoint(model, sample, pt)
 
 GetModelInfo(model)
+
+GetPCScores(model)
 
 \S4method{DrawMean}{pPCA}(model)
 
@@ -84,6 +88,8 @@ GetModelInfo(model)
 \S4method{EvaluateSampleAtPoint}{pPCA,mesh3d,numeric}(model, sample, pt)
 
 \S4method{GetModelInfo}{pPCA}(model)
+
+\S4method{GetPCScores}{pPCA}(model)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
@@ -112,6 +118,7 @@ GetModelInfo(model)
 \item{GetDomainPoints}{a matrix containing the points of the model's domain}
 \item{GetDomainSize}{get the size of the model's domain}
 \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
+\item{GetPCScores}{get model's PC-scores}
 }
 \description{
 Implementation/Emulation of the statismo StatisticalModel class.
