@@ -1,7 +1,7 @@
 #include "BuildConditionalModel.h"
-#include "ConditionalModelBuilder.h"
+#include "ConditionalModelBuilderCustom.h"
 
-typedef ConditionalModelBuilder<vtkPolyData> ModelBuilderType;
+typedef ConditionalModelBuilderCustom<vtkPolyData> ModelBuilderType;
 
 
 SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_) {
