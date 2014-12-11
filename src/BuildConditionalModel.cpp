@@ -24,7 +24,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     Map<VectorXd> surrogateInfo1(as<Map<VectorXd> >(surrogateInfo_)); 
     const VectorXf surrogateInfo = surrogateInfo1.cast<float>();
   
-    List condData(condData_); 
+    NumericMatrix condData(condData_); 
     double sigma = as<double>(sigma_);
     unsigned int ndata = myshapelist.size();
     std::vector<std::string> nam = myshapelist.names();
@@ -33,10 +33,10 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     vtkSmartPointer<vtkPolyData> reference = R2polyData(vbref,itref);
     shared_ptr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
     ModelBuilderType::CondVariableValueVectorType conditioningInfo;
-    for (unsigned int i = 0; i < condData.size(); i++) {
-      List tmp = condData[i];
-      bool use = as<bool>(tmp[0]);
-      float value = as<float>(tmp[1]);
+    for (unsigned int i = 0; i < condData.nrow(); i++) {
+      NumericVector tmp = condData(i,_);
+      bool use = tmp[0];
+      float value = tmp[1];
       conditioningInfo.push_back(ModelBuilderType::CondVariableValuePair(use, value));
     }
   
