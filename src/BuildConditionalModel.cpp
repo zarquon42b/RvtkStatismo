@@ -1,7 +1,7 @@
 #include "BuildConditionalModel.h"
-#include "ConditionalModelBuilder.h"
+#include "ConditionalModelBuilderCustom.h"
 
-typedef ConditionalModelBuilder<vtkPolyData> ModelBuilderType;
+typedef ConditionalModelBuilderCustom<vtkPolyData> ModelBuilderType;
 typedef DataManagerWithSurrogateVector<vtkPolyData> vtkMeshDataManagerWithSurrogates;
 
 
