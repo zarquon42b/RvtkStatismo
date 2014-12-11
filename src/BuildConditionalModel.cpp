@@ -1,7 +1,8 @@
 #include "BuildConditionalModel.h"
-#include "ConditionalModelBuilderCustom.h"
+#include "ConditionalModelBuilder.h"
 
-typedef ConditionalModelBuilderCustom<vtkPolyData> ModelBuilderType;
+typedef ConditionalModelBuilder<vtkPolyData> ModelBuilderType;
+typedef DataManagerWithSurrogateVector<vtkPolyData> vtkMeshDataManagerWithSurrogates;
 
 
 SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_) {
@@ -18,12 +19,11 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     List myshapelist(myshapelist_);
     List myreference(myreference_);
     NumericMatrix trainingData(trainingData_);
-    if (myshapelist.size() != trainingData.ncol())
+    if (myshapelist.size() != trainingData.nrow())
       ::Rf_error("each input shape must have corresponding conditioning variables");
     
     Map<VectorXd> surrogateInfo1(as<Map<VectorXd> >(surrogateInfo_)); 
-    const VectorXf surrogateInfo = surrogateInfo1.cast<float>();
-  
+    VectorXf surrogateInfo = surrogateInfo1.cast<float>();
     NumericMatrix condData(condData_); 
     double sigma = as<double>(sigma_);
     unsigned int ndata = myshapelist.size();
@@ -34,10 +34,9 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     shared_ptr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
     ModelBuilderType::CondVariableValueVectorType conditioningInfo;
     for (unsigned int i = 0; i < condData.nrow(); i++) {
-      NumericVector tmp = condData(i,_);
-      bool use = tmp[0];
-      float value = tmp[1];
-      conditioningInfo.push_back(ModelBuilderType::CondVariableValuePair(use, value));
+      bool use = condData(i,0);
+      float value = condData(i,1);
+      conditioningInfo.push_back(ModelBuilderType::CondVariableValuePair(true, value));
     }
   
     shared_ptr<vtkMeshDataManagerWithSurrogates> dataManager(vtkMeshDataManagerWithSurrogates::Create(representer.get(),surrogateInfo));
@@ -55,7 +54,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     
       }
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
-    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma));
+    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma,1));
     return model;
 
   } catch (StatisticalModelException& e) {

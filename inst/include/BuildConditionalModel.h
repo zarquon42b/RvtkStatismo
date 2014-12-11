@@ -5,6 +5,7 @@
 #include <memory>
 #include <RcppEigen.h>
 #include "pPCA2statismo.h"
+#include "DataManagerWithSurrogateVector.h"
 
 using namespace Eigen;
 using namespace Rcpp;
