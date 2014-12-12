@@ -51,7 +51,7 @@ statismoSaveModel(condmod,"condmod.h5")
 R. Blanc, M. Reyes, C. Seiler and G. Szekely. 2009. Conditional Variability of Statistical Shape Models Based on Surrogate Variables. In Proc. MICCAI 2009
 }
 \seealso{
-\code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
+\code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}, \link{manageConditioningData}}
 }
 \keyword{StatisticalModel<representer>}
 

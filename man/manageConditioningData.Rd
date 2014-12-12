@@ -16,4 +16,7 @@ manageConditioningData(trainingData)
 \description{
 convert a data.frame or vector of factors into a format usable by statismoBuildConditionalModel and extract variable information.
 }
+\seealso{
+\code{\link{statismoBuildConditionalModel}}
+}
 

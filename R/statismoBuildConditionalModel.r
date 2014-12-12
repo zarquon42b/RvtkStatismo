@@ -30,7 +30,7 @@
 #' statismoSaveModel(condmod,"condmod.h5")
 #' 
 #' @keywords StatisticalModel<representer>
-#' @seealso \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
+#' @seealso \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}, \link{manageConditioningData}} 
 #' @importFrom Morpho bindArr
 #' 
 #' @export
@@ -91,7 +91,7 @@ statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trai
 #' \item{trainingData}{Data converted into numeric matrix}
 #' \item{surrogateInfo}{vector of 0 and 1 indicating which input was categorial/continuous}
 #' \item{encode}{in case categorial variables where encoded into integers, this lists the association of the categorial values to the corresponding dummy encoding.}
-
+#' @seealso \code{\link{statismoBuildConditionalModel}}
 #' @export
 manageConditioningData <- function(trainingData) {
     
