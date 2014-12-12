@@ -5,15 +5,15 @@ typedef ConditionalModelBuilderCustom<vtkPolyData> ModelBuilderType;
 typedef DataManagerWithSurrogateVector<vtkPolyData> vtkMeshDataManagerWithSurrogates;
 
 
-SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_) {
+SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_, SEXP exVar_) {
   
-  shared_ptr<vtkMeshModel> model = BuildConditionalModel(myshapelist_,myreference_, sigma_, trainingData_,condData_,surrogateInfo_);
+  shared_ptr<vtkMeshModel> model = BuildConditionalModel(myshapelist_,myreference_, sigma_, trainingData_,condData_,surrogateInfo_,exVar_);
   return statismo2pPCA(model);
   
 }
 
   
-shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_) {
+shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_,SEXP exVar_) {
 
   try {
     List myshapelist(myshapelist_);
@@ -26,6 +26,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     VectorXf surrogateInfo = surrogateInfo1.cast<float>();
     NumericMatrix condData(condData_); 
     double sigma = as<double>(sigma_);
+    double exVar = as<double>(exVar_);
     unsigned int ndata = myshapelist.size();
     std::vector<std::string> nam = myshapelist.names();
     SEXP vbref = myreference["vb"];
@@ -54,7 +55,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     
       }
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
-    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma,1));
+    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma,exVar));
     return model;
 
   } catch (StatisticalModelException& e) {

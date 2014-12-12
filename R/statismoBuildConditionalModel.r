@@ -6,20 +6,32 @@
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
-#' @return an object of class pPCA (\code{\link{pPCA-class}})
+#' @param trainingData a numeric matrix containing categorial variables (as integers) and continuous variables for each sample in \code{x}
+#' @param conditioningData a numeric vector of length \code{ncol(trainingData)} containing the parameters to condition the model to
+#' @param surrogateInfo a numeric vector of zeros and ones coding wether the variables in the i-th column of \code{trainingData} is categorial or continuous. 0 = categorial, 1 = continuous.
+#' @param exVar with 0 < exVar <= 1. Allows to reduce the model according to the variance explained.
+#' @references
+#' R. Blanc, M. Reyes, C. Seiler and G. Szekely. 2009. Conditional Variability of Statistical Shape Models Based on Surrogate Variables. In Proc. MICCAI 2009
+#' @note If you want to use a data.frame of mixed variables, you can use the helper function manageConditioningData to extract and convert the information to accomodate the necesseties of the function.
+#' @return an statistical model of class pPCA (\code{\link{pPCA-class}})
 #' @examples
 #' require(Morpho)
 #' data(boneData)
 #' align <- rigidAlign(boneLM)$rotated
-#' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+#' pop <- name2factor(boneLM,which=3)
+#' ##prepare data
+#' conddata <- manageConditioningData(pop)
+#' ##now condition the model to Chinese
+#' condmod <- statismoBuildConditionalModel(align,trainingData=conddata$trainingData,conditioningData=1,surrogateInfo=conddata$surrogateInfo)
 #' ## save it
-#' statismoSaveModel(mymod,"mymod.h5")
+#' statismoSaveModel(condmod,"condmod.h5")
+#' 
 #' @keywords StatisticalModel<representer>
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
 #' @importFrom Morpho bindArr
 #' 
 #' @export
-statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trainingData,conditioningData,surrogateInfo) {
+statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trainingData,conditioningData,surrogateInfo,exVar=1) {
     if (is.array(x)) {
         m <- dim(x)[2]
         if (m == 2) {
@@ -59,18 +71,28 @@ statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trai
     
     conditioningData <- cbind(1,conditioningData)
     trainingData <- as.matrix(trainingData)
-    surrogateInfo <- as.vector(surrogateInfo);
-    out <- .Call("BuildConditionalModelExport",mylist,representer,sigma,trainingData,conditioningData,surrogateInfo)
+    surrogateInfo <- as.numeric(surrogateInfo);
+    out <- .Call("BuildConditionalModelExport",mylist,representer,sigma,trainingData,conditioningData,surrogateInfo,exVar)
     SetScale(out) <- scale
     return(out)
     
     
 }
 
+#' convert a data.frame or vector of factors into a format usable by statismoBuildConditionalModel
+#'
+#' convert a data.frame or vector of factors into a format usable by statismoBuildConditionalModel and extract variable information.
+#'
+#' @param trainingData training data, can be data.frame, character vector/matrix, etc.
+#' @return
+#' \item{trainingData}{Data converted into numeric matrix}
+#' \item{surrogateInfo}{vector of 0 and 1 indicating which input was categorial/continuous}
+#' \item{encode}{in case categorial variables where encoded into integers, this lists the association of the categorial values to the corresponding dummy encoding.}
+
 #' @export
 manageConditioningData <- function(trainingData) {
     
-    if (is.vector(trainingData))
+    if (is.vector(trainingData)|| is.factor(trainingData))
         trainingData <- as.data.frame(trainingData)
     orig <- trainingData
     if (is.data.frame(trainingData)) {
@@ -83,7 +105,7 @@ manageConditioningData <- function(trainingData) {
     trainingData <- as.matrix(trainingData)
     out <- list()
     out$trainingData <- trainingData
-    out$surrogateInfo <- surrogateInfo
+    out$surrogateInfo <- as.numeric(surrogateInfo)
     encode <- list()
     catVar <- which(surrogateInfo==0)
     if (length(catVar)) {

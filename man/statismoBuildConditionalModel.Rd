@@ -4,7 +4,7 @@
 \title{generate a statistical model using an array of superimposed landmarks or a list of meshes}
 \usage{
 statismoBuildConditionalModel(x, representer, sigma = 0, scale = FALSE,
-  trainingData, conditioningData, surrogateInfo)
+  trainingData, conditioningData, surrogateInfo, exVar = 1)
 }
 \arguments{
 \item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}
@@ -14,20 +14,38 @@ statismoBuildConditionalModel(x, representer, sigma = 0, scale = FALSE,
 \item{sigma}{noise in the data}
 
 \item{scale}{logical: set to TRUE, if scaling was involved in the registration.}
+
+\item{trainingData}{a numeric matrix containing categorial variables (as integers) and continuous variables for each sample in \code{x}}
+
+\item{conditioningData}{a numeric vector of length \code{ncol(trainingData)} containing the parameters to condition the model to}
+
+\item{surrogateInfo}{a numeric vector of zeros and ones coding wether the variables in the i-th column of \code{trainingData} is categorial or continuous. 0 = categorial, 1 = continuous.}
+
+\item{exVar}{with 0 < exVar <= 1. Allows to reduce the model according to the variance explained.}
 }
 \value{
-an object of class pPCA (\code{\link{pPCA-class}})
+an statistical model of class pPCA (\code{\link{pPCA-class}})
 }
 \description{
 generate a statistical model using an array of superimposed landmarks
+}
+\note{
+If you want to use a data.frame of mixed variables, you can use the helper function manageConditioningData to extract and convert the information to accomodate the necesseties of the function.
 }
 \examples{
 require(Morpho)
 data(boneData)
 align <- rigidAlign(boneLM)$rotated
-mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+pop <- name2factor(boneLM,which=3)
+##prepare data
+conddata <- manageConditioningData(pop)
+##now condition the model to Chinese
+condmod <- statismoBuildConditionalModel(align,trainingData=conddata$trainingData,conditioningData=1,surrogateInfo=conddata$surrogateInfo)
 ## save it
-statismoSaveModel(mymod,"mymod.h5")
+statismoSaveModel(condmod,"condmod.h5")
+}
+\references{
+R. Blanc, M. Reyes, C. Seiler and G. Szekely. 2009. Conditional Variability of Statistical Shape Models Based on Surrogate Variables. In Proc. MICCAI 2009
 }
 \seealso{
 \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
