@@ -27,7 +27,7 @@
 \alias{GetModelInfo}
 \alias{GetModelInfo,pPCA-method}
 \alias{GetPCScores}
-\alias{GetPCScores,pPCA-method}
+\alias{GetPCScores,pPCA,logical-method}
 \alias{StatismoModelMembers}
 \title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
@@ -53,7 +53,7 @@ EvaluateSampleAtPoint(model, sample, pt)
 
 GetModelInfo(model)
 
-GetPCScores(model)
+GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawMean}{pPCA}(model)
 
@@ -89,7 +89,7 @@ GetPCScores(model)
 
 \S4method{GetModelInfo}{pPCA}(model)
 
-\S4method{GetPCScores}{pPCA}(model)
+\S4method{GetPCScores}{pPCA,logical}(model, scaled = TRUE)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
@@ -105,6 +105,8 @@ GetPCScores(model)
 \item{sample}{depending on the function a matrix, a numeric vector or a mesh3d (see methods below)}
 
 \item{ptNoise}{specify the noise estimated in the points.}
+
+\item{scaled}{logical: if TRUE, the scores are scaled by their standard deviation.}
 }
 \value{
 \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
@@ -118,7 +120,7 @@ GetPCScores(model)
 \item{GetDomainPoints}{a matrix containing the points of the model's domain}
 \item{GetDomainSize}{get the size of the model's domain}
 \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
-\item{GetPCScores}{get model's PC-scores}
+\item{GetPCScores}{get model's PC-scores, scaled or unscaled, depending on the choice of \code{scaled}}
 }
 \description{
 Implementation/Emulation of the statismo StatisticalModel class.

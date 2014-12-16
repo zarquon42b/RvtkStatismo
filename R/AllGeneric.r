@@ -8,6 +8,7 @@
 #' @param ptNoise specify the noise estimated in the points.
 #' @param sample depending on the function a matrix, a numeric vector or a mesh3d (see methods below)
 #' @param pt either an integer pointing to a coordinate or a 3D-vector containing the coordinates of the domain point of interest. For \code{ComputeCoefficientsForPointValues}, this can also specify a matrix of coordinates on the domain.
+#' @param scaled logical: if TRUE, the scores are scaled by their standard deviation.
 #' @return
 #' \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
 #' \item{GetMeanVector}{Get the mean vector}
@@ -21,7 +22,7 @@
 
 #' \item{GetDomainSize}{get the size of the model's domain}
 #' \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
-#' \item{GetPCScores}{get model's PC-scores}
+#' \item{GetPCScores}{get model's PC-scores, scaled or unscaled, depending on the choice of \code{scaled}}
 #' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @keywords StatisticalModel<representer>
 #' @name StatismoModelMembers
@@ -226,6 +227,6 @@ setGeneric("GetModelInfo", function(model) {
 
 #' @rdname statismoMembers
 #' @export
-setGeneric("GetPCScores", function(model) {
+setGeneric("GetPCScores", function(model,scaled=TRUE) {
     standardGeneric("GetPCScores")
 })

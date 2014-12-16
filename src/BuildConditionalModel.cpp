@@ -25,6 +25,8 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     Map<VectorXd> surrogateInfo1(as<Map<VectorXd> >(surrogateInfo_)); 
     VectorXf surrogateInfo = surrogateInfo1.cast<float>();
     NumericMatrix condData(condData_); 
+    if (condData.nrow() != trainingData.ncol())
+      ::Rf_error("conditioning data must have same amount of variables as training data");
     double sigma = as<double>(sigma_);
     double exVar = as<double>(exVar_);
     unsigned int ndata = myshapelist.size();

@@ -255,7 +255,9 @@ setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
 })
 
 #' @rdname statismoMembers
-setMethod("GetPCScores", signature(model="pPCA"), function(model) {
+setMethod("GetPCScores", signature(model="pPCA",scaled="logical"), function(model,scaled) {
     scores <- model@PCA$x
+    if (scaled)
+        scores <- scale(scores,scale=1/x@PCA$sdev)
     return(scores)
 })
