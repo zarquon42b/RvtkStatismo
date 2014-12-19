@@ -1,28 +1,4 @@
-#' Constrains a model of class pPCA by a subset of coordinates
-#'
-#' Constrains a model of class pPCA by a subset of coordinates
-#' @param x a k x 3 matrix containing the sample's coordinates of the reduced model
-#' @param model an object of class \code{\link{pPCA}}
-#' @param align logical: if TRUE, \code{x} will be aligned to the models mean
-#' @param use.lm integer vector, specifying which coordinates from the full model are to be used/missing (see note)
-#' @param deselect logical: if TRUE, use.lm specifies the missing coordinates instead of those present.
-#' @param origSpace logical: if align=TRUE and origSpace=TRUE, the representer of the returned model will contain the estimated full shape in the original coordinate system of \code{x}
-#' @note if \code{deselect = FALSE}, the order of the entries in \code{use.lm} is interpreted as follows: the i-th entry in use.lm specifies the index of the meanshapes coordinate belonging to the i-th coordinate of \code{x}.
-#' if \code{deselect = TRUE}, the i-th coordinate of x is linked to the i-th coordinate of the model's mean with \code{use.lm} removed.
-#' @return an object of class pPCA constrained to \code{x}
-#' @examples
-#' ## create a model superimposed with missing landmarks 3 and 4
-#' require(Morpho)
-#' data(boneData)
-#' newmod <- pPCA(boneLM[,,-1],sigma=0,scale=TRUE,use.lm = 3:4,deselect=TRUE)
-#' ## predict the left out shape from the constrained model
-#' boneLM1 <- ComputeConstrainedModel(boneLM[-c(3:4),,1],newmod,align=TRUE,use.lm=3:4,deselect=TRUE,origSpace=TRUE)
-#' ## the coordinates of the estimated complete config are now stored in the representer's vertices
-#' \dontrun{
-#' ##visualize prediction error
-#' deformGrid3d(vert2points(boneLM1$representer),boneLM[,,1],ngrid=0)
-#' }
-#' @export
+
 ComputeConstrainedModel <- function(x,model,align=FALSE,use.lm,deselect=FALSE,origSpace=FALSE) {
     mshape <- getMeanMatrix(model,transpose=TRUE)
     k <- ncol(model@representer$vb)
