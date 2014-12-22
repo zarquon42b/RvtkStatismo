@@ -61,6 +61,6 @@ GetProjectionMatrix(model)
 Get Matrices from StatisticalModel class - such as projection matrices, covariance matrices or Jacobian
 }
 \details{
-see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 }
 

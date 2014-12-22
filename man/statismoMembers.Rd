@@ -128,7 +128,7 @@ Implementation/Emulation of the statismo StatisticalModel class.
 #
 }
 \details{
-see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 }
 \keyword{StatisticalModel<representer>}
 

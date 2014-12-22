@@ -23,7 +23,7 @@
 #' \item{GetDomainSize}{get the size of the model's domain}
 #' \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
 #' \item{GetPCScores}{get model's PC-scores, scaled or unscaled, depending on the choice of \code{scaled}}
-#' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+#' @details see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @keywords StatisticalModel<representer>
 #' @name StatismoModelMembers
 #' @docType methods
@@ -108,7 +108,7 @@ setGeneric("EvaluateSampleAtPoint",function(model,sample,pt) standardGeneric("Ev
 #' \item{GetJacobian}{ returns the 3 x 3 Jacobian matrix at \code{pt}}
 #' \item{GetProjectionMatrix}{ returns matrix to project a sample vector into the latent space (this is not a member function but might prove useful anyway)}
 #'
-#' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+#' @details see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @name StatismoMatrices
 #' @rdname StatismoMatrices
 NULL
@@ -159,7 +159,7 @@ setGeneric("GetProjectionMatrix", function(model) {
 #' \item{GetNoiseVariance}{returns the estimated noise in the model}
 #' \item{GetPCAVarianceVector}{returns the variance in the model}
 #' \item{GetMeanVector}{returns the model's mean vector}
-#' @details see \url{http://statismo.github.io/statismo/classdoc/html/classstatismo_1_1StatisticalModel.html} for details.
+#' @details see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @docType methods
 #' @name StatismoParameters
 #' @rdname statismoParameters
