@@ -36,10 +36,14 @@ project(RvtkStatismo CXX)
 #endif()
  
   ## look for VTK
-find_package(VTK REQUIRED)
-
+#find_package(VTK REQUIRED)
+#message("${VTK_DIR}")
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(statismo REQUIRED)
+#message("${VTK_DIR}")
+IF( NOT VTK_SUPPORT )
+  MESSAGE(FATAL_ERROR "You need to build statismo with VTK_SUPPORT=ON" )
+ENDIF()
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR})
 include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} "../inst/include/")
 include(${VTK_USE_FILE})
