@@ -20,7 +20,7 @@
 #' 
 #' @export
 
-statismoBuildModel <- function(x,representer,sigma=0,scale=TRUE) {
+statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE) {
     if (is.array(x)) {
         m <- dim(x)[2]
         if (m == 2) {
