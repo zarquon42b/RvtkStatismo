@@ -255,9 +255,16 @@ setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
 })
 
 #' @rdname statismoMembers
-setMethod("GetPCScores", signature(model="pPCA",scaled="logical"), function(model,scaled) {
+setMethod("GetPCScores", signature(model="pPCA",scaled="logical"), function(model,scaled=TRUE) {
     scores <- model@PCA$x
+    if (nrow(scores) > 0) {
     if (scaled)
-        scores <- scale(scores,scale=1/x@PCA$sdev)
+        scores <- scale(scores,scale=1/model@PCA$sdev)
+
+    modinfo <- GetModelInfo(model)$datainfo
+    if (!is.null(modinfo))
+        rownames(scores) <- modinfo[,2]
+} else
+    stop("model contains no scores")
     return(scores)
 })
