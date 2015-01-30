@@ -15,4 +15,19 @@ returns a list of restored shapes
 \description{
 restores original samples (meshes or pointclouds) from a model with stored PC-scores
 }
+\note{
+the exact original shapes are only returned in case the model's assumed noise variance sigma = 0 (as eigenvalues might be discarded.
+}
+\examples{
+require(Morpho)
+data(boneData)
+align <- rigidAlign(boneLM)$rotated
+mymod <- statismoBuildModel(align,representer=align[,,1],scale=FALSE)
+##now restore shapes
+rest <- restoreSamples(mymod)
+\dontrun{
+##visualize (non-existing) differences between restored and original shape
+deformGrid3d(rest[[1]],align[,,1])
+}
+}
 
