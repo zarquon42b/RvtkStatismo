@@ -246,6 +246,7 @@ setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
         URIsplit <- name2num(datainfoframe[,1],which=2)
         URIsplit <- order(URIsplit)
         datainfoframe <- datainfoframe[URIsplit,]
+        rownames(datainfoframe) <- NULL
     }
     else
         datainfoframe <- data.frame()
