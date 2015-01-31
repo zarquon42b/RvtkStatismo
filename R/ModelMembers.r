@@ -237,11 +237,16 @@ setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="mesh3d",pt="n
 })
 
 #' @rdname statismoMembers
+#' @importFrom Morpho name2num
 setMethod("GetModelInfo", signature(model="pPCA"), function(model) {
 
     datainfo <- unlist(model@modelinfo@datainfo)
-    if (!is.null(datainfo))
-        datainfoframe <- as.data.frame(matrix(datainfo,length(datainfo)/2,2,byrow = T))
+    if (!is.null(datainfo)) {
+        datainfoframe <- as.data.frame(matrix(datainfo,length(datainfo)/2,2,byrow = T),stringsAsFactors = FALSE)
+        URIsplit <- name2num(datainfoframe[,1],which=2)
+        URIsplit <- order(URIsplit)
+        datainfoframe <- datainfoframe[URIsplit,]
+    }
     else
         datainfoframe <- data.frame()
     
