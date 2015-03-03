@@ -22,7 +22,7 @@
 
 #' \item{GetDomainSize}{get the size of the model's domain}
 #' \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
-#' \item{GetPCScores}{get model's PC-scores, scaled or unscaled, depending on the choice of \code{scaled}}
+#' \item{GetPCScores}{get model's PC-scores, scaled or unscaled to unit variance, depending on the choice of \code{scaled}}
 #' @details see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @keywords StatisticalModel<representer>
 #' @name StatismoModelMembers

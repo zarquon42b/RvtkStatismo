@@ -28,7 +28,7 @@
 \alias{GetModelInfo}
 \alias{GetModelInfo,pPCA-method}
 \alias{GetPCScores}
-\alias{GetPCScores,pPCA,logical-method}
+\alias{GetPCScores,pPCA-method}
 \alias{StatismoModelMembers}
 \title{Implementation/Emulation of the statismo StatisticalModel class.}
 \usage{
@@ -90,7 +90,7 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{GetModelInfo}{pPCA}(model)
 
-\S4method{GetPCScores}{pPCA,logical}(model, scaled = TRUE)
+\S4method{GetPCScores}{pPCA}(model, scaled = TRUE)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
@@ -121,7 +121,7 @@ GetPCScores(model, scaled = TRUE)
 \item{GetDomainPoints}{a matrix containing the points of the model's domain}
 \item{GetDomainSize}{get the size of the model's domain}
 \item{EvaluateSampleAtPoint}{Returns the value of the given sample at the point specified (either as point on the domain or as an index)}
-\item{GetPCScores}{get model's PC-scores, scaled or unscaled, depending on the choice of \code{scaled}}
+\item{GetPCScores}{get model's PC-scores, scaled or unscaled to unit variance, depending on the choice of \code{scaled}}
 }
 \description{
 Implementation/Emulation of the statismo StatisticalModel class.
