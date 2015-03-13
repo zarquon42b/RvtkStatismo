@@ -64,8 +64,9 @@ RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_) {
     blend->AddInputData(castFilter->GetOutput());
    
 #endif
-  
+    blend->SetOpacity(0,.5);
     blend->SetOpacity(1,.5);
+    blend->Update();
     vtkSmartPointer<vtkImageData> outputImage = blend->GetOutput();
     //write image to file
     vtkImageWrite(outputImage,outputFilename);
