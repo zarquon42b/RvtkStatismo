@@ -35,14 +35,15 @@
 using namespace Rcpp;
 
 
-RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_) {
+RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_,SEXP image1opa_ = wrap(0.5), SEXP image2opa_ = wrap(0.5)) {
   try{ 
 
     std::string inputFilename1 = as<std::string>(images1_);
     std::string inputFilename2 = as<std::string>(images2_);
     std::string outputFilename = as<std::string>(outname_);
-    //calculate landmark transform
-    
+    double image1opa = as<double>(image1opa_);
+    double image2opa = as<double>(image2opa_);
+        
     vtkSmartPointer<vtkImageData> image1 = vtkImageRead(inputFilename1);
     vtkSmartPointer<vtkImageData> image2 = vtkImageRead(inputFilename2);
     vtkSmartPointer<vtkImageBlend> blend = vtkSmartPointer<vtkImageBlend>::New();
@@ -64,8 +65,8 @@ RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_) {
     blend->AddInputData(castFilter->GetOutput());
    
 #endif
-    blend->SetOpacity(0,.5);
-    blend->SetOpacity(1,.5);
+    blend->SetOpacity(0,image1opa);
+    blend->SetOpacity(1,image2opa);
     blend->Update();
     vtkSmartPointer<vtkImageData> outputImage = blend->GetOutput();
     //write image to file
