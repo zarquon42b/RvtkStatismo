@@ -12,7 +12,7 @@ PredictSample(model, dataset, representer = TRUE, ...)
 \S4method{PredictSample}{pPCA,matrix}(model, dataset, representer = TRUE,
   origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
   mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
-  ...)
+  bySubset = FALSE, ...)
 
 \S4method{PredictSample}{pPCA,mesh3d}(model, dataset, representer = TRUE,
   origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
@@ -40,6 +40,8 @@ PredictSample(model, dataset, representer = TRUE, ...)
 \item{align}{if TRUE, the sample will be aligned to the mean.}
 
 \item{addNoise}{re-add noise while reprojecting from latent into shape space.}
+
+\item{bySubset}{if TRUE, instead the shape will be predicted by the coordinates defined by \code{lmModel} and \code{lmDataset}.}
 }
 \value{
 \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.

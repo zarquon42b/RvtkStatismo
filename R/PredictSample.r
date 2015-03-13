@@ -12,6 +12,7 @@
 #' @param mahaprob character: if != "none", use mahalanobis-distance to determine overall probability (of the shape projected into the model space."chisq" uses the Chi-Square distribution of the squared Mahalanobisdistance, while "dist" restricts the values to be within a multi-dimensional sphere of radius \code{sdmax}. If FALSE the probability will be determined per PC separately.
 #' @param align if TRUE, the sample will be aligned to the mean.
 #' @param addNoise re-add noise while reprojecting from latent into shape space.
+#' @param bySubset if TRUE, instead the shape will be predicted by the coordinates defined by \code{lmModel} and \code{lmDataset}.
 #' @param ... currently not in use.
 #' 
 #' @return \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
@@ -30,7 +31,7 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE, ...) {
+setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,bySubset=FALSE, ...) {
     mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     hasLM <- FALSE
@@ -46,8 +47,10 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
         }
     } else
         sb <- dataset
-
-    alpha <- ComputeCoefficientsForDataset(model,sb)
+    if (hasLM && bySubset) 
+        alpha <- ComputeCoefficientsForPointValues(mymod,lmModel,lmDataset,1)
+    else 
+        alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         if (mahaprob != "n") {
