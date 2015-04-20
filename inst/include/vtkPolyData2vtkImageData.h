@@ -8,6 +8,6 @@
 #include <vtkImageData.h>
 #include <vtkPointData.h>
 
-vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin = 1.1);
+vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin = 1.1, int col = 255);
 
 #endif // _VTKPOLYDATA2VTKIMAGEDATA_H__

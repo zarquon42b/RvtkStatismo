@@ -1,6 +1,6 @@
 #include "vtkPolyData2vtkImageData.h"
 #include "RcppEigen.h"
-vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin) {
+vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin, int col) {
   vtkSmartPointer<vtkImageData> whiteImage = vtkSmartPointer<vtkImageData>::New();
   
   double bounds[6];
@@ -37,7 +37,7 @@ vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyDa
     whiteImage->AllocateScalars(VTK_UNSIGNED_CHAR,1);
 #endif
     // fill the image with foreground voxels:
-    unsigned char inval = 255;
+    unsigned char inval = col;
     unsigned char outval = 0;
     vtkIdType count = whiteImage->GetNumberOfPoints();
     for (vtkIdType i = 0; i < count; ++i) {
