@@ -26,10 +26,22 @@ vtkRenderMesh <- function(mesh,size=5) {
 #' @param mesh mesh of class mesh3d
 #' @param filename character
 #' @export
-vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtp","vtk")) {
+vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
+    
     dataname <- deparse(substitute(mesh))
-    vb <- mesh$vb[1:3,]
-    it <- mesh$it
+    if(inherits(mesh,"mesh3d")) {
+        vb <- mesh$vb[1:3,]
+        it <- mesh$it
+    } else if (is.matrix(mesh)) {
+          it <- NULL
+          if (ncol(mesh) == 3)
+              vb <- t(mesh)
+          else if (ncol(mesh) == 2)
+              vb <- t(cbind(mesh,0))
+          else
+              stop("only 2D and 3D matrices are allowed")
+      }
+    
     type <- type[1]
     filename <- path.expand(as.character(filename))
     if (type %in% c("vtp","vtk"))
