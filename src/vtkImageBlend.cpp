@@ -31,7 +31,7 @@
 #include "R2vtkPoints.h"
 #include <RcppEigen.h>
 #include "vtkImageIO.h"
-
+#include <vtkImageReslice.h>
 using namespace Rcpp;
 
 
@@ -69,6 +69,42 @@ RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_,SEXP
     blend->SetOpacity(1,image2opa);
     blend->Update();
     vtkSmartPointer<vtkImageData> outputImage = blend->GetOutput();
+    //write image to file
+    vtkImageWrite(outputImage,outputFilename);
+    return wrap(0);
+} catch (std::exception& e) {
+  ::Rf_error( e.what());
+ } catch (...) {
+  ::Rf_error("unknown exception");
+ }
+}
+
+RcppExport SEXP vtkImageReSize(SEXP images1_, SEXP outname_,const double* spacing) {
+  try{ 
+
+    std::string inputFilename1 = as<std::string>(images1_);
+    std::string outputFilename = as<std::string>(outname_);
+    double spacing1[3];
+    spacing1[0] = 3;
+    spacing1[1] = 3;
+    spacing1[2] = 3;
+    vtkSmartPointer<vtkTransform> trafo = vtkSmartPointer<vtkTransform>::New();
+    vtkSmartPointer<vtkMatrix4x4> ras =vtkSmartPointer<vtkMatrix4x4>::New();
+    ras->Identity();
+    trafo->SetMatrix(ras);
+    vtkSmartPointer<vtkImageData> image1 = vtkImageRead(inputFilename1);
+    vtkSmartPointer<vtkImageReslice> resample = vtkImageReslice::New();
+#if VTK_MAJOR_VERSION <= 5
+    resample->SetInput(image1);
+#else
+    resample->SetInputData(image1);
+#endif 
+    resample->SetResliceTransform(trafo);
+    resample->SetOutputSpacing(spacing);
+    resample->SetInterpolationMode(2);
+    resample->Update();
+    
+    vtkSmartPointer<vtkImageData> outputImage = resample->GetOutput();
     //write image to file
     vtkImageWrite(outputImage,outputFilename);
     return wrap(0);
