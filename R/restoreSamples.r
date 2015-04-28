@@ -19,7 +19,7 @@
 #' @export
 restoreSamples <- function(model) {
     out <- list()
-    scores <- GetPCScores(model,FALSE)    
+    scores <- GetPCScores(model,TRUE)    
     for (i in 1:nrow(scores))
         out[[i]] <- DrawSample(model,coefficients=scores[i,])
     names(out) <- rownames(scores)
