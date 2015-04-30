@@ -9,8 +9,11 @@
 vtkImageBlend <- function(image1,image2,outname="out.mha",opacity1=0.5, opacity2=0.5) {
     tmp <- .Call("vtkImageBlender",image1,image2,outname,opacity1,opacity2)
 }
-    
-vtkImageResize <- function(image,outname,spacing=c(1,1,1)) {
+
+
+#' Resample an image and write to file.
+vtkImageResize <- function(image,outname,spacing=c(1,1,1),interpolate=2) {
     storage.mode(spacing) <- "double"
-    tmp <- .Call("vtkImageReSize",image,outname,spacing)
+    tmp <- .Call("vtkImageReSize",image,outname,spacing,as.integer(interpolate))
 }
+

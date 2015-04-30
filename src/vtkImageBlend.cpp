@@ -79,15 +79,16 @@ RcppExport SEXP vtkImageBlender(SEXP images1_, SEXP images2_, SEXP outname_,SEXP
  }
 }
 
-RcppExport SEXP vtkImageReSize(SEXP images1_, SEXP outname_,const double* spacing) {
+RcppExport SEXP vtkImageReSize(SEXP images1_, SEXP outname_, SEXP spacing_, SEXP interpolate_) {
   try{ 
-
+    int interpolate = as<int>(interpolate_);
     std::string inputFilename1 = as<std::string>(images1_);
     std::string outputFilename = as<std::string>(outname_);
+    NumericVector spacing(spacing_);
     double spacing1[3];
-    spacing1[0] = 3;
-    spacing1[1] = 3;
-    spacing1[2] = 3;
+    spacing1[0] = spacing[0];
+    spacing1[1] =  spacing[1];
+    spacing1[2] =  spacing[2];
     vtkSmartPointer<vtkTransform> trafo = vtkSmartPointer<vtkTransform>::New();
     vtkSmartPointer<vtkMatrix4x4> ras =vtkSmartPointer<vtkMatrix4x4>::New();
     ras->Identity();
@@ -100,8 +101,9 @@ RcppExport SEXP vtkImageReSize(SEXP images1_, SEXP outname_,const double* spacin
     resample->SetInputData(image1);
 #endif 
     resample->SetResliceTransform(trafo);
-    resample->SetOutputSpacing(spacing);
-    resample->SetInterpolationMode(2);
+    resample->SetOutputSpacing(spacing1);
+    //resample->SetInterpolate(interpolate);
+    resample->SetInterpolationMode(interpolate);
     resample->Update();
     
     vtkSmartPointer<vtkImageData> outputImage = resample->GetOutput();
