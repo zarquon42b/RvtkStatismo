@@ -23,28 +23,20 @@ SET(CMAKE_CXX_COMPILER::string "${CXX}")
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 project(RvtkStatismo CXX)
-## check for C++11 compatibility
-#include(CheckCXXCompilerFlag)
-#CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-#CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-#if(COMPILER_SUPPORTS_CXX11)
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#elseif(COMPILER_SUPPORTS_CXX0X)
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-#else()
-#  message(FATAL_ERROR "Your compiler ${CMAKE_CXX_COMPILER} has no C++11 support")
-#endif()
- 
-  ## look for VTK
-#find_package(VTK REQUIRED)
-#message("${VTK_DIR}")
+
+option(Qt5 "enable if your vtk version is built against qt5" ON)
+
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(statismo REQUIRED)
-#message("${VTK_DIR}")
+#message( "${VTK_QT_VERSION}")
 IF( NOT VTK_SUPPORT )
   MESSAGE(FATAL_ERROR "You need to build statismo with VTK_SUPPORT=ON" )
 ENDIF()
-LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR})
+if(${VTK_QT_VERSION} EQUAL "5")
+  find_package(Qt5Widgets REQUIRED)
+  #find_package(Qt5OpenGL REQUIRED)
+endif()
+LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR} )
 include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} "../inst/include/")
 include(${VTK_USE_FILE})
 add_library(RvtkStatismo SHARED BuildConditionalModel.cpp BuildGaussProcessModel.cpp BuildModel.cpp ConstrainedModel.cpp getFullJacobian.cpp Helpers.cpp ModelMembers.cpp polyData2R.cpp pPCA2statismo.cpp R2polyData.cpp R2vtkPoints.cpp readVTP.cpp ReducedModel.cpp SaveModel.cpp vtkExtractOutsideMesh.cpp vtkICP.cpp vtkImageBlend.cpp vtkImageIO.cpp vtkImageTransform.cpp vtkpoly2unstruct.cpp vtkPolyData2vtkImageData.cpp vtkPolyToImageData.cpp vtkPolyVolume.cpp vtkSurfaceReko.cpp vtkVisualize.cpp writeToVTK.cpp)
