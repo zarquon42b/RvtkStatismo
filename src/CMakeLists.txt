@@ -23,7 +23,7 @@ SET(CMAKE_CXX_COMPILER::string "${CXX}")
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 project(RvtkStatismo CXX)
-set(VTK_QT_VERSION "0")
+
 option(Qt5 "enable if your vtk version is built against qt5" ON)
 
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
@@ -32,7 +32,7 @@ FIND_PACKAGE(statismo REQUIRED)
 IF( NOT VTK_SUPPORT )
   MESSAGE(FATAL_ERROR "You need to build statismo with VTK_SUPPORT=ON" )
 ENDIF()
-if($VTK_QT_VERSION)
+if(NOT ${VTK_QT_VERSION} STREQUAL "")
   if(${VTK_QT_VERSION} EQUAL "5")
     find_package(Qt5Widgets REQUIRED)
     #find_package(Qt5OpenGL REQUIRED)
