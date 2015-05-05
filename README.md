@@ -6,7 +6,7 @@ __RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github
 
 * **Linux/OSX:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment and of course statismo
 
-On Ubuntu (14.04/14.10), this can be easily accomplished by:
+On Ubuntu (14.04/14.10/15.04), this can be easily accomplished by:
 	
 	sudo apt-add-repository ppa:zarquon42/ppa
 	sudo apt-get update
