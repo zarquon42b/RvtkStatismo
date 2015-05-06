@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 2.6)
 #set(VTK_DIR ".")
 
+macro(NO_QT arg result)
+  set(VTK_NO_QT "")
+  foreach(lib ${arg})
+    if (NOT  ${lib} MATCHES "Qt")
+      list(APPEND VTK_NO_QT ${lib})
+    endif()
+  endforeach()
+  set(${result} "${VTK_NO_QT}")
+endmacro()
+
 ## GET R-specific ENV variables
 set(R_HOME $ENV{R_HOME})
 SET(RLIB "${R_HOME}/lib")
@@ -24,20 +34,15 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 project(RvtkStatismo CXX)
 
-option(Qt5 "enable if your vtk version is built against qt5" ON)
-
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(statismo REQUIRED)
 #message( "${VTK_QT_VERSION}")
 IF( NOT VTK_SUPPORT )
   MESSAGE(FATAL_ERROR "You need to build statismo with VTK_SUPPORT=ON" )
 ENDIF()
-if(NOT ${VTK_QT_VERSION} STREQUAL "")
-  if(${VTK_QT_VERSION} EQUAL "5")
-    find_package(Qt5Widgets REQUIRED)
-    #find_package(Qt5OpenGL REQUIRED)
-  endif()
-endif()
+
+NO_QT("${VTK_LIBRARIES}" VTK_LIBRARIES)
+
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR} )
 include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} "../inst/include/")
 include(${VTK_USE_FILE})
