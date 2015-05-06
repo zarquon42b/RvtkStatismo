@@ -4,6 +4,7 @@
 #' @param model
 #' @param sample k x 3 matrix of coordinates
 #' @param index integer vector of lenght \code{k} assigning the corresponding index of the model's coordinates to each row of \code{sample}
+#' @param mahlanobis logical: if FALSE, Euclideandistance is used.
 #' @return
 #' \item{mahadistance}{vector containing the mahalanobisdistances of all tested coordinates}
 #' \item{goodverts}{the coordinates with the lowest mahalanobisdistance}
@@ -24,15 +25,15 @@
 #'
 #' @rdname competingPoints
 #' @export
-setGeneric("competingPoints", function(model,sample,index) {
+setGeneric("competingPoints", function(model,sample,index,mahalanobis=TRUE) {
     standardGeneric("competingPoints")
 })
 
 #' @rdname competingPoints
-setMethod("competingPoints", signature(model="pPCA",sample="matrix",index="numeric"), function(model,sample,index) {
+setMethod("competingPoints", signature(model="pPCA",sample="matrix",index="numeric"), function(model,sample,index,mahalanobis=TRUE) {
     if (length(index) != nrow(sample))
         stop("each point needs an index assigned")
     index <- index-1L
-    out <- .Call("competingPoints",model,sample,index)
+    out <- .Call("competingPoints",model,sample,index,mahalanobis)
     return(out)
 })

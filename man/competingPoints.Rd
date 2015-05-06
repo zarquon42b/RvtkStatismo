@@ -6,9 +6,10 @@
 \alias{competingPoints,pPCA,matrix,numeric-method}
 \title{select the most probable points based on a statistical model}
 \usage{
-competingPoints(model, sample, index)
+competingPoints(model, sample, index, mahalanobis = TRUE)
 
-\S4method{competingPoints}{pPCA,matrix,numeric}(model, sample, index)
+\S4method{competingPoints}{pPCA,matrix,numeric}(model, sample, index,
+  mahalanobis = TRUE)
 }
 \arguments{
 \item{model}{}
@@ -16,6 +17,8 @@ competingPoints(model, sample, index)
 \item{sample}{k x 3 matrix of coordinates}
 
 \item{index}{integer vector of lenght \code{k} assigning the corresponding index of the model's coordinates to each row of \code{sample}}
+
+\item{mahlanobis}{logical: if FALSE, Euclideandistance is used.}
 }
 \value{
 \item{mahadistance}{vector containing the mahalanobisdistances of all tested coordinates}

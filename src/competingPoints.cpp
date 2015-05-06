@@ -1,5 +1,13 @@
 #include "competingPoints.h"
 
+double eudist(vtkPoint x, vtkPoint y) {
+  double nn = 0.0;
+  for (unsigned int i = 0; i < 3;i++) {
+    nn += std::pow(y[i]-x[i],2);
+  }
+  nn = std::sqrt(nn);
+  return(nn);
+}
 
 IntegerVector sortInt(IntegerVector x) {
    IntegerVector y = clone(x);
@@ -7,9 +15,10 @@ IntegerVector sortInt(IntegerVector x) {
    return y;
 }
 
-SEXP competingPoints(SEXP pPCA_,SEXP sample_, SEXP indices_) {
+SEXP competingPoints(SEXP pPCA_,SEXP sample_, SEXP indices_, SEXP maha_) {
 
    try {
+     bool maha = as<bool>(maha_);
      NumericMatrix sample(sample_);
      IntegerVector indices(indices_);
      IntegerVector ranges = sortInt(unique(indices));
@@ -24,13 +33,16 @@ SEXP competingPoints(SEXP pPCA_,SEXP sample_, SEXP indices_) {
        for (unsigned int j = 0; j < indices.size(); j++) {
 	 
 	 if (indices[j] == *it) {
+	   double mahaget;
 	   vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(j,_)));
-	   vtkPoint tmp1 = model->DrawMeanAtPoint(indices[j]);
-	   double mahaget = mahadist(model.get(),tmp0,tmp1);
+	   vtkPoint tmp1 = model->DrawMeanAtPoint(*it);
+	   if(maha)
+	     mahaget = mahadist(model.get(),tmp0,tmp1);
+	   else
+	     mahaget = eudist(tmp0,tmp1);
 	   mahadistance[j] = mahaget;
 	   if (mahaget < md) {
 	     md = mahaget;
-	     
 	     mahadistance[j] = mahaget;
 	     goodverts(i,_) = sample(j,_);
 	     mahagood[i] = mahaget;
