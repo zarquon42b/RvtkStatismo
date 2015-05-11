@@ -13,7 +13,7 @@ vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyDa
   }
   //add margin for each dimension
   for (int i = 0; i < 6; i++) {
-    double margintmp = std::pow(-1.0d,i+1)*margin*dimbounds[i];
+    double margintmp = std::pow(-1.0,i+1)*margin*dimbounds[i];
     bounds[i] += margintmp;//add 10 % margin
   }
   whiteImage->SetSpacing(spacing);
