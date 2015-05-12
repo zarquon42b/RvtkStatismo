@@ -4,6 +4,7 @@
 \name{modelinfo-class}
 \alias{AddModelInfoParams}
 \alias{AddModelInfoParams,modelinfo-method}
+\alias{SetModelDataInfo<-}
 \alias{SetModelInfoParams<-}
 \alias{modelinfo-class}
 \title{Documentation of class modelinfo}
@@ -15,6 +16,10 @@ AddModelInfoParams(x, value)
 SetModelInfoParams(x) <- value
 
 \S4method{SetModelInfoParams}{modelinfo}(x) <- value
+
+SetModelDataInfo(x) <- value
+
+\S4method{SetModelDataInfo}{modelinfo}(x) <- value
 }
 \arguments{
 \item{x}{an object of class "modelinfo"}

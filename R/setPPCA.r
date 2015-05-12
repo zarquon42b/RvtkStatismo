@@ -109,7 +109,28 @@ setGeneric("SetModelInfoParams<-", function(x, value) standardGeneric("SetModelI
 setReplaceMethod("SetModelInfoParams", signature("modelinfo"),function(x, value) {
     x@paraminfo <-value; validObject(x); x
 })
+#' @rdname ppcasetters
+setMethod("SetModelInfoParams<-", signature("pPCA"),function(x, value) {
+              SetModelInfoParams(x@modelinfo) <- value; validObject(x)
+              return(x)
+    
+})
 
+#' @rdname modelinfo-class
+#' @export
+setGeneric("SetModelDataInfo<-", function(x, value) standardGeneric("SetModelDataInfo<-"))
+#' @rdname modelinfo-class
+#' @name modelinfo-class
+setReplaceMethod("SetModelDataInfo", signature("modelinfo"),function(x, value) {
+                     x@datainfo <-value; validObject(x); x
+})
+
+#' @rdname ppcasetters
+setMethod("SetModelDataInfo<-", signature("pPCA"),function(x, value) {
+              SetModelDataInfo(x@modelinfo) <- value; validObject(x)
+              return(x)
+    
+})
 pairNameCheck <- function(x,value) {
     full <- unlist(x)
     full <- full[ (1:length(full)) %% 2 != 0]

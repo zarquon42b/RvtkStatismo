@@ -5,6 +5,8 @@
 \alias{AddModelInfoParams,pPCA-method}
 \alias{Set-pPCA-class}
 \alias{SetMeanVector<-}
+\alias{SetModelDataInfo<-,pPCA-method}
+\alias{SetModelInfoParams<-,pPCA-method}
 \alias{SetNoiseVariance<-}
 \alias{SetPCA<-}
 \alias{SetPCBasisMatrix<-}
@@ -52,6 +54,10 @@ SetVariance(x) <- value
 \S4method{SetVariance}{pPCA}(x) <- value
 
 \S4method{AddModelInfoParams}{pPCA}(x, value)
+
+\S4method{SetModelInfoParams}{pPCA}(x) <- value
+
+\S4method{SetModelDataInfo}{pPCA}(x) <- value
 }
 \arguments{
 \item{value}{set the specific value}

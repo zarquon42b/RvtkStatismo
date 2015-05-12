@@ -3,6 +3,7 @@
 S3method(getDataLikelihood,matrix)
 S3method(getDataLikelihood,mesh3d)
 export("SetMeanVector<-")
+export("SetModelDataInfo<-")
 export("SetModelInfoParams<-")
 export("SetNoiseVariance<-")
 export("SetPCA<-")
