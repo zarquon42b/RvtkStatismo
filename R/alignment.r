@@ -5,12 +5,12 @@
 #' @param scale logical: request scaling during alignment
 #' @param use.lm integer vector: specifies the indices of the points that are to be used in the constrained model
 #' @param deselect logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.
+#' @param reference integer: instead of a GPA, all specimens are aligned to this specific one.
 #' @return a list containing
 #' \item{rotated}{array containing registered coordinates}
 #' \item{mshape}{matrix containing meanshape}
-#'
 #' @export
-rigidAlign <- function(array,scale=FALSE,use.lm=NULL,deselect=FALSE) {
+rigidAlign <- function(array,scale=FALSE,use.lm=NULL,deselect=FALSE,reference=NULL) {
     k <- dim(array)[1]
     if (!is.null(use.lm)) {
         use.lm <- unique(sort(use.lm))
@@ -18,23 +18,32 @@ rigidAlign <- function(array,scale=FALSE,use.lm=NULL,deselect=FALSE) {
             use.lm <- c(1:k)[-use.lm]
         }
     }
-    out <- partialAlign(array,use.lm = use.lm,scale=scale)
+    out <- partialAlign(array,use.lm = use.lm,scale=scale,reference=reference)
 }
 
-partialAlign <- function(array,use.lm=NULL,scale=FALSE) {
-    if (!is.null(use.lm)){
-        procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
+partialAlign <- function(array,use.lm=NULL,scale=FALSE,reference=NULL) {
+    if (is.null(reference)){
+        if (!is.null(use.lm)){
+            procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=F,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
             tmp <- array
             a.list <-  1:(dim(array)[3])
             tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[,,i],scale=scale,reflection = F);return(mat)})
-            tmp1 <- array
-            for (i in 1:length(a.list))
-                tmp1[,,i] <- tmp[[i]]
+            tmp1 <- Morpho::list2array(tmp)
             procMod$rotated <- tmp1
             procMod$mshape <- arrMean3(tmp1)
         } else {
             procMod <- ProcGPA(array,scale=scale,CSinit = F,reflection = F,silent = T)
         }
+    } else {
+        if (is.null(use.lm))
+            use.lm <- 1:dim(array)[1]
+        a.list <-  1:(dim(array)[3])
+        tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],array[,,reference],scale=scale,reflection = F);return(mat)})
+        procMod <- list()
+        procMod$rotated <- Morpho::list2array(tmp)
+        procMod$mshape <- arrMean3(procMod$rotated)
+        
+    }
     return(procMod)
 }
 
@@ -47,11 +56,16 @@ partialAlign <- function(array,use.lm=NULL,scale=FALSE) {
 #' @param use.lm integer vector: specifies the indices of the points that are to be used in the constrained model
 #' @param array logical: if TRUE the superimposed vertices will be returned as 3D array.
 #' @return returns a list of aligned meshes or an array of dimensions k x 3 x n, where k=number of vertices and n=sample size.
+#' @param reference integer: instead of a GPA, all specimens are aligned to this specific one.
+#' @examples
+#' mod <- statismoLoadModel(system.file("extdata","mandibles.h5",package="RvtkStatismo"))
+#' shapes <- restoreSamples(mod)
+#' newalign <- meshalign(shapes,reference=1)
 #' @importFrom Morpho vert2points ProcGPA
 #' @export
-meshalign <- function(meshlist,scale=FALSE,use.lm=NULL,deselect=FALSE,array=FALSE) {
+meshalign <- function(meshlist,scale=FALSE,use.lm=NULL,deselect=FALSE,array=FALSE,reference=NULL) {
     vertarr <- meshlist2array(meshlist)
-    out <- rigidAlign(vertarr,scale=scale,use.lm=use.lm,deselect=FALSE)$rotated
+    out <- rigidAlign(vertarr,scale=scale,use.lm=use.lm,deselect=FALSE,reference=reference)$rotated
     if (array) {
         return(out)
     } else {

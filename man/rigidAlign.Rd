@@ -4,7 +4,8 @@
 \alias{rigidAlign}
 \title{Fast Procrustes align of coordinates}
 \usage{
-rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE)
+rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE,
+  reference = NULL)
 }
 \arguments{
 \item{array}{array of coordinates}
@@ -14,6 +15,8 @@ rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE)
 \item{use.lm}{integer vector: specifies the indices of the points that are to be used in the constrained model}
 
 \item{deselect}{logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.}
+
+\item{reference}{integer: instead of a GPA, all specimens are aligned to this specific one.}
 }
 \value{
 a list containing
