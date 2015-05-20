@@ -9,7 +9,7 @@
 #' require(Rvcg)
 #' require(rgl)
 #' data(humface)
-#' hummodel <- statismoModelFromRepresenter(humface)
+#' hummodel <- statismoModelFromRepresenter(humface,kernel=list(c(50,50)))
 #' hummodel0 <- removePointsFromModel(hummodel,1:1000)
 #' shade3d(DrawSample(hummodel0),col=3)
 #' @importFrom Morpho rmVertex
