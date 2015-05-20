@@ -12,6 +12,7 @@
 \alias{SetPCBasisMatrix<-}
 \alias{SetPCsdev<-}
 \alias{SetRawdata<-}
+\alias{SetRepresenter<-}
 \alias{SetScale<-}
 \alias{SetScores<-}
 \alias{SetVariance<-}
@@ -40,6 +41,10 @@ SetMeanVector(x) <- value
 SetScores(x) <- value
 
 \S4method{SetScores}{pPCA}(x) <- value
+
+SetRepresenter(x) <- value
+
+\S4method{SetRepresenter}{pPCA}(x) <- value
 
 SetScale(x) <- value
 

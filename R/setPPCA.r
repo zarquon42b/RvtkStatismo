@@ -55,6 +55,14 @@ setReplaceMethod("SetScores", "pPCA",function(x, value) {x@PCA$x <- value; valid
 
 #' @rdname ppcasetters
 #' @export
+setGeneric("SetRepresenter<-", function(x, value) standardGeneric("SetRepresenter<-"))
+#' @name Set-pPCA-class
+#' @rdname ppcasetters
+setReplaceMethod("SetRepresenter", "pPCA",function(x, value) {x@representer <- dataset2representer(value); validObject(x); x})
+
+
+#' @rdname ppcasetters
+#' @export
 setGeneric("SetScale<-", function(x, value) standardGeneric("SetScale<-"))
 #' @name Set-pPCA-class
 #' @rdname ppcasetters

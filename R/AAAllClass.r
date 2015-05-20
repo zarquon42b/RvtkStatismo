@@ -81,8 +81,9 @@ setClass("pPCA",
     dimbasis <- dim(object@PCA$rotation)
     sdevlen <- length(object@PCA$sdev)
     centerlen <- length(object@PCA$center)
-    if (centerlen != dimbasis[1])
-        return("dimension of meanvector and PC-Basis differ")
+    representerlen <- length(as.vector(object@representer$vb[1:3,]))
+    if (centerlen != dimbasis[1] || centerlen != representerlen)
+        return("dimension of meanvector and PC-Basis or Representer coordinates differ ")
     else if (sdevlen != dimbasis[2])
         return("number of standarddeviations and number of Basisvectors differ"
                )
