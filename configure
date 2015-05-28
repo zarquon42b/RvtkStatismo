@@ -24,3 +24,5 @@ cd src
 #cmake .
 cmake . $@
 #make -j$(grep -c ^processor /proc/cpuinfo)
+make
+cp cygRvtkStatismo.dll libRvtkStatismo.dll
