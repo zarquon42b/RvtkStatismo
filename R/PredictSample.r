@@ -32,7 +32,7 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 #' @rdname PredictSample
 #' @export
 setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,bySubset=FALSE, ...) {
-    mahaprob <- substr(mahaprob[1],1L,1L)
+    #mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     hasLM <- FALSE
     if (!is.null(lmDataset) && !is.null(lmModel))
@@ -53,28 +53,7 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
         alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
-        if (mahaprob != "n") {
-            sdl <- length(model@PCA$sdev)
-            probs <- sum(alpha^2)
-            if (mahaprob == "c") {
-                Mt <- qchisq(1-2*pnorm(sdmax,lower.tail=F),df=sdl)
-                probs <- sum(alpha^2)
-            } else if (mahaprob == "d") {
-                Mt <- sdmax
-                probs <- sqrt(probs)
-            }
-            if (probs > Mt ) {
-                sca <- Mt/probs
-                alpha <- alpha*sca
-            }
-            
-        } else { 
-            signalpha <- sign(alpha)
-            alpha <- abs(alpha)
-            outlier <- which(alpha > sdmax)
-            alpha[outlier] <- sdmax
-            alpha <- alpha*signalpha
-        }
+        alpha <- constrainParams(alpha,sdmax=sdmax,mahaprob=mahaprob)
     }
     if ("coeffs" %in% names(list(...))) {
         return(alpha)
@@ -99,3 +78,29 @@ setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(mod
     return(estim)
 })
 
+constrainParams <- function(alpha,sdmax=3,mahaprob=c("none","chisq","dist")) {
+    
+    mahaprob <- match.arg(mahaprob,c("none","chisq","dist"))
+    if (mahaprob != "none") {
+        sdl <- length(alpha)
+        probs <- sum(alpha^2)
+        if (mahaprob == "chisq") {
+            Mt <- qchisq(1-2*pnorm(sdmax,lower.tail=F),df=sdl)
+            probs <- sum(alpha^2)
+        } else if (mahaprob == "dist") {
+            Mt <- sdmax
+            probs <- sqrt(probs)
+        }
+        if (probs > Mt ) {
+            sca <- Mt/probs
+            alpha <- alpha*sca
+        }
+    } else { 
+        signalpha <- sign(alpha)
+        alpha <- abs(alpha)
+        outlier <- which(alpha > sdmax)
+        alpha[outlier] <- sdmax
+        alpha <- alpha*signalpha
+    }
+    return(alpha)
+}
