@@ -11,24 +11,34 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
     std::list<MatrixValuedKernelType*> mKerns;
     std::list<GaussianKernel*> gKerns;
+    std::list<MultiscaleKernel*> bsKerns;
     vtkPoint centroid = SEXP2vtkPoint(centroid_);
     List kernels(kernels_);
   
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-   
+    MatrixValuedKernelType* mvKernel;
     // set up the gaussian kernel to be incremented over a list of parameters
     NumericVector params = kernels[0];
-    GaussianKernel* gk = new GaussianKernel(params[0]);
-    gKerns.push_back(gk);
-    MatrixValuedKernelType* mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-    
-    MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
+    //if params[0] == 0 Gaussian Kernel
+    //else Multiscale kernel
+    if (params[0] == 0) {
+      GaussianKernel* gk = new GaussianKernel(params[1]);
+      gKerns.push_back(gk);
+      mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+      
+    } else {
+      MultiscaleKernel* gk1 = new MultiscaleKernel(params[1],params[3]);
+      bsKerns.push_back(gk1);
+      mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk1, model->GetRepresenter()->GetDimensions());
+      
+    }
+      MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[2]);
     //iterate over the remaining kernel parameters
     for (unsigned int i = 1; i < kernels.size();i++) {
       params = kernels[i];
-      GaussianKernel* gkNew = new GaussianKernel(params[0]);
+      GaussianKernel* gkNew = new GaussianKernel(params[1]);
       MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
-      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
+      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[2]);
       //keep track of allocated objects
       gKerns.push_back(gkNew);
       mKerns.push_back(mvGk);
@@ -64,6 +74,11 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
       }
     }
     for (std::list<GaussianKernel*>::iterator it = gKerns.begin(); it != gKerns.end(); it++) {
+      if (*it != NULL) {
+	delete *it;
+      }
+    }
+    for (std::list<MultiscaleKernel*>::iterator it = bsKerns.begin(); it != bsKerns.end(); it++) {
       if (*it != NULL) {
 	delete *it;
       }
