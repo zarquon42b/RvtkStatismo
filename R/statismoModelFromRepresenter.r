@@ -17,7 +17,7 @@
 #' require(rgl)
 #' for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
 #' @export
-statismoModelFromRepresenter <- function(representer,kernel=list(c(0,100,70,0)),ncomp=10,nystroem=500,combine="sum",isoScale=0, centroid=NULL) {
+statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500,combine="sum",isoScale=0, centroid=NULL) {
     representer <- dataset2representer(representer)
     center <- as.vector(representer$vb[1:3,])
     pp <- new("pPCA")
