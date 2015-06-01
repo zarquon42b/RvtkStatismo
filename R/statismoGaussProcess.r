@@ -4,7 +4,7 @@
 #'
 #' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
-#' @param kernel a list containing 2 valued vecors for a GP kernel or 4 valued vectors containing with the first entry specifiying the kernel type (see details) , the second bandwidth and the third the scaling and the fourth (only needed for Multiscale kernels) the number of scales. 
+#' @param kernel a list containing 2 numeric vectors containing. Except the first entry may be 3 valued and then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels. 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character: determining how to combine the kernels: "sum" or "product" are supported.
@@ -30,7 +30,7 @@
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}}
 #' @keywords StatisticalModel<representer>
 #' @export
-statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(0,100,70,0)),ncomp=10,nystroem=500, combine=c("sum","product"),combineEmp="sum", isoScale=0, centroid=NULL) {
+statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=10,nystroem=500, combine=c("sum","product"),combineEmp="sum", isoScale=0, centroid=NULL) {
     combine <- combine[1]
     if (combine == "sum")
         combine <- 0
@@ -52,11 +52,9 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(0,100,70,0)),nco
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
-    twokerns <- which(chk == 2)
-    kernel[twokerns] <- lapply(kernel[twokerns],function(x) x <- c(0,x,0))
     kernelVec <- unlist(kernel)
-    chkZeroScale <- prod(kernelVec[((1:length(kernelVec))%%4 == 3)])
-    chkZeroSigma <- prod(kernelVec[((1:length(kernelVec))%%4 == 2)])
+    chkZeroScale <- prod(sapply(kernel,function(x) x <- x[1]))
+    chkZeroSigma <- prod(sapply(kernel,function(x) x <- x[2]))
     if (chkZeroSigma == 0)
         stop("kernels with zero sigma are not allowed. For using dummy kernels set scale=0")
     if (chkZeroScale == 0 && !useEmpiric) {
@@ -75,7 +73,7 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(0,100,70,0)),nco
         }
     }
     useEmpiric <- as.logical(useEmpiric)
-    if (!(prod(unlist(chk) >= 3) * is.numeric(unlist(kernel))))
+    if (!(prod(unlist(chk) >= 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
     
     

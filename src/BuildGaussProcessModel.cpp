@@ -21,24 +21,24 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
     NumericVector params = kernels[0];
     //if params[0] == 0 Gaussian Kernel
     //else Multiscale kernel
-    if (params[0] == 0) {
-      GaussianKernel* gk = new GaussianKernel(params[1]);
+    if (params.size() == 2) {
+      GaussianKernel* gk = new GaussianKernel(params[0]);
       gKerns.push_back(gk);
       mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
       
     } else {
-      MultiscaleKernel* gk1 = new MultiscaleKernel(params[1],params[3]);
+      MultiscaleKernel* gk1 = new MultiscaleKernel(params[0],params[2]);
       bsKerns.push_back(gk1);
       mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk1, model->GetRepresenter()->GetDimensions());
       
     }
-      MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[2]);
+      MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
     //iterate over the remaining kernel parameters
     for (unsigned int i = 1; i < kernels.size();i++) {
       params = kernels[i];
-      GaussianKernel* gkNew = new GaussianKernel(params[1]);
+      GaussianKernel* gkNew = new GaussianKernel(params[0]);
       MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
-      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[2]);
+      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
       //keep track of allocated objects
       gKerns.push_back(gkNew);
       mKerns.push_back(mvGk);
