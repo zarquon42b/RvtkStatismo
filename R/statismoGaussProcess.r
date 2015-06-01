@@ -4,7 +4,7 @@
 #'
 #' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
-#' @param kernel a list containing 3 or 4 valued vectors containing with the first entry specifiying the kernel type (see details) , the second bandwidth and the third the scaling and the fourth (only needed for Multiscale kernels) the number of scales . 
+#' @param kernel a list containing 2 valued vecors for a GP kernel or 4 valued vectors containing with the first entry specifiying the kernel type (see details) , the second bandwidth and the third the scaling and the fourth (only needed for Multiscale kernels) the number of scales. 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character: determining how to combine the kernels: "sum" or "product" are supported.
@@ -52,6 +52,8 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(0,100,70,0)),nco
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
+    twokerns <- which(chk == 2)
+    kernel[twokerns] <- lapply(kernel[twokerns],function(x) x <- c(0,x,0))
     kernelVec <- unlist(kernel)
     chkZeroScale <- prod(kernelVec[((1:length(kernelVec))%%4 == 3)])
     chkZeroSigma <- prod(kernelVec[((1:length(kernelVec))%%4 == 2)])
