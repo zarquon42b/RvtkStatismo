@@ -91,6 +91,8 @@ statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trai
 #' \item{trainingData}{Data converted into numeric matrix}
 #' \item{surrogateInfo}{vector of 0 and 1 indicating which input was categorial/continuous}
 #' \item{encode}{in case categorial variables where encoded into integers, this lists the association of the categorial values to the corresponding dummy encoding.}
+#' \item{order}{order of variables after resorting}
+#' @note the variables will be resorted with the first being continuous variables and then categorial ones.
 #' @seealso \code{\link{statismoBuildConditionalModel}}
 #' @export
 manageConditioningData <- function(trainingData) {
@@ -100,7 +102,10 @@ manageConditioningData <- function(trainingData) {
     orig <- trainingData
     if (is.data.frame(trainingData)) {
         surrogateInfo <- as.integer(unlist(lapply(trainingData,is.numeric)))
-        trainingData <- as.data.frame(lapply(trainingData,as.numeric))
+        surrorder <- order(surrogateInfo,decreasing=TRUE)
+        surrogateInfo <- surrogateInfo[surrorder]
+        trainingData <- as.data.frame(lapply(trainingData[,surrorder],as.numeric))
+        orig <- orig[,surrorder]
     } else if (is.matrix(trainingData))
           surrogateInfo <- rep(1,ncol(trainingData))
       else
@@ -109,6 +114,7 @@ manageConditioningData <- function(trainingData) {
     out <- list()
     out$trainingData <- trainingData
     out$surrogateInfo <- as.numeric(surrogateInfo)
+    out$order <- colnames(trainingData)
     encode <- list()
     catVar <- which(surrogateInfo==0)
     if (length(catVar)) {
