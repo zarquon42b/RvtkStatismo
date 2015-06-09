@@ -13,9 +13,13 @@ manageConditioningData(trainingData)
 \item{trainingData}{Data converted into numeric matrix}
 \item{surrogateInfo}{vector of 0 and 1 indicating which input was categorial/continuous}
 \item{encode}{in case categorial variables where encoded into integers, this lists the association of the categorial values to the corresponding dummy encoding.}
+\item{order}{order of variables after resorting}
 }
 \description{
 convert a data.frame or vector of factors into a format usable by statismoBuildConditionalModel and extract variable information.
+}
+\note{
+the variables will be resorted with the first being continuous variables and then categorial ones.
 }
 \seealso{
 \code{\link{statismoBuildConditionalModel}}

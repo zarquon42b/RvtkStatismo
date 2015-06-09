@@ -104,12 +104,14 @@ manageConditioningData <- function(trainingData) {
         surrogateInfo <- as.integer(unlist(lapply(trainingData,is.numeric)))
         surrorder <- order(surrogateInfo,decreasing=TRUE)
         surrogateInfo <- surrogateInfo[surrorder]
-        trainingData <- as.data.frame(lapply(trainingData[,surrorder],as.numeric))
-        orig <- orig[,surrorder]
-    } else if (is.matrix(trainingData))
-          surrogateInfo <- rep(1,ncol(trainingData))
-      else
-          stop("trainingData must be a vector, matrix or data.frame")
+        trainingData <- trainingData[,surrorder,drop=FALSE]
+        trainingData <- as.data.frame(lapply(trainingData,as.numeric))
+        orig <- orig[,surrorder,drop=FALSE]
+    } else if (is.matrix(trainingData)) {
+        surrogateInfo <- rep(1,ncol(trainingData))
+    }  else {
+        stop("trainingData must be a vector, matrix or data.frame")
+    }
     trainingData <- as.matrix(trainingData)
     out <- list()
     out$trainingData <- trainingData
@@ -119,7 +121,7 @@ manageConditioningData <- function(trainingData) {
     catVar <- which(surrogateInfo==0)
     if (length(catVar)) {
         for(i in 1:length(catVar)) {
-            encode[[names(orig)[i]]] <- unique(data.frame(orig[,catVar[i]],trainingData[,catVar[i]]))
+            encode[[names(orig)[i]]] <- unique(data.frame(orig[,catVar[i]],trainingData[,catVar[i]],row.names = NULL))
         }
         out$encode <- encode
     }
