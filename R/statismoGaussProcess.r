@@ -4,7 +4,7 @@
 #'
 #' @param model shape model of class \code{\link{pPCA}}
 #' @param useEmpiric logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.
-#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels. 
+#' @param kernel a list containing 2 numeric vectors containing. Except the first entry may be 3 valued and then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels. 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character: determining how to combine the kernels: "sum" or "product" are supported.
@@ -53,8 +53,8 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
     storage.mode(nystroem) <- "integer"
     chk <- lapply(kernel,length)
     kernelVec <- unlist(kernel)
-    chkZeroScale <- prod(kernelVec[!as.logical((1:length(kernelVec))%%2)])
-    chkZeroSigma <- prod(kernelVec[as.logical((1:length(kernelVec))%%2)])
+    chkZeroScale <- prod(sapply(kernel,function(x) x <- x[1]))
+    chkZeroSigma <- prod(sapply(kernel,function(x) x <- x[2]))
     if (chkZeroSigma == 0)
         stop("kernels with zero sigma are not allowed. For using dummy kernels set scale=0")
     if (chkZeroScale == 0 && !useEmpiric) {
@@ -73,7 +73,7 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
         }
     }
     useEmpiric <- as.logical(useEmpiric)
-    if (!(prod(unlist(chk) == 2) * is.numeric(unlist(kernel))))
+    if (!(prod(unlist(chk) >= 2) * is.numeric(unlist(kernel))))
         stop("only provide two-valued numeric vectors in kernel")
     
     
