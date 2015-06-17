@@ -2,7 +2,7 @@
 #'
 #' get Jacobian for all model points or a subset
 #'
-#' @param model
+#' @param model statistical shape model of class 'pPCA'           
 #' @param pt integer vector specifying which points to use
 #' @return
 #' returns a matrix with rows n: (n+2) containing the Jacobian for the n-th point

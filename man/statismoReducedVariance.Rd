@@ -11,11 +11,13 @@ statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE)
 \S4method{statismoReducedVariance}{pPCA}(model, exVar = 1, npc = 0)
 }
 \arguments{
-\item{model}{}
+\item{model}{statistical shape model of class 'pPCA'}
 
 \item{exVar}{restricts model by explained variance - with \code{0 < exVar < 1}}
 
 \item{npc}{number of PCs retained in the model (overrides \code{exVar})}
+
+\item{scores}{logical: if TRUE, the scores for the reduced model will be returned.}
 }
 \description{
 Reduce an existing statistical shape model either to first n PCs or by explained Variance

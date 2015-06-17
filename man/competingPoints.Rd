@@ -12,13 +12,13 @@ competingPoints(model, sample, index, mahalanobis = TRUE)
   mahalanobis = TRUE)
 }
 \arguments{
-\item{model}{}
+\item{model}{statistical shape model of class 'pPCA'}
 
 \item{sample}{k x 3 matrix of coordinates}
 
 \item{index}{integer vector of lenght \code{k} assigning the corresponding index of the model's coordinates to each row of \code{sample}}
 
-\item{mahlanobis}{logical: if FALSE, Euclideandistance is used.}
+\item{mahalanobis}{logical: if FALSE, Euclideandistance is used.}
 }
 \value{
 \item{mahadistance}{vector containing the mahalanobisdistances of all tested coordinates}

@@ -24,6 +24,7 @@ vtkRenderMesh <- function(mesh,size=5) {
 #'
 #' @param mesh mesh of class mesh3d
 #' @param filename character
+#' @param type character: file extension. Can be "vtk" or "vtp".
 #' @export
 vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
     

@@ -15,11 +15,11 @@ vtkMesh2Image(mesh, spacing = c(0.5, 0.5, 0.5), filename = "default.mha",
 \item{filename}{filename to save as. Can be mha/mhd for VTK_VERSION < 6.2 and
 additionally nii or nii.gz else}
 
+\item{IJK2RAS}{3x3 transformation matrix from point to image space}
+
 \item{margin}{percentage of margin to add around the volume}
 
 \item{col}{integer: value 0 <= col <= 255. Defines the foreground color.}
-
-\item{RAS2IJK}{3x3 transformation matrix from point to image space}
 }
 \description{
 convert a 3D triangular mesh into a voxel image

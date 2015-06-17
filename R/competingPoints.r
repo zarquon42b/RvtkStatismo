@@ -1,10 +1,10 @@
 #' select the most probable points based on a statistical model
 #'
 #' select the most probable points based on a statistical model, using the mahalanobisdistance
-#' @param model
+#' @param model statistical shape model of class 'pPCA'
 #' @param sample k x 3 matrix of coordinates
 #' @param index integer vector of lenght \code{k} assigning the corresponding index of the model's coordinates to each row of \code{sample}
-#' @param mahlanobis logical: if FALSE, Euclideandistance is used.
+#' @param mahalanobis logical: if FALSE, Euclideandistance is used.
 #' @return
 #' \item{mahadistance}{vector containing the mahalanobisdistances of all tested coordinates}
 #' \item{goodverts}{the coordinates with the lowest mahalanobisdistance}

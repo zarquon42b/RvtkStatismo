@@ -2,9 +2,10 @@
 #'
 #' Reduce an existing statistical shape model either to first n PCs or by explained Variance
 #'
-#' @param model
+#' @param model statistical shape model of class 'pPCA'
 #' @param exVar restricts model by explained variance - with \code{0 < exVar < 1}
 #' @param npc number of PCs retained in the model (overrides \code{exVar})
+#' @param scores logical: if TRUE, the scores for the reduced model will be returned.
 #' @examples
 #' require(Morpho)
 #' data(boneData)

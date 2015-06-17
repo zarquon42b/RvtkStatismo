@@ -10,6 +10,8 @@ vtkMeshWrite(mesh, filename = dataname, type = c("vtk", "vtp"))
 \item{mesh}{mesh of class mesh3d}
 
 \item{filename}{character}
+
+\item{type}{character: file extension. Can be "vtk" or "vtp".}
 }
 \description{
 exports a triangular mesh of class mesh3d to a vtp file

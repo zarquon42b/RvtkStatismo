@@ -11,7 +11,7 @@ GetFullJacobian(model, pt)
 \S4method{GetFullJacobian}{pPCA}(model, pt)
 }
 \arguments{
-\item{model}{}
+\item{model}{statistical shape model of class 'pPCA'}
 
 \item{pt}{integer vector specifying which points to use}
 }

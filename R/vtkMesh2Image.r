@@ -5,7 +5,7 @@
 #' @param spacing numeric vector of length 3: voxel spacings
 #' @param filename filename to save as. Can be mha/mhd for VTK_VERSION < 6.2 and
 #' additionally nii or nii.gz else
-#' @param RAS2IJK 3x3 transformation matrix from point to image space
+#' @param IJK2RAS 3x3 transformation matrix from point to image space
 #' @param margin percentage of margin to add around the volume
 #' @param col integer: value 0 <= col <= 255. Defines the foreground color.
 #' @examples

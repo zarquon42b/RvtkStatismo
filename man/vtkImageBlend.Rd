@@ -13,6 +13,10 @@ vtkImageBlend(image1, image2, outname = "out.mha", opacity1 = 0.5,
 \item{image2}{character: path to second image}
 
 \item{outname}{character: image to save merged image to.}
+
+\item{opacity1}{opacity of image1. Accepts values between 0 and 1.}
+
+\item{opacity2}{opacity of image2. Accepts values between 0 and 1.}
 }
 \description{
 Blend two Images using vtkImageBlend
