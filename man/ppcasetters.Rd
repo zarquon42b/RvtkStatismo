@@ -5,17 +5,27 @@
 \alias{AddModelInfoParams,pPCA-method}
 \alias{Set-pPCA-class}
 \alias{SetMeanVector<-}
+\alias{SetMeanVector<-,pPCA-method}
 \alias{SetModelDataInfo<-,pPCA-method}
 \alias{SetModelInfoParams<-,pPCA-method}
 \alias{SetNoiseVariance<-}
+\alias{SetNoiseVariance<-,pPCA-method}
 \alias{SetPCA<-}
+\alias{SetPCA<-,pPCA-method}
 \alias{SetPCBasisMatrix<-}
+\alias{SetPCBasisMatrix<-,pPCA-method}
 \alias{SetPCsdev<-}
+\alias{SetPCsdev<-,pPCA-method}
 \alias{SetRawdata<-}
+\alias{SetRawdata<-,pPCA-method}
 \alias{SetRepresenter<-}
+\alias{SetRepresenter<-,pPCA-method}
 \alias{SetScale<-}
+\alias{SetScale<-,pPCA-method}
 \alias{SetScores<-}
+\alias{SetScores<-,pPCA-method}
 \alias{SetVariance<-}
+\alias{SetVariance<-,pPCA-method}
 \title{Low level methods to set pPCA class content}
 \usage{
 SetNoiseVariance(x) <- value
@@ -65,9 +75,9 @@ SetVariance(x) <- value
 \S4method{SetModelDataInfo}{pPCA}(x) <- value
 }
 \arguments{
-\item{value}{set the specific value}
+\item{x}{of class "pPCA"}
 
-\item{model}{of class "pPCA"}
+\item{value}{set the specific value}
 }
 \value{
 returns an updated pPCA object

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{statismoReducedVariance}
 \alias{statismoReducedVariance}
+\alias{statismoReducedVariance,pPCA-method}
 \title{Reduce an existing statistical shape model}
 \usage{
 statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE)

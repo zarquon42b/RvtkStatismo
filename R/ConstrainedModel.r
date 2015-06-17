@@ -8,12 +8,12 @@
 #' @return a constrained model
 #' @rdname statismoConstrainModel
 #' @name statismoConstrainModel
+#' @docType methods
 #' @export
 setGeneric("statismoConstrainModel",function(model,sample,pt,ptValueNoise){
     standardGeneric("statismoConstrainModel")})
 
 #' @rdname statismoConstrainModel
-#' @name statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise) {
     ptValueNoise <- max(1e-7,ptValueNoise)
     mean <- t(pt)
@@ -22,7 +22,6 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="ma
     return(out)
 })
 #' @rdname statismoConstrainModel
-#' @name statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise) {
     ptValueNoise <- max(1e-12,ptValueNoise)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
@@ -31,7 +30,6 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="nu
     return(out)
 })
 #' @rdname statismoConstrainModel
-#' @name statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise) {
     ptValueNoise <- max(1e-12,ptValueNoise)
     sample <- matrix(sample,3,1)
@@ -61,7 +59,6 @@ setGeneric("statismoConstrainModelSafe",function(model,sample,pt,ptValueNoise,sd
     standardGeneric("statismoConstrainModelSafe")})
 
 #' @rdname statismoConstrainModelSafe
-#' @name statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5) {
     ptValueNoise <- max(1e-12,ptValueNoise)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
@@ -70,6 +67,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
     out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax)
 })
 
+#' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise,sdmax=5) {
     ptValueNoise <- max(1e-12,ptValueNoise)
     mean <- t(pt)
@@ -78,6 +76,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
     out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax)
 })
 
+#' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5) {
     ptValueNoise <- max(1e-12,ptValueNoise)
     sample <- matrix(sample,3,1)

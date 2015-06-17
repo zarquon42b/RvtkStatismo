@@ -3,11 +3,20 @@
 \docType{methods}
 \name{statismoConstrainModelSafe}
 \alias{statismoConstrainModelSafe}
+\alias{statismoConstrainModelSafe,pPCA,matrix,matrix-method}
+\alias{statismoConstrainModelSafe,pPCA,matrix,numeric-method}
+\alias{statismoConstrainModelSafe,pPCA,numeric,numeric-method}
 \title{calculate a posterior model but only use likely correspondences}
 \usage{
 statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5)
 
 \S4method{statismoConstrainModelSafe}{pPCA,matrix,numeric}(model, sample, pt,
+  ptValueNoise, sdmax = 5)
+
+\S4method{statismoConstrainModelSafe}{pPCA,matrix,matrix}(model, sample, pt,
+  ptValueNoise, sdmax = 5)
+
+\S4method{statismoConstrainModelSafe}{pPCA,numeric,numeric}(model, sample, pt,
   ptValueNoise, sdmax = 5)
 }
 \arguments{

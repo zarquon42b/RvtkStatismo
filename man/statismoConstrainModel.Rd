@@ -3,6 +3,9 @@
 \docType{methods}
 \name{statismoConstrainModel}
 \alias{statismoConstrainModel}
+\alias{statismoConstrainModel,pPCA,matrix,matrix-method}
+\alias{statismoConstrainModel,pPCA,matrix,numeric-method}
+\alias{statismoConstrainModel,pPCA,numeric,numeric-method}
 \title{constrain a model of class pPCA}
 \usage{
 statismoConstrainModel(model, sample, pt, ptValueNoise)

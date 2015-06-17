@@ -8,10 +8,12 @@
 #' returns a matrix with rows n: (n+2) containing the Jacobian for the n-th point
 #' @seealso \code{\link{GetJacobian}}
 #' @export
-#' 
+#' @rdname GetFullJacobian 
 setGeneric("GetFullJacobian", function(model,pt) {
     standardGeneric("GetFullJacobian")
 })
+
+#' @rdname GetFullJacobian
 setMethod("GetFullJacobian", signature(model="pPCA"), function(model,pt) {
     if (missing(pt))
         pt <- GetDomainPoints(model)

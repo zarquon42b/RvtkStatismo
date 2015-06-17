@@ -5,7 +5,9 @@
 \alias{AddModelInfoParams}
 \alias{AddModelInfoParams,modelinfo-method}
 \alias{SetModelDataInfo<-}
+\alias{SetModelDataInfo<-,modelinfo-method}
 \alias{SetModelInfoParams<-}
+\alias{SetModelInfoParams<-,modelinfo-method}
 \alias{modelinfo-class}
 \title{Documentation of class modelinfo}
 \usage{
