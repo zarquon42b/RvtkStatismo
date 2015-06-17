@@ -138,7 +138,7 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE, lmDataset=NULL, lmMode
             sb <- rotsb$yrot
         } else {
             rotsb <- rotonto(lmModel,lmDataset,scale=model@scale,reflection=F)
-            sb <- rotonmat(dataset,lmDataset,rotsb$yrot)
+            sb <- rotonmat(x,lmDataset,rotsb$yrot)
         }
     } else {
         sb <- x

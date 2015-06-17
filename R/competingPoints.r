@@ -17,7 +17,7 @@
 #'     mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 #' #add some arbitrary data
 #' myconfused <- matrix(rnorm(300),100,3)
-#' myconfusedind <- sample(1:10,size=100,replace=T)
+#' myconfusedind <- sample(1:10,size=100,replace=TRUE)
 #' perturb <- sample(1:110)
 #' out <- competingPoints(mymod,rbind(align[,,1],myconfused)[perturb,],c(1:10,myconfusedind)[perturb])
 #' ##check if the selected coords are identical to the actual ones

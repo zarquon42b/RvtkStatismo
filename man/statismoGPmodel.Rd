@@ -13,7 +13,7 @@ statismoGPmodel(model, useEmpiric = TRUE, kernel = list(c(100, 70)),
 
 \item{useEmpiric}{logical: if TRUE, the empiric covariance kernel will be added to the Gaussian ones.}
 
-\item{kernel}{a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.}
+\item{kernel}{a list containing 2 numeric vectors containing. Except the first entry may be 3 valued and then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels.}
 
 \item{ncomp}{integer: number of PCs to approximate}
 

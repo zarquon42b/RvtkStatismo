@@ -1,4 +1,3 @@
-#' @export
 vtkRenderMesh <- function(mesh,size=5) {
     if (inherits(mesh,"mesh3d")) {
         vb <- mesh$vb[1:3,]
@@ -76,12 +75,5 @@ read.vtk <- function(filename) {
     class(out) <- "mesh3d"
     return(out)
 }
-vtkUpdateNormals <- function(mesh) {
-     
-        vb <- mesh$vb[1:3,]
-        if(!is.null(mesh$it))
-            it <- mesh$it-1
-        else
-            stop("mesh contains no faces")
-         out <- .Call("vtkWrite",filename,vb,it)
-}
+
+

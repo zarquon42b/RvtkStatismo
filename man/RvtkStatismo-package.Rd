@@ -4,16 +4,17 @@
 \name{RvtkStatismo-package}
 \alias{RvtkStatismo}
 \alias{RvtkStatismo-package}
-\title{Integrates statismo and R using the vtkStandardMeshRepresente}
+\title{Integrating  statismo and R using the vtkStandardMeshRepresente}
 \description{
-Integrates statismo and R using the vtkStandardMeshRepresenter. Statismo shape models will be stored as objects of class "pPCA". (this is work in progress).
+Integrating statismo and R using the vtkStandardMeshRepresenter.
+Statismo shape models will be stored as objects of class "pPCA". (this is work in progress).
 }
 \details{
 \tabular{ll}{
 Package: \tab RvtkStatismo\cr
 Type: \tab Package\cr
-Version: \tab 0.2.150506\cr
-Date: \tab 2015-05-06\cr
+Version: \tab 0.2.150616\cr
+Date: \tab 2015-06-16\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr }
 }

@@ -1,12 +1,13 @@
-#' Integrates statismo and R using the vtkStandardMeshRepresente
+#' Integrating  statismo and R using the vtkStandardMeshRepresente
 #' 
-#' Integrates statismo and R using the vtkStandardMeshRepresenter. Statismo shape models will be stored as objects of class "pPCA". (this is work in progress). 
+#' Integrating statismo and R using the vtkStandardMeshRepresenter.
+#' Statismo shape models will be stored as objects of class "pPCA". (this is work in progress). 
 #' 
 #' \tabular{ll}{
 #' Package: \tab RvtkStatismo\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.2.150506\cr
-#' Date: \tab 2015-05-06\cr
+#' Version: \tab 0.2.150616\cr
+#' Date: \tab 2015-06-16\cr
 #' License: \tab GPL\cr
 #' LazyLoad: \tab yes\cr }
 #' 
