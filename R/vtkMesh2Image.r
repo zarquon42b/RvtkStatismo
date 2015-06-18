@@ -10,7 +10,7 @@
 #' @param col integer: value 0 <= col <= 255. Defines the foreground color.
 #' @examples
 #' require(Rvcg)
-#' data(dummyhead.mesh)
+#' data(dummyhead)
 #' vtkMesh2Image(dummyhead.mesh)
 #' @export
 vtkMesh2Image <- function(mesh,spacing=c(0.5,0.5,0.5),filename="default.mha",IJK2RAS=diag(c(-1,-1,1)),margin=0.1,col=255) {

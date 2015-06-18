@@ -25,11 +25,11 @@
 #' condmod <- statismoBuildConditionalModel(align,trainingData=conddata$trainingData,
 #'                                         conditioningData=1, surrogateInfo=conddata$surrogateInfo)
 #' ##now the mean of this model corresponds to the shape of the average Chinese
-#' apply(align[,,pop=="ch"],1:2,mean)
-#' DrawMean(condmod)
+#' \dontrun{
+#' deformGrid3d(apply(align[,,pop=="ch"],1:2,mean),DrawMean(condmod))
 #' ## save it
 #' statismoSaveModel(condmod,"condmod.h5")
-#' 
+#' }
 #' @keywords StatisticalModel<representer>
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}, \link{manageConditioningData}} 
 #' @importFrom Morpho bindArr

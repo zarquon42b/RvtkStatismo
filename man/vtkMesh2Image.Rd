@@ -26,7 +26,7 @@ convert a 3D triangular mesh into a voxel image
 }
 \examples{
 require(Rvcg)
-data(dummyhead.mesh)
+data(dummyhead)
 vtkMesh2Image(dummyhead.mesh)
 }
 
