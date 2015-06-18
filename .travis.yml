@@ -16,7 +16,8 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_github "zarquon42b/Morpho"
-
+  - ./travis-tool.sh install_r_binary rgl Rcpp RcppEigen RcppArmadillo foreach doParallel yaImpute testthat
+  -
 install:
   - ./travis-tool.sh install_deps
 script: ./travis-tool.sh run_tests
