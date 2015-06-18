@@ -1,4 +1,4 @@
-' calculate or modify a probablistic PCA based on 3D-coordinates
+#' calculate or modify a probablistic PCA based on 3D-coordinates
 #'
 #' calculate or modify a probablistic PCA based on 3D-coordinates
 #' 
