@@ -26,7 +26,10 @@
 #'                                         conditioningData=1, surrogateInfo=conddata$surrogateInfo)
 #' ##now the mean of this model corresponds to the shape of the average Chinese
 #' \dontrun{
-#' deformGrid3d(apply(align[,,pop=="ch"],1:2,mean),DrawMean(condmod))
+#' chinmean <- apply(align[,,pop=="ch"],1:2,mean)
+#' modmean <- DrawMean(condmod)
+#' stopifnot(all.equal(chinmean, modmean,tolerance = 1e-6,check.attributes = FALSE))
+#' deformGrid3d(chinmean,modmean)
 #' ## save it
 #' statismoSaveModel(condmod,"condmod.h5")
 #' }
