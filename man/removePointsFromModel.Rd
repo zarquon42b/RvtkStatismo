@@ -20,10 +20,12 @@ remove a set of point from a statismo shape model
 \examples{
 ## create a GP model from a mesh and remove the first 1000 coordinates
 require(Rvcg)
-require(rgl)
 data(humface)
 hummodel <- statismoModelFromRepresenter(humface,kernel=list(c(50,50)))
 hummodel0 <- removePointsFromModel(hummodel,1:1000)
+\dontrun{
+require(rgl)
 shade3d(DrawSample(hummodel0),col=3)
+}
 }
 

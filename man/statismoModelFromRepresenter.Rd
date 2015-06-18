@@ -33,7 +33,9 @@ generate model from a representer using gaussian kernels
 require(Rvcg)
 data(humface)
 hummodel <- statismoModelFromRepresenter(humface)
+\dontrun{
 require(rgl)
 for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
+}
 }
 

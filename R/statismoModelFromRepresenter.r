@@ -14,8 +14,10 @@
 #' require(Rvcg)
 #' data(humface)
 #' hummodel <- statismoModelFromRepresenter(humface)
+#' \dontrun{
 #' require(rgl)
 #' for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
+#' }
 #' @export
 statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500,combine="sum",isoScale=0, centroid=NULL) {
     representer <- dataset2representer(representer)
