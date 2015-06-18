@@ -1,3 +1,5 @@
+[![Travis Build Status](https://travis-ci.org/zarquon42b/RvtkStatismo.png?branch=master)](https://travis-ci.org/zarquon42b/RvtkStatismo)
+
 __RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github.com/statismo/statismo)** (a C++ library to calculate and modify statistical shape models) using vtkStandardMeshRepresenter and thus also includes some functionality of the **[VTK](http://www.vtk.org)** library.
 
 #### Install prerequisites ###
