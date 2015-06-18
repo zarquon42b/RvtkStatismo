@@ -41,7 +41,8 @@ pop <- name2factor(boneLM,which=3)
 ##prepare data
 conddata <- manageConditioningData(pop)
 ##now condition the model to Chinese
-condmod <- statismoBuildConditionalModel(align,trainingData=conddata$trainingData,conditioningData=1,surrogateInfo=conddata$surrogateInfo)
+condmod <- statismoBuildConditionalModel(align,trainingData=conddata$trainingData,
+                                        conditioningData=1, surrogateInfo=conddata$surrogateInfo)
 ##now the mean of this model corresponds to the shape of the average Chinese
 apply(align[,,pop=="ch"],1:2,mean)
 DrawMean(condmod)

@@ -39,15 +39,20 @@ require(Morpho)
 data(boneData)
 align <- rigidAlign(boneLM)$rotated
 mod <- statismoBuildModel(align)
-GPmod <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)))##extend flexibility using two Gaussian kernels
-GPmodNoEmp <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)),useEmpiric = FALSE)##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
+##extend flexibility using two Gaussian kernels
+GPmod <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)))
+##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
+GPmodNoEmp <- statismoGPmodel(mod,kernel=list(c(10,1),c(1,1)),useEmpiric = FALSE)
 PC1orig <- DrawSample(mod,2)# get shape in 2sd of first PC of originial model
 PC1 <- DrawSample(GPmod,2)# get shape in 2sd of first PC of the extended model
 PC1NoEmp <- DrawSample(GPmodNoEmp,2)# get shape in 2sd of first PC
 ##visualize the differences from the mean (green spheres)
+\dontrun{
 deformGrid3d(PC1,DrawMean(GPmod),ngrid=0)##
-deformGrid3d(PC1NoEmp,DrawMean(GPmod),ngrid=0,col1=4,add=TRUE)##only deviates in 5 landmarks from the mean (dark blue)
+##only deviates in 5 landmarks from the mean (dark blue)
+deformGrid3d(PC1NoEmp,DrawMean(GPmod),ngrid=0,col1=4,add=TRUE)
 deformGrid3d(PC1orig,DrawMean(GPmod),ngrid=0,col1=5,add=TRUE)
+}
 }
 \seealso{
 \code{\link{pPCA}, \link{pPCA-class}}
