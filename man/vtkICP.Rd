@@ -12,13 +12,13 @@ vtkICP(refmesh, tarmesh, iterations = 10, center = FALSE, type = c("none",
 
 \item{tarmesh}{fixed mesh}
 
+\item{iterations}{integer: number of iterations to run}
+
 \item{center}{logical: rotate meshes around center of gravity.}
 
 \item{type}{type of transform to be used: "none"=rigid,"scale"=similarity transform, "affine"=affine transform.}
 
 \item{sample}{number of random samples to use}
-
-\item{iteration}{integer: number of iterations to run}
 }
 \description{
 Iteratively closest point registration

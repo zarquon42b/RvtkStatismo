@@ -3,7 +3,7 @@
 #' Iteratively closest point registration
 #' @param refmesh moving mesh
 #' @param tarmesh fixed mesh
-#' @param iteration integer: number of iterations to run
+#' @param iterations integer: number of iterations to run
 #' @param center logical: rotate meshes around center of gravity.
 #' @param type type of transform to be used: "none"=rigid,"scale"=similarity transform, "affine"=affine transform.
 #' @param sample number of random samples to use
