@@ -1,0 +1,19 @@
+Source: rvtkstatismo
+Section: gnu-r
+Priority: optional
+Maintainer: Stefan Schlager <zarquon42@gmail.com>
+Build-Depends: r-base-dev, xvfb, xauth, xfonts-base, r-base-core, r-cran-rcpp, r-cran-rcppeigen, debhelper (>> 4.1.0), cdbs, r-cran-rvcg, r-cran-morpho, statismo, cmake, libvtk5-dev, libhdf5-serial-dev, libeigen3-dev, libboost-date-time1.55-dev, libboost1.55-dev, libboost-system1.55-dev, libboost-thread1.55-dev, libboost-filesystem1.55-dev, libboost-program-options1.55-dev, cmake, libfftw3-dev
+Standards-Version: 3.9.1
+
+Package: r-cran-rvtkstatismo
+Architecture: any
+Depends: ${shlibs:Depends}, r-base-core, r-cran-rcpp, r-cran-rcppeigen, r-cran-rvcg, r-cran-morpho
+Description: Integrates statismo and R using the vtkStandardMeshRepresenter
+ .
+ Integrates statismo and R using the vtkStandardMeshRepresenter.
+    Statismo shape models will be stored as objects of class "pPCA". (this is
+    work in progress).
+ .
+ Author: Stefan Schlager
+ .
+ Maintainer: Stefan Schlager <zarquon42@gmail.com>

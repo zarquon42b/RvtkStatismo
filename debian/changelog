@@ -1,0 +1,25 @@
+rvtkstatismo (0.12.2-precise4) precise; urgency=medium
+
+  * only use necessary depends (not statismo-dev)
+
+ -- Stefan Schlager <zarquon42@gmail.com>  Fri, 26 Jun 2015 12:35:33 +0200
+
+rvtkstatismo (0.12.2-precise3) precise; urgency=medium
+
+  * use statismo as dependency instead o statismo-dev
+
+ -- Stefan Schlager <zarquon42@gmail.com>  Fri, 26 Jun 2015 08:59:38 +0200
+
+rvtkstatismo (0.12.2-precise1) precise; urgency=medium
+
+  * changed deps
+
+ -- Stefan Schlager <zarquon42@gmail.com>  Thu, 25 Jun 2015 14:22:38 +0200
+
+rvtkstatismo (0.12.2-precise0) precise; urgency=medium
+
+  *  initial debianization
+
+ -- Stefan Schlager <zarquon42@gmail.com>  Thu, 25 Jun 2015 11:06:44 +0200
+
+
