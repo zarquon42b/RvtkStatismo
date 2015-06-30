@@ -5,7 +5,7 @@
 \title{align meshes stored in a list by their vertices}
 \usage{
 meshalign(meshlist, scale = FALSE, use.lm = NULL, deselect = FALSE,
-  array = FALSE, reference = NULL)
+  array = FALSE, reference = NULL, reflection = FALSE)
 }
 \arguments{
 \item{meshlist}{list containing triangular meshes of class "mesh3d"}
@@ -19,6 +19,8 @@ meshalign(meshlist, scale = FALSE, use.lm = NULL, deselect = FALSE,
 \item{array}{logical: if TRUE the superimposed vertices will be returned as 3D array.}
 
 \item{reference}{integer: instead of a GPA, all specimens are aligned to this specific one.}
+
+\item{reflection}{logical: if TRUE, reflections are allowed to minimzie squared distance.}
 }
 \value{
 returns a list of aligned meshes or an array of dimensions k x 3 x n, where k=number of vertices and n=sample size.

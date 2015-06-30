@@ -5,7 +5,7 @@
 \title{Fast Procrustes align of coordinates}
 \usage{
 rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE,
-  reference = NULL)
+  reference = NULL, reflection = FALSE)
 }
 \arguments{
 \item{array}{array of coordinates}
@@ -17,6 +17,8 @@ rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE,
 \item{deselect}{logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.}
 
 \item{reference}{integer: instead of a GPA, all specimens are aligned to this specific one.}
+
+\item{reflection}{logical: if TRUE, reflections are allowed to minimzie squared distance.}
 }
 \value{
 a list containing
