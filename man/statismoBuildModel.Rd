@@ -4,7 +4,8 @@
 \alias{statismoBuildModel}
 \title{generate a statistical model using an array of superimposed landmarks or a list of meshes}
 \usage{
-statismoBuildModel(x, representer, sigma = 0, scale = FALSE)
+statismoBuildModel(x, representer, sigma = 0, scale = FALSE,
+  SelfAdjointEigenSolver = FALSE)
 }
 \arguments{
 \item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}
@@ -14,6 +15,8 @@ statismoBuildModel(x, representer, sigma = 0, scale = FALSE)
 \item{sigma}{noise in the data}
 
 \item{scale}{logical: set to TRUE, if scaling was involved in the registration.}
+
+\item{SelfAdjointEigenSolver}{logical: if TRUE SelfAdjointEigenSolver is used during model building (faster but less accurate).}
 }
 \value{
 an object of class pPCA (\code{\link{pPCA-class}})

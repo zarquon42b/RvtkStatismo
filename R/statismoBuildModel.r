@@ -6,6 +6,7 @@
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
+#' @param SelfAdjointEigenSolver logical: if TRUE SelfAdjointEigenSolver is used during model building (faster but less accurate).
 #' @return an object of class pPCA (\code{\link{pPCA-class}})
 #' @examples
 #' require(Morpho)
