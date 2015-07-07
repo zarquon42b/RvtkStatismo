@@ -63,11 +63,11 @@ vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
 read.vtk <- function(filename) {
     filename <- path.expand(as.character(filename))
     ext <- gsub("(.*)[.](vtk|vtp|wrl)$", "\\2", tolower(filename));
-    type <- 0
+    type <- 1
     if (! ext %in% c("vtk", "vtp","wrl"))
         stop("unknown file format")
     else if (ext == "vtk")
-        type <- 1
+        type <- 0
     else
         type <- 2
 

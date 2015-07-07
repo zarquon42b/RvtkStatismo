@@ -23,12 +23,9 @@
 #include <vtkDataSetSurfaceFilter.h>
 using namespace Rcpp;
 
-RcppExport SEXP vtkRead(SEXP filename_, SEXP type_)
-{
+RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
   try {
-    
-	
-	CharacterVector filename(filename_);
+    CharacterVector filename(filename_);
     int type = as<int>(type_);
     vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
     if (type == 0) {
@@ -84,7 +81,7 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_)
 	}
     }
     //convert polydata to triangle mesh
-vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
+    vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
 #if VTK_MAJOR_VERSION <= 5 
     triangleFilter->SetInput(polydata);
 #else
@@ -134,6 +131,6 @@ vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleF
   } catch (...) {
     ::Rf_error("unknown exception");
   }
- } 
+} 
 
  
