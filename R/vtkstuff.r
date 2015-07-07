@@ -24,7 +24,7 @@ vtkRenderMesh <- function(mesh,size=5) {
 #'
 #' @param mesh mesh of class mesh3d
 #' @param filename character
-#' @param type character: file extension. Can be "vtk" or "vtp".
+#' @param type character: file extension. Can be "vtk", "vtp".
 #' @export
 vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
     
@@ -50,24 +50,28 @@ vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
         stop("unsupported file format")
     out <- .Call("vtkWrite",filename,vb,it,type)
 }
-#' imports vtk and vtp files
+#' imports vtk, vtp and wrl files containing meshes
 #'
-#' imports vtk and vtp files
+#'imports vtk, vtp and wrl files containing meshes
 #'
 #' @param filename character string
-#' @return list of class mesh3d
-#' 
+#' @return triangular mesh of class mesh3d
+#' @note read.wrl is simply an alias for read.vtk.
+#' All structures will be converted to triangular meshes.
+#' @rdname vtkIO
 #' @export
 read.vtk <- function(filename) {
     filename <- path.expand(as.character(filename))
-    ext <- gsub("(.*)[.](vtk|vtp)$", "\\2", tolower(filename));
-    legacy <- FALSE
-    if (! ext %in% c("vtk", "vtp"))
+    ext <- gsub("(.*)[.](vtk|vtp|wrl)$", "\\2", tolower(filename));
+    type <- 0
+    if (! ext %in% c("vtk", "vtp","wrl"))
         stop("unknown file format")
     else if (ext == "vtk")
-        legacy <- TRUE   
-    
-    out <- .Call("vtkRead",filename,legacy)
+        type <- 1
+    else
+        type <- 2
+
+    out <- .Call("vtkRead",filename,type)
     out$vb <- rbind(out$vb,1)
     if (ncol(out$it) == 0)
         out$it <- NULL
@@ -77,4 +81,7 @@ read.vtk <- function(filename) {
     return(out)
 }
 
-
+#' @return triangular mesh of class mesh3d
+#' @rdname vtkIO
+#' @export
+read.wrl <- read.vtk

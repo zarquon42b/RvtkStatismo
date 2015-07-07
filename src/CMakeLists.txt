@@ -53,6 +53,9 @@ if(VTK_MAJOR_VERSION GREATER 5)
     vtkImagingStencil
     vtkFiltersModeling
     vtkFiltersHybrid
+    vtkIOImport
+    vtkRenderingCore
+    vtkRenderingOpenGL
     )
   find_package( VTK REQUIRED COMPONENTS ${required_vtk_modules} )
 endif()
