@@ -81,7 +81,6 @@ read.vtk <- function(filename) {
     return(out)
 }
 
-#' @return triangular mesh of class mesh3d
 #' @rdname vtkIO
 #' @export
 read.wrl <- read.vtk

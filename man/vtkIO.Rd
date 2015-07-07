@@ -2,9 +2,12 @@
 % Please edit documentation in R/vtkstuff.r
 \name{read.vtk}
 \alias{read.vtk}
+\alias{read.wrl}
 \title{imports vtk, vtp and wrl files containing meshes}
 \usage{
 read.vtk(filename)
+
+read.wrl(filename)
 }
 \arguments{
 \item{filename}{character string}
@@ -16,6 +19,7 @@ triangular mesh of class mesh3d
 imports vtk, vtp and wrl files containing meshes
 }
 \note{
-read.wrl is simply an alias for read.vtk
+read.wrl is simply an alias for read.vtk.
+All structures will be converted to triangular meshes.
 }
 
