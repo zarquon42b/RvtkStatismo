@@ -49,7 +49,7 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
       } else  
 	return wrap(1);
     } else if (type == 2) {
-      vtkSmartPointer<vtkVRMLImporter> reader = vtkSmartPointer<vtkVRMLImporter>::New();
+      vtkVRMLImporter* reader = vtkVRMLImporter::New();
       reader->SetFileName(filename[0]);
       reader->Read();
       reader->Update();
@@ -65,8 +65,7 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
 	  pDataset = nextActor->GetMapper()->GetInput();
 	  polydatatmp = vtkPolyData::SafeDownCast(pDataset);
 	  
-	  vtkSmartPointer<vtkAppendPolyData> appendFilter =
-	    vtkSmartPointer<vtkAppendPolyData>::New();
+	  vtkSmartPointer<vtkAppendPolyData> appendFilter = vtkSmartPointer<vtkAppendPolyData>::New();
 #if VTK_MAJOR_VERSION <= 5
 	  appendFilter->AddInputConnection(polydata->GetProducerPort());
 	  appendFilter->AddInputConnection(polydatatmp->GetProducerPort());
@@ -79,6 +78,10 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
 	  polydata = appendFilter->GetOutput();
       
 	}
+      //this is a very dirty hack to deal with a bug in vtk 6.1 (better a memory leak than a segfault)
+#if VTK_MAJOR_VERSION == 6 && VTK_MINOR_VERSION == 1
+      reader->Delete();
+#endif	
     }
     //convert polydata to triangle mesh
     vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
