@@ -16,7 +16,7 @@ statismoBuildModel(x, representer, sigma = 0, scale = FALSE,
 
 \item{scale}{logical: set to TRUE, if scaling was involved in the registration.}
 
-\item{SelfAdjointEigenSolver}{logical: if TRUE SelfAdjointEigenSolver is used during model building (faster but less accurate).}
+\item{SelfAdjointEigenSolver}{logical: if TRUE SelfAdjointEigenSolver is used during model building. Only use this if sample size exceeds amount of variables (faster but less accurate) - can lead to errors otherwise.}
 }
 \value{
 an object of class pPCA (\code{\link{pPCA-class}})
