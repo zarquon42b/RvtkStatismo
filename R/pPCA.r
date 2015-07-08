@@ -3,7 +3,7 @@
 #' calculate or modify a probablistic PCA based on 3D-coordinates
 #' 
 #' @encoding utf8
-#' @param array array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.
+#' @param x array of dimensions k x 3 x n, where k=number of coordinates and n=sample size -  or a list containing triangular meshes. 
 #' @param align logical: if TRUE, the data will be aligned first
 #' @param use.lm integer vector: specifies the indices of the points that are to be used in the constrained model
 #' @param deselect logical: if TRUE, \code{use.lm} references the missing coordinates instead of the present ones.
@@ -34,11 +34,16 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
+pPCA <- function(x, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
+    if (is.list(x)) {
+        if (is.null(representer))
+            representer <- x[[1]]
+        x <- meshlist2array(x)
+    }
     if (align) {
-        procMod <- rigidAlign(array,scale=scale,use.lm=use.lm,deselect=deselect)
+        procMod <- rigidAlign(x,scale=scale,use.lm=use.lm,deselect=deselect)
     } else {
-        procMod <- list(rotated=array)
+        procMod <- list(rotated=x)
     }
     if (is.null(sigma))
         sigma <- numeric(0)
@@ -58,6 +63,12 @@ pPCA <- function(array, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1
     model <- new("pPCA",PCA=PCA,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
     SetScale(model) <- scale
     model <- UpdateModel(model,sigma=sigma,exVar=exVar)
+    if (is.null(dimnames(x)[[3]]))
+        mynames <- paste0("specimen_",1:dim(x)[3])
+    else
+        mynames <- dimnames(x)[[3]]
+    modinfonames <- names2modelinfo(mynames)
+    SetModelDataInfo(model) <- modinfonames
     return(model)
 
 }

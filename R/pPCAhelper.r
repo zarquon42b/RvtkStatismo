@@ -84,3 +84,10 @@ setGeneric("UpdateVariance", function(model) standardGeneric("UpdateVariance"))
 setMethod("UpdateVariance", "pPCA",function(model) {
     return(model)
 })
+
+
+names2modelinfo <- function(x) {
+    ll <- 1:length(x)
+    out <- lapply(ll,function(i) x <- c(paste("URI",i,sep="_"),x[i]))
+    return(out)
+}

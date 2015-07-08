@@ -8,7 +8,7 @@
 \alias{pPCA}
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
-pPCA(array, align = TRUE, use.lm = NULL, deselect = FALSE, sigma = NULL,
+pPCA(x, align = TRUE, use.lm = NULL, deselect = FALSE, sigma = NULL,
   exVar = 1, scale = FALSE, representer = NULL)
 
 UpdateModel(model, sigma = NULL, exVar = 1)
@@ -16,7 +16,7 @@ UpdateModel(model, sigma = NULL, exVar = 1)
 \S4method{UpdateModel}{pPCA}(model, sigma = NULL, exVar = 1)
 }
 \arguments{
-\item{array}{array of dimensions k x 3 x n, where k=number of coordinates and n=sample size.}
+\item{x}{array of dimensions k x 3 x n, where k=number of coordinates and n=sample size -  or a list containing triangular meshes.}
 
 \item{align}{logical: if TRUE, the data will be aligned first}
 

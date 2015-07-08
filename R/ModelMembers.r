@@ -268,7 +268,7 @@ setMethod("GetPCScores", signature(model="pPCA"), function(model,scaled=TRUE) {
         scores <- scale(scores,scale=1/model@PCA$sdev)
 
     modinfo <- GetModelInfo(model)$datainfo
-    if (!is.null(modinfo))
+    if (length(modinfo))
         rownames(scores) <- modinfo[,2]
 } else
     stop("model contains no scores")
