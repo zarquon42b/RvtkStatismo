@@ -16,7 +16,19 @@ NULL
 setGeneric("SetNoiseVariance<-", function(x, value) standardGeneric("SetNoiseVariance<-"))
 
 #' @rdname ppcasetters
-setReplaceMethod("SetNoiseVariance", "pPCA",function(x, value) {x@sigma <- value; validObject(x); x})
+setReplaceMethod("SetNoiseVariance", "pPCA",function(x, value) {
+                     x@sigma <- value;
+                     tmp <- x@modelinfo@paraminfo
+                     nn <- lapply(tmp,function(i) i <- i[1])
+                     nvind <- grep("NoiseVariance",unlist(nn))
+                     if (length(nvind))
+                         tmp[[nvind]][2] <- as.character(value)
+                     else
+                         tmp <- append(list(c("NoiseVariance",as.character(value))),tmp)
+                     x@modelinfo@paraminfo <- tmp
+                     
+                     validObject(x); x
+                 })
 
 
 #' @rdname ppcasetters

@@ -59,7 +59,7 @@ pPCA <- function(x, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sca
     PCA$x <- 0
     PCA <- unclass(PCA)
     if (is.null(representer) || is.matrix(representer))
-        representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,0,0))
+        representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,3,0))
     model <- new("pPCA",PCA=PCA,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
     SetScale(model) <- scale
     model <- UpdateModel(model,sigma=sigma,exVar=exVar)
