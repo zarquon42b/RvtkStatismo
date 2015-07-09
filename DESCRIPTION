@@ -15,7 +15,8 @@ Imports:
     Rvcg,
     methods
 Suggests:
-    rgl
+    rgl,
+    testthat
 LinkingTo: Rcpp,RcppEigen
 SystemRequirement: VTK5.8, statismo (>= 0.9.1 best ist freshly from github)
 URL: http://github.com/zarquon42b/RvtkStatismo, URL:
