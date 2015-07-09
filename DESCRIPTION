@@ -18,6 +18,6 @@ Suggests:
     rgl,
     testthat
 LinkingTo: Rcpp,RcppEigen
-SystemRequirement: VTK5.8, statismo (>= 0.9.1 best ist freshly from github)
+SystemRequirement: VTK >= 5, statismo (>= 0.11), cmake
 URL: http://github.com/zarquon42b/RvtkStatismo, URL:
     http://github.com/statismo/statismo
