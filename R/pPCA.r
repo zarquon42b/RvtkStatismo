@@ -55,6 +55,7 @@ pPCA <- function(x, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sca
     good <- which(sds > 1e-13)
     sds <- sds[good] ## remove PCs with very little variability
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
+    dimnames(PCA$rotation) <- NULL
     PCA$sdev <- PCA$sdev[good]
     PCA$x <- 0
     PCA <- unclass(PCA)
@@ -64,7 +65,7 @@ pPCA <- function(x, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sca
     SetScale(model) <- scale
     model <- UpdateModel(model,sigma=sigma,exVar=exVar)
     if (is.null(dimnames(x)[[3]]))
-        mynames <- paste0("specimen_",1:dim(x)[3])
+        mynames <- paste0("specimen_",(1:dim(x)[3]))
     else
         mynames <- dimnames(x)[[3]]
     modinfonames <- names2modelinfo(mynames)
@@ -104,9 +105,11 @@ setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVa
     SetNoiseVariance(model) <- sigma
     PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     PCA$sdev <- sqrt(sigest[usePC])
-    if (ncol(model@rawdata) > 0)
-        PCA$x <- model@rawdata%*%t(GetProjectionMatrix(model))
-    else
+    SetPCA(model) <- PCA
+    if (ncol(model@rawdata) > 0) {
+        PCA$x <- (model@rawdata%*%t(GetProjectionMatrix(model)))[,usePC,drop=FALSE]
+        dimnames(PCA$x) <- NULL
+  }  else
         PCA$x <- matrix(0,0,0)
     SetPCA(model) <- PCA
     return(model)

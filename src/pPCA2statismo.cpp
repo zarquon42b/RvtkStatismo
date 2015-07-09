@@ -94,10 +94,12 @@ S4 statismo2pPCA(shared_ptr<vtkMeshModel> model) {
   try {
     if (model.get()) {
       vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
-      List PCA = List::create(Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
+      List PCA = List::create(
+			      Named("sdev")= model->GetPCAVarianceVector().array().sqrt(),
+			      Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
 			      Named("center")= model->GetMeanVector(),
-			      Named("x")=model->GetModelInfo().GetScoresMatrix().transpose(),
-			      Named("sdev")= model->GetPCAVarianceVector().array().sqrt()
+			      Named("x")=model->GetModelInfo().GetScoresMatrix().transpose()
+			     
 			      );
       Language pPCAcall("new", "pPCA");
       Rcpp::S4 pPCA( pPCAcall.eval() );

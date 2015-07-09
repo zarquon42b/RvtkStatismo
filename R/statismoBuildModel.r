@@ -61,6 +61,7 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEige
     
     out <- .Call("BuildModelExport",mylist,representer,sigma,SelfAdjointEigenSolver)
     SetScale(out) <- scale
+    out@rawdata <- rawdata
     return(out)
     
     

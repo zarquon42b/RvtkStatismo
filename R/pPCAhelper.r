@@ -88,6 +88,6 @@ setMethod("UpdateVariance", "pPCA",function(model) {
 
 names2modelinfo <- function(x) {
     ll <- 1:length(x)
-    out <- lapply(ll,function(i) x <- c(paste("URI",i,sep="_"),x[i]))
+    out <- lapply(ll,function(i) x <- c(paste("URI",i-1,sep="_"),x[i]))
     return(out)
 }
