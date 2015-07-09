@@ -60,7 +60,7 @@ getSubCov <- function(model,use.lm,deselect=FALSE) {
     diag(M) <- diag(M)+1
         stry <- try(Minv <- solve(M)) 
     if (inherits(stry,"try-error")) {
-        Minv <- Morpho:::armaGinv(M)
+        Minv <- Morpho::armaGinv(M)
         message("singular Matrix")
     }
     Minv <- (Minv+t(Minv))/2
