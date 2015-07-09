@@ -34,7 +34,7 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-pPCA <- function(x, align=TRUE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
+pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
     if (is.list(x)) {
         if (is.null(representer))
             representer <- x[[1]]
