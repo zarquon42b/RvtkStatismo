@@ -7,30 +7,45 @@
 \alias{align2domain,pPCA,mesh3d-method}
 \title{align a sample to a model}
 \usage{
-align2domain(model, sample, scale = FALSE, ptDomain = NULL,
-  ptSample = NULL)
-
-\S4method{align2domain}{pPCA,matrix}(model, sample, scale = FALSE,
+align2domain(model, sample, type = c("rigid", "similarity", "affine"),
   ptDomain = NULL, ptSample = NULL)
 
-\S4method{align2domain}{pPCA,mesh3d}(model, sample, scale = FALSE,
-  ptDomain = NULL, ptSample = NULL)
+\S4method{align2domain}{pPCA,matrix}(model, sample, type = c("rigid",
+  "similarity", "affine"), ptDomain = NULL, ptSample = NULL)
+
+\S4method{align2domain}{pPCA,mesh3d}(model, sample, type = c("rigid",
+  "similarity", "affine"), ptDomain = NULL, ptSample = NULL)
 }
 \arguments{
 \item{model}{statistical model of class "pPCA"}
 
 \item{sample}{matrix or mesh3d}
 
-\item{scale}{logical: request scaling during alignment}
+\item{type}{type of transform}
 
 \item{ptDomain}{integer vector: specifies the indices of the domain points that are to be used for registration (order is important).}
 
 \item{ptSample}{integer vector: specifies the indices of the sample that are to be used  for registration (order is important).}
+
+\item{scale}{logical: request scaling during alignment}
 }
 \value{
 a rotated (and scaled) mesh or matrix - depending on the input.
 }
 \description{
 align a sample to a model
+}
+\examples{
+require(Morpho)
+data(boneData)
+mymod <- pPCA(boneLM,align=TRUE)
+## rigidly align first specimen to model
+align1 <- align2domain(mymod,boneLM[,,1])
+## now align by an affine transform
+alignAffine <- align2domain(mymod,boneLM[,,1],type="affine")
+\dontrun{
+deformGrid3d(align1,DrawMean(mymod))
+deformGrid3d(alignAffine,DrawMean(mymod))
+}
 }
 

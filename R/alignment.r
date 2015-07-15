@@ -94,29 +94,44 @@ meshalign <- function(meshlist,scale=FALSE,use.lm=NULL,deselect=FALSE,array=FALS
 #'
 #' @param model statistical model of class "pPCA"
 #' @param sample matrix or mesh3d
+#' @param type type of transform
 #' @param scale logical: request scaling during alignment
 #' @param ptDomain integer vector: specifies the indices of the domain points that are to be used for registration (order is important).
 #' @param ptSample integer vector: specifies the indices of the sample that are to be used  for registration (order is important).
 #' @return a rotated (and scaled) mesh or matrix - depending on the input.
+#' @examples
+#' require(Morpho)
+#' data(boneData)
+#' mymod <- pPCA(boneLM,align=TRUE)
+#' ## rigidly align first specimen to model
+#' align1 <- align2domain(mymod,boneLM[,,1])
+#' ## now align by an affine transform
+#' alignAffine <- align2domain(mymod,boneLM[,,1],type="affine")
+#' \dontrun{
+#' deformGrid3d(align1,DrawMean(mymod))
+#' deformGrid3d(alignAffine,DrawMean(mymod))
+#' }
 #' @rdname align2domain
+#' @importFrom Morpho computeTransform applyTransform
 #' @export
-setGeneric("align2domain", function(model,sample,scale=FALSE,ptDomain=NULL,ptSample=NULL) {
+setGeneric("align2domain", function(model,sample,type=c("rigid","similarity","affine"),ptDomain=NULL,ptSample=NULL) {
     standardGeneric("align2domain")
 })
 #' @rdname align2domain
-setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,scale=FALSE, ptDomain=NULL,ptSample=NULL) {
+setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model,sample,type=c("rigid","similarity","affine"), ptDomain=NULL,ptSample=NULL) {
     domain <- GetDomainPoints(model)
     if (is.null(ptDomain))
         ptDomain <- 1:nrow(domain)
     if (is.null(ptSample))
         ptSample <- 1:nrow(sample)
-    rot <- rotonto(domain[ptDomain,],sample[ptSample,],scale=scale)$yrot
+    trafo <- computeTransform(domain[ptDomain,],sample[ptSample,],type=type)
+    rot <- applyTransform(sample,trafo)
     return(rot)
 })
 
 #' @importFrom Morpho vert2points rotonto
 #' @rdname align2domain
-setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,scale=FALSE, ptDomain=NULL,ptSample=NULL) {
+setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,type=c("rigid","similarity","affine"), ptDomain=NULL,ptSample=NULL) {
     
     sample0 <- vert2points(sample)
     rot <- align2domain(model,sample0,scale,ptDomain = ptDomain, ptSample = ptSample)
