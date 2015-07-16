@@ -3,7 +3,7 @@
 #' generate model from a representer using gaussian kernels
 #'
 #' @param representer mesh3d or matrix used as representer
-#' @param kernel a list containing two valued vectors containing with the first entry specifiying the bandwidth and the second the scaling of the Gaussian kernels.
+#' @param kernel a list containing 2 numeric vectors containing. Except the first entry may be 3 valued and then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels. 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
 #' @param combine character determining how to combine the kernels: "sum" or "product" are supported.
