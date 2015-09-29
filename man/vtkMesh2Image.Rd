@@ -5,7 +5,7 @@
 \title{convert a 3D triangular mesh into a voxel image}
 \usage{
 vtkMesh2Image(mesh, spacing = c(0.5, 0.5, 0.5), filename = "default.mha",
-  IJK2RAS = diag(c(-1, -1, 1)), margin = 0.1, col = 255)
+  IJK2RAS = diag(c(-1, -1, 1)), margin = 0.1, col = 255, tol = 0)
 }
 \arguments{
 \item{mesh}{triangular mesh of class mesh3d}
@@ -20,6 +20,8 @@ additionally nii or nii.gz else}
 \item{margin}{percentage of margin to add around the volume}
 
 \item{col}{integer: value 0 <= col <= 255. Defines the foreground color.}
+
+\item{tol}{The tolerance for including a voxel inside the stencil. This is in fractions of a voxel, and must be between 0 and 1. Tolerance is only applied in the x and y directions, not in z. Setting the tolerance to zero disables all tolerance checks and might result in faster performance.}
 }
 \description{
 convert a 3D triangular mesh into a voxel image

@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 //transforms a 3 x k SEXP matrix into vtkPoints
-RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_, SEXP margin_ = wrap(0.1), SEXP col_=wrap(255)) {
+RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_, SEXP margin_ = wrap(0.1), SEXP col_=wrap(255),SEXP tol_ =wrap(0)) {
   try {
     List mesh(mesh_);
     std::string outputFilename = as<std::string>(outname_);
@@ -18,9 +18,10 @@ RcppExport SEXP vtkPolyToImageData(SEXP mesh_, SEXP outname_, SEXP spacing_, SEX
     spacing[2] = spacingtmp[2];
     double margin = as<double>(margin_);
     int col = as<int>(col_);
+    double tol = as<double>(tol_);
     
     //margin += 1;
-    vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing,margin,col);
+    vtkSmartPointer<vtkImageData> whiteImage = vtkPolyData2vtkImageData(pd,spacing,margin,col,tol);
     int chk = vtkImageWrite(whiteImage,outputFilename);
 
     return wrap(0);

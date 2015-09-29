@@ -1,6 +1,6 @@
 #include "vtkPolyData2vtkImageData.h"
 #include "RcppEigen.h"
-vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin, int col) {
+vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyData> pd, double* spacing, double margin, int col, double tol) {
   vtkSmartPointer<vtkImageData> whiteImage = vtkSmartPointer<vtkImageData>::New();
   
   double bounds[6];
@@ -52,7 +52,7 @@ vtkSmartPointer<vtkImageData> vtkPolyData2vtkImageData(vtkSmartPointer<vtkPolyDa
 #else
     pol2stenc->SetInputData(pd);
 #endif
-    //pol2stenc->SetTolerance(0.0);
+    pol2stenc->SetTolerance(tol);
     pol2stenc->SetOutputOrigin(origin);
     pol2stenc->SetOutputSpacing(spacing);
     pol2stenc->SetOutputWholeExtent(whiteImage->GetExtent());
