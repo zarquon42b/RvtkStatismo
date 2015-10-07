@@ -46,6 +46,16 @@ statismoGPmodel <- function(model,useEmpiric=TRUE,kernel=list(c(100,70)),ncomp=1
         combineEmp <- 0
     else
         combineEmp <- 1
+    nkernel <- length(list(kernel))
+    if (useEmpiric)
+        nkernel <- nkernel+1
+    if (isoScale > 0)
+        nkernel <- nkernel+1
+    
+    nystroemnew <- max(nystroem,ncomp*2)
+    if (nystroemnew > nystroem)
+        cat(paste("nystroem set to",nystroemnew),"\n")
+    nystroem <- nystroemnew
     
     ncomp <- as.integer(ncomp)
     if (!inherits(model,"pPCA"))
