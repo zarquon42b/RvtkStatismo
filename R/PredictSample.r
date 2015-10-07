@@ -44,11 +44,12 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
         } else {
             rotsb <- rotonto(lmModel,lmDataset,scale=model@scale,reflection=F)
             sb <- rotonmat(dataset,lmDataset,rotsb$yrot)
+            lmDataset <- rotsb$yrot
         }
     } else
         sb <- dataset
     if (hasLM && bySubset) 
-        alpha <- ComputeCoefficientsForPointValues(mymod,lmModel,lmDataset,1)
+        alpha <- ComputeCoefficientsForPointValues(model,lmModel,lmDataset,1)
     else 
         alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
