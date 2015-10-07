@@ -134,7 +134,7 @@ setMethod("align2domain",signature(model="pPCA",sample="matrix"), function(model
 setMethod("align2domain",signature(model="pPCA",sample="mesh3d"), function(model,sample,type=c("rigid","similarity","affine"), ptDomain=NULL,ptSample=NULL) {
     
     sample0 <- vert2points(sample)
-    rot <- align2domain(model,sample0,scale,ptDomain = ptDomain, ptSample = ptSample)
+    rot <- align2domain(model,sample0,ptDomain = ptDomain, ptSample = ptSample,type=type)
     out <- list(vb=rbind(t(rot),1),it=sample$it)
     class(out) <- "mesh3d"
     return(out)
