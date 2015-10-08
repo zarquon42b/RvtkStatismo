@@ -4,7 +4,8 @@
 \alias{vtkMeshWrite}
 \title{exports a triangular mesh of class mesh3d to a vtp file}
 \usage{
-vtkMeshWrite(mesh, filename = dataname, type = c("vtk", "vtp"))
+vtkMeshWrite(mesh, filename = dataname, type = c("vtk", "vtp"),
+  ascii = FALSE)
 }
 \arguments{
 \item{mesh}{mesh of class mesh3d}
@@ -12,6 +13,8 @@ vtkMeshWrite(mesh, filename = dataname, type = c("vtk", "vtp"))
 \item{filename}{character}
 
 \item{type}{character: file extension. Can be "vtk", "vtp".}
+
+\item{ascii}{if TRUE, vtk will be written as binary}
 }
 \description{
 exports a triangular mesh of class mesh3d to a vtp file

@@ -19,12 +19,12 @@
 #include "R2polyData.h"
 using namespace Rcpp;
 
-RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_, SEXP type_) {
+RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_, SEXP type_, SEXP ascii_) {
   try {
     std::string type = as<std::string>(type_);
     CharacterVector filename(filename_);
     vtkSmartPointer<vtkPolyData> polydata = R2polyData(vb_, it_);
-    
+    bool ascii = as<bool>(ascii_);
     if (type == "vtp") {
       vtkSmartPointer<vtkXMLPolyDataWriter> writer =  vtkSmartPointer<vtkXMLPolyDataWriter>::New();
   
@@ -34,11 +34,13 @@ RcppExport SEXP vtkWrite(SEXP filename_,SEXP vb_, SEXP it_, SEXP type_) {
 #else
       writer->SetInputData(polydata);
 #endif
+     
       writer->Write(); 
       return  wrap(EXIT_SUCCESS); 
     } else if (type == "vtk") {
       vtkSmartPointer<vtkPolyDataWriter> writer =  vtkSmartPointer<vtkPolyDataWriter>::New();
-  
+      if (ascii)
+	 writer->SetFileTypeToASCII();
       writer->SetFileName(filename[0]);
 #if VTK_MAJOR_VERSION <= 5
       writer->SetInput(polydata);

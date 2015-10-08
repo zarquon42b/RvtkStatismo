@@ -25,8 +25,9 @@ vtkRenderMesh <- function(mesh,size=5) {
 #' @param mesh mesh of class mesh3d
 #' @param filename character
 #' @param type character: file extension. Can be "vtk", "vtp".
+#' @param ascii if TRUE, vtk will be written as binary
 #' @export
-vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
+vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp"),ascii=FALSE) {
     
     dataname <- deparse(substitute(mesh))
     if(inherits(mesh,"mesh3d")) {
@@ -48,7 +49,7 @@ vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp")) {
         filename <- paste0(filename,".",type)
     else
         stop("unsupported file format")
-    out <- .Call("vtkWrite",filename,vb,it,type)
+    out <- .Call("vtkWrite",filename,vb,it,type,ascii)
 }
 #' imports vtk, vtp and wrl files containing meshes
 #'
