@@ -120,6 +120,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
               } else {
                   if (length(ptValueNoise) != nrow(sample))
                       stop("each entries in ptValueNoise != number of sample points")
+                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
               }
               ptValueNoise <- as.matrix(ptValueNoise)
               mean <- t(pt)
@@ -130,7 +131,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5) {
-               if (length(ptValueNoise) == 1) {
+              if (length(ptValueNoise) == 1) {
                   ptValueNoise <- max(1e-7,ptValueNoise)
               } else {
                   if (length(ptValueNoise) != nrow(sample))
