@@ -3,6 +3,10 @@
 
 typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
 typedef std::list<PointValuePairType> PointValueListType;
+typedef MatrixType 	PointCovarianceMatrixType;
+typedef std::pair < PointValuePairType, PointCovarianceMatrixType> 	PointValueWithCovariancePairType;
+typedef std::list < PointValueWithCovariancePairType > 	PointValueWithCovarianceListType;
+
 typedef PosteriorModelBuilder<vtkPolyData> ModelBuilderType;
 
 double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt) {
@@ -19,22 +23,35 @@ double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt) {
 SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_) {
 
    try {
-     double ptValueNoise = as<double>(ptValueNoise_);
+     NumericMatrix ptValueNoise(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
      shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
+     PointValueWithCovarianceListType ptValueWithCovPair;
      shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
-      for (int i = 0; i < mean.ncol();i++) {
-      
-      vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
-      vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
-      
-      ptValueList.push_back(PointValuePairType(tmp1,tmp0));
-      }
-      shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
-      
-      return statismo2pPCA(postModel);
+     
+     for (int i = 0; i < mean.ncol();i++) {
+	 
+       vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
+       vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+       if (ptValueNoise.nrow() == 1) {
+	 ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+       } else {
+	 MatrixType tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
+	 PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
+	 PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	 ptValueWithCovPair.push_back(covpair);
+       }
+     }
+     if (ptValueNoise.nrow() == 1) {
+       double noise = ptValueNoise(0,0);
+       shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
+       return statismo2pPCA(postModel);
+     } else {
+       shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair));
+       return statismo2pPCA(postModel);
+     }
    }  catch (std::exception& e) {
     ::Rf_error( e.what());
   } catch (...) {
@@ -48,23 +65,39 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
 
    try {
      double maha = as<double>(maha_);
-     double ptValueNoise = as<double>(ptValueNoise_);
+     NumericMatrix ptValueNoise(ptValueNoise_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
      shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
+     PointValueWithCovarianceListType ptValueWithCovPair;
      shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
       for (int i = 0; i < mean.ncol();i++) {
       
 	vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
 	vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
 	double mahaget = mahadist(model.get(),tmp0,tmp1);
-	if (mahaget <= maha)
-	  ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+	if (mahaget <= maha) {
+	  
+	  if (ptValueNoise.nrow() == 1) {
+	    ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+	  } else {
+	    MatrixType tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
+	    PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
+	    PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	    ptValueWithCovPair.push_back(covpair);
+	  }	
+	}
       }
-      shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,ptValueNoise));
+      if (ptValueNoise.nrow() == 1) {
+	double noise = ptValueNoise(0,0);
+	shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
+	return statismo2pPCA(postModel);
+      } else {
+	shared_ptr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair));
+	return statismo2pPCA(postModel);
+      }
       
-      return statismo2pPCA(postModel);
    }  catch (std::exception& e) {
     ::Rf_error( e.what());
   } catch (...) {

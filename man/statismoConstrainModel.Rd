@@ -34,4 +34,20 @@ a constrained model
 \description{
 constrain a model of class pPCA
 }
+\examples{
+require(Rvcg)
+data(humface)
+hummodel <- statismoModelFromRepresenter(humface,kernel=list(c(80,50),c(20,40)))
+GPmodConstUnif <- statismoConstrainModel(hummodel,humface.lm,humface.lm,ptValueNoise = 1)
+\dontrun{
+## sample from model
+for(i in 1:10) rgl::wire3d(DrawSample(GPmodConstUnif),col="red")
+}
+noise <- (0:6)*5
+GPmodConst <- statismoConstrainModel(hummodel,humface.lm,humface.lm,ptValueNoise = noise)
+\dontrun{
+## sample from model
+for(i in 1:10) rgl::wire3d(DrawSample(GPmodConst),col="white")
+}
+}
 
