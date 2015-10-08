@@ -8,7 +8,7 @@
 #' @return returns a triangular mesh of class mesh3d
 #'
 #' @export
-vtkSegment <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1))) {
+vtkTriangulate <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1))) {
     out <- .Call("vtkSegment2PolyData",file,value)
     class(out) <- "mesh3d"
     out$vb <- rbind(out$vb,1)
