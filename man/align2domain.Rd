@@ -26,8 +26,6 @@ align2domain(model, sample, type = c("rigid", "similarity", "affine"),
 \item{ptDomain}{integer vector: specifies the indices of the domain points that are to be used for registration (order is important).}
 
 \item{ptSample}{integer vector: specifies the indices of the sample that are to be used  for registration (order is important).}
-
-\item{scale}{logical: request scaling during alignment}
 }
 \value{
 a rotated (and scaled) mesh or matrix - depending on the input.

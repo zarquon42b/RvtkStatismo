@@ -95,7 +95,6 @@ meshalign <- function(meshlist,scale=FALSE,use.lm=NULL,deselect=FALSE,array=FALS
 #' @param model statistical model of class "pPCA"
 #' @param sample matrix or mesh3d
 #' @param type type of transform
-#' @param scale logical: request scaling during alignment
 #' @param ptDomain integer vector: specifies the indices of the domain points that are to be used for registration (order is important).
 #' @param ptSample integer vector: specifies the indices of the sample that are to be used  for registration (order is important).
 #' @return a rotated (and scaled) mesh or matrix - depending on the input.
