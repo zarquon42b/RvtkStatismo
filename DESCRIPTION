@@ -1,11 +1,11 @@
 Package: RvtkStatismo
 Type: Package
-Title: Integrates statismo and R using the vtkStandardMeshRepresenter
+Title: Integrating statismo and R using the vtkStandardMeshRepresenter
 Version: 0.2.150716
 Date: 2015-07-16
 Author: Stefan Schlager, the authors of Statismo
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
-Description: Integrates statismo and R using the vtkStandardMeshRepresenter.
+Description: Integrating statismo and R using the vtkStandardMeshRepresenter.
     Statismo shape models will be stored as objects of class "pPCA". (this is
     work in progress).
 License: GPL (>=2)
@@ -21,3 +21,4 @@ LinkingTo: Rcpp,RcppEigen
 SystemRequirement: VTK >= 5, statismo (>= 0.11), cmake
 URL: http://github.com/zarquon42b/RvtkStatismo, URL:
     http://github.com/statismo/statismo
+RoxygenNote: 5.0.1
