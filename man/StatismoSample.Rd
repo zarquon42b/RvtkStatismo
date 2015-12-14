@@ -2,26 +2,26 @@
 % Please edit documentation in R/AllGeneric.r, R/ModelMembers.r
 \docType{methods}
 \name{StatismoSample}
-\alias{ComputeLogProbabilityOfDataset}
-\alias{ComputeLogProbabilityOfDataset,pPCA-method}
-\alias{ComputeMahalanobisDistanceForDataset}
-\alias{ComputeMahalanobisDistanceForDataset,pPCA-method}
-\alias{ComputeProbabilityOfDataset}
-\alias{ComputeProbabilityOfDataset,pPCA-method}
+\alias{ComputeLogProbability}
+\alias{ComputeLogProbability,pPCA-method}
+\alias{ComputeMahalanobisDistance}
+\alias{ComputeMahalanobisDistance,pPCA-method}
+\alias{ComputeProbability}
+\alias{ComputeProbability,pPCA-method}
 \alias{StatismoSample}
 \title{Retrieve information about a sample from the model}
 \usage{
-ComputeLogProbabilityOfDataset(model, dataset)
+ComputeLogProbability(model, dataset)
 
-ComputeProbabilityOfDataset(model, dataset)
+ComputeProbability(model, dataset)
 
-ComputeMahalanobisDistanceForDataset(model, dataset)
+ComputeMahalanobisDistance(model, dataset)
 
-\S4method{ComputeLogProbabilityOfDataset}{pPCA}(model, dataset)
+\S4method{ComputeLogProbability}{pPCA}(model, dataset)
 
-\S4method{ComputeProbabilityOfDataset}{pPCA}(model, dataset)
+\S4method{ComputeProbability}{pPCA}(model, dataset)
 
-\S4method{ComputeMahalanobisDistanceForDataset}{pPCA}(model, dataset)
+\S4method{ComputeMahalanobisDistance}{pPCA}(model, dataset)
 }
 \arguments{
 \item{model}{model of class "pPCA"}
@@ -29,8 +29,8 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 \item{dataset}{a matrix or mesh3d aligned to the model's mean}
 }
 \value{
-\item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
-\item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
+\item{ComputeLogProbability}{returns the log-probability density for the sample}
+\item{ComputeProbability}{returns the probability density for the sample}
 }
 \description{
 Retrieve information about a sample from the model
