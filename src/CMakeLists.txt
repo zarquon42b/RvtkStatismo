@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 #set(VTK_DIR ".")
+if( POLICY CMP0042 )
+  cmake_policy( SET CMP0042 NEW )
+endif()
 
 ## GET R-specific ENV variables
 set(R_HOME $ENV{R_HOME})
