@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 2.6)
 if( POLICY CMP0042 )
   cmake_policy( SET CMP0042 NEW )
 endif()
-
+if( POLICY CMP0054 )
+  cmake_policy( SET CMP0054 OLD )
+endif()
 ## GET R-specific ENV variables
 set(R_HOME $ENV{R_HOME})
 SET(RLIB "${R_HOME}/lib")
@@ -75,4 +77,9 @@ if (LINK_STATIC_LIBSTDC)
 endif(LINK_STATIC_LIBSTDC)
 
 target_link_libraries(RvtkStatismo ${VTK_LIBRARIES} ${STATISMO_HDF5_LIBRARIES} R ${Boost_LIBRARIES} ${statismo_LIBRARIES})
+if(APPLE)
+  SET_TARGET_PROPERTIES(RvtkStatismo PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+  set_property(TARGET RvtkStatismo PROPERTY OUTPUT_NAME "RvtkStatismo.so")
+  set_property(TARGET RvtkStatismo PROPERTY SUFFIX "")
+endif()
 
