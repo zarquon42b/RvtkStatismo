@@ -6,7 +6,7 @@ __RvtkStatismo__ is an R-package aiming to integrate **[Statismo](https://github
 
 
 
-* **Linux/OSX:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment and of course statismo
+* **Linux:** Install VTK (headers and library), CMake, HDF5 libraries and R build environment and of course statismo
 
 On Ubuntu (14.04/14.10/15.04), this can be easily accomplished by:
 	
@@ -17,6 +17,57 @@ On Ubuntu (14.04/14.10/15.04), this can be easily accomplished by:
 
 
 
+* **OS X** * Install R, XCODE and cmake, run the following lines in your terminal:
+```
+ git clone https://github.com/statismo/statismo.git
+ mkdir build && cd build
+ cmake ../statismo/superbuild 
+ make ## make a coffee or go for lunch
+ ```
+
+There are two ways to tell R, where the libraries reside:
+
+1. Dirty solution. Copy the libs to where R can find them:
+
+    ```bash
+    cp INSTALL/lib/libvtk* INSTALL/lib/libboost* INSTALL/lib/libhdf5* /Library/Frameworks/R.framework/Resources/lib
+     
+    ```
+
+2. In OS X Yosemite there seems no way to set the environment variable ```DYLD_LIBRARY_PATH```  globally, so we create a file ```~/Library/LaunchAgents/statismo.plist```containing the following xml code (of course replacing the path with yours):
+
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>Label</key>
+      <string>my.startup</string>
+      <key>ProgramArguments</key>
+      <array>
+        <string>sh</string>
+        <string>-c</string>
+        <string>
+        launchctl setenv DYLD_LIBRARY_PATH /Users/myuser/statismo/build/INSTALL/lib
+       </string>
+    
+      </array>
+      <key>RunAtLoad</key>
+      <true/>
+    </dict>
+    </plist>
+    ```
+    Now logout and login again.
+
+
+    To use RvtkStatismo in a console you need to run (works for one session only):
+
+    ```
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Users/myuser/statismo/build/INSTALL/lib
+    ```
+    
+   To make this permanent add this command to your ~/.bash_profile (create it if it does not exist).
+	
 
 * **Windows:** SUCKS BIG TIME!! <s>install [CMake](http://cmake.org/cmake/resources/software.html) and [MinGW](http://www.mingw.org/) (including MSYS) and make sure the respective paths are included in the PATH variable). Then download  [VTK](http://www.vtk.org/VTK/resources/software.html) source code and build it. If you build VTK static libraries, the R-package will be portable.</s>
 
