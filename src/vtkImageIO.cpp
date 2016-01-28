@@ -15,7 +15,7 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
     return image;
   }
       
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
+#if (VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1) || VTK_MAJOR_VERSION > 6
   //try NIFTII
   else {
     vtkSmartPointer<vtkNIFTIImageReader> niftiReader = vtkSmartPointer<vtkNIFTIImageReader>::New();
@@ -48,7 +48,7 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
       return transformImage;
     } else {
-      ::Rf_error("image not readable");
+      ::Rf_error("image not readable a");
       
     }
   }
@@ -70,7 +70,7 @@ int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilenam
   ras->SetElement(0,0,-1);
   ras->SetElement(1,1,-1);
   vtkSmartPointer<vtkImageWriter> writer;
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
+#if (VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1) || VTK_MAJOR_VERSION > 6
   
   if (ext.compare(".nii") ==0 || extext.compare(".nii.gz") == 0) { 
     vtkSmartPointer<vtkNIFTIImageWriter> writertmp = vtkSmartPointer<vtkNIFTIImageWriter>::New();

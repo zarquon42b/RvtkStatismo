@@ -10,7 +10,7 @@
 #include <vtkImageWriter.h>
 #include <vtkMetaImageWriter.h>
 #include <vtksys/SystemTools.hxx>
-#if VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1
+#if (VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1) || VTK_MAJOR_VERSION > 6
 #include <vtkNIFTIImageReader.h>
 #include <vtkNIFTIImageWriter.h>
 #endif

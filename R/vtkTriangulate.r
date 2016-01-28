@@ -9,6 +9,7 @@
 #'
 #' @export
 vtkTriangulate <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1))) {
+    file <- path.expand(file)
     out <- .Call("vtkSegment2PolyData",file,value)
     class(out) <- "mesh3d"
     out$vb <- rbind(out$vb,1)
