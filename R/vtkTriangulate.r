@@ -8,9 +8,9 @@
 #' @return returns a triangular mesh of class mesh3d
 #'
 #' @export
-vtkTriangulate <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1))) {
+vtkTriangulate <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1)),dicom=FALSE) {
     file <- path.expand(file)
-    out <- .Call("vtkSegment2PolyData",file,value)
+    out <- .Call("vtkSegment2PolyData",file,value,dicom)
     class(out) <- "mesh3d"
     out$vb <- rbind(out$vb,1)
     out <- Morpho::applyTransform(out,IJK2RAS)
