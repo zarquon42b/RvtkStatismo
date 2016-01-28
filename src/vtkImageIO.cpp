@@ -48,7 +48,7 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
       vtkSmartPointer<vtkImageData> transformImage = transform2->GetOutput();
       return transformImage;
     } else {
-      ::Rf_error("image not readable a");
+      ::Rf_error("image not readable");
       
     }
   }
