@@ -37,33 +37,40 @@ IF( NOT VTK_SUPPORT )
 ENDIF()
 
 ### only link against necessary libs (requires vtk6)
-if(VTK_MAJOR_VERSION GREATER 5) 
-  set( required_vtk_modules
-    vtkCommonComputationalGeometry
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonExecutionModel
-    vtkCommonMath
-    vtkCommonMisc
-    vtkCommonSystem
-    vtkCommonTransforms
-    vtkFiltersCore
-    vtkFiltersGeneral
-    vtkIOCore
-    vtkIOGeometry
-    vtkIOLegacy
-    vtkIOXML
-    vtkIOXMLParser
-    vtkImagingHybrid
-    vtkImagingStencil
-    vtkFiltersModeling
-    vtkFiltersHybrid
-    vtkIOImport
-    vtkRenderingCore
-    vtkRenderingOpenGL
-    )
+if(VTK_MAJOR_VERSION GREATER 5)
+  
+ 
+    set( required_vtk_modules
+      vtkCommonComputationalGeometry
+      vtkCommonCore
+      vtkCommonDataModel
+      vtkCommonExecutionModel
+      vtkCommonMath
+      vtkCommonMisc
+      vtkCommonSystem
+      vtkCommonTransforms
+      vtkFiltersCore
+      vtkFiltersGeneral
+      vtkIOCore
+      vtkIOGeometry
+      vtkIOLegacy
+      vtkIOXML
+      vtkIOXMLParser
+      vtkImagingHybrid
+      vtkImagingStencil
+      vtkFiltersModeling
+      vtkFiltersHybrid
+      vtkIOImport
+      vtkRenderingCore
+     # vtkRenderingOpenGL
+      )
+    if(VTK_RENDERING_BACKEND) #in vtk 7, the rendering backend is exported as a var.
+       LIST(APPEND required_vtk_modules vtkRendering${VTK_RENDERING_BACKEND})
+    else(VTK_RENDERING_BACKEND)
+      LIST(APPEND required_vtk_modules vtkRenderingOpenGL)
+    endif(VTK_RENDERING_BACKEND)
   find_package( VTK REQUIRED COMPONENTS ${required_vtk_modules} )
-endif()
+endif(VTK_MAJOR_VERSION GREATER 5)
 
 
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR} )
