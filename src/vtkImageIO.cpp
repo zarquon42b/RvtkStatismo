@@ -4,7 +4,6 @@
 vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename, bool dicom) {
 
   if (dicom) {
-    Rprintf("dicom");
     vtkSmartPointer<vtkImageData> image =vtkSmartPointer<vtkImageData>::New();
     vtkSmartPointer<vtkDICOMImageReader> dicomReader = vtkSmartPointer<vtkDICOMImageReader>::New();
     dicomReader->SetDirectoryName(inputFilename.c_str());
