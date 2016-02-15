@@ -67,20 +67,20 @@ setMethod("GetPCAVarianceVector", signature(model="pPCA"), function(model) {
 ### SAMPLE INFO
 
 #' @rdname StatismoSample
-setMethod("ComputeLogProbability",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeLogProbability",model,dataset2representer(dataset),TRUE)
+setMethod("ComputeLogProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),TRUE)
     return(out)
 })
 
 #' @rdname StatismoSample
-setMethod("ComputeProbability",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeLogProbability",model,dataset2representer(dataset),FALSE)
+setMethod("ComputeProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
     return(out)
 })
 
 #' @rdname StatismoSample
-setMethod("ComputeMahalanobisDistance",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeMahalanobisDistance",model,dataset2representer(dataset),FALSE)
+setMethod("ComputeMahalanobisDistanceForDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeMahalanobisDistanceForDataset",model,dataset2representer(dataset),FALSE)
     return(out)
 })
 
@@ -162,14 +162,14 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt
 })
 
 #' @rdname statismoMembers
-setMethod("ComputeCoefficients",signature(model="pPCA"), function(model,dataset) {
-    out <- .Call("ComputeCoefficients",model,dataset2representer(dataset))
+setMethod("ComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset) {
+    out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
     return(out)
 })
 
 # #' @rdname statismoMembers
-# setMethod("RobustlyComputeCoefficients",signature(model="pPCA"), function(model,dataset,niterations=100, nu = 6, sigma2=1) {
-#     out <- .Call("RobustlyComputeCoefficients",model,dataset2representer(dataset),niterations, nu, sigma2)
+# setMethod("RobustlyComputeCoefficientsForDataset",signature(model="pPCA"), function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+#     out <- .Call("RobustlyComputeCoefficientsForDataset",model,dataset2representer(dataset),niterations, nu, sigma2)
 #    return(out)
 # })
 

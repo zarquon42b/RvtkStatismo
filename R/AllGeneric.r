@@ -16,7 +16,7 @@
 #' \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
 #' \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 #' \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
-#' \item{ComputeCoefficients}{Computes the coefficients of the latent variables}
+#' \item{ComputeCoefficientsForDataset}{Computes the coefficients of the latent variables}
 #' \item{ComputeCoefficientsForPointValues}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points}
 #' \item{GetDomainPoints}{a matrix containing the points of the model's domain}
 
@@ -62,13 +62,13 @@ setGeneric("DrawSampleAtPoint", function(model,coefficients,pt,addNoise=FALSE) {
 
 #' @rdname statismoMembers
 #' @export
-setGeneric("ComputeCoefficients", function(model,dataset) {
-    standardGeneric("ComputeCoefficients")
+setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
+    standardGeneric("ComputeCoefficientsForDataset")
 })
 # # @rdname statismoMembers
 # # @export
-# setGeneric("RobustlyComputeCoefficients", function(model,dataset,niterations=100, nu = 6, sigma2=1) {
-#    standardGeneric("RobustlyComputeCoefficients")
+# setGeneric("RobustlyComputeCoefficientsForDataset", function(model,dataset,niterations=100, nu = 6, sigma2=1) {
+#    standardGeneric("RobustlyComputeCoefficientsForDataset")
 #})
 
 #' @rdname statismoMembers
@@ -190,8 +190,8 @@ setGeneric("GetPCAVarianceVector", function(model) {
 #' @param model model of class "pPCA"
 #' @param dataset a matrix or mesh3d aligned to the model's mean
 #' @return
-#' \item{ComputeLogProbability}{returns the log-probability density for the sample}
-#' \item{ComputeProbability}{returns the probability density for the sample}
+#' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
+#' \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 #' @seealso \code{\link{getDataLikelihood}}
 #' @docType methods
 #' @name StatismoSample
@@ -200,20 +200,20 @@ NULL
 
 #' @rdname StatismoSample
 #' @export
-setGeneric("ComputeLogProbability", function(model,dataset) {
-    standardGeneric("ComputeLogProbability")
+setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
+    standardGeneric("ComputeLogProbabilityOfDataset")
 })
 
 #' @rdname StatismoSample
 #' @export
-setGeneric("ComputeProbability", function(model,dataset) {
-    standardGeneric("ComputeProbability")
+setGeneric("ComputeProbabilityOfDataset", function(model,dataset) {
+    standardGeneric("ComputeProbabilityOfDataset")
 })
 
 #' @rdname StatismoSample
 #' @export
-setGeneric("ComputeMahalanobisDistance", function(model,dataset) {
-    standardGeneric("ComputeMahalanobisDistance")
+setGeneric("ComputeMahalanobisDistanceForDataset", function(model,dataset) {
+    standardGeneric("ComputeMahalanobisDistanceForDataset")
 })
 
 

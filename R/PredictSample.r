@@ -53,7 +53,7 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
     if (hasLM && posteriorMean) 
         alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
     else 
-        alpha <- ComputeCoefficients(model,sb)
+        alpha <- ComputeCoefficientsForDataset(model,sb)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         alpha <- constrainParams(alpha,sdmax=sdmax,mahaprob=mahaprob)
