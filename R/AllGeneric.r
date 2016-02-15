@@ -18,6 +18,7 @@
 #' \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
 #' \item{ComputeCoefficientsForDataset}{Computes the coefficients of the latent variables}
 #' \item{ComputeCoefficientsForPointValues}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points}
+#'  \item{ComputeCoefficientsForPointValuesWithCovariance}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points. In contrast to \code{ComputeCoefficientsForPointValues}, \code{ptNoise} can be set individually, either as vector of length \code{k} (assuming spherical noise) or a \eqn{(k*3) \times 3}{(k*3) x 3} matrix with the i-th \eqn{3 \times 3}{3x3} block containing the covariance matrix for the i-th coordinate.}
 #' \item{GetDomainPoints}{a matrix containing the points of the model's domain}
 
 #' \item{GetDomainSize}{get the size of the model's domain}
@@ -74,6 +75,9 @@ setGeneric("ComputeCoefficientsForDataset", function(model,dataset) {
 #' @rdname statismoMembers
 #' @export
 setGeneric("ComputeCoefficientsForPointValues",function(model,sample,pt,ptNoise=0) standardGeneric("ComputeCoefficientsForPointValues"))
+#' @rdname statismoMembers
+#' @export
+setGeneric("ComputeCoefficientsForPointValuesWithCovariance",function(model,sample,pt,ptNoise=0) standardGeneric("ComputeCoefficientsForPointValuesWithCovariance"))
 
 #' @rdname statismoMembers
 #' @export

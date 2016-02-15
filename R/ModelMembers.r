@@ -216,6 +216,86 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA", sample="n
 
 
 #' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="matrix",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
+    ptNoise <- as.matrix(ptNoise)
+    if (length(ptNoise) == 1)
+        ptNoise <- as.matrix(rep(ptNoise,nrow(sample)))
+    sample <- t(sample)
+    mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+     storage.mode(ptNoise) ="numeric"
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="matrix",pt="matrix",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
+    if (length(ptNoise) == 1)
+        ptNoise <- rep(ptNoise,nrow(sample))
+    storage.mode(ptNoise) ="numeric"
+    sample <- t(sample)
+    mean <- t(pt)
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="numeric",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
+    
+    if (length(ptNoise) == 1)
+        ptNoise <- rep(ptNoise,length(sample))
+    sample <- matrix(sample,3,1)
+    if (length(pt) == 3)
+        mean <- matrix(pt,3,1)
+    else if (length(pt) == 1)
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        stop("in this case pt must be a vector of length 3 or an integer")
+    storage.mode(ptNoise) ="numeric"
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="matrix",pt="numeric",ptNoise="matrix"), function(model,sample,pt,ptNoise=0) {
+    if (nrow(ptNoise) != length(sample))
+        stop("you need to specify a 3x3 covariance matrix for each point")
+    sample <- t(sample)
+    mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    storage.mode(ptNoise) ="numeric"
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="matrix",pt="matrix",ptNoise="matrix"), function(model,sample,pt,ptNoise=0) {
+    if (nrow(ptNoise) != length(sample))
+        stop("you need to specify a 3x3 covariance matrix for each point")
+    sample <- t(sample)
+    mean <- t(pt)
+    storage.mode(ptNoise) ="numeric"
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pPCA", sample="numeric",pt="numeric",ptNoise="matrix"), function(model,sample,pt,ptNoise=0) {
+    if (nrow(ptNoise) != length(sample))
+        stop("you need to specify a 3x3 covariance matrix for each point")
+    sample <- matrix(sample,3,1)
+    if (length(pt) == 3)
+        mean <- matrix(pt,3,1)
+    else if (length(pt) == 1)
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        stop("in this case pt must be a vector of length 3 or an integer")
+    storage.mode(ptNoise) ="numeric"
+    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    return(out)
+})
+
+
+
+#' @rdname statismoMembers
 setMethod("EvaluateSampleAtPoint", signature(model="pPCA", sample="matrix",pt="numeric"), function(model,sample,pt) {
     sample <- list(vb=t(sample),it=matrix(0,0,0))
     if (length(pt) == 1)

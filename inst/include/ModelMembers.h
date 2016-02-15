@@ -43,6 +43,8 @@ RcppExport SEXP GetJacobian(SEXP pPCA_, SEXP pt_);
 
 RcppExport SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
 
+RcppExport SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
+
 RcppExport SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_);
 
 #endif// _MODEL_MEMBERS_H__

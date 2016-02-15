@@ -94,7 +94,7 @@ setMethod("PredictSample",signature(model="pPCA",dataset="missing"), function(mo
         lmDataset <- rotsb$yrot
     }
     posteriorMean <- TRUE
-    alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
+    alpha <- ComputeCoefficientsForPointValuesWithCovariance(model,lmDataset,lmModel,ptNoise = ptValueNoise)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         alpha <- constrainParams(alpha,sdmax=sdmax,mahaprob=mahaprob)

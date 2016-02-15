@@ -262,6 +262,7 @@ SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
 
 typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
 typedef std::list<PointValuePairType> PointValueListType;
+
 SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
   try {
     double noise = as<double>(noise_);
@@ -278,6 +279,49 @@ SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEX
     }
     
     VectorXf coeff = model->ComputeCoefficientsForPointValues(ptValueList,noise);
+    
+  
+    return wrap(coeff);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
+}
+
+typedef MatrixType 	PointCovarianceMatrixType;
+typedef std::pair < PointValuePairType, PointCovarianceMatrixType> 	PointValueWithCovariancePairType;
+typedef std::list < PointValueWithCovariancePairType > 	PointValueWithCovarianceListType;
+
+SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
+  try {
+    Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(noise_));
+    NumericMatrix sample(sample_);
+    NumericMatrix mean(mean_);
+    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    PointValueListType ptValueList;
+    PointValueWithCovarianceListType ptValueWithCovPair;
+    MatrixXd tmpcovd;
+    MatrixType tmpcov;	 
+    for (int i = 0; i < mean.ncol();i++) {
+      
+      vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
+      vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+      
+      if (ptValueNoise.cols() == 1) {
+	tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
+      } else if (ptValueNoise.cols() == 3) {
+	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
+	//tmpcov = tmpcovd.cast<float>();
+      } else {
+	::Rf_error("noise must be vector or 3 column matrix\n");
+      }
+      PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
+      PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+      ptValueWithCovPair.push_back(covpair);
+    }
+  
+    VectorXf coeff = model->ComputeCoefficientsForPointValuesWithCovariance(ptValueWithCovPair);
     
   
     return wrap(coeff);
