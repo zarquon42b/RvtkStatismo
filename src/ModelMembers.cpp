@@ -309,10 +309,15 @@ SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, S
       vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
       
       if (ptValueNoise.cols() == 1) {
-	tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
+	float scalarnoise =  ptValueNoise(i,0);
+	if (scalarnoise == 0)
+	  scalarnoise = 1e-6;
+	tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
       } else if (ptValueNoise.cols() == 3) {
 	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
-	//tmpcov = tmpcovd.cast<float>();
+	if (tmpcov.isZero())
+	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
+	
       } else {
 	::Rf_error("noise must be vector or 3 column matrix\n");
       }
