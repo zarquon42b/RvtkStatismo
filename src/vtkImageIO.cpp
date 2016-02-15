@@ -1,12 +1,20 @@
 #include "vtkImageIO.h"
 #include "RcppEigen.h"
 
-vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
-  
+vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename, bool dicom) {
+
+  if (dicom) {
+    vtkSmartPointer<vtkImageData> image =vtkSmartPointer<vtkImageData>::New();
+    vtkSmartPointer<vtkDICOMImageReader> dicomReader = vtkSmartPointer<vtkDICOMImageReader>::New();
+    dicomReader->SetDirectoryName(inputFilename.c_str());
+    dicomReader->Update();
+    image = dicomReader->GetOutput();
+    return image;
+  } else {
   vtkSmartPointer<vtkImageData> image =vtkSmartPointer<vtkImageData>::New();
   vtkSmartPointer<vtkImageReader2Factory> readerFactory = vtkSmartPointer<vtkImageReader2Factory>::New();
   vtkImageReader2* imageReader = readerFactory->CreateImageReader2(inputFilename.c_str());
-   
+ 
   if (imageReader) {
     imageReader->SetFileName(inputFilename.c_str());
     imageReader->Update();
@@ -56,6 +64,7 @@ vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) {
   else
     ::Rf_error("image not readable");
 #endif
+  }
     
 }
 

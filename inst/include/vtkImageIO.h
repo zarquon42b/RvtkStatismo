@@ -9,6 +9,7 @@
 #include <vtkImageReslice.h>
 #include <vtkImageWriter.h>
 #include <vtkMetaImageWriter.h>
+#include <vtkDICOMImageReader.h>
 #include <vtksys/SystemTools.hxx>
 #if (VTK_MAJOR_VERSION > 5 && VTK_MINOR_VERSION > 1) || VTK_MAJOR_VERSION > 6
 #include <vtkNIFTIImageReader.h>
@@ -18,7 +19,7 @@
 #include <vtkMatrix4x4.h>
 #include <vtkTransform.h>
 
-vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename) ;
+vtkSmartPointer<vtkImageData> vtkImageRead(std::string inputFilename, bool dicom=false) ;
 
 int vtkImageWrite(vtkSmartPointer<vtkImageData> image, std::string outputFilename);
 
