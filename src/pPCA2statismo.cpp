@@ -74,6 +74,8 @@ shared_ptr<vtkMeshModel> pPCA2statismo(SEXP pPCA_) {
     binfoList.push_back(builderInfo);
     ModelInfo myinfo(scores,binfoList);//(scores,binfoList);
     model->SetModelInfo(myinfo);
+   
+
     return model;
     
   }  catch (std::exception& e) {
@@ -93,7 +95,7 @@ typedef std::vector<BuilderInfo> BuilderInfoList;
 S4 statismo2pPCA(shared_ptr<vtkMeshModel> model) {
   try {
     if (model.get()) {
-      vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+      vtkPolyData* reference = model->DrawMean();
       List PCA = List::create(
 			      Named("sdev")= model->GetPCAVarianceVector().array().sqrt(),
 			      Named("rotation") = model->GetOrthonormalPCABasisMatrix(),
@@ -107,7 +109,7 @@ S4 statismo2pPCA(shared_ptr<vtkMeshModel> model) {
       pPCA.slot("PCA") = PCA;
       pPCA.slot("sigma") = model->GetNoiseVariance();
       pPCA.slot("representer")=polyData2R(reference);
-
+      reference->Delete();
       // get model info
       //create S4 object modelinfo
       Language modInfocall("new", "modelinfo");

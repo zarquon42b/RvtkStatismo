@@ -7,8 +7,9 @@ using namespace Eigen;
 SEXP DrawMean(SEXP pPCA_){
   try {
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    vtkSmartPointer<vtkPolyData> reference = model->DrawMean();
+    vtkPolyData* reference = model->DrawMean();
     List out = polyData2R(reference);
+    reference->Delete();
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
@@ -35,7 +36,7 @@ SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
 SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
-    vtkSmartPointer<vtkPolyData> reference;
+    vtkPolyData* reference;
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     if (!Rf_isNull(coeffs_)) {
       
@@ -46,6 +47,7 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
       reference = model->DrawSample(addNoise);
     }
     List out = polyData2R(reference);
+    reference->Delete();
     return out;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
@@ -73,7 +75,6 @@ SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
 SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
-    vtkSmartPointer<vtkPolyData> reference;
     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     
     Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));

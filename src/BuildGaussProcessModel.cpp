@@ -66,7 +66,8 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
     mKerns.push_back(sumKernel);
     //build new model
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    shared_ptr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
+    vtkPolyData* newmean = model->DrawMean();
+    shared_ptr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(newmean, *sumKernel, numberOfComponents,nystroem));
     //tidy up
     for (std::list<MatrixValuedKernelType*>::iterator it = mKerns.begin(); it != mKerns.end(); it++) {
       if (*it != NULL) {
@@ -83,6 +84,7 @@ shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP
 	delete *it;
       }
     }
+    newmean->Delete();
     return combinedModel;
   
   } catch (StatisticalModelException& e) {

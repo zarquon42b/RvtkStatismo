@@ -37,7 +37,7 @@ shared_ptr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sig
       vtkSmartPointer<vtkPolyData> dataset = R2polyData(vb,it);
       std::string myname = nam[i];
       dataManager->AddDataset(dataset,myname);
-    
+      dataset = NULL;
     }
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     
