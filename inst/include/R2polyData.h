@@ -23,5 +23,9 @@
 
 using namespace Rcpp;
 vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_= Rcpp::NumericMatrix(0,0));
+
+
+vtkSmartPointer<vtkPolyData> mesh3d2polyData(SEXP mesh_);
+
 #endif 
 //NOTE: always!! include statismo stuff before this header!!!

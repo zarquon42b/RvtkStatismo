@@ -4,7 +4,7 @@
 \alias{vtkBooleanOp}
 \title{run boolean operations on mesh}
 \usage{
-vtkBooleanOp(mesh1, mesh2, type = 0)
+vtkBooleanOp(mesh1, mesh2, type = 0, reorient = TRUE, tol = 1e-06)
 }
 \arguments{
 \item{mesh1}{triangular mesh}
@@ -12,6 +12,10 @@ vtkBooleanOp(mesh1, mesh2, type = 0)
 \item{mesh2}{triangular mesh}
 
 \item{type}{integer: boolean operation. 0=Union, 1=intersection, 2=difference}
+
+\item{reorient}{logical: Turn on/off cell reorientation of the intersection portion of the surface when the type=2 (DIFFERENCE). Defaults to TRUE.}
+
+\item{tol}{Set the tolerance used to determine when a point's absolute distance is considered to be zero. Defaults to 1e-6.}
 }
 \value{
 returns manipulated mesh

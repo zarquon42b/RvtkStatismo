@@ -1,5 +1,5 @@
 #include "R2polyData.h"
-
+#include "checkListNames.h"
 using Rcpp::List;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerMatrix;
@@ -67,5 +67,25 @@ vtkSmartPointer<vtkPolyData> R2polyData(SEXP vb_, SEXP it_) {
     ::Rf_error("unknown exception");
     vtkSmartPointer<vtkPolyData> polydata;      
     return polydata;
+  }
+}
+
+vtkSmartPointer<vtkPolyData> mesh3d2polyData(SEXP mesh_) {
+  try{
+    List mesh(mesh_);
+    Rcpp::CharacterVector mychar = Rcpp::CharacterVector::create("vb","it");
+    std::vector<bool> test = checkListNames(mesh,mychar);
+    for (int i = 0; i < 2; i++) {
+      if (!test[i]) {
+	std::string tmp = Rcpp::as<std::string>(mychar[i]);
+	mesh[tmp] = Rcpp::wrap(0);
+      }
+    }
+    return R2polyData(mesh["vb"],mesh["it"]);
+  
+  }  catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
   }
 }
