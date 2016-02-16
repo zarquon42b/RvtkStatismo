@@ -22,13 +22,15 @@
 #include "vtkImageIO.h"
 
 
-RcppExport SEXP vtkBooleanOp(SEXP mesh0_,SEXP mesh1_, SEXP optype_) {
+RcppExport SEXP vtkBooleanOp(SEXP mesh0_,SEXP mesh1_, SEXP optype_, SEXP reorient_, SEXP tolerance_) {
 try {
   List mesh0(mesh0_);
   List mesh1(mesh1_);
   int optype = as<int>(optype_);
-  vtkSmartPointer<vtkPolyData> polydata0 = R2polyData(mesh0["vb"],mesh0["it"]);
-  vtkSmartPointer<vtkPolyData> polydata1 = R2polyData(mesh1["vb"],mesh1["it"]);
+  bool reorient = as<bool>(reorient_);
+  double tolerance = as<double>(tolerance_);
+  vtkSmartPointer<vtkPolyData> polydata0 = mesh3d2polyData(mesh0);
+  vtkSmartPointer<vtkPolyData> polydata1 = mesh3d2polyData(mesh1);
   vtkSmartPointer<vtkBooleanOperationPolyDataFilter> booleanOperation =  vtkSmartPointer<vtkBooleanOperationPolyDataFilter>::New();
   booleanOperation->SetOperation(optype);
 #if VTK_MAJOR_VERSION <= 5
@@ -38,11 +40,15 @@ try {
  booleanOperation->SetInputData(0,polydata0);
  booleanOperation->SetInputData(1,polydata1);
 #endif
- 
+ if (!reorient)
+   booleanOperation->ReorientDifferenceCellsOff();
+ booleanOperation->SetTolerance(tolerance);
  booleanOperation->Update(); 
-  return polyData2R(booleanOperation->GetOutput());
+ return polyData2R(booleanOperation->GetOutput());
+ return wrap(0);
  } catch (std::exception& e) {
   ::Rf_error( e.what());
+  
  } catch (...) {
   ::Rf_error("unknown exception");
  }
