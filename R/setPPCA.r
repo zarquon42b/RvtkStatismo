@@ -64,7 +64,17 @@ setReplaceMethod("SetMeanVector", "pPCA",function(x, value) {x@PCA$center <- val
 setGeneric("SetScores<-", function(x, value) standardGeneric("SetScores<-"))
 
 #' @rdname ppcasetters
-setReplaceMethod("SetScores", "pPCA",function(x, value) {x@PCA$x <- value; validObject(x); x})
+setReplaceMethod("SetScores", "pPCA",function(x, value) {
+    varlen <- length(x@PCA$sdev)
+    if (!is.matrix(value))
+        stop(paste("scores must be a matrix with", varlen,"or zero (to remove the scores) columns "))
+    else if (sum(dim(value) > 0)) {
+        varlen <- length(x@PCA$sdev)
+        if (ncol(value) != varlen)
+            stop(paste("scores must be a matrix with", varlen,"or zero (to remove the scores)columns"))
+    } 
+     
+    x@PCA$x <- value; validObject(x); x})
 
 #' @rdname ppcasetters
 #' @export
