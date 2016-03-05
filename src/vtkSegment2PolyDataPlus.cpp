@@ -1,6 +1,7 @@
 #include <vtkImageData.h>
 #include <vtkImageThreshold.h>
 #include <vtkImageOpenClose3D.h>
+#include <vtkDiscreteMarchingCubes.h>
 #include <vtkInteractorStyleImage.h>
 #include <vtkImageMapper3D.h>
 #include <vtkVersion.h>
@@ -17,6 +18,13 @@
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
 
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkImageActor.h>
+#include <vtkImageCast.h>
+#include <vtkImageMandelbrotSource.h>
+
 #include "RcppEigen.h"
 #include "R2polyData.h"
 #include "polyData2R.h"
@@ -25,13 +33,13 @@
 #include "vtkImageIO.h"
 
 
-vtkSmartPointer<vtkImageThreshold> vtkThreshold(inputFilename,lower,upper,inValue,outValue,dicom) {
+vtkSmartPointer<vtkImageThreshold> vtkThreshold(std::string inputFilename,double lower,double upper, double inValue, double outValue, bool dicom) {
     try
     {
         vtkSmartPointer<vtkImageData> image = vtkImageRead(inputFilename,dicom);
         vtkSmartPointer<vtkImageThreshold> imageThreshold = vtkSmartPointer<vtkImageThreshold>::New();
 
-        imageThreshold->SetInputConnection(image->GetOutputPort());
+        imageThreshold->SetInputDataObject(image);
         imageThreshold->ThresholdBetween(lower, upper);
         imageThreshold->ReplaceInOn();
         imageThreshold->SetInValue(inValue);
@@ -59,7 +67,7 @@ RcppExport SEXP vtkSegment2PolyDataPlus(SEXP inputFilename_,SEXP lower_,SEXP upp
         double upper = as<double>(upper_);
         bool dicom = as<bool>(dicom_);
         std::string inputFilename = as<std::string>(inputFilename_);
-        vtkSmartPointer<vtkImageData> threshImage = vtkThreshold(inputFilename,lower,upper,inValue,outValue,dicom);
+        vtkSmartPointer<vtkImageThreshold> threshImage = vtkThreshold(inputFilename,lower,upper,inValue,outValue,dicom);
         vtkSmartPointer<vtkDiscreteMarchingCubes> discreteCubes = vtkSmartPointer<vtkDiscreteMarchingCubes>::New();
 
         int kernelX = as<int>(kernelX_);
@@ -71,16 +79,16 @@ RcppExport SEXP vtkSegment2PolyDataPlus(SEXP inputFilename_,SEXP lower_,SEXP upp
         }
         else
         {
-            openedImage = vtkSmartPointer<vtkImageOpenClose3D>;
-            openedImage.SetInputConnection(threshImage->GetOutputPort());
-            openedImage.SetOpenValue(0);
-            openedImage.SetCloseValue(1);
-            openedImage.SetKernelSize(kernelX,kernelY,kernelZ);
+            vtkSmartPointer<vtkImageOpenClose3D> openedImage = vtkSmartPointer<vtkImageOpenClose3D>::New();
+            openedImage->SetInputConnection(threshImage->GetOutputPort());
+            openedImage->SetOpenValue(0);
+            openedImage->SetCloseValue(1);
+            openedImage->SetKernelSize(kernelX,kernelY,kernelZ);
             discreteCubes->SetInputConnection(openedImage->GetOutputPort());
         }
 
         discreteCubes->GenerateValues(1, 1, 1);
-        discreteCubes->->ComputeNormalsOn();
+        discreteCubes->ComputeNormalsOn();
 
         // Sometimes the contouring algorithm can create a volume whose gradient
         // vector and ordering of polygon (using the right hand rule) are
