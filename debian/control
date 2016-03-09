@@ -2,7 +2,7 @@ Source: rvtkstatismo
 Section: gnu-r
 Priority: optional
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
-Build-Depends: r-base-dev, xvfb, xauth, xfonts-base, r-base-core, r-cran-rcpp, r-cran-rcppeigen, debhelper (>> 4.1.0), cdbs, r-cran-rvcg, r-cran-morpho, statismo, cmake, libvtk5-dev, libhdf5-serial-dev, libeigen3-dev, libboost-date-time1.55-dev, libboost1.55-dev, libboost-system1.55-dev, libboost-thread1.55-dev, libboost-filesystem1.55-dev, libboost-program-options1.55-dev, cmake, libfftw3-dev
+Build-Depends: r-base-dev, xvfb, xauth, xfonts-base, r-base-core, r-cran-rcpp, r-cran-rcppeigen, debhelper (>> 4.1.0), cdbs, r-cran-rvcg, r-cran-morpho, statismo, cmake, libvtk6-dev, libhdf5-dev, libeigen3-dev, libboost-date-time-dev, libboost-dev, libboost-system-dev, libboost-thread-dev, libboost-filesystem-dev, libboost-program-options-dev, cmake, libfftw3-dev
 Standards-Version: 3.9.1
 
 Package: r-cran-rvtkstatismo
