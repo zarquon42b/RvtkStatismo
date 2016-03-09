@@ -6,8 +6,8 @@
 #' \tabular{ll}{
 #' Package: \tab RvtkStatismo\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.2.150716\cr
-#' Date: \tab 2015-07-16\cr
+#' Version: \tab 0.3.160309\cr
+#' Date: \tab 2016-03-09\cr
 #' License: \tab GPL\cr
 #' LazyLoad: \tab yes\cr }
 #' 
