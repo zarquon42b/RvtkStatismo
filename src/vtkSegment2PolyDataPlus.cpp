@@ -81,8 +81,8 @@ RcppExport SEXP vtkSegment2PolyDataPlus(SEXP inputFilename_,SEXP lower_,SEXP upp
         {
             vtkSmartPointer<vtkImageOpenClose3D> openedImage = vtkSmartPointer<vtkImageOpenClose3D>::New();
             openedImage->SetInputConnection(threshImage->GetOutputPort());
-            openedImage->SetOpenValue(0);
-            openedImage->SetCloseValue(1);
+            openedImage->SetOpenValue(1);
+            openedImage->SetCloseValue(0);
             openedImage->SetKernelSize(kernelX,kernelY,kernelZ);
             discreteCubes->SetInputConnection(openedImage->GetOutputPort());
         }
