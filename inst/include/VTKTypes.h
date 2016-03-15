@@ -4,11 +4,11 @@
 #include "PCAModelBuilder.h"
 #include "StatisticalModel.h"
 #include "DataManager.h"
-#include <boost/shared_ptr.hpp>
+//#include <boost/XPtr.hpp>
 
 
 using namespace statismo;
-using boost::shared_ptr;
+//using boost::XPtr;
 
 typedef vtkStandardMeshRepresenter vtkMeshRepresenter;
 typedef DataManager<vtkPolyData> vtkMeshDataManager;

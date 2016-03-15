@@ -7,16 +7,16 @@ SEXP ReducedModel(SEXP pPCA_,SEXP npc_,SEXP exVar_) {
   try {
     unsigned int npc = as<unsigned int>(npc_);
     double exVar = as<double>(exVar_);
-    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    //shared_ptr<vtkMeshModel> reducedModel;
-    shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+    XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    //XPtr<vtkMeshModel> reducedModel;
+    XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     if (npc > 0) {
-      shared_ptr<vtkMeshModel> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc));
+      XPtr<vtkMeshModel> reducedModel(modelBuilder->BuildNewModelWithLeadingComponents(model.get(), npc));
       return statismo2pPCA(reducedModel);
     
       
     } else {
-      shared_ptr<vtkMeshModel> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar));
+      XPtr<vtkMeshModel> reducedModel(modelBuilder->BuildNewModelWithVariance(model.get(), exVar));
       return statismo2pPCA(reducedModel);
 
     }

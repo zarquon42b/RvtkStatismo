@@ -7,6 +7,7 @@
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
 #' @param SelfAdjointEigenSolver logical: if TRUE SelfAdjointEigenSolver is used during model building. Only use this if sample size exceeds amount of variables (faster but less accurate) - can lead to errors otherwise.
+#' @param pointer if TRUE an object of class pPCA_pointer is returned
 #' @return an object of class pPCA (\code{\link{pPCA-class}})
 #' @examples
 #' require(Morpho)
@@ -21,7 +22,7 @@
 #' 
 #' @export
 
-statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEigenSolver=FALSE) {
+statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEigenSolver=FALSE,pointer=FALSE) {
     if (is.array(x)) {
         m <- dim(x)[2]
         if (m == 2) {
@@ -59,10 +60,8 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEige
         stop("representer must be a matrix or a mesh")
     }
     
-    out <- .Call("BuildModelExport",mylist,representer,sigma,SelfAdjointEigenSolver)
+    out <- .Call("BuildModelExport",mylist,representer,sigma,SelfAdjointEigenSolver,pointer)
     SetScale(out) <- scale
-    out@rawdata <- rawdata
     return(out)
-    
     
 }

@@ -1,22 +1,23 @@
 #include "BuildGaussProcessModel.h"
 #include "Helpers.h"
 
-XPtr<vtkMeshModel> BuildGPModel(shared_ptr<vtkMeshModel> model, SEXP mykernel_, SEXP ncomp_,SEXP nystroem_) {
+XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP ncomp_,SEXP nystroem_, SEXP combine_) {
   try {
-    // shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     unsigned int nystroem = as<unsigned int>(nystroem_);
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
     XPtr<MatrixValuedKernelType > mykernel(mykernel_);
-    //MatrixValuedKernelType* sumKernel = (&*mykernel);
-    MatrixValuedKernelType* sumKernel = new SumKernel<vtkPoint>(mykernel,mykernel);
+    int combine = as<int>(combine_);
+    MatrixValuedKernelType* sumKernel = (&*mykernel);
+    MatrixValuedKernelType* statModelKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
+    if (combine == 1 )
+      sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
+    else if (combine == 2)
+      sumKernel = new ProductKernel<vtkPoint>(sumKernel, statModelKernel);
+  
+    XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
+    XPtr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
     
-    //MatrixValuedKernelType* testKernel = *sumKernel;
-    shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    vtkPolyData* newmean = model->DrawMean();
-    Rprintf("2\n");
-    XPtr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(newmean, *mykernel, numberOfComponents,nystroem));
-   
-    newmean->Delete();
+    delete statModelKernel;
     return combinedModel;
   
   } catch (StatisticalModelException& e) {
@@ -29,19 +30,16 @@ XPtr<vtkMeshModel> BuildGPModel(shared_ptr<vtkMeshModel> model, SEXP mykernel_, 
   }
 }
 
-SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_){
- 
-  std::string classname = getClassname(pPCA_);
-  Rprintf("%s\n",classname.c_str());
-  if (("class") == "pPCA") {
-	  shared_ptr<vtkMeshModel> modelin = pPCA2statismo(pPCA_);
-	  shared_ptr<vtkMeshModel> model = BuildGPModel(modelin,kernels_,ncomp_,nystroem_);
-	  return statismo2pPCA(model);
-  } else {
+SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP combine_, SEXP pointer_) {
+  try {
+    bool pointer = as<bool>(pointer_);
     XPtr<vtkMeshModel> modelin = pPCA2statismo(pPCA_);
-    // }
-  //return statismo2pPCA(model);
-  
-  
+    XPtr<vtkMeshModel> model = BuildGPModel(modelin,kernels_,ncomp_,nystroem_,combine_);
+    return statismo2pPCA(model,pointer);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
 }
 

@@ -25,7 +25,7 @@ SEXP competingPoints(SEXP pPCA_,SEXP sample_, SEXP indices_, SEXP maha_) {
      NumericMatrix goodverts(ranges.size(),3);
      NumericVector mahagood(ranges.size());
      IntegerVector goodrows(ranges.size());
-     shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      NumericVector mahadistance(indices.size());
      unsigned int i = 0;
      for(IntegerVector::iterator it = ranges.begin(); it != ranges.end(); ++it) {

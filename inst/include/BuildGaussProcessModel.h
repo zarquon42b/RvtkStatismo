@@ -228,7 +228,7 @@ typedef GaussianKernel GaussianKernelType;
 typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
 typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_);
+XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP ncomp_,SEXP nystroem_, SEXP combine_);
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_);
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP combine_, SEXP pointer_);
 #endif //_BUILD_GP_MODEL_H__

@@ -1,3 +1,10 @@
+#' create a scalar valued kernel of type MultiscaleBsplineKernel
+#'
+#' create a scalar valued kernel of type MultiscaleBsplineKernel
+#' @param support suppor value for B-spline
+#' @param levels number of levels
+#' @return object of class scalarKernel
+#' @export
 MultiscaleBsplineKernel <- function(support=100,levels=2) {
     out <- new("scalarKernel")
     kernel <- .Call("RscalarValuedKernel",1,support,levels);
@@ -5,6 +12,14 @@ MultiscaleBsplineKernel <- function(support=100,levels=2) {
     out@kerneltype="MultiscaleBsplineKernel"
     return(out)
 }
+
+#' create a scalar valued kernel of type GaussianKernel
+#'
+#' create a scalar valued kernel of type GaussianKernel
+#' @param sigma  bandwidth of Gausian kernel
+#' @param levels number of levels
+#' @return object of class scalarKernel
+#' @export
 GaussianKernel <- function(sigma=50) {
     out <- new("scalarKernel")
     kernel <- .Call("RscalarValuedKernel",0,sigma,0);
@@ -12,6 +27,14 @@ GaussianKernel <- function(sigma=50) {
     out@kerneltype="GaussianKernel"
     return(out)
 }
+
+#' create a matrix valued kernel
+#'
+#' create a matrix valued kernel
+#' @param scalarKernel object of class scalarKernel
+#' @param scale scale factor of kernel
+#' @return object of class matrixKernel
+#' @export
 MatrixValuedKernel <- function(scalarKernel,scale=1) {
     if (!inherits(scalarKernel,"scalarKernel"))
         stop("scalarKernel must be of class scalarKernel")
@@ -21,7 +44,13 @@ MatrixValuedKernel <- function(scalarKernel,scale=1) {
    # mkernel@kerneltype <- "MatrixValuedKernel"
     return(mkernel)
 }
-
+#' create an isotropic kernel
+#'
+#' create an isotropic kernel
+#' @param x matrix or mesh based on which the scaling is centered
+#' @param scale scale factor
+#' @return object of class matrixKernel
+#' @export
 IsoKernel <- function(x, scale=0.1) {
     if (inherits(x,"mesh3d"))
         x <- vert2points(x)
@@ -42,7 +71,14 @@ GetEmpiricalKernel <- function(pPCA) {
     out@kerneltype <- "EmpiricalKernel"
     return(out)
 }
-
+#' combine (add or multiply) two matrixKernels
+#'
+#' combine (add or multiply) two matrixKernels
+#' @param kernel1 object of class matrixKernel
+#' @param kernel2 object of class matrixKernel
+#' @param add logical: if TRUE kernels will be added, multiplied otherwise
+#' @return object of class matrixKernel
+#' @export
 CombineKernels <- function(kernel1, kernel2, add=TRUE) {
     if (!inherits(kernel1,"matrixKernel") ||!inherits(kernel2,"matrixKernel") )
         stop("kernels must be of class matrixKernel")

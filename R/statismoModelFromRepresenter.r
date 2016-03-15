@@ -3,12 +3,10 @@
 #' generate model from a representer using gaussian kernels
 #'
 #' @param representer mesh3d or matrix used as representer
-#' @param kernel a list containing numeric vectors of length 2. Except the first entry of this list may be of length 2 and is then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels. 
+#' @param kernel an object of class matrixKernel  
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
-#' @param combine character determining how to combine the kernels: "sum" or "product" are supported.
-#' @param isoScale standard deviation of isotropic scaling. 
-#' @param centroid specify the center of scaling. If NULL, the centroid will be used.
+#' @param pointer if TRUE an object of class pPCA_pointer is returned
 #' @return returns a shape model of class \code{\link{pPCA}}
 #' @examples
 #' require(Rvcg)
@@ -19,7 +17,7 @@
 #' for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
 #' }
 #' @export
-statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncomp=10,nystroem=500,combine="sum",isoScale=0, centroid=NULL) {
+statismoModelFromRepresenter <- function(representer,kernel=MatrixValuedKernel(GaussianKernel(50),10),ncomp=10,nystroem=500,pointer=FALSE) {
     representer <- dataset2representer(representer)
     center <- as.vector(representer$vb[1:3,])
     pp <- new("pPCA")
@@ -29,7 +27,7 @@ statismoModelFromRepresenter <- function(representer,kernel=list(c(100,70)),ncom
     pp@representer <- representer
     pp@PCA$rotation <- matrix(0,length(pp@PCA$center),1)
     centroid <- apply(GetDomainPoints(pp),2,mean)
-    out <- statismoGPmodel(pp,useEmpiric=FALSE,kernel=kernel,ncomp=ncomp,nystroem=nystroem,combine = combine,combineEmp=0,isoScale=isoScale,centroid=centroid)
+    out <- statismoGPmodel(pp,kernel=kernel,ncomp=ncomp,nystroem=nystroem,pointer=pointer,empiric = "none")
     return(out)
 }
     

@@ -7,13 +7,13 @@ typedef DataManagerWithSurrogateVector<vtkPolyData> vtkMeshDataManagerWithSurrog
 
 SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_, SEXP exVar_) {
   
-  shared_ptr<vtkMeshModel> model = BuildConditionalModel(myshapelist_,myreference_, sigma_, trainingData_,condData_,surrogateInfo_,exVar_);
+  XPtr<vtkMeshModel> model = BuildConditionalModel(myshapelist_,myreference_, sigma_, trainingData_,condData_,surrogateInfo_,exVar_);
   return statismo2pPCA(model);
   
 }
 
   
-shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_,SEXP exVar_) {
+XPtr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_,SEXP exVar_) {
 
   try {
     List myshapelist(myshapelist_);
@@ -34,7 +34,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
     SEXP vbref = myreference["vb"];
     SEXP itref = myreference["it"];
     vtkSmartPointer<vtkPolyData> reference = R2polyData(vbref,itref);
-    shared_ptr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
+    XPtr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
     ModelBuilderType::CondVariableValueVectorType conditioningInfo;
     for (unsigned int i = 0; i < condData.nrow(); i++) {
       bool use = condData(i,0);
@@ -42,7 +42,7 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
       conditioningInfo.push_back(ModelBuilderType::CondVariableValuePair(true, value));
     }
   
-    shared_ptr<vtkMeshDataManagerWithSurrogates> dataManager(vtkMeshDataManagerWithSurrogates::Create(representer.get(),surrogateInfo));
+    XPtr<vtkMeshDataManagerWithSurrogates> dataManager(vtkMeshDataManagerWithSurrogates::Create(representer.get(),surrogateInfo));
     for (unsigned int i = 0; i < ndata; i++) {
       List tmplist = myshapelist[i];
       //IntegerMatrix
@@ -56,8 +56,8 @@ shared_ptr<vtkMeshModel> BuildConditionalModel(SEXP myshapelist_,SEXP myreferenc
       dataManager->AddDatasetWithSurrogates(dataset,myname,tmpVector);
     
       }
-    shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
-    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma,exVar));
+    XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+    XPtr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), dataManager->GetSurrogateTypeInfo(), conditioningInfo, sigma,exVar));
     return model;
 
   } catch (StatisticalModelException& e) {

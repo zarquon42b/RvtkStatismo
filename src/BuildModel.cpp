@@ -2,15 +2,20 @@
 typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 
 
-SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_) {
-  
-  shared_ptr<vtkMeshModel> model = BuildModel(myshapelist_,myreference_, sigma_, SelfAdjointSolve_);
-  return statismo2pPCA(model);
-  
+SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_, SEXP pointer_) {
+  try {
+    bool pointer = as<bool>(pointer_);
+    XPtr<vtkMeshModel> model = BuildModel(myshapelist_,myreference_, sigma_, SelfAdjointSolve_);
+    return statismo2pPCA(model,pointer);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
 }
 
   
-shared_ptr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_){
+XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_){
 
   try {
     List myshapelist(myshapelist_);
@@ -22,13 +27,13 @@ shared_ptr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sig
     SEXP vbref = myreference["vb"];
     SEXP itref = myreference["it"];
     vtkSmartPointer<vtkPolyData> reference = R2polyData(vbref,itref);
-    shared_ptr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
+    XPtr<vtkMeshRepresenter> representer(vtkMeshRepresenter::Create(reference));
     //enum method { JacobiSVD, SelfAdjointEigenSolver } ;
     ModelBuilderType::EigenValueMethod method = ModelBuilderType::JacobiSVD;
     if (SelfAdjointSolve)
       method =  ModelBuilderType::SelfAdjointEigenSolver;
     
-    shared_ptr<vtkMeshDataManager> dataManager(vtkMeshDataManager::Create(representer.get()));
+    XPtr<vtkMeshDataManager> dataManager(vtkMeshDataManager::Create(representer.get()));
     for (unsigned int i = 0; i < ndata; i++) {
       List tmplist = myshapelist[i];
       //IntegerMatrix
@@ -39,9 +44,9 @@ shared_ptr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sig
       dataManager->AddDataset(dataset,myname);
       dataset = NULL;
     }
-    shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+    XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     
-    shared_ptr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma,true,method));
+    XPtr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma,true,method));
     return model;
 
   } catch (StatisticalModelException& e) {

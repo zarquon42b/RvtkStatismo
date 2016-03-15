@@ -8,12 +8,14 @@
 \usage{
 statismoSaveModel(model, modelname = dataname)
 
-statismoLoadModel(modelname, scale = FALSE)
+statismoLoadModel(modelname, pointer = FALSE, scale = FALSE)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}
 
 \item{modelname}{filename to read/save}
+
+\item{pointer}{if TRUE an object of class pPCA_pointer is returned}
 
 \item{scale}{specify if scaling was involved in model generation}
 }

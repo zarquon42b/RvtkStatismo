@@ -22,6 +22,7 @@
 \alias{SetRepresenter<-,pPCA-method}
 \alias{SetScale<-}
 \alias{SetScale<-,pPCA-method}
+\alias{SetScale<-,pPCA_pointer-method}
 \alias{SetScores<-}
 \alias{SetScores<-,pPCA-method}
 \alias{SetVariance<-}
@@ -59,6 +60,8 @@ SetRepresenter(x) <- value
 SetScale(x) <- value
 
 \S4method{SetScale}{pPCA}(x) <- value
+
+\S4method{SetScale}{pPCA_pointer}(x) <- value
 
 SetPCA(x) <- value
 

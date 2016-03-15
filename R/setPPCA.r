@@ -100,7 +100,10 @@ setReplaceMethod("SetScale", "pPCA",function(x, value) {
     }
         
     validObject(x); x})
-
+#' @rdname ppcasetters
+setReplaceMethod("SetScale", "pPCA_pointer",function(x, value) {
+    x@scale <- value;
+    x})
 #' @rdname ppcasetters
 #' @export
 setGeneric("SetPCA<-", function(x, value) standardGeneric("SetPCA<-"))

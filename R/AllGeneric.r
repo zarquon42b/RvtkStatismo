@@ -187,6 +187,12 @@ setGeneric("GetPCAVarianceVector", function(model) {
     standardGeneric("GetPCAVarianceVector")
 })
 
+#' @rdname statismoParameters
+#' @export
+setGeneric("GetNumberOfPrincipalComponents", function(model) {
+    standardGeneric("GetNumberOfPrincipalComponents")
+})
+
 
 ### SAMPLE INFO
 #' Retrieve information about a sample from the model

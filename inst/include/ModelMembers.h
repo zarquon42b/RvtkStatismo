@@ -19,7 +19,7 @@ RcppExport SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_);
 
 RcppExport SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_);
 
-RcppExport SEXP LoadModel(SEXP modelname_);
+RcppExport SEXP LoadModel(SEXP modelname_, SEXP pointer_);
 
 RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
 
@@ -47,4 +47,13 @@ RcppExport SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP
 
 RcppExport SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_);
 
+RcppExport SEXP GetPCABasisMatrix(SEXP pPCA_);
+
+RcppExport SEXP GetOrthonormalPCABasisMatrix(SEXP pPCA_);
+
+RcppExport SEXP GetNumberOfPrincipalComponents(SEXP pPCA_);
+
+RcppExport SEXP GetMeanVector(SEXP pPCA_);
+
+RcppExport SEXP GetNoiseVariance(SEXP pPCA_);
 #endif// _MODEL_MEMBERS_H__

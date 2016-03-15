@@ -4,24 +4,20 @@
 \alias{statismoModelFromRepresenter}
 \title{generate model from a representer using gaussian kernels}
 \usage{
-statismoModelFromRepresenter(representer, kernel = list(c(100, 70)),
-  ncomp = 10, nystroem = 500, combine = "sum", isoScale = 0,
-  centroid = NULL)
+statismoModelFromRepresenter(representer,
+  kernel = MatrixValuedKernel(GaussianKernel(50), 10), ncomp = 10,
+  nystroem = 500, pointer = FALSE)
 }
 \arguments{
 \item{representer}{mesh3d or matrix used as representer}
 
-\item{kernel}{a list containing numeric vectors of length 2. Except the first entry of this list may be of length 2 and is then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels.}
+\item{kernel}{an object of class matrixKernel}
 
 \item{ncomp}{integer: number of PCs to approximate}
 
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
 
-\item{combine}{character determining how to combine the kernels: "sum" or "product" are supported.}
-
-\item{isoScale}{standard deviation of isotropic scaling.}
-
-\item{centroid}{specify the center of scaling. If NULL, the centroid will be used.}
+\item{pointer}{if TRUE an object of class pPCA_pointer is returned}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}

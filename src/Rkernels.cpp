@@ -63,7 +63,7 @@ RcppExport SEXP RisoKernel(SEXP scale_, SEXP centroid_) {
 
 RcppExport SEXP RgetEmpiricalKernel(SEXP pPCA_) {
   try {
-    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     XPtr<MatrixValuedKernelType> statModelKernel(new StatisticalModelKernel<vtkPolyData>(model.get()));
     return statModelKernel;
   } catch (std::exception& e) {

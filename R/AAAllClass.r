@@ -97,3 +97,6 @@ setClass("scalarKernel",slots=c(pointer="externalptr",kerneltype="character"))
 
 #' @export
 setClass("matrixKernel",slots=c(pointer="externalptr",kerneltype="character"))
+
+#' @export
+setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype=list(pointer=NULL,scale=FALSE))
