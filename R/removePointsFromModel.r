@@ -8,7 +8,7 @@
 #' ## create a GP model from a mesh and remove the first 1000 coordinates
 #' require(Rvcg)
 #' data(humface)
-#' hummodel <- statismoModelFromRepresenter(humface,kernel=list(c(50,50)))
+#' hummodel <- statismoModelFromRepresenter(humface,MatrixValuedKernel(GaussianKernel(50),50))
 #' hummodel0 <- removePointsFromModel(hummodel,1:1000)
 #' \dontrun{
 #' require(rgl)
@@ -17,6 +17,12 @@
 #' @importFrom Morpho rmVertex
 #' @export
 removePointsFromModel <- function(model,pointind) {
+    pointer <- FALSE
+    scale <- model@scale
+    if (inherits(model,"pPCA_pointer")) {
+        pointer <- TRUE
+        model <- pointer2pPCA(model)
+    }
     model@PCA$x <- matrix(0,0,0)
     rminds <- (pointind-1)*3
     rminds <- c(rminds+1,rminds+2,rminds+3)
@@ -27,6 +33,11 @@ removePointsFromModel <- function(model,pointind) {
     else
         model@representer$vb <-  model@representer$vb[,-pointind]
     validObject(model)
+    if (pointer) {
+        model <- pPCA2pointer(model)
+        SetScale(model) <- scale
+    }
+    
     return(model)
 }
     

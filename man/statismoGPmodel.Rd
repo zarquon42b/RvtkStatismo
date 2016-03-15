@@ -34,13 +34,14 @@ align <- rigidAlign(boneLM)$rotated
 mod <- statismoBuildModel(align)
 ##extend flexibility using two Gaussian kernels
 ## Get the empirical kernel first
-isoKernel <- IsoKernel(DrawMean(mod))
+isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
 kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
 kernel2 <- MatrixValuedKernel(GaussianKernel(1),1)
 combinedKernel <- CombineKernels(kernel1,kernel2)
+combinedKernel <- CombineKernels(combinedKernel,isoKernel)
 GPmod <- statismoGPmodel(mod,kernel=combinedKernel)
 ##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
-GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,combine = "none")
+GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,empiric = "none")
 PC1orig <- DrawSample(mod,2)# get shape in 2sd of first PC of originial model
 PC1 <- DrawSample(GPmod,2)# get shape in 2sd of first PC of the extended model
 PC1NoEmp <- DrawSample(GPmodNoEmp,2)# get shape in 2sd of first PC

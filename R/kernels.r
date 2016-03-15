@@ -4,6 +4,8 @@
 #' @param support suppor value for B-spline
 #' @param levels number of levels
 #' @return object of class scalarKernel
+#' @examples
+#' kernel1 <- MultiscaleBsplineKernel(100,5)
 #' @export
 MultiscaleBsplineKernel <- function(support=100,levels=2) {
     out <- new("scalarKernel")
@@ -19,6 +21,8 @@ MultiscaleBsplineKernel <- function(support=100,levels=2) {
 #' @param sigma  bandwidth of Gausian kernel
 #' @param levels number of levels
 #' @return object of class scalarKernel
+#' @examples
+#' gkernel <- GaussianKernel(2)
 #' @export
 GaussianKernel <- function(sigma=50) {
     out <- new("scalarKernel")
@@ -34,6 +38,9 @@ GaussianKernel <- function(sigma=50) {
 #' @param scalarKernel object of class scalarKernel
 #' @param scale scale factor of kernel
 #' @return object of class matrixKernel
+#' @examples
+#' gkernel <- GaussianKernel(2)
+#' mvkernel <- MatrixValuedKernel(gkernel)
 #' @export
 MatrixValuedKernel <- function(scalarKernel,scale=1) {
     if (!inherits(scalarKernel,"scalarKernel"))
@@ -50,8 +57,11 @@ MatrixValuedKernel <- function(scalarKernel,scale=1) {
 #' @param x matrix or mesh based on which the scaling is centered
 #' @param scale scale factor
 #' @return object of class matrixKernel
+#' require(Rvcg)
+#' data(humface)
+#' isokernel <- IsoKernel(humface,scale=0.01)
 #' @export
-IsoKernel <- function(x, scale=0.1) {
+IsoKernel <- function(x, scale=0.01) {
     if (inherits(x,"mesh3d"))
         x <- vert2points(x)
     centroid <- colMeans(x)
@@ -78,6 +88,10 @@ GetEmpiricalKernel <- function(pPCA) {
 #' @param kernel2 object of class matrixKernel
 #' @param add logical: if TRUE kernels will be added, multiplied otherwise
 #' @return object of class matrixKernel
+#' @examples
+#' isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
+#' kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
+#' combinedKernel <- CombineKernels(kernel1,isoKernel)
 #' @export
 CombineKernels <- function(kernel1, kernel2, add=TRUE) {
     if (!inherits(kernel1,"matrixKernel") ||!inherits(kernel2,"matrixKernel") )

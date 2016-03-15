@@ -5,7 +5,7 @@
 \title{generate model from a representer using gaussian kernels}
 \usage{
 statismoModelFromRepresenter(representer,
-  kernel = MatrixValuedKernel(GaussianKernel(50), 10), ncomp = 10,
+  kernel = MatrixValuedKernel(GaussianKernel(100), 50), ncomp = 10,
   nystroem = 500, pointer = FALSE)
 }
 \arguments{
@@ -28,7 +28,10 @@ generate model from a representer using gaussian kernels
 \examples{
 require(Rvcg)
 data(humface)
-hummodel <- statismoModelFromRepresenter(humface)
+kernel1 <- MatrixValuedKernel(GaussianKernel(80),50)
+kernel2 <- MatrixValuedKernel(GaussianKernel(20),40)
+combinedKernel <- CombineKernels(kernel1,kernel2)
+hummodel <- statismoModelFromRepresenter(humface,combinedKernel)
 \dontrun{
 require(rgl)
 for (i in 1:5) wire3d(DrawSample(hummodel),col=i)

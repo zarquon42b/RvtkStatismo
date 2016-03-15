@@ -4,7 +4,7 @@
 \alias{IsoKernel}
 \title{create an isotropic kernel}
 \usage{
-IsoKernel(x, scale = 0.1)
+IsoKernel(x, scale = 0.01)
 }
 \arguments{
 \item{x}{matrix or mesh based on which the scaling is centered}
@@ -13,6 +13,9 @@ IsoKernel(x, scale = 0.1)
 }
 \value{
 object of class matrixKernel
+require(Rvcg)
+data(humface)
+isokernel <- IsoKernel(humface,scale=0.01)
 }
 \description{
 create an isotropic kernel

@@ -17,4 +17,7 @@ object of class scalarKernel
 \description{
 create a scalar valued kernel of type MultiscaleBsplineKernel
 }
+\examples{
+kernel1 <- MultiscaleBsplineKernel(100,5)
+}
 

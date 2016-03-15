@@ -17,4 +17,8 @@ object of class matrixKernel
 \description{
 create a matrix valued kernel
 }
+\examples{
+gkernel <- GaussianKernel(2)
+mvkernel <- MatrixValuedKernel(gkernel)
+}
 
