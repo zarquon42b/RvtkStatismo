@@ -25,6 +25,7 @@
 \alias{SetScale<-,pPCA_pointer-method}
 \alias{SetScores<-}
 \alias{SetScores<-,pPCA-method}
+\alias{SetScores<-,pPCA_pointer-method}
 \alias{SetVariance<-}
 \alias{SetVariance<-,pPCA-method}
 \title{Low level methods to set pPCA class content}
@@ -52,6 +53,8 @@ SetMeanVector(x) <- value
 SetScores(x) <- value
 
 \S4method{SetScores}{pPCA}(x) <- value
+
+\S4method{SetScores}{pPCA_pointer}(x) <- value
 
 SetRepresenter(x) <- value
 

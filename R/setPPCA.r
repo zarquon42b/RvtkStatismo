@@ -77,6 +77,13 @@ setReplaceMethod("SetScores", "pPCA",function(x, value) {
     x@PCA$x <- value; validObject(x); x})
 
 #' @rdname ppcasetters
+setReplaceMethod("SetScores", "pPCA_pointer",function(x, value) {
+    tmp <- pointer2pPCA(x)
+    SetScores(tmp) <- value
+    return(pPCA2pointer(tmp))
+})
+
+#' @rdname ppcasetters
 #' @export
 setGeneric("SetRepresenter<-", function(x, value) standardGeneric("SetRepresenter<-"))
 

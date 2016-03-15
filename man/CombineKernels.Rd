@@ -19,4 +19,9 @@ object of class matrixKernel
 \description{
 combine (add or multiply) two matrixKernels
 }
+\examples{
+isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
+kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
+combinedKernel <- CombineKernels(kernel1,isoKernel)
+}
 
