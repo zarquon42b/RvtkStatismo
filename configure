@@ -2,7 +2,8 @@
 # obtain and export Rs environment variables
 export R_HOME
 CXX=$(R CMD config CXX)
-CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
+#CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
+CXXFLAGS="$(R CMD config CXX1XFLAGS)"
 # $(R CMD config DYLIB_LDFLAGS)"
 CPPFLAGS=$(R CMD config CPPFLAGS)
 BLAS_LIBS=$(R CMD config BLAS_LIBS)
