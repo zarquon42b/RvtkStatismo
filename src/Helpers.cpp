@@ -11,3 +11,11 @@ vtkPoint SEXP2vtkPoint(SEXP vec) {
 
  
 }
+
+std::string getClassname(SEXP x) {
+  Environment base("package:base");
+  Function getAttrib = base["attr"];
+  SEXP classname_ = getAttrib(pPCA_, "class");
+  std::string classname = as<std::string>(classname_);
+  return classname;
+}

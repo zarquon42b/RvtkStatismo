@@ -92,4 +92,8 @@ setClass("pPCA",
 }
 setValidity("pPCA", .pPCA.valid)
 
+#' @export
+setClass("scalarKernel",slots=c(pointer="externalptr",kerneltype="character"))
 
+#' @export
+setClass("matrixKernel",slots=c(pointer="externalptr",kerneltype="character"))

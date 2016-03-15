@@ -74,20 +74,20 @@ private:
 
 
 
-vtkPoint vtkPointScale(vtkPoint x,double scale) {
+inline vtkPoint vtkPointScale(vtkPoint x,double scale) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]*scale;
   }
   return x;
 }
 
-vtkPoint vtkPointSum(vtkPoint x,vtkPoint y) {
+inline vtkPoint vtkPointSum(vtkPoint x,vtkPoint y) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]+y[i];
   }
   return x;
 }
-vtkPoint vtkPointDif(vtkPoint x,vtkPoint y) {
+inline vtkPoint vtkPointDif(vtkPoint x,vtkPoint y) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]-y[i];
   }
@@ -228,7 +228,7 @@ typedef GaussianKernel GaussianKernelType;
 typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
 typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_ , SEXP isoScale_, SEXP centroid_);
+shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_);
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_,SEXP isoScale_, SEXP centroid_);
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_);
 #endif //_BUILD_GP_MODEL_H__

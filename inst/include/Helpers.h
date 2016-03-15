@@ -9,4 +9,6 @@ vtkPoint NumVec2vtkPoint(NumericVector vec);
 
 vtkPoint SEXP2vtkPoint(SEXP vec);
 
+std::string getClassname(SEXP x);
+
 #endif
