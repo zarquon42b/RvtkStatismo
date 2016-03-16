@@ -3,6 +3,7 @@
 #' create a scalar valued kernel of type MultiscaleBsplineKernel
 #' @param support suppor value for B-spline
 #' @param levels number of levels
+#' @param scale scale factor
 #' @return object of class scalarKernel
 #' @examples
 #' kernel1 <- MultiscaleBsplineKernel(100,5)
@@ -21,7 +22,7 @@ MultiscaleBsplineKernel <- function(support=100,levels=2,scale=10) {
 #'
 #' create a scalar valued kernel of type GaussianKernel
 #' @param sigma  bandwidth of Gausian kernel
-#' @param levels number of levels
+#' @param scale scale factor
 #' @return object of class scalarKernel
 #' @examples
 #' gkernel <- GaussianKernel(2)
@@ -38,8 +39,9 @@ GaussianKernel <- function(sigma=50,scale=10) {
 #' create an isotropic kernel
 #'
 #' create an isotropic kernel
-#' @param x matrix or mesh based on which the scaling is centered
 #' @param scale scale factor
+#' @param x matrix or mesh to calculate the centroid from (overrides centroid)
+#' @param centroid centroid 
 #' @return object of class matrixKernel
 #' require(Rvcg)
 #' data(humface)
@@ -77,7 +79,7 @@ SumKernels <- function(kernel1, kernel2) {
     if (!class(kernel1) %in% typesallowed ||!class(kernel2)  %in% typesallowed)
         stop("unkown kernel class")
     if (kernel1@kerneltype == "ProductKernel" || kernel2@kerneltype == "ProductKernel")
-        stop("first create all your summed kernels and then call the ProductKernel")
+        stop("first create all your summed kernels and then subsequently call ProductKernels ")
     out <- new("combinedKernel")
     if (inherits(kernel1,"combinedKernel")) {
         if (inherits(kernel2,"combinedKernel")) {
@@ -85,15 +87,12 @@ SumKernels <- function(kernel1, kernel2) {
         } else {
             print(1)
             out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2)
-            
         }
-    
     } else if (inherits(kernel2,"combinedKernel")) {
         out@kernels[[1]] <- list(kernel2@kernels[[1]],kernel1)
     } else {
         out@kernels[[1]] <- list(kernel1,kernel2)
     }
-    
     out@kerneltype <- "SumKernel"
     validObject(out)
     return(out)
@@ -113,16 +112,12 @@ ProductKernels <- function(kernel1, kernel2) {
         } else {
             print(1)
             out@kernels <- append(kernel1@kernels,list(list(kernel2)))
-            
         }
-    
     } else if (inherits(kernel2,"combinedKernel")) {
         out@kernels <- append(kernel2@kernels,(kernel1))
     } else {
         out@kernels <- list(list(kernel1),list(kernel2))
     }
-    
-    
     out@kerneltype <- "ProductKernel"
     validObject(out)
     return(out)

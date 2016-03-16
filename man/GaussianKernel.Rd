@@ -9,7 +9,7 @@ GaussianKernel(sigma = 50, scale = 10)
 \arguments{
 \item{sigma}{bandwidth of Gausian kernel}
 
-\item{levels}{number of levels}
+\item{scale}{scale factor}
 }
 \value{
 object of class scalarKernel

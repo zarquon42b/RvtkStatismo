@@ -9,7 +9,9 @@ IsoKernel(scale = 0.01, x = NULL, centroid = NULL)
 \arguments{
 \item{scale}{scale factor}
 
-\item{x}{matrix or mesh based on which the scaling is centered}
+\item{x}{matrix or mesh to calculate the centroid from (overrides centroid)}
+
+\item{centroid}{centroid}
 }
 \value{
 object of class matrixKernel

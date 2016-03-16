@@ -10,6 +10,8 @@ MultiscaleBsplineKernel(support = 100, levels = 2, scale = 10)
 \item{support}{suppor value for B-spline}
 
 \item{levels}{number of levels}
+
+\item{scale}{scale factor}
 }
 \value{
 object of class scalarKernel

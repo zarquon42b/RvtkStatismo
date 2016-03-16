@@ -90,6 +90,7 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="n
 #' @param pt either a k x 3 matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample} 
 #' @param ptValueNoise numeric: specify noise on constraints.
 #' @param sdmax a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)
+#' @param pointer if TRUE an object of class pPCA_pointer is returned.
 #' @return a constrained model
 #' @rdname statismoConstrainModelSafe
 #' @name statismoConstrainModelSafe

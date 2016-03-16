@@ -42,6 +42,8 @@ statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
 \item{ptValueNoise}{numeric: specify noise on constraints.}
 
 \item{sdmax}{a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)}
+
+\item{pointer}{if TRUE an object of class pPCA_pointer is returned.}
 }
 \value{
 a constrained model
