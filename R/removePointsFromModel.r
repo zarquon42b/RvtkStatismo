@@ -8,7 +8,7 @@
 #' ## create a GP model from a mesh and remove the first 1000 coordinates
 #' require(Rvcg)
 #' data(humface)
-#' hummodel <- statismoModelFromRepresenter(humface,MatrixValuedKernel(GaussianKernel(50),50))
+#' hummodel <- statismoModelFromRepresenter(humface,GaussianKernel(50,50))
 #' hummodel0 <- removePointsFromModel(hummodel,1:1000)
 #' \dontrun{
 #' require(rgl)

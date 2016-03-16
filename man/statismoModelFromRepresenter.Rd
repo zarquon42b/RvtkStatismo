@@ -4,9 +4,8 @@
 \alias{statismoModelFromRepresenter}
 \title{generate model from a representer using gaussian kernels}
 \usage{
-statismoModelFromRepresenter(representer,
-  kernel = MatrixValuedKernel(GaussianKernel(100), 50), ncomp = 10,
-  nystroem = 500, pointer = FALSE)
+statismoModelFromRepresenter(representer, kernel = GaussianKernel(100, 50),
+  ncomp = 10, nystroem = 500, pointer = FALSE)
 }
 \arguments{
 \item{representer}{mesh3d or matrix used as representer}
@@ -28,9 +27,9 @@ generate model from a representer using gaussian kernels
 \examples{
 require(Rvcg)
 data(humface)
-kernel1 <- MatrixValuedKernel(GaussianKernel(80),50)
-kernel2 <- MatrixValuedKernel(GaussianKernel(20),40)
-combinedKernel <- CombineKernels(kernel1,kernel2)
+kernel1 <- GaussianKernel(80,50)
+kernel2 <- GaussianKernel(20,20)
+combinedKernel <- SumKernels(kernel1,kernel2)
 hummodel <- statismoModelFromRepresenter(humface,combinedKernel)
 \dontrun{
 require(rgl)

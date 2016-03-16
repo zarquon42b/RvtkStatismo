@@ -21,7 +21,7 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
 	MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
 	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
 	sumKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
-      } else if (classname == "BsplineKernel") {
+      } else if (classname == "IsoKernel") {
 	S4 IsoKernelR(mykernel_);
 	vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
 	sumKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);

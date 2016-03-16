@@ -38,7 +38,7 @@
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}}
 #' @keywords StatisticalModel<representer>
 #' @export
-statismoGPmodel <- function(model,kernel=MatrixValuedKernel(GaussianKernel(50),10),ncomp=10,nystroem=500,pointer=FALSE,empiric="sum") {
+statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem=500,pointer=FALSE,empiric="sum") {
     #gc()
     empargs <- c("none","sum","product")
     empiric <- match.arg(empiric[1],empargs)
@@ -58,6 +58,8 @@ statismoGPmodel <- function(model,kernel=MatrixValuedKernel(GaussianKernel(50),1
     nystroem <- min(k,nystroem)
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
+    if (inherits(kernel,"IsoKernel"))
+        ncomp <- 1
     out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,empiric,pointer)
     gc()
     SetScale(out) <- model@scale

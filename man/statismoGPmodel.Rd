@@ -4,8 +4,8 @@
 \alias{statismoGPmodel}
 \title{expands a models variability by adding a Gaussian kernel function}
 \usage{
-statismoGPmodel(model, kernel = MatrixValuedKernel(GaussianKernel(50), 10),
-  ncomp = 10, nystroem = 500, pointer = FALSE, empiric = "sum")
+statismoGPmodel(model, kernel = GaussianKernel(50, 10), ncomp = 10,
+  nystroem = 500, pointer = FALSE, empiric = "sum")
 }
 \arguments{
 \item{model}{shape model of class \code{\link{pPCA}}}
@@ -35,10 +35,10 @@ mod <- statismoBuildModel(align)
 ##extend flexibility using two Gaussian kernels
 ## Get the empirical kernel first
 isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
-kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
-kernel2 <- MatrixValuedKernel(GaussianKernel(1),1)
-combinedKernel <- CombineKernels(kernel1,kernel2)
-combinedKernel <- CombineKernels(combinedKernel,isoKernel)
+kernel1 <- GaussianKernel(10,1)
+kernel2 <- GaussianKernel(1,1)
+combinedKernel <- SumKernels(kernel1,kernel2)
+combinedKernel <- SumKernels(combinedKernel,isoKernel)
 GPmod <- statismoGPmodel(mod,kernel=combinedKernel)
 ##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
 GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,empiric = "none")

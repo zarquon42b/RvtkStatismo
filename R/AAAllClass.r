@@ -92,15 +92,16 @@ setClass("pPCA",
 }
 setValidity("pPCA", .pPCA.valid)
 
-#' @export
-setClass("scalarKernel",slots=c(pointer="externalptr",kerneltype="character"))
-
-#' @export
-setClass("matrixKernel",slots=c(pointer="externalptr",kerneltype="character"))
 
 #' @export
 setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype=list(pointer=NULL,scale=FALSE))
 
+
+#' Documentation of kernel classes
+#'
+#' Documentation of kernel classes
+#'
+#' 
 #' @export
 setClass("BsplineKernel",slots=c(support="numeric",levels="integer",scale="numeric",kerneltype="character"))
 

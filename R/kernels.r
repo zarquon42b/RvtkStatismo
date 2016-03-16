@@ -56,6 +56,8 @@ IsoKernel <- function(scale=0.01,x=NULL, centroid=NULL) {
     }
     out <- new("IsoKernel")
     out@centroid <- centroid
+    if (length(centroid) != 3)
+        stop("centroid must be a vector of length 3")
     out@scale <- scale
     out@kerneltype <- "IsoKernel"
     return(out)
