@@ -85,7 +85,6 @@ SumKernels <- function(kernel1, kernel2) {
         if (inherits(kernel2,"combinedKernel")) {
             out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2@kernels[[1]])
         } else {
-            print(1)
             out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2)
         }
     } else if (inherits(kernel2,"combinedKernel")) {
@@ -110,7 +109,6 @@ ProductKernels <- function(kernel1, kernel2) {
         if (inherits(kernel2,"combinedKernel")) {
             out@kernels <- append(kernel1@kernels,kernel2@kernels)
         } else {
-            print(1)
             out@kernels <- append(kernel1@kernels,list(list(kernel2)))
         }
     } else if (inherits(kernel2,"combinedKernel")) {
