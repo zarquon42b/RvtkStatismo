@@ -100,3 +100,28 @@ setClass("matrixKernel",slots=c(pointer="externalptr",kerneltype="character"))
 
 #' @export
 setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype=list(pointer=NULL,scale=FALSE))
+
+#' @export
+setClass("BsplineKernel",slots=c(support="numeric",levels="integer",scale="numeric",kerneltype="character"))
+
+#' @export
+setClass("GaussianKernel",slots=c(sigma="numeric",scale="numeric",kerneltype="character"))
+
+#' @export
+setClass("IsoKernel",slots=c(centroid="numeric",scale="numeric",kerneltype="character"))
+
+#' @export
+setClass("combinedKernel",slots=c(kernels="list",kerneltype="character"))
+.combinedKernel.valid <- function(object) {
+    validkernels <-  c("BsplineKernel","GaussianKernel","IsoKernel")
+    kernels <- object@kernels
+    kernclass <- sapply(kernels,class)
+    if (length(grep("list",kernclass)) != length(kernclass))
+        return("slot kernel must only contain lists")
+    kerncheck <- unlist(lapply(kernels,function(x) lapply(x,class)))
+    if (prod(kerncheck %in% validkernels) == 0)
+        stop("each list in slot kernel must only contain valid kernels")
+    else
+        return(TRUE)
+}
+setValidity("combinedKernel", .combinedKernel.valid)

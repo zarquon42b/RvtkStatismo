@@ -7,11 +7,13 @@
 #' @examples
 #' kernel1 <- MultiscaleBsplineKernel(100,5)
 #' @export
-MultiscaleBsplineKernel <- function(support=100,levels=2) {
-    out <- new("scalarKernel")
-    kernel <- .Call("RscalarValuedKernel",1,support,levels);
-    out@pointer <- kernel
-    out@kerneltype="MultiscaleBsplineKernel"
+MultiscaleBsplineKernel <- function(support=100,levels=2,scale=10) {
+    levels <- as.integer(levels)
+    out <- new("BsplineKernel")
+    out@support <- support
+    out@levels <- levels
+    out@scale <- scale
+    out@kerneltype <- "BsplineKernel"
     return(out)
 }
 
@@ -24,33 +26,15 @@ MultiscaleBsplineKernel <- function(support=100,levels=2) {
 #' @examples
 #' gkernel <- GaussianKernel(2)
 #' @export
-GaussianKernel <- function(sigma=50) {
-    out <- new("scalarKernel")
-    kernel <- .Call("RscalarValuedKernel",0,sigma,0);
-    out@pointer <- kernel
+GaussianKernel <- function(sigma=50,scale=10) {
+    out <- new("GaussianKernel")
+    out@sigma <- sigma
+    out@scale <- scale
     out@kerneltype="GaussianKernel"
     return(out)
 }
 
-#' create a matrix valued kernel
-#'
-#' create a matrix valued kernel
-#' @param scalarKernel object of class scalarKernel
-#' @param scale scale factor of kernel
-#' @return object of class matrixKernel
-#' @examples
-#' gkernel <- GaussianKernel(2)
-#' mvkernel <- MatrixValuedKernel(gkernel)
-#' @export
-MatrixValuedKernel <- function(scalarKernel,scale=1) {
-    if (!inherits(scalarKernel,"scalarKernel"))
-        stop("scalarKernel must be of class scalarKernel")
-    out <- new("matrixKernel")
-    mkernel <- .Call("RMatrixValuedKernel",scalarKernel@pointer,scale);
-    # out@pointer <- mkernel
-   # mkernel@kerneltype <- "MatrixValuedKernel"
-    return(mkernel)
-}
+
 #' create an isotropic kernel
 #'
 #' create an isotropic kernel
@@ -61,46 +45,83 @@ MatrixValuedKernel <- function(scalarKernel,scale=1) {
 #' data(humface)
 #' isokernel <- IsoKernel(humface,scale=0.01)
 #' @export
-IsoKernel <- function(x, scale=0.01) {
-    if (inherits(x,"mesh3d"))
-        x <- vert2points(x)
-    centroid <- colMeans(x)
-    out <- new("matrixKernel")
-    isokernel <- .Call("RisoKernel",scale,centroid)
-    # out@pointer <- isokernel
-    isokernel@kerneltype <- "IsoKernel"
-    return(isokernel)
-}
-
-GetEmpiricalKernel <- function(pPCA) {
-    out <- new("matrixKernel")
-    if (!inherits(pPCA,"pPCA"))
-        stop("pPCA must be of class pPCA")
-    empkern <- .Call("RgetEmpiricalKernel",pPCA)
-    out@pointer <- empkern
-    out@kerneltype <- "EmpiricalKernel"
+IsoKernel <- function(scale=0.01,x=NULL, centroid=NULL) {
+    if ( is.null(x) && is.null(centroid))
+        stop("you need to specify centroid or x")
+    if (!is.null(x)) {
+        if (inherits(x,"mesh3d"))
+            x <- vert2points(x)
+        if (is.null(centroid))
+            centroid <- colMeans(x)
+    }
+    out <- new("IsoKernel")
+    out@centroid <- centroid
+    out@scale <- scale
+    out@kerneltype <- "IsoKernel"
     return(out)
 }
-#' combine (add or multiply) two matrixKernels
+
+
+#' Add two kernels
 #'
 #' combine (add or multiply) two matrixKernels
 #' @param kernel1 object of class matrixKernel
 #' @param kernel2 object of class matrixKernel
-#' @param add logical: if TRUE kernels will be added, multiplied otherwise
-#' @return object of class matrixKernel
-#' @examples
-#' isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
-#' kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
-#' combinedKernel <- CombineKernels(kernel1,isoKernel)
+#' @return object of class combinedKernel
 #' @export
-CombineKernels <- function(kernel1, kernel2, add=TRUE) {
-    if (!inherits(kernel1,"matrixKernel") ||!inherits(kernel2,"matrixKernel") )
-        stop("kernels must be of class matrixKernel")
-    out <- new("matrixKernel")
-    combined <- .Call("RcombineKernels",kernel1@pointer,kernel2@pointer,add)
-    # out@pointer <- combined
-    combined@kerneltype <- "CombinedKernel"
-    return(combined)
+SumKernels <- function(kernel1, kernel2) {
+    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel")
+    out <- new("combinedKernel")
+    if (!class(kernel1) %in% typesallowed ||!class(kernel2)  %in% typesallowed)
+        stop("unkown kernel class")
+    if (kernel1@kerneltype == "ProductKernel" || kernel2@kerneltype == "ProductKernel")
+        stop("first create all your summed kernels and then call the ProductKernel")
+    out <- new("combinedKernel")
+    if (inherits(kernel1,"combinedKernel")) {
+        if (inherits(kernel2,"combinedKernel")) {
+            out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2@kernels[[1]])
+        } else {
+            print(1)
+            out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2)
+            
+        }
+    
+    } else if (inherits(kernel2,"combinedKernel")) {
+        out@kernels[[1]] <- list(kernel2@kernels[[1]],kernel1)
+    } else {
+        out@kernels[[1]] <- list(kernel1,kernel2)
+    }
+    
+    out@kerneltype <- "SumKernel"
+    validObject(out)
+    return(out)
 }
 
-
+#' @export
+ProductKernels <- function(kernel1, kernel2) {
+    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel")
+    out <- new("combinedKernel")
+    if (!class(kernel1) %in% typesallowed ||!class(kernel2)  %in% typesallowed)
+        stop("unkown kernel class")
+   
+    out <- new("combinedKernel")
+    if (inherits(kernel1,"combinedKernel")) {
+        if (inherits(kernel2,"combinedKernel")) {
+            out@kernels <- append(kernel1@kernels,kernel2@kernels)
+        } else {
+            print(1)
+            out@kernels <- append(kernel1@kernels,list(list(kernel2)))
+            
+        }
+    
+    } else if (inherits(kernel2,"combinedKernel")) {
+        out@kernels <- append(kernel2@kernels,(kernel1))
+    } else {
+        out@kernels <- list(list(kernel1),list(kernel2))
+    }
+    
+    
+    out@kerneltype <- "ProductKernel"
+    validObject(out)
+    return(out)
+}

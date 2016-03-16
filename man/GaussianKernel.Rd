@@ -4,7 +4,7 @@
 \alias{GaussianKernel}
 \title{create a scalar valued kernel of type GaussianKernel}
 \usage{
-GaussianKernel(sigma = 50)
+GaussianKernel(sigma = 50, scale = 10)
 }
 \arguments{
 \item{sigma}{bandwidth of Gausian kernel}

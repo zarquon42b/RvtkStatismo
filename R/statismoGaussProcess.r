@@ -18,10 +18,10 @@
 #' ##extend flexibility using two Gaussian kernels
 #' ## Get the empirical kernel first
 #' isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
-#' kernel1 <- MatrixValuedKernel(GaussianKernel(10),1)
-#' kernel2 <- MatrixValuedKernel(GaussianKernel(1),1)
-#' combinedKernel <- CombineKernels(kernel1,kernel2)
-#' combinedKernel <- CombineKernels(combinedKernel,isoKernel)
+#' kernel1 <- GaussianKernel(10,1)
+#' kernel2 <- GaussianKernel(1,1)
+#' combinedKernel <- SumKernels(kernel1,kernel2)
+#' combinedKernel <- SumKernels(combinedKernel,isoKernel)
 #' GPmod <- statismoGPmodel(mod,kernel=combinedKernel)
 #' ##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
 #' GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,empiric = "none")
@@ -39,6 +39,7 @@
 #' @keywords StatisticalModel<representer>
 #' @export
 statismoGPmodel <- function(model,kernel=MatrixValuedKernel(GaussianKernel(50),10),ncomp=10,nystroem=500,pointer=FALSE,empiric="sum") {
+    #gc()
     empargs <- c("none","sum","product")
     empiric <- match.arg(empiric[1],empargs)
     empiric <- match(empiric,empargs)-1L
@@ -51,14 +52,14 @@ statismoGPmodel <- function(model,kernel=MatrixValuedKernel(GaussianKernel(50),1
     ncomp <- as.integer(ncomp)
     if (!inherits(model,"pPCA") && !inherits(model,"pPCA_pointer")  )
         stop("please provide model of class 'pPCA' or 'pPCA_pointer'")
-    if (!inherits(kernel,"matrixKernel"))
-        stop("kernel needs to be of class matrixKernel")
+    ## if (!inherits(kernel,"matrixKernel"))
+    ##    stop("kernel needs to be of class matrixKernel")
     k <- nrow(GetDomainPoints(model))
     nystroem <- min(k,nystroem)
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
-    out <- .Call("BuildGPModelExport",model,kernel@pointer,ncomp,nystroem,empiric,pointer)
-    
+    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,empiric,pointer)
+    gc()
     SetScale(out) <- model@scale
     return(out)
                          

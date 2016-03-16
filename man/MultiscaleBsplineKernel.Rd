@@ -4,7 +4,7 @@
 \alias{MultiscaleBsplineKernel}
 \title{create a scalar valued kernel of type MultiscaleBsplineKernel}
 \usage{
-MultiscaleBsplineKernel(support = 100, levels = 2)
+MultiscaleBsplineKernel(support = 100, levels = 2, scale = 10)
 }
 \arguments{
 \item{support}{suppor value for B-spline}

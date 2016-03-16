@@ -4,12 +4,12 @@
 \alias{IsoKernel}
 \title{create an isotropic kernel}
 \usage{
-IsoKernel(x, scale = 0.01)
+IsoKernel(scale = 0.01, x = NULL, centroid = NULL)
 }
 \arguments{
-\item{x}{matrix or mesh based on which the scaling is centered}
-
 \item{scale}{scale factor}
+
+\item{x}{matrix or mesh based on which the scaling is centered}
 }
 \value{
 object of class matrixKernel
