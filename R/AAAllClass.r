@@ -112,9 +112,12 @@ setClass("GaussianKernel",slots=c(sigma="numeric",scale="numeric",kerneltype="ch
 setClass("IsoKernel",slots=c(centroid="numeric",scale="numeric",kerneltype="character"))
 
 #' @export
+setClass("StatisticalModelKernel",slots=c(kerneltype="character"))
+
+#' @export
 setClass("combinedKernel",slots=c(kernels="list",kerneltype="character"))
 .combinedKernel.valid <- function(object) {
-    validkernels <-  c("BsplineKernel","GaussianKernel","IsoKernel")
+    validkernels <-  c("BsplineKernel","GaussianKernel","IsoKernel","StatisticalModelKernel")
     kernels <- object@kernels
     kernclass <- sapply(kernels,class)
     if (length(grep("list",kernclass)) != length(kernclass))
@@ -126,3 +129,16 @@ setClass("combinedKernel",slots=c(kernels="list",kerneltype="character"))
         return(TRUE)
 }
 setValidity("combinedKernel", .combinedKernel.valid)
+
+containsStatisticalModelKernel <- function(x) {
+    if (!inherits(x,"combinedKernel")) {
+        if (inherits(x,"StatisticalModelKernel"))
+            return(TRUE)
+    } else {
+        kernels <- x@kernels
+        kerncheck <- unlist(lapply(kernels,function(x) lapply(x,class)))
+        if ("StatisticalModelKernel" %in% kerncheck)
+            return(TRUE)
+    }
+    return(FALSE)
+}

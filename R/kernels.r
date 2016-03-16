@@ -65,16 +65,26 @@ IsoKernel <- function(scale=0.01,x=NULL, centroid=NULL) {
     return(out)
 }
 
+#' Create empirical StatisticalModelKernel
+#'
+#' Create empirical StatisticalModelKernel
+#' @return returns object of class StatisticalModelKernel
+#' @export
+StatisticalModelKernel <- function() {
+    out <- new("StatisticalModelKernel")
+    out@kerneltype <- "StatisticalModelKernel"
+    return(out)
+}
 
 #' Add two kernels
 #'
-#' combine (add or multiply) two matrixKernels
+#' Add two kernels
 #' @param kernel1 object of class matrixKernel
 #' @param kernel2 object of class matrixKernel
 #' @return object of class combinedKernel
 #' @export
 SumKernels <- function(kernel1, kernel2) {
-    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel")
+    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel","StatisticalModelKernel")
     out <- new("combinedKernel")
     if (!class(kernel1) %in% typesallowed ||!class(kernel2)  %in% typesallowed)
         stop("unkown kernel class")
@@ -88,7 +98,7 @@ SumKernels <- function(kernel1, kernel2) {
             out@kernels[[1]] <- append(kernel1@kernels[[1]],kernel2)
         }
     } else if (inherits(kernel2,"combinedKernel")) {
-        out@kernels[[1]] <- list(kernel2@kernels[[1]],kernel1)
+        out@kernels[[1]] <- append(kernel2@kernels[[1]],kernel1)
     } else {
         out@kernels[[1]] <- list(kernel1,kernel2)
     }
@@ -97,9 +107,16 @@ SumKernels <- function(kernel1, kernel2) {
     return(out)
 }
 
+#' Multiply two kernels
+#'
+#' Multiply two kernels
+#' @param kernel1 object of class matrixKernel
+#' @param kernel2 object of class matrixKernel
+#' @return object of class combinedKernel
+#' @export
 #' @export
 ProductKernels <- function(kernel1, kernel2) {
-    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel")
+    typesallowed <- c("BsplineKernel","GaussianKernel","IsoKernel","combinedKernel","StatisticalModelKernel")
     out <- new("combinedKernel")
     if (!class(kernel1) %in% typesallowed ||!class(kernel2)  %in% typesallowed)
         stop("unkown kernel class")

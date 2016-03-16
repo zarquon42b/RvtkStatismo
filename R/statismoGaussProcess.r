@@ -6,7 +6,6 @@
 #' @param kernel an object of class matrixKernel 
 #' @param ncomp integer: number of PCs to approximate
 #' @param nystroem number of samples to compute Nystroem approximation of eigenvectors
-#' @param empiric character: how to combine the model's empirical kernel with the new ones. Options are "sum", "product" and "none".
 #' @param pointer if TRUE an object of class pPCA_pointer is returned
 #' @return returns a shape model of class \code{\link{pPCA}}
 #' @examples
@@ -21,10 +20,11 @@
 #' kernel1 <- GaussianKernel(10,1)
 #' kernel2 <- GaussianKernel(1,1)
 #' combinedKernel <- SumKernels(kernel1,kernel2)
-#' combinedKernel <- SumKernels(combinedKernel,isoKernel)
+#' combinedKernelNoEmp <- SumKernels(combinedKernel,isoKernel)
+#' combinedKernel <- SumKernels(combinedKernelNoEmp,StatisticalModelKernel())
 #' GPmod <- statismoGPmodel(mod,kernel=combinedKernel)
 #' ##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
-#' GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,empiric = "none")
+#' GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernelNoEmp)
 #' PC1orig <- DrawSample(mod,2)# get shape in 2sd of first PC of originial model
 #' PC1 <- DrawSample(GPmod,2)# get shape in 2sd of first PC of the extended model
 #' PC1NoEmp <- DrawSample(GPmodNoEmp,2)# get shape in 2sd of first PC
@@ -38,11 +38,11 @@
 #' @seealso \code{\link{pPCA}, \link{pPCA-class}}
 #' @keywords StatisticalModel<representer>
 #' @export
-statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem=500,pointer=FALSE,empiric="sum") {
+statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem=500,pointer=FALSE) {
     #gc()
-    empargs <- c("none","sum","product")
-    empiric <- match.arg(empiric[1],empargs)
-    empiric <- match(empiric,empargs)-1L
+    ## empargs <- c("none","sum","product")
+    ## empiric <- match.arg(empiric[1],empargs)
+    ## empiric <- match(empiric,empargs)-1L
     
     nystroemnew <- max(nystroem,ncomp*2)
     if (nystroemnew > nystroem)
@@ -60,7 +60,7 @@ statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem
     storage.mode(nystroem) <- "integer"
     if (inherits(kernel,"IsoKernel"))
         ncomp <- 1
-    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,empiric,pointer)
+    out <- .Call("BuildGPModelExport",model,kernel,ncomp,nystroem,pointer)
     gc()
     SetScale(out) <- model@scale
     return(out)

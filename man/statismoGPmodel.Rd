@@ -5,7 +5,7 @@
 \title{expands a models variability by adding a Gaussian kernel function}
 \usage{
 statismoGPmodel(model, kernel = GaussianKernel(50, 10), ncomp = 10,
-  nystroem = 500, pointer = FALSE, empiric = "sum")
+  nystroem = 500, pointer = FALSE)
 }
 \arguments{
 \item{model}{shape model of class \code{\link{pPCA}}}
@@ -17,8 +17,6 @@ statismoGPmodel(model, kernel = GaussianKernel(50, 10), ncomp = 10,
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
 
 \item{pointer}{if TRUE an object of class pPCA_pointer is returned}
-
-\item{empiric}{character: how to combine the model's empirical kernel with the new ones. Options are "sum", "product" and "none".}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}
@@ -38,10 +36,11 @@ isoKernel <- IsoKernel(DrawMean(mod),scale=0.001)
 kernel1 <- GaussianKernel(10,1)
 kernel2 <- GaussianKernel(1,1)
 combinedKernel <- SumKernels(kernel1,kernel2)
-combinedKernel <- SumKernels(combinedKernel,isoKernel)
+combinedKernelNoEmp <- SumKernels(combinedKernel,isoKernel)
+combinedKernel <- SumKernels(combinedKernelNoEmp,StatisticalModelKernel())
 GPmod <- statismoGPmodel(mod,kernel=combinedKernel)
 ##extend flexibility using two Gaussian kernels but ignoring empiric covariance.
-GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernel,empiric = "none")
+GPmodNoEmp <- statismoGPmodel(mod,kernel=combinedKernelNoEmp)
 PC1orig <- DrawSample(mod,2)# get shape in 2sd of first PC of originial model
 PC1 <- DrawSample(GPmod,2)# get shape in 2sd of first PC of the extended model
 PC1NoEmp <- DrawSample(GPmodNoEmp,2)# get shape in 2sd of first PC

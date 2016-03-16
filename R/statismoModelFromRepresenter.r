@@ -21,6 +21,8 @@
 #' }
 #' @export
 statismoModelFromRepresenter <- function(representer,kernel=GaussianKernel(100,50),ncomp=10,nystroem=500,pointer=FALSE) {
+    if(containsStatisticalModelKernel(kernel))
+        stop("kernel must not containt StatisticalModelKernel")
     representer <- dataset2representer(representer)
     center <- as.vector(representer$vb[1:3,])
     pp <- new("pPCA")
@@ -30,7 +32,7 @@ statismoModelFromRepresenter <- function(representer,kernel=GaussianKernel(100,5
     pp@representer <- representer
     pp@PCA$rotation <- matrix(0,length(pp@PCA$center),1)
     centroid <- apply(GetDomainPoints(pp),2,mean)
-    out <- statismoGPmodel(pp,kernel=kernel,ncomp=ncomp,nystroem=nystroem,pointer=pointer,empiric = "none")
+    out <- statismoGPmodel(pp,kernel=kernel,ncomp=ncomp,nystroem=nystroem,pointer=pointer)
     return(out)
 }
     
