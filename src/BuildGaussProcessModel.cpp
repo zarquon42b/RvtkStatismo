@@ -5,122 +5,84 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
   try {
     unsigned int nystroem = as<unsigned int>(nystroem_);
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
-    //int combine = as<int>(combine_);
+    //setup lists for keeping track of allocated pointers
     std::list<MatrixValuedKernelType*> mKerns;
     std::list<ScalarValuedKernel<vtkPoint>*> gKerns;
+
     std::string classname = getClassname(mykernel_);
     MatrixValuedKernelType* mvKernel;
-    MatrixValuedKernelType* sumKernel;
-    if (classname != "combinedKernel") {
+    // create a multiplicative neutral matrixkernel
+    MatrixValuedKernelType* productKernel = new NeutralProductKernel();
+    
+    if (classname != "CombinedKernel") {
+      //*              CASE: single kernel                                     *//
       if (classname == "GaussianKernel") {
 	S4 GaussianKernelR(mykernel_);
 	GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
 	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	sumKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
+	productKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
 	gKerns.push_back(gk);
-      } else if (classname == "BsplineKernel") {
-	S4 BsplineKernelR(mykernel_);
-	MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
+	mKerns.push_back(mvKernel);
+      } else if (classname == "BSplineKernel") {
+	S4 BSplineKernelR(mykernel_);
+	BSplineKernel* gk = new BSplineKernel(as<double>(BSplineKernelR.slot("support")));
 	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	sumKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
+	productKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BSplineKernelR.slot("scale")));
 	gKerns.push_back(gk);
+	mKerns.push_back(mvKernel);
+      }  else if (classname == "MultiscaleBSplineKernel") {
+	S4 MultiscaleBSplineKernelR(mykernel_);
+	MultiscaleKernel* gk = new MultiscaleKernel(as<double>(MultiscaleBSplineKernelR.slot("support")),as<int>(MultiscaleBSplineKernelR.slot("levels")));
+	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+	productKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(MultiscaleBSplineKernelR.slot("scale")));
+	gKerns.push_back(gk);
+	mKerns.push_back(mvKernel);
       } else if (classname == "IsoKernel") {
 	S4 IsoKernelR(mykernel_);
 	vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
-	sumKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
+	productKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
       } else if (classname == "StatisticalModelKernel") {
-	sumKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
+	productKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
       }
-    } else {//deal with a list of kernels
-      MatrixValuedKernelType* tmpKernel;
-      S4 combinedKernelR(mykernel_);
-      List kernellist(combinedKernelR.slot("kernels"));
-      int listsize = kernellist.size();
-      // get the first kernel 
-      List additiveKernels = kernellist[0];
-     classname = getClassname(additiveKernels[0]);
-      if (classname == "GaussianKernel") {
-	S4 GaussianKernelR(additiveKernels[0]);
-	GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
-	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	sumKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
-	gKerns.push_back(gk);
-      } else if (classname == "BsplineKernel") {
-	S4 BsplineKernelR(additiveKernels[0]);
-	MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
-	mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	sumKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
-	gKerns.push_back(gk);
-      } else if (classname == "IsoKernel") {
-	S4 IsoKernelR(additiveKernels[0]);
-	vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
-	sumKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
-      } else if (classname == "StatisticalModelKernel") {
-	sumKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
-      }
+    } else {
+      //*      CASE: combined kernels as lists of lists containing kernels     *//
+      //*                the kernels within the lists are added                *//
+      //                 while the resulting sums will be multiplied           *//
 
-      // now process the first list
-      for (unsigned int j = 1; j < additiveKernels.size();j++) {
-	//MatrixValuedKernelType* tmpKernel;
-	classname = getClassname(additiveKernels[j]);
-	if (classname == "GaussianKernel") {
-	  S4 GaussianKernelR(additiveKernels[j]);
-	  GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
-	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	  tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
-	  gKerns.push_back(gk);
-	} else if (classname == "BsplineKernel") {
-	  S4 BsplineKernelR(additiveKernels[j]);
-	  MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
-	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	  tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
-	  gKerns.push_back(gk);
-	} else if (classname == "IsoKernel") {
-	  S4 IsoKernelR(additiveKernels[j]);
-	  vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
-	  tmpKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
-	} else if (classname == "StatisticalModelKernel") {
-	  tmpKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
-	}
-      	sumKernel = new SumKernel<vtkPoint>(sumKernel, tmpKernel);
-	
-      }
-	//
-      for (unsigned int i = 1; i < listsize;i++) {
-	MatrixValuedKernelType* sum1Kernel;
-	
+      MatrixValuedKernelType* tmpKernel;
+      S4 CombinedKernelR(mykernel_);
+      List kernellist(CombinedKernelR.slot("kernels"));
+      int listsize = kernellist.size();
+      List additiveKernels;
+      // create an additive neutral matrixkernel
+      MatrixValuedKernelType* addKernel = new NeutralSumKernel();
+      for (unsigned int i = 0; i < listsize;i++) {
+	MatrixValuedKernelType* addKernel = new NeutralSumKernel();
+	//MatrixValuedKernelType* sumKer
 	additiveKernels = kernellist[i];
-	classname = getClassname(additiveKernels[0]);
-	if (classname == "GaussianKernel") {
-	  S4 GaussianKernelR(additiveKernels[0]);
-	  GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
-	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	  sum1Kernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
-	} else if (classname == "BsplineKernel") {
-	  S4 BsplineKernelR(additiveKernels[0]);
-	  MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
-	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	  sum1Kernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
-	} else if (classname == "IsoKernel") {
-	  S4 IsoKernelR(additiveKernels[0]);
-	  vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
-	  sum1Kernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
-	} else if (classname == "StatisticalModelKernel") {
-	  sum1Kernel = new StatisticalModelKernel<vtkPolyData>(model.get());
-	}
-	
-	for (unsigned int j = 1; j < additiveKernels.size();j++){
+	for (unsigned int j = 0; j < additiveKernels.size();j++){
 	  classname = getClassname(additiveKernels[j]);
 	  if (classname == "GaussianKernel") {
 	    S4 GaussianKernelR(additiveKernels[j]);
 	    GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
 	    mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
 	    tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
-	  } else if (classname == "BsplineKernel") {
-	    S4 BsplineKernelR(additiveKernels[j]);
-	    MultiscaleKernel* gk = new MultiscaleKernel(as<double>(BsplineKernelR.slot("support")),as<int>(BsplineKernelR.slot("levels")));
+	    gKerns.push_back(gk);
+	    mKerns.push_back(mvKernel);
+	  } else if (classname == "BSplineKernel") {
+	    S4 BSplineKernelR(additiveKernels[j]);
+	    BSplineKernel* gk = new BSplineKernel(as<double>(BSplineKernelR.slot("support")));
 	    mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-	    tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BsplineKernelR.slot("scale")));
+	    tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BSplineKernelR.slot("scale")));
+	    gKerns.push_back(gk);
+	    mKerns.push_back(mvKernel);
+	  } else if (classname == "MultiscaleBSplineKernel") {
+	    S4 MultiscaleBSplineKernelR(additiveKernels[j]);
+	    MultiscaleKernel* gk = new MultiscaleKernel(as<double>(MultiscaleBSplineKernelR.slot("support")),as<int>(MultiscaleBSplineKernelR.slot("levels")));
+	    mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+	    tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(MultiscaleBSplineKernelR.slot("scale")));
+	    gKerns.push_back(gk);
+	    mKerns.push_back(mvKernel);
 	  } else if (classname == "IsoKernel") {
 	    S4 IsoKernelR(additiveKernels[j]);
 	    vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
@@ -128,27 +90,17 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
 	  } else if (classname == "StatisticalModelKernel") {
 	    tmpKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
 	  }
-	  sum1Kernel = new SumKernel<vtkPoint>(sum1Kernel, tmpKernel);
+	  addKernel = new SumKernel<vtkPoint>(addKernel, tmpKernel);
 	}
-	sumKernel = new ProductKernel<vtkPoint>(sumKernel,sum1Kernel);
-	mKerns.push_back(sum1Kernel);
+	productKernel = new ProductKernel<vtkPoint>(productKernel,addKernel);
+	mKerns.push_back(addKernel);
 	mKerns.push_back(tmpKernel);
-	}
-      
+      }
     }
-  
-    
-    
-    /*MatrixValuedKernelType* statModelKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
-    if (combine == 1 )
-      sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
-    else if (combine == 2)
-      sumKernel = new ProductKernel<vtkPoint>(sumKernel, statModelKernel);
-    */
+    mKerns.push_back(productKernel);
+    // build the model
     XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    XPtr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
-    
-    
+    XPtr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *productKernel, numberOfComponents,nystroem));    
     // house cleaning
     for (std::list<ScalarValuedKernel<vtkPoint>*>::iterator it = gKerns.begin(); it != gKerns.end(); it++) {
       if (*it != NULL) {
@@ -159,10 +111,7 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
       if (*it != NULL) {
 	delete *it;
       }
-      }
-    //delete mvKernel;
-    delete sumKernel;
-    //delete statModelKernel;
+    }
     // end house cleaning
     
     return combinedModel;
