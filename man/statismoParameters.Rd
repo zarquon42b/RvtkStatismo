@@ -13,6 +13,7 @@
 \alias{GetNumberOfPrincipalComponents,pPCA_pointer-method}
 \alias{GetPCAVarianceVector}
 \alias{GetPCAVarianceVector,pPCA-method}
+\alias{GetPCAVarianceVector,pPCA_pointer-method}
 \alias{StatismoParameters}
 \title{Get model parameters}
 \usage{
@@ -35,6 +36,8 @@ GetNumberOfPrincipalComponents(model)
 \S4method{GetNoiseVariance}{pPCA_pointer}(model)
 
 \S4method{GetMeanVector}{pPCA_pointer}(model)
+
+\S4method{GetPCAVarianceVector}{pPCA_pointer}(model)
 
 \S4method{GetNumberOfPrincipalComponents}{pPCA_pointer}(model)
 }

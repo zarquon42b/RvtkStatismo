@@ -62,6 +62,12 @@ setMethod("GetMeanVector",signature(model = "pPCA_pointer"), function(model) {
 })
 
 #' @rdname statismoParameters
+setMethod("GetPCAVarianceVector", signature(model="pPCA_pointer"), function(model) {
+    return (.Call("GetPCAVarianceVector",model))
+    #return(model@PCA$sdev^2)
+})
+
+#' @rdname statismoParameters
 setMethod("GetNumberOfPrincipalComponents",signature(model = "pPCA_pointer"), function(model) {
     return(.Call("GetNumberOfPrincipalComponents",model))
 })

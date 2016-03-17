@@ -104,6 +104,16 @@ setValidity("pPCA", .pPCA.valid)
 #' @export
 setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype=list(pointer=NULL,scale=FALSE))
 
+print.pPCA_pointer<- function(x, digits = getOption("digits"), Variance=TRUE,...){
+    cat(paste("   sigma =",GetNoiseVariance(x),"\n"))
+    sdev <- sqrt(GetPCAVarianceVector(x))
+    cat(paste(" first",length(sdev),"PCs used\n"))
+    if (Variance) {
+        cat("\n\n Model Variance:\n")
+        print(createVarTable(sdev,square=TRUE))
+    }
+}
+setMethod("show", "pPCA_pointer", function(object){print.pPCA_pointer(object)})
 
 #' Documentation of kernel classes
 #'

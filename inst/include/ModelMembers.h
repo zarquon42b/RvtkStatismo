@@ -56,4 +56,6 @@ RcppExport SEXP GetNumberOfPrincipalComponents(SEXP pPCA_);
 RcppExport SEXP GetMeanVector(SEXP pPCA_);
 
 RcppExport SEXP GetNoiseVariance(SEXP pPCA_);
+
+RcppExport SEXP GetPCAVarianceVector(SEXP pPCA_);
 #endif// _MODEL_MEMBERS_H__

@@ -420,3 +420,16 @@ SEXP GetNoiseVariance(SEXP pPCA_) {
     ::Rf_error("unknown exception");
   }
 }
+
+SEXP GetPCAVarianceVector(SEXP pPCA_) {
+  try {
+    XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    VectorXf pcaVector  = model->GetPCAVarianceVector();
+    return wrap(pcaVector);
+    
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
+}
