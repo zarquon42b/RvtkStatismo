@@ -8,7 +8,7 @@ setMethod("GetPCABasisMatrix", signature(model = "pPCA_pointer"), function(model
 
 #' @rdname StatismoMatrices
 setMethod("GetOrthonormalPCABasisMatrix" ,signature(model="pPCA_pointer"),function(model) {
-    return(t(.Call("GetOrthonormalPCABasisMatrix",model)))
+    return(.Call("GetOrthonormalPCABasisMatrix",model))
 })
 
 #' @rdname StatismoMatrices
