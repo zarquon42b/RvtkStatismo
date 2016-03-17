@@ -14,8 +14,8 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
     // create a multiplicative neutral matrixkernel
     MatrixValuedKernelType* productKernel = new NeutralProductKernel();
     
-    if (classname != "CombinedKernel") {
-      //*              CASE: single kernel                                     *//
+    /*if (classname != "CombinedKernel") {
+      //*              CASE: single kernel                                     
       if (classname == "GaussianKernel") {
 	S4 GaussianKernelR(mykernel_);
 	GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
@@ -44,7 +44,7 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
       } else if (classname == "StatisticalModelKernel") {
 	productKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
       }
-    } else {
+    } else */ {
       //*      CASE: combined kernels as lists of lists containing kernels     *//
       //*                the kernels within the lists are added                *//
       //                 while the resulting sums will be multiplied           *//

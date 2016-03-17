@@ -43,7 +43,7 @@ statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem
     ## empargs <- c("none","sum","product")
     ## empiric <- match.arg(empiric[1],empargs)
     ## empiric <- match(empiric,empargs)-1L
-    
+    kernel <- MatrixKernel2CombinedKernel(kernel)
     nystroemnew <- max(nystroem,ncomp*2)
     if (nystroemnew > nystroem)
         cat(paste("nystroem set to",nystroemnew),"\n")

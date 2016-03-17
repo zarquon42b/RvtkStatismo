@@ -156,3 +156,15 @@ ProductKernels <- function(kernel1, kernel2) {
     validObject(out)
     return(out)
 }
+
+MatrixKernel2CombinedKernel <- function(x) {
+    typesallowed <- getValidKernels(FALSE)
+    if (class(x) %in% typesallowed) {
+        out <- new("CombinedKernel")
+    out@kernels <- list(list(x))
+    out@kerneltype <- "Matrix2CombinedKernel"
+    validObject(out)
+        return(out)
+    } else if (class(x) == "CombinedKernel")
+        return(x)
+}
