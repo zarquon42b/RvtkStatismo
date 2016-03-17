@@ -12,7 +12,7 @@ SumKernels(kernel1, kernel2)
 \item{kernel2}{object of class matrixKernel}
 }
 \value{
-object of class combinedKernel
+object of class CombinedKernel
 }
 \description{
 Add two kernels

@@ -92,7 +92,15 @@ setClass("pPCA",
 }
 setValidity("pPCA", .pPCA.valid)
 
-
+#' Documentation of pPCA_pointer class
+#'
+#' Documentation of pPCA_pointer class
+#' this class stores a pointer to an object of statismo::StatisticalModel<vtkPolyData>.
+#' It has the following slots
+#' \itemize{
+#'  \item{\code{pointer} - externalptr: contains the external pointer}
+#'  \item{\code{scale} - logical: contains information whether the data to build the model was aligned including scaling}
+#' }
 #' @export
 setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype=list(pointer=NULL,scale=FALSE))
 
@@ -102,22 +110,68 @@ setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype
 #' Documentation of kernel classes
 #'
 #' 
+#' Blow are all S4 kernel classes and their containing slots, where the parameters are stored, that later used when passed to statismo. All kernel-classes have a common slot:
+#' \itemize{
+#'  \item{\code{kerneltype} - character: containing kernel specifics}
+#' }
+#' 
+#' Available kernels are:
+#' MultiscaleBSplineKernel-class
+#' \itemize{
+#'  \item{\code{support} - numeric: the BSpline support}
+#'  \item{\code{scale} - numeric: scale factor}
+#'  \item{\code{levels} - integer: Number of levels}
+#' }
+#' 
+#' BSplineKernel-class:
+#' \itemize{
+#'  \item{\code{support} - numeric: the BSpline support}
+#' }
+#' 
+#' GaussianKernel-class
+#' \itemize{
+#'  \item{\code{sigma} - numeric: kernel bandwidth}
+#'  \item{\code{scale} - numeric: scale factor}
+#' }
+#' 
+#' IsoKernel-class
+#' \itemize{
+#'  \item{\code{centroid} - vector: centroid around which to be scaled}
+#'  \item{\code{scale} - numeric: scale factor}
+#' }
+#' 
+#' CombinedKernel-class
+#' \itemize{
+#'  \item{\code{kernel} - list(s) containing the kernel above}
+#' }
+#' @name kernel-classes
+#' @rdname kernel-classes
 #' @export
-setClass("BsplineKernel",slots=c(support="numeric",levels="integer",scale="numeric",kerneltype="character"))
+setClass("MultiscaleBSplineKernel",slots=c(support="numeric",scale="numeric",levels="integer", kerneltype="character"))
 
+#' @rdname kernel-classes
+#' @export
+setClass("BSplineKernel",slots=c(support="numeric",scale="numeric",kerneltype="character"))
+
+#' @rdname kernel-classes
 #' @export
 setClass("GaussianKernel",slots=c(sigma="numeric",scale="numeric",kerneltype="character"))
 
+#' @rdname kernel-classes
 #' @export
+
 setClass("IsoKernel",slots=c(centroid="numeric",scale="numeric",kerneltype="character"))
-
+#' @rdname kernel-classes
 #' @export
+
 setClass("StatisticalModelKernel",slots=c(kerneltype="character"))
-
+#' @rdname kernel-classes
 #' @export
-setClass("combinedKernel",slots=c(kernels="list",kerneltype="character"))
-.combinedKernel.valid <- function(object) {
-    validkernels <-  c("BsplineKernel","GaussianKernel","IsoKernel","StatisticalModelKernel")
+
+#' @rdname kernel-classes
+setClass("CombinedKernel",slots=c(kernels="list",kerneltype="character"))
+.CombinedKernel.valid <- function(object) {
+    validkernels <-  getValidKernels(FALSE)
     kernels <- object@kernels
     kernclass <- sapply(kernels,class)
     if (length(grep("list",kernclass)) != length(kernclass))
@@ -128,10 +182,10 @@ setClass("combinedKernel",slots=c(kernels="list",kerneltype="character"))
     else
         return(TRUE)
 }
-setValidity("combinedKernel", .combinedKernel.valid)
+setValidity("CombinedKernel", .CombinedKernel.valid)
 
 containsStatisticalModelKernel <- function(x) {
-    if (!inherits(x,"combinedKernel")) {
+    if (!inherits(x,"CombinedKernel")) {
         if (inherits(x,"StatisticalModelKernel"))
             return(TRUE)
     } else {
@@ -141,4 +195,11 @@ containsStatisticalModelKernel <- function(x) {
             return(TRUE)
     }
     return(FALSE)
+}
+
+getValidKernels <- function(combined=TRUE) {
+    validkernels <- c("BSplineKernel","GaussianKernel","IsoKernel","StatisticalModelKernel","MultiscaleBSplineKernel")
+    if (combined)
+        validkernels <- c(validkernels,"CombinedKernel")
+    return(validkernels)
 }
