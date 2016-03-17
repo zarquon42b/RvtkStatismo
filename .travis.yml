@@ -11,11 +11,8 @@ dist: trusty
 before_install:
   
   - sudo add-apt-repository ppa:zarquon42/travis-trusty -y
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-       sudo add-apt-repository ppa:zarquon42/ppa -y
-    else
-      sudo add-apt-repository ppa:zarquon42/statismo-develop -y
-    fi
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then sudo add-apt-repository ppa:zarquon42/ppa -y; fi
+  - if [ "$TRAVIS_BRANCH" != "master" ]; then sudo add-apt-repository ppa:zarquon42/statismo-develop -y; fi
   - sudo apt-get update -qq
   - sudo apt-get install -y statismo-dev cmake
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
