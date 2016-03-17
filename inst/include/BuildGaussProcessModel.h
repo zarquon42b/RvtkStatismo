@@ -72,6 +72,51 @@ private:
   
 };
 
+class NeutralSumKernel: public MatrixValuedKernel<vtkPoint> {
+public:
+  
+  NeutralSumKernel() :
+    MatrixValuedKernel<vtkPoint>(3) {}
+  
+  
+  inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
+    MatrixType covar = MatrixType::Zero(3,3);
+    return covar;
+  }
+
+  std::string GetKernelInfo() const {
+    std::ostringstream os;
+    os << "NeutralSumKernel";
+    return os.str();
+  }
+
+
+  
+  
+};
+
+class NeutralProductKernel: public MatrixValuedKernel<vtkPoint> {
+public:
+  
+  NeutralProductKernel() :
+    MatrixValuedKernel<vtkPoint>(3) {}
+  
+  
+  inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
+    MatrixType covar = MatrixType::Constant(3,3,1);
+    return covar;
+  }
+
+  std::string GetKernelInfo() const {
+    std::ostringstream os;
+    os << "NeutralProductKernel";
+    return os.str();
+  }
+
+
+  
+  
+};
 
 
 inline vtkPoint vtkPointScale(vtkPoint x,double scale) {
