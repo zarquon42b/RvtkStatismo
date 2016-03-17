@@ -6,6 +6,7 @@
 \alias{CombinedKernel-class}
 \alias{GaussianKernel-class}
 \alias{IsoKernel-class}
+\alias{MultiscaleBSplineKernel-class}
 \alias{StatisticalModelKernel-class}
 \alias{kernel-classes}
 \title{Documentation of kernel classes}

@@ -146,6 +146,9 @@ setClass("pPCA_pointer",slots=c(pointer="externalptr",scale="logical"),prototype
 #' }
 #' @name kernel-classes
 #' @rdname kernel-classes
+NULL
+
+#' @rdname kernel-classes
 #' @export
 setClass("MultiscaleBSplineKernel",slots=c(support="numeric",scale="numeric",levels="integer", kerneltype="character"))
 
@@ -157,18 +160,20 @@ setClass("BSplineKernel",slots=c(support="numeric",scale="numeric",kerneltype="c
 #' @export
 setClass("GaussianKernel",slots=c(sigma="numeric",scale="numeric",kerneltype="character"))
 
+
 #' @rdname kernel-classes
 #' @export
-
 setClass("IsoKernel",slots=c(centroid="numeric",scale="numeric",kerneltype="character"))
+
+
 #' @rdname kernel-classes
 #' @export
-
 setClass("StatisticalModelKernel",slots=c(kerneltype="character"))
-#' @rdname kernel-classes
-#' @export
+
+
 
 #' @rdname kernel-classes
+#' @export
 setClass("CombinedKernel",slots=c(kernels="list",kerneltype="character"))
 .CombinedKernel.valid <- function(object) {
     validkernels <-  getValidKernels(FALSE)
