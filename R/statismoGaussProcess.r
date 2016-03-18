@@ -55,7 +55,7 @@ statismoGPmodel <- function(model,kernel=GaussianKernel(50,10),ncomp=10,nystroem
     ## if (!inherits(kernel,"matrixKernel"))
     ##    stop("kernel needs to be of class matrixKernel")
     k <- nrow(GetDomainPoints(model))
-    nystroem <- min(k,nystroem)
+    nystroem <- min(k*3,nystroem)
     ncomp <- min(ncomp,floor(k/2))
     storage.mode(nystroem) <- "integer"
     if (inherits(kernel,"IsoKernel"))
