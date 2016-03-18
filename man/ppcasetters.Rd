@@ -3,23 +3,29 @@
 \docType{methods}
 \name{Set-pPCA-class}
 \alias{AddModelInfoParams,pPCA-method}
+\alias{AddModelInfoParams,pPCA_pointer-method}
 \alias{Set-pPCA-class}
 \alias{SetMeanVector<-}
 \alias{SetMeanVector<-,pPCA-method}
 \alias{SetModelDataInfo<-,pPCA-method}
+\alias{SetModelDataInfo<-,pPCA_pointer-method}
 \alias{SetModelInfoParams<-,pPCA-method}
+\alias{SetModelInfoParams<-,pPCA_pointer-method}
 \alias{SetNoiseVariance<-}
 \alias{SetNoiseVariance<-,pPCA-method}
 \alias{SetPCA<-}
 \alias{SetPCA<-,pPCA-method}
 \alias{SetPCBasisMatrix<-}
 \alias{SetPCBasisMatrix<-,pPCA-method}
+\alias{SetPCBasisMatrix<-,pPCA_pointer-method}
 \alias{SetPCsdev<-}
 \alias{SetPCsdev<-,pPCA-method}
+\alias{SetPCsdev<-,pPCA_pointer-method}
 \alias{SetRawdata<-}
 \alias{SetRawdata<-,pPCA-method}
 \alias{SetRepresenter<-}
 \alias{SetRepresenter<-,pPCA-method}
+\alias{SetRepresenter<-,pPCA_pointer-method}
 \alias{SetScale<-}
 \alias{SetScale<-,pPCA-method}
 \alias{SetScale<-,pPCA_pointer-method}
@@ -42,9 +48,13 @@ SetPCBasisMatrix(x) <- value
 
 \S4method{SetPCBasisMatrix}{pPCA}(x) <- value
 
+\S4method{SetPCBasisMatrix}{pPCA_pointer}(x) <- value
+
 SetPCsdev(x) <- value
 
 \S4method{SetPCsdev}{pPCA}(x) <- value
+
+\S4method{SetPCsdev}{pPCA_pointer}(x) <- value
 
 SetMeanVector(x) <- value
 
@@ -59,6 +69,8 @@ SetScores(x) <- value
 SetRepresenter(x) <- value
 
 \S4method{SetRepresenter}{pPCA}(x) <- value
+
+\S4method{SetRepresenter}{pPCA_pointer}(x) <- value
 
 SetScale(x) <- value
 
@@ -76,9 +88,15 @@ SetVariance(x) <- value
 
 \S4method{AddModelInfoParams}{pPCA}(x, value)
 
+\S4method{AddModelInfoParams}{pPCA_pointer}(x, value)
+
 \S4method{SetModelInfoParams}{pPCA}(x) <- value
 
+\S4method{SetModelInfoParams}{pPCA_pointer}(x) <- value
+
 \S4method{SetModelDataInfo}{pPCA}(x) <- value
+
+\S4method{SetModelDataInfo}{pPCA_pointer}(x) <- value
 }
 \arguments{
 \item{x}{of class "pPCA"}

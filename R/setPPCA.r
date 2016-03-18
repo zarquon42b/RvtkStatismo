@@ -46,11 +46,27 @@ setGeneric("SetPCBasisMatrix<-", function(x, value) standardGeneric("SetPCBasisM
 setReplaceMethod("SetPCBasisMatrix", "pPCA",function(x, value) {x@PCA$rotation <- value; validObject(x); x})
 
 #' @rdname ppcasetters
+setReplaceMethod("SetPCBasisMatrix", "pPCA_pointer",function(x, value) {
+    x <- pointer2pPCA(x)
+    SetPCBasisMatrix(x) <- value
+    validObject(x);
+    x <- pPCA2pointer(x)
+    x})
+
+#' @rdname ppcasetters
 #' @export
 setGeneric("SetPCsdev<-", function(x, value) standardGeneric("SetPCsdev<-"))
 
 #' @rdname ppcasetters
 setReplaceMethod("SetPCsdev", "pPCA",function(x, value) {x@PCA$sdev <- value; validObject(x); x})
+
+#' @rdname ppcasetters
+setReplaceMethod("SetPCsdev", "pPCA_pointer",function(x, value) {
+    x <- pointer2pPCA(x)
+    SetPCsdev(x) <- value
+    x <- pPCA2pointer(x)
+    x
+})
 
 #' @rdname ppcasetters
 #' @export
@@ -71,10 +87,10 @@ setReplaceMethod("SetScores", "pPCA",function(x, value) {
     else if (sum(dim(value) > 0)) {
         varlen <- length(x@PCA$sdev)
         if (ncol(value) != varlen)
-            stop(paste("scores must be a matrix with", varlen,"or zero (to remove the scores)columns"))
-    } 
-     
+            stop(paste("scores must be a matrix with", varlen,"or zero (to remove the scores) columns"))
+    }      
     x@PCA$x <- value; validObject(x); x})
+
 
 #' @rdname ppcasetters
 setReplaceMethod("SetScores", "pPCA_pointer",function(x, value) {
@@ -89,6 +105,13 @@ setGeneric("SetRepresenter<-", function(x, value) standardGeneric("SetRepresente
 
 #' @rdname ppcasetters
 setReplaceMethod("SetRepresenter", "pPCA",function(x, value) {x@representer <- dataset2representer(value); validObject(x); x})
+
+#' @rdname ppcasetters
+setReplaceMethod("SetRepresenter", "pPCA_pointer",function(x, value) {
+    x <- pointer2pPCA(x)
+    SetRepresenter(x) <- value
+    x <- pPCA2pointer(x)
+    x})
 
 
 #' @rdname ppcasetters
@@ -107,9 +130,12 @@ setReplaceMethod("SetScale", "pPCA",function(x, value) {
     }
         
     validObject(x); x})
+
 #' @rdname ppcasetters
 setReplaceMethod("SetScale", "pPCA_pointer",function(x, value) {
-    x@scale <- value;
+    x <- pointer2pPCA(x)
+    SetScale(x) <- value
+    pPCA2pointer(x)
     x})
 #' @rdname ppcasetters
 #' @export
@@ -142,6 +168,14 @@ setMethod("AddModelInfoParams", signature("pPCA"),function(x, value) {
     return(x)
     
 })
+#' @rdname ppcasetters
+setMethod("AddModelInfoParams", signature("pPCA_pointer"),function(x, value) {
+    x <- pointer2pPCA(x)
+    AddModelInfoParams(x) <- value
+    x <- pPCA2pointer(x)
+    x})
+    
+
 #' @rdname modelinfo-class
 #' @export
 setGeneric("SetModelInfoParams<-", function(x, value) standardGeneric("SetModelInfoParams<-"))
@@ -156,6 +190,12 @@ setMethod("SetModelInfoParams<-", signature("pPCA"),function(x, value) {
               return(x)
     
 })
+#' @rdname ppcasetters
+setMethod("SetModelInfoParams<-", signature("pPCA_pointer"),function(x, value) {
+    x <- pointer2pPCA(x)
+    SetModelInfoParams(x) <- value
+    x <- pPCA2pointer(x)
+    x})
 
 #' @rdname modelinfo-class
 #' @export
@@ -171,6 +211,14 @@ setMethod("SetModelDataInfo<-", signature("pPCA"),function(x, value) {
               return(x)
     
 })
+
+#' @rdname ppcasetters
+setMethod("SetModelDataInfo<-", signature("pPCA_pointer"),function(x, value) {
+    x <- pointer2pPCA(x)
+    SetModelDataInfo(x) <- value
+    x <- pPCA2pointer(x)
+    x})
+
 pairNameCheck <- function(x,value) {
     full <- unlist(x)
     full <- full[ (1:length(full)) %% 2 != 0]

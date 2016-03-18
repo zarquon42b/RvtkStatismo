@@ -22,7 +22,7 @@ public:
   inline double operator()(const vtkPoint& x, const vtkPoint& y) const {
     VectorType r(3);
     r << x[0] - y[0], x[1] - y[1], x[2] - y[2];
-    return exp(-r.dot(r) / m_sigma2);
+    return exp(-r.dot(r) / (2 * m_sigma2));
   }
 
   std::string GetKernelInfo() const {
