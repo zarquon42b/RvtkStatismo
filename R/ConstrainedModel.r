@@ -27,9 +27,8 @@
 #' ## and here an example where we assume spherical noise for each coordinate
 #' ## except the first one
 #' ## first constrain the model using the assumed covariance of the first coordinate
-#' ## only allowing variability along x-axis
-#' noise1 <- matrix(0,3,3);noise[1,1] <- 3
-#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=F],humface.lm[1,,drop=F],ptValueNoise = noise1)
+#' noise1 <- diag(3);noise1[1,1] <- 6
+#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=F],humface.lm[1,,drop=F],ptValueNoise = 1)
 #' ## now we constrain the rest
 #' GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,,drop=F],humface.lm[-1,,drop=F],ptValueNoise = 0.01)
 
