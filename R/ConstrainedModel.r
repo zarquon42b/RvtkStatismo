@@ -28,9 +28,9 @@
 #' ## except the first one
 #' ## first constrain the model using the assumed covariance of the first coordinate
 #' noise1 <- diag(3);noise1[1,1] <- 6
-#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=F],humface.lm[1,,drop=F],ptValueNoise = 1)
+#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],humface.lm[1,,drop=FALSE],ptValueNoise = 1)
 #' ## now we constrain the rest
-#' GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,,drop=F],humface.lm[-1,,drop=F],ptValueNoise = 0.01)
+#' GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,],humface.lm[-1,],ptValueNoise = 0.01)
 
 #' @rdname statismoConstrainModel
 #' @name statismoConstrainModel
