@@ -47,7 +47,6 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEX
 	tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
       } else if (ptValueNoise.cols() == 3) {
 	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
-	Rcout << tmpcov << std::endl;
 	if (tmpcov.isZero())
 	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
 	
