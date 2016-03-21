@@ -11,16 +11,17 @@
 \alias{statismoConstrainModel,pPCA_pointer,numeric,numeric-method}
 \title{constrain a model of class pPCA}
 \usage{
-statismoConstrainModel(model, sample, pt, ptValueNoise, pointer = FALSE)
+statismoConstrainModel(model, sample, pt, ptValueNoise, computeScores = TRUE,
+  pointer = FALSE)
 
 \S4method{statismoConstrainModel}{pPCA,matrix,matrix}(model, sample, pt,
-  ptValueNoise, pointer = FALSE)
+  ptValueNoise, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModel}{pPCA,matrix,numeric}(model, sample, pt,
-  ptValueNoise, pointer = FALSE)
+  ptValueNoise, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModel}{pPCA,numeric,numeric}(model, sample, pt,
-  ptValueNoise, pointer = FALSE)
+  ptValueNoise, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModel}{pPCA_pointer,matrix,matrix}(model, sample, pt,
   ptValueNoise, pointer = TRUE)
@@ -39,6 +40,8 @@ statismoConstrainModel(model, sample, pt, ptValueNoise, pointer = FALSE)
 \item{pt}{either a matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample}}
 
 \item{ptValueNoise}{can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.}
+
+\item{computeScores}{if TRUE, the scores (if present) are projected into the updated model space.}
 
 \item{pointer}{if TRUE an object of class pPCA_pointer is returned.}
 

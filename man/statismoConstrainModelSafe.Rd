@@ -12,16 +12,16 @@
 \title{calculate a posterior model but only use likely correspondences}
 \usage{
 statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
-  pointer = FALSE)
+  computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA,matrix,numeric}(model, sample, pt,
-  ptValueNoise, sdmax = 5, pointer = FALSE)
+  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA,matrix,matrix}(model, sample, pt,
-  ptValueNoise, sdmax = 5, pointer = FALSE)
+  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA,numeric,numeric}(model, sample, pt,
-  ptValueNoise, sdmax = 5, pointer = FALSE)
+  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,numeric}(model,
   sample, pt, ptValueNoise, sdmax = 5, pointer = TRUE)
@@ -42,6 +42,8 @@ statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
 \item{ptValueNoise}{can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.}
 
 \item{sdmax}{a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)}
+
+\item{computeScores}{if TRUE, the scores (if present) are projected into the updated model space.}
 
 \item{pointer}{if TRUE an object of class pPCA_pointer is returned.}
 }

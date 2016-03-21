@@ -21,11 +21,12 @@ double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt) {
 }
 
 // calculate a posterior model given two sets of points - one on the model's mean and a sample used to restrict the model.
-SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEXP pointer_) {
+SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEXP computeScores_, SEXP pointer_) {
 
    try {
      Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(ptValueNoise_));
      bool pointer = as<bool>(pointer_);
+     bool computeScores = as<bool>(computeScores_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
      XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
@@ -56,10 +57,10 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEX
      }
      if (ptValueNoise.rows() == 1) {
        double noise = ptValueNoise(0,0);
-       XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
+       XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise,computeScores));
        return statismo2pPCA(postModel);
      } else {
-       XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair));
+       XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair,computeScores));
        return statismo2pPCA(postModel);
      }
    }  catch (std::exception& e) {
@@ -71,12 +72,13 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEX
 
 
 // evaluate the probabilty of each point before using it as a prior
-SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,SEXP maha_, SEXP pointer_) {
+SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,SEXP maha_,SEXP computeScores_, SEXP pointer_) {
 
    try {
      
      double maha = as<double>(maha_);
      bool pointer = as<bool>(pointer_);
+     bool computeScores = as<bool>(computeScores_);
       Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(ptValueNoise_));
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
@@ -112,10 +114,10 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
       }
       if (ptValueNoise.rows() == 1) {
 	double noise = ptValueNoise(0,0);
-	XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
+	XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise,computeScores));
 	return statismo2pPCA(postModel);
       } else {
-	XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair));
+	XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(),ptValueWithCovPair,computeScores));
 	return statismo2pPCA(postModel);
       }
       
