@@ -39,7 +39,7 @@ statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
 
 \item{pt}{either a k x 3 matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample}}
 
-\item{ptValueNoise}{numeric: specify noise on constraints.}
+\item{ptValueNoise}{can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.}
 
 \item{sdmax}{a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)}
 
@@ -50,5 +50,8 @@ a constrained model
 }
 \description{
 calculate a posterior model but only use likely correspondences
+}
+\note{
+to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
 }
 

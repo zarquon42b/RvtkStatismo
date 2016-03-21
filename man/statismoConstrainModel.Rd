@@ -38,15 +38,20 @@ statismoConstrainModel(model, sample, pt, ptValueNoise, pointer = FALSE)
 
 \item{pt}{either a matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample}}
 
-\item{ptValueNoise}{numeric: specify noise on constraints.}
+\item{ptValueNoise}{can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.}
 
 \item{pointer}{if TRUE an object of class pPCA_pointer is returned.}
+
+\item{sdmax}{a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)}
 }
 \value{
 a constrained model
 }
 \description{
 constrain a model of class pPCA
+}
+\note{
+to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
 }
 \examples{
 require(Rvcg)
@@ -63,5 +68,13 @@ GPmodConst <- statismoConstrainModel(hummodel,humface.lm,humface.lm,ptValueNoise
 ## sample from model
 for(i in 1:10) rgl::wire3d(DrawSample(GPmodConst),col="white")
 }
+## and here an example where we assume spherical noise for each coordinate
+## except the first one
+## first constrain the model using the assumed covariance of the first coordinate
+## only allowing variability along x-axis
+noise1 <- matrix(0,3,3);noise[1,1] <- 3
+GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=F],humface.lm[1,,drop=F],ptValueNoise = noise1)
+## now we constrain the rest
+GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,,drop=F],humface.lm[-1,,drop=F],ptValueNoise = 0.01)
 }
 

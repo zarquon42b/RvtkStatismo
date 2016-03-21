@@ -4,8 +4,10 @@
 #' @param model object of class pPCA
 #' @param sample k x 3 matrix containing coordinates to constrain model to
 #' @param pt either a matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample} 
-#' @param ptValueNoise numeric: specify noise on constraints.
+#' @param ptValueNoise can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.
+#' @param sdmax a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)
 #' @param pointer if TRUE an object of class pPCA_pointer is returned.
+#' @note to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
 #' @return a constrained model
 #' @examples
 #' require(Rvcg)
@@ -22,6 +24,15 @@
 #' ## sample from model
 #' for(i in 1:10) rgl::wire3d(DrawSample(GPmodConst),col="white")
 #' }
+#' ## and here an example where we assume spherical noise for each coordinate
+#' ## except the first one
+#' ## first constrain the model using the assumed covariance of the first coordinate
+#' ## only allowing variability along x-axis
+#' noise1 <- matrix(0,3,3);noise[1,1] <- 3
+#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=F],humface.lm[1,,drop=F],ptValueNoise = noise1)
+#' ## now we constrain the rest
+#' GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,,drop=F],humface.lm[-1,,drop=F],ptValueNoise = 0.01)
+
 #' @rdname statismoConstrainModel
 #' @name statismoConstrainModel
 #' @docType methods
@@ -32,15 +43,7 @@ setGeneric("statismoConstrainModel",function(model,sample,pt,ptValueNoise,pointe
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise,pointer=FALSE) {
              
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
+              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
               mean <- t(pt)
               sample <- t(sample)
               out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,pointer)
@@ -48,14 +51,7 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="ma
           })
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise,pointer=FALSE) {
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
+              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
               mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
               sample <- t(sample)
               out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,pointer)
@@ -63,14 +59,7 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="nu
           })
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,pointer=FALSE) {
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
+              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
               sample <- matrix(sample,3,1)
               if (length(pt) == 3)
                   mean <- matrix(pt,3,1)
@@ -88,9 +77,10 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="n
 #' @param model object of class pPCA
 #' @param sample matrix containing coordinates to constrain model to
 #' @param pt either a k x 3 matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample} 
-#' @param ptValueNoise numeric: specify noise on constraints.
+#' @param ptValueNoise can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.
 #' @param sdmax a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)
 #' @param pointer if TRUE an object of class pPCA_pointer is returned.
+#' @note to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
 #' @return a constrained model
 #' @rdname statismoConstrainModelSafe
 #' @name statismoConstrainModelSafe
@@ -100,15 +90,7 @@ setGeneric("statismoConstrainModelSafe",function(model,sample,pt,ptValueNoise,sd
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5,pointer=FALSE) {
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise <- as.matrix(ptValueNoise)
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
+              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
               mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
               sample <- t(sample)
               mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
@@ -117,14 +99,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise,sdmax=5,pointer=FALSE) {
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
               mean <- t(pt)
               sample <- t(sample)
               mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
@@ -133,14 +108,7 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5,pointer=FALSE) {
-              if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-               ptValueNoise <- as.matrix(ptValueNoise)
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
                
               sample <- matrix(sample,3,1)
               if (length(pt) == 3)
@@ -152,3 +120,23 @@ setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",p
               mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
               out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,pointer)
           })
+
+
+checkpointValueNoise <- function(ptValueNoise,sample) {
+    if (!is.matrix(sample))
+        sample <- as.matrix(sample)
+     if (length(ptValueNoise) == 1) {
+                  ptValueNoise <- max(1e-7,ptValueNoise)
+              } else if (is.vector(ptValueNoise)) {
+                  if (length(ptValueNoise) != nrow(sample))
+                      stop("each entries in ptValueNoise != number of sample points")
+                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
+              } else if (is.matrix(ptValueNoise)) {
+                   if (nrow(ptValueNoise) != (nrow(sample)*3))
+                      stop("each entries in ptValueNoise != number of sample points")
+                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
+              }
+              ptValueNoise <- as.matrix(ptValueNoise)
+     return(ptValueNoise)
+}
+                                                         

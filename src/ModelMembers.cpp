@@ -39,7 +39,6 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
     vtkPolyData* reference;
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     if (!Rf_isNull(coeffs_)) {
-      
       Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
       const VectorXf coeffs = coeffs0.cast<float>();
       reference = model->DrawSample(coeffs,addNoise);

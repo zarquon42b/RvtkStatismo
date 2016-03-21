@@ -1,5 +1,6 @@
 #include "ConstrainedModel.h"
 
+using namespace Eigen;
 
 typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
 typedef std::list<PointValuePairType> PointValueListType;
@@ -23,7 +24,7 @@ double mahadist(const vtkMeshModel* model, vtkPoint targetPt, vtkPoint meanPt) {
 SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEXP pointer_) {
 
    try {
-     NumericMatrix ptValueNoise(ptValueNoise_);
+     Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(ptValueNoise_));
      bool pointer = as<bool>(pointer_);
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
@@ -31,21 +32,29 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEX
      PointValueListType ptValueList;
      PointValueWithCovarianceListType ptValueWithCovPair;
      XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
-     
+     MatrixXd tmpcovd;
+     MatrixType tmpcov;	 
      for (int i = 0; i < mean.ncol();i++) {
 	 
        vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
        vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
-       if (ptValueNoise.nrow() == 1) {
+       if (ptValueNoise.rows() == 1) {
 	 ptValueList.push_back(PointValuePairType(tmp1,tmp0));
-       } else {
-	 MatrixType tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
-	 PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
-	 PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
-	 ptValueWithCovPair.push_back(covpair);
-       }
+       } else if (ptValueNoise.cols() == 1) {
+	float scalarnoise =  ptValueNoise(i,0);
+	if (scalarnoise == 0)
+	  scalarnoise = 1e-6;
+	tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
+      } else if (ptValueNoise.cols() == 3) {
+	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
+	if (tmpcov.isZero())
+	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
+	
+      } else {
+	::Rf_error("noise must be vector or 3 column matrix\n");
+      }
      }
-     if (ptValueNoise.nrow() == 1) {
+     if (ptValueNoise.rows() == 1) {
        double noise = ptValueNoise(0,0);
        XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
        return statismo2pPCA(postModel);
@@ -68,13 +77,15 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
      
      double maha = as<double>(maha_);
      bool pointer = as<bool>(pointer_);
-     NumericMatrix ptValueNoise(ptValueNoise_);
+      Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(ptValueNoise_));
      NumericMatrix sample(sample_);
      NumericMatrix mean(mean_);
      XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      PointValueListType ptValueList;
      PointValueWithCovarianceListType ptValueWithCovPair;
      XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
+     MatrixXd tmpcovd;
+     MatrixType tmpcov;	 
       for (int i = 0; i < mean.ncol();i++) {
       
 	vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
@@ -82,17 +93,24 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
 	double mahaget = mahadist(model.get(),tmp0,tmp1);
 	if (mahaget <= maha) {
 	  
-	  if (ptValueNoise.nrow() == 1) {
-	    ptValueList.push_back(PointValuePairType(tmp1,tmp0));
-	  } else {
-	    MatrixType tmpcov = Eigen::MatrixXf::Identity(3, 3) * ptValueNoise(i,0);
-	    PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
-	    PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
-	    ptValueWithCovPair.push_back(covpair);
-	  }	
+	  if (ptValueNoise.rows() == 1) {
+	 ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+       } else if (ptValueNoise.cols() == 1) {
+	float scalarnoise =  ptValueNoise(i,0);
+	if (scalarnoise == 0)
+	  scalarnoise = 1e-6;
+	tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
+      } else if (ptValueNoise.cols() == 3) {
+	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
+	if (tmpcov.isZero())
+	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
+	
+      } else {
+	::Rf_error("noise must be vector or 3 column matrix\n");
+      }
 	}
       }
-      if (ptValueNoise.nrow() == 1) {
+      if (ptValueNoise.rows() == 1) {
 	double noise = ptValueNoise(0,0);
 	XPtr<vtkMeshModel> postModel(modelBuilder->BuildNewModelFromModel(model.get(), ptValueList,noise));
 	return statismo2pPCA(postModel);
