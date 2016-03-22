@@ -6,6 +6,7 @@
 #' @param representer matrix or triangular mesh of class "mesh3d" with vertices corresponding to rows in the array.
 #' @param sigma noise in the data
 #' @param scale logical: set to TRUE, if scaling was involved in the registration.
+#' @param computeScores logical: if TRUE PCscores are computed
 #' @param SelfAdjointEigenSolver logical: if TRUE SelfAdjointEigenSolver is used during model building. Only use this if sample size exceeds amount of variables (faster but less accurate) - can lead to errors otherwise.
 #' @param pointer if TRUE an object of class pPCA_pointer is returned
 #' @return an object of class pPCA (\code{\link{pPCA-class}})
@@ -22,7 +23,7 @@
 #' 
 #' @export
 
-statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEigenSolver=FALSE,pointer=FALSE) {
+statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE, computeScores=TRUE, SelfAdjointEigenSolver=FALSE,pointer=FALSE) {
     if (is.array(x)) {
         m <- dim(x)[2]
         if (m == 2) {
@@ -56,8 +57,7 @@ statismoBuildModel <- function(x,representer,sigma=0,scale=FALSE,SelfAdjointEige
     } else {
         stop("representer must be a matrix or a mesh")
     }
-    
-    out <- .Call("BuildModelExport",mylist,representer,sigma,SelfAdjointEigenSolver,pointer)
+    out <- .Call("BuildModelExport",mylist,representer,sigma,computeScores,SelfAdjointEigenSolver,pointer)
     SetScale(out) <- scale
     return(out)
     

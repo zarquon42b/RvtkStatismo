@@ -5,7 +5,7 @@
 \title{generate a statistical model using an array of superimposed landmarks or a list of meshes}
 \usage{
 statismoBuildModel(x, representer, sigma = 0, scale = FALSE,
-  SelfAdjointEigenSolver = FALSE, pointer = FALSE)
+  computeScores = TRUE, SelfAdjointEigenSolver = FALSE, pointer = FALSE)
 }
 \arguments{
 \item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}
@@ -15,6 +15,8 @@ statismoBuildModel(x, representer, sigma = 0, scale = FALSE,
 \item{sigma}{noise in the data}
 
 \item{scale}{logical: set to TRUE, if scaling was involved in the registration.}
+
+\item{computeScores}{logical: if TRUE PCscores are computed}
 
 \item{SelfAdjointEigenSolver}{logical: if TRUE SelfAdjointEigenSolver is used during model building. Only use this if sample size exceeds amount of variables (faster but less accurate) - can lead to errors otherwise.}
 

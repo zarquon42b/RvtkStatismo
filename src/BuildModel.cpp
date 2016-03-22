@@ -2,10 +2,10 @@
 typedef PCAModelBuilder<vtkPolyData> ModelBuilderType;
 
 
-SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_, SEXP pointer_) {
+SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP computeScores_, SEXP SelfAdjointSolve_,  SEXP pointer_) {
   try {
     bool pointer = as<bool>(pointer_);
-    XPtr<vtkMeshModel> model = BuildModel(myshapelist_,myreference_, sigma_, SelfAdjointSolve_);
+    XPtr<vtkMeshModel> model = BuildModel(myshapelist_,myreference_, sigma_, computeScores_, SelfAdjointSolve_);
     return statismo2pPCA(model,pointer);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
@@ -15,12 +15,13 @@ SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP Self
 }
 
   
-XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_){
+XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP computeScores_, SEXP SelfAdjointSolve_){
 
   try {
     List myshapelist(myshapelist_);
     List myreference(myreference_);
     double sigma = as<double>(sigma_);
+    bool computeScores = as<bool>(computeScores_);
     bool SelfAdjointSolve = as<bool>(SelfAdjointSolve_);
     unsigned int ndata = myshapelist.size();
     std::vector<std::string> nam = myshapelist.names();
@@ -34,6 +35,7 @@ XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, S
       method =  ModelBuilderType::SelfAdjointEigenSolver;
     
     XPtr<vtkMeshDataManager> dataManager(vtkMeshDataManager::Create(representer.get()));
+    //#pragma omp parallel for schedule(static)
     for (unsigned int i = 0; i < ndata; i++) {
       List tmplist = myshapelist[i];
       //IntegerMatrix
@@ -46,7 +48,7 @@ XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, S
     }
     XPtr<ModelBuilderType> modelBuilder(ModelBuilderType::Create());
     
-    XPtr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma,true,method));
+    XPtr<vtkMeshModel> model(modelBuilder->BuildNewModel(dataManager->GetData(), sigma,computeScores, method));
     return model;
 
   } catch (StatisticalModelException& e) {

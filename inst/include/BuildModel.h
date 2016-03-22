@@ -10,7 +10,7 @@
 using namespace Rcpp;
 using namespace statismo;
 
-RcppExport SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_,SEXP pointer_);
-XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP SelfAdjointSolve_);
+RcppExport SEXP BuildModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP computeScores_, SEXP SelfAdjointSolve_,  SEXP pointer_);
+XPtr<vtkMeshModel> BuildModel(SEXP myshapelist_,SEXP myreference_,SEXP sigma_, SEXP computeScores_, SEXP SelfAdjointSolve_);
 
 #endif //#ifndef _BUILD_MODEL_H__
