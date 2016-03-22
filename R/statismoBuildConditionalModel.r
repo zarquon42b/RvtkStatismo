@@ -10,6 +10,7 @@
 #' @param conditioningData a numeric vector of length \code{ncol(trainingData)} containing the parameters to condition the model to
 #' @param surrogateInfo a numeric vector of zeros and ones coding wether the variables in the i-th column of \code{trainingData} is categorial or continuous. 0 = categorial, 1 = continuous.
 #' @param exVar with 0 < exVar <= 1. Allows to reduce the model according to the variance explained.
+#' @param pointer if TRUE an object of class pPCA_pointer is returned
 #' @references
 #' R. Blanc, M. Reyes, C. Seiler and G. Szekely. 2009. Conditional Variability of Statistical Shape Models Based on Surrogate Variables. In Proc. MICCAI 2009
 #' @note If you want to use a data.frame of mixed variables, you can use the helper function manageConditioningData to extract and convert the information to accomodate the necesseties of the function.
@@ -38,7 +39,7 @@
 #' @importFrom Morpho bindArr
 #' 
 #' @export
-statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trainingData,conditioningData,surrogateInfo,exVar=1) {
+statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trainingData,conditioningData,surrogateInfo,exVar=1,pointer=FALSE) {
     if (is.array(x)) {
         m <- dim(x)[2]
         if (m == 2) {
@@ -75,7 +76,7 @@ statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trai
     conditioningData <- cbind(1,conditioningData)
     trainingData <- as.matrix(trainingData)
     surrogateInfo <- as.numeric(surrogateInfo);
-    out <- .Call("BuildConditionalModelExport",mylist,representer,sigma,trainingData,conditioningData,surrogateInfo,exVar)
+    out <- .Call("BuildConditionalModelExport",mylist,representer,sigma,trainingData,conditioningData,surrogateInfo,exVar,pointer)
     SetScale(out) <- scale
     return(out)
     

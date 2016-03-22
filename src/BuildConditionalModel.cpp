@@ -5,10 +5,10 @@ typedef ConditionalModelBuilderCustom<vtkPolyData> ModelBuilderType;
 typedef DataManagerWithSurrogateVector<vtkPolyData> vtkMeshDataManagerWithSurrogates;
 
 
-SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_, SEXP exVar_) {
-  
+SEXP BuildConditionalModelExport(SEXP myshapelist_,SEXP myreference_,SEXP sigma_,SEXP trainingData_, SEXP condData_,SEXP surrogateInfo_, SEXP exVar_,SEXP pointer_) {
+  bool pointer = as<bool>(pointer_);
   XPtr<vtkMeshModel> model = BuildConditionalModel(myshapelist_,myreference_, sigma_, trainingData_,condData_,surrogateInfo_,exVar_);
-  return statismo2pPCA(model);
+  return statismo2pPCA(model,pointer);
   
 }
 

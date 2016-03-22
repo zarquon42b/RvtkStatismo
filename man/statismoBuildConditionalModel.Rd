@@ -5,7 +5,7 @@
 \title{generate a statistical model using an array of superimposed landmarks or a list of meshes}
 \usage{
 statismoBuildConditionalModel(x, representer, sigma = 0, scale = FALSE,
-  trainingData, conditioningData, surrogateInfo, exVar = 1)
+  trainingData, conditioningData, surrogateInfo, exVar = 1, pointer = FALSE)
 }
 \arguments{
 \item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}
@@ -23,6 +23,8 @@ statismoBuildConditionalModel(x, representer, sigma = 0, scale = FALSE,
 \item{surrogateInfo}{a numeric vector of zeros and ones coding wether the variables in the i-th column of \code{trainingData} is categorial or continuous. 0 = categorial, 1 = continuous.}
 
 \item{exVar}{with 0 < exVar <= 1. Allows to reduce the model according to the variance explained.}
+
+\item{pointer}{if TRUE an object of class pPCA_pointer is returned}
 }
 \value{
 an statistical model of class pPCA (\code{\link{pPCA-class}})
