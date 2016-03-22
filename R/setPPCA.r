@@ -127,9 +127,8 @@ setReplaceMethod("SetScale", "pPCA",function(x, value) {
 
 #' @rdname ppcasetters
 setReplaceMethod("SetScale", "pPCA_pointer",function(x, value) {
-    x <- pointer2pPCA(x)
-    SetScale(x) <- value
-    pPCA2pointer(x)
+    x <- .Call("SetScale",x,value)
+    x@scale <- value
     x})
 #' @rdname ppcasetters
 #' @export

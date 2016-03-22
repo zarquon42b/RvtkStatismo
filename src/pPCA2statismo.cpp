@@ -1,6 +1,7 @@
 #include "pPCA2statismo.h"
 #include "polyData2R.h"
 #include "Helpers.h"
+#include "SetScale.h"
 using Rcpp::List;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerMatrix;
@@ -106,6 +107,7 @@ S4 statismo2pPCA(XPtr<vtkMeshModel> model, bool pointer) {
       Language pPCAcall("new", "pPCA_pointer");
       Rcpp::S4 pPCA( pPCAcall.eval() );
       pPCA.slot("pointer") = model;
+      pPCA.slot("scale") = GetScale(model);
       return pPCA;
     } else {
       vtkPolyData* reference = model->DrawMean();
