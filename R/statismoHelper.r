@@ -31,7 +31,7 @@ checkmeshlist <- function(x) {
     if (!chk)
         stop("all meshes need to have the same amount of vertices")
     else
-        return(lapply(x,meshintegrity))
+        return(x)
 }
 ##converts the returned model from statismo to class pPCA   
 statismo2pPCA <- function(statismodel) {

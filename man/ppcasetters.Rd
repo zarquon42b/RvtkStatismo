@@ -21,8 +21,6 @@
 \alias{SetPCsdev<-}
 \alias{SetPCsdev<-,pPCA-method}
 \alias{SetPCsdev<-,pPCA_pointer-method}
-\alias{SetRawdata<-}
-\alias{SetRawdata<-,pPCA-method}
 \alias{SetRepresenter<-}
 \alias{SetRepresenter<-,pPCA-method}
 \alias{SetRepresenter<-,pPCA_pointer-method}
@@ -39,10 +37,6 @@
 SetNoiseVariance(x) <- value
 
 \S4method{SetNoiseVariance}{pPCA}(x) <- value
-
-SetRawdata(x) <- value
-
-\S4method{SetRawdata}{pPCA}(x) <- value
 
 SetPCBasisMatrix(x) <- value
 

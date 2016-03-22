@@ -46,18 +46,14 @@ statismoBuildConditionalModel <- function(x,representer,sigma=0,scale=FALSE,trai
             x <- bindArr(x,zeros,along=2)
         } else if (dim(x)[2] != 3)
               stop("only 2D and 3D configs allowed")
-        rawdata <- vecx(x,byrow=TRUE)
-        rawdata <- sweep(rawdata,2,colMeans(rawdata))
         mylist <- array2meshlist(x)
         if (missing(representer))
             representer <- x[,,1]
         names(mylist) <- dimnames(x)[[3]]
     } else if (is.list(x)) {
-        mylist <-checkmeshlist(x)
+        mylist <- checkmeshlist(x)
         if (missing(representer))
             representer <- x[[1]]
-        rawdata <- vecx(meshlist2array(mylist),byrow=TRUE)
-        rawdata <- sweep(rawdata,2,colMeans(rawdata))
     }
     if (is.null(names(mylist)))
         names(mylist) <- paste("specimen",1:length(mylist),sep="_")

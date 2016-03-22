@@ -57,11 +57,11 @@ pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sc
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     dimnames(PCA$rotation) <- NULL
     PCA$sdev <- PCA$sdev[good]
-    PCA$x <- 0
+    PCA$x <- t(t(unclass(PCA$x)[,good,drop=FALSE])/PCA$sdev)
     PCA <- unclass(PCA)
     if (is.null(representer) || is.matrix(representer))
         representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,3,0))
-    model <- new("pPCA",PCA=PCA,representer=representer,rawdata=sweep(rawdata,2,colMeans(rawdata)))
+    model <- new("pPCA",PCA=PCA,representer=representer)
     SetScale(model) <- scale
     model <- UpdateModel(model,sigma=sigma,exVar=exVar)
     if (is.null(dimnames(x)[[3]]))
@@ -77,14 +77,19 @@ pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sc
 ###Modify an existing pPCA model
 #' @rdname pPCA
 #' @export
-setGeneric("UpdateModel", function(model,sigma=NULL,exVar=1) {
+setGeneric("UpdateModel", function(model,sigma=NULL,exVar=1,computeScores=TRUE) {
     standardGeneric("UpdateModel")
 })
 
 #' @rdname pPCA
-setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVar=1) {
+setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVar=1,computeScores=TRUE) {
     k <- ncol(model@representer$vb)
     PCA <- model@PCA
+    repro <- NULL
+    
+    if ((ncol(PCA$x) == ncol(PCA$rotation)) && computeScores) {
+        repro <- t(t(PCA$x)*PCA$sdev)%*%t(PCA$rotation)
+    }
     if (length(model@sigma))
         sds <- calcSdev(model)^2
     else
@@ -106,11 +111,12 @@ setMethod("UpdateModel", signature(model="pPCA"), function(model,sigma=NULL,exVa
     PCA$rotation <- PCA$rotation[,usePC,drop=FALSE]
     PCA$sdev <- sqrt(sigest[usePC])
     SetPCA(model) <- PCA
-    if (ncol(model@rawdata) > 0) {
-        PCA$x <- (model@rawdata%*%t(GetProjectionMatrix(model)))[,usePC,drop=FALSE]
+    if (!is.null(repro)) {
+        PCA$x <- (repro%*%t(GetProjectionMatrix(model)))[,usePC,drop=FALSE]
         dimnames(PCA$x) <- NULL
-  }  else
+    } else {
         PCA$x <- matrix(0,0,0)
+    }
     SetPCA(model) <- PCA
     return(model)
 })

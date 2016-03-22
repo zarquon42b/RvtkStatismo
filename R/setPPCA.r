@@ -31,12 +31,6 @@ setReplaceMethod("SetNoiseVariance", "pPCA",function(x, value) {
                  })
 
 
-#' @rdname ppcasetters
-#' @export
-setGeneric("SetRawdata<-", function(x, value) standardGeneric("SetRawdata<-"))
-
-#' @rdname ppcasetters
-setReplaceMethod("SetRawdata", "pPCA",function(x, value) {x@rawdata <- value; validObject(x); x})
 
 #' @rdname ppcasetters
 #' @export

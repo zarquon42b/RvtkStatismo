@@ -11,9 +11,10 @@
 pPCA(x, align = FALSE, use.lm = NULL, deselect = FALSE, sigma = NULL,
   exVar = 1, scale = FALSE, representer = NULL)
 
-UpdateModel(model, sigma = NULL, exVar = 1)
+UpdateModel(model, sigma = NULL, exVar = 1, computeScores = TRUE)
 
-\S4method{UpdateModel}{pPCA}(model, sigma = NULL, exVar = 1)
+\S4method{UpdateModel}{pPCA}(model, sigma = NULL, exVar = 1,
+  computeScores = TRUE)
 }
 \arguments{
 \item{x}{array of dimensions k x 3 x n, where k=number of coordinates and n=sample size -  or a list containing triangular meshes.}
