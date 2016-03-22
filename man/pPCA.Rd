@@ -9,7 +9,7 @@
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
 pPCA(x, align = FALSE, use.lm = NULL, deselect = FALSE, sigma = NULL,
-  exVar = 1, scale = FALSE, representer = NULL)
+  exVar = 1, scale = FALSE, computeScores = TRUE, representer = NULL)
 
 UpdateModel(model, sigma = NULL, exVar = 1, computeScores = TRUE)
 
@@ -30,6 +30,8 @@ UpdateModel(model, sigma = NULL, exVar = 1, computeScores = TRUE)
 \item{exVar}{numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance}
 
 \item{scale}{logical: allow scaling in Procrustes fitting}
+
+\item{computeScores}{logical: if FALSE, scores are not calculated.}
 
 \item{representer}{a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.}
 

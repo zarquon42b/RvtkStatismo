@@ -44,8 +44,6 @@ statismoConstrainModel(model, sample, pt, ptValueNoise, computeScores = TRUE,
 \item{computeScores}{if TRUE, the scores (if present) are projected into the updated model space.}
 
 \item{pointer}{if TRUE an object of class pPCA_pointer is returned.}
-
-\item{sdmax}{a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)}
 }
 \value{
 a constrained model
@@ -75,7 +73,8 @@ for(i in 1:10) rgl::wire3d(DrawSample(GPmodConst),col="white")
 ## except the first one
 ## first constrain the model using the assumed covariance of the first coordinate
 noise1 <- diag(3);noise1[1,1] <- 6
-GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],humface.lm[1,,drop=FALSE],ptValueNoise = 1)
+GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],
+                                   humface.lm[1,,drop=FALSE],ptValueNoise = 1)
 ## now we constrain the rest
 GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,],humface.lm[-1,],ptValueNoise = 0.01)
 }

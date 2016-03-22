@@ -10,6 +10,7 @@
 #' @param sigma estimate of error variance (sensible is a value estimating coordinate error in terms of observer error)
 #' @param exVar numeric value with \code{0 < exVar <= 1} specifying the PCs to be included by their cumulative explained Variance
 #' @param scale logical: allow scaling in Procrustes fitting
+#' @param computeScores logical: if FALSE, scores are not calculated.
 #' @param representer a triangular mesh, where the vertices correspond to the coordinates in \code{array}, leave NULL for pointclouds.
 #' @param model object of class \code{pPCA}
 #' @return returns a probabilistic PCA model as S4 class "pPCA" (see \code{\link{pPCA-class}}).
@@ -21,7 +22,7 @@
 #' @examples
 #' require(Morpho)
 #' data(boneData)
-#' model <- pPCA(boneLM[,,])
+#' model <- pPCA(boneLM[,,],align=TRUE)
 #' ## change parameters without recomputing Procrustes fit
 #' model1 <- UpdateModel(model, sigma=1, exVar=0.8)
 #'
@@ -34,7 +35,7 @@
 #' @name pPCA
 #' @rdname pPCA
 #' @export
-pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,representer=NULL) {
+pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,scale=FALSE,computeScores=TRUE,representer=NULL) {
     if (is.list(x)) {
         if (is.null(representer))
             representer <- x[[1]]
@@ -49,7 +50,7 @@ pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sc
         sigma <- numeric(0)
     procMod$mshape <- NULL
     rawdata <- vecx(procMod$rotated,byrow=T)
-    PCA <- prcomp(rawdata,tol = sqrt(.Machine$double.eps)) ## calculate PCA
+    PCA <- prcomp(rawdata,tol = sqrt(.Machine$double.eps),retx=computeScores) ## calculate PCA
     PCA$scale <- NULL
     sds <- PCA$sdev^2
     good <- which(sds > 1e-13)
@@ -57,7 +58,10 @@ pPCA <- function(x, align=FALSE,use.lm=NULL,deselect=FALSE,sigma=NULL,exVar=1,sc
     PCA$rotation <- PCA$rotation[,good,drop=FALSE]
     dimnames(PCA$rotation) <- NULL
     PCA$sdev <- PCA$sdev[good]
-    PCA$x <- t(t(unclass(PCA$x)[,good,drop=FALSE])/PCA$sdev)
+    if (computeScores)
+        PCA$x <- t(t(unclass(PCA$x)[,good,drop=FALSE])/PCA$sdev)
+    else
+        PCA$x <- matrix(0,0,0)
     PCA <- unclass(PCA)
     if (is.null(representer) || is.matrix(representer))
         representer <- list(vb=t(arrMean3(procMod$rotated)),it=matrix(0,3,0))

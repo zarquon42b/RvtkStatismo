@@ -5,7 +5,6 @@
 #' @param sample k x 3 matrix containing coordinates to constrain model to
 #' @param pt either a matrix with each row containing points on the model's domain corresponding to the row in \code{sample} or an integer vector specifying the coordinates of the sample's mean corresponding to \code{sample} 
 #' @param ptValueNoise can be a single value, if the same spherical noise is to be used for all points, or a vector specifying spherical noise per point or a k*3 x 3 matrix with the per-point covariance matrices concatenated by row. See note below.
-#' @param sdmax a measure in standard deviations to allow the likelihood of the correspondeces between sample and model. (using chi-square distribution)
 #' @param computeScores if TRUE, the scores (if present) are projected into the updated model space.
 #' @param pointer if TRUE an object of class pPCA_pointer is returned.
 #' @note to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
@@ -29,7 +28,8 @@
 #' ## except the first one
 #' ## first constrain the model using the assumed covariance of the first coordinate
 #' noise1 <- diag(3);noise1[1,1] <- 6
-#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],humface.lm[1,,drop=FALSE],ptValueNoise = 1)
+#' GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],
+#'                                    humface.lm[1,,drop=FALSE],ptValueNoise = 1)
 #' ## now we constrain the rest
 #' GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,],humface.lm[-1,],ptValueNoise = 0.01)
 
