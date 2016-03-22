@@ -103,7 +103,7 @@ public:
   
   
   inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
-    MatrixType covar = MatrixType::Constant(3,3,1);
+    MatrixType covar = MatrixType::Identity(3,3);
     return covar;
   }
 
