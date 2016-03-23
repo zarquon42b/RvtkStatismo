@@ -191,12 +191,6 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA_pointer",coefficients="num
 })
 
 #' @rdname statismoMembers
-setMethod("DrawPCABasisSample",  signature(model="pPCA_pointer",pcaComponent="numeric"), function(model,pcaComponent) {
-    out <- output2sample(.Call("DrawPCABasisSample",model,pcaComponent))
-    return(out)
-})
-
-#' @rdname statismoMembers
 setMethod("ComputeCoefficientsForDataset",signature(model="pPCA_pointer"), function(model,dataset) {
     out <- .Call("ComputeCoefficientsForDataset",model,dataset2representer(dataset))
     return(out)

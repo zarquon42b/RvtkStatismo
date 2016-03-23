@@ -61,7 +61,5 @@ RcppExport SEXP GetPCAVarianceVector(SEXP pPCA_);
 
 RcppExport SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
 
-RcppExport SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
-
-RcppExport SEXP DrawPCABasisSample(SEXP pPCA_, SEXP pcaComponent_);
+  RcppExport SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
 #endif// _MODEL_MEMBERS_H__

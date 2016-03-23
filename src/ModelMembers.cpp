@@ -459,18 +459,3 @@ SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
     ::Rf_error("unknown exception");
   }
 }
-SEXP DrawPCABasisSample(SEXP pPCA_, SEXP pcaComponent_) {
-   try {
-     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-     unsigned int pcaComponent = as<unsigned int>(pcaComponent_);
-     pcaComponent -= 1;
-     vtkPolyData* sample = model->DrawPCABasisSample(pcaComponent);
-     List out = polyData2R(sample);
-     sample->Delete();
-     return out;
-   } catch (std::exception& e) {
-    ::Rf_error( e.what());
-  } catch (...) {
-    ::Rf_error("unknown exception");
-  }
-}
