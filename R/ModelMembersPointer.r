@@ -222,6 +222,13 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", s
     return(out)
 })
 
+#' @rdname statismoMembers
+setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", sample="matrix",pt="matrix",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
+    sample <- t(sample)
+    mean <- t(pt)
+    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,ptNoise)
+    return(out)
+})
 
 #' @rdname statismoMembers
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", sample="numeric",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {

@@ -4,6 +4,7 @@
 \name{StatismoSample}
 \alias{ComputeLogProbabilityOfCoefficients}
 \alias{ComputeLogProbabilityOfCoefficients,pPCA-method}
+\alias{ComputeLogProbabilityOfCoefficients,pPCA_pointer-method}
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeLogProbabilityOfDataset,pPCA-method}
 \alias{ComputeLogProbabilityOfDataset,pPCA_pointer-method}
@@ -12,6 +13,7 @@
 \alias{ComputeMahalanobisDistanceForDataset,pPCA_pointer-method}
 \alias{ComputeProbabilityOfCoefficients}
 \alias{ComputeProbabilityOfCoefficients,pPCA-method}
+\alias{ComputeProbabilityOfCoefficients,pPCA_pointer-method}
 \alias{ComputeProbabilityOfDataset}
 \alias{ComputeProbabilityOfDataset,pPCA-method}
 \alias{ComputeProbabilityOfDataset,pPCA_pointer-method}
@@ -42,9 +44,10 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA_pointer}(model, dataset)
 
-\S4method{ComputeProbabilityOfCoefficients}{pPCA}(model, coefficients)
+\S4method{ComputeProbabilityOfCoefficients}{pPCA_pointer}(model, coefficients)
 
-\S4method{ComputeLogProbabilityOfCoefficients}{pPCA}(model, coefficients)
+\S4method{ComputeLogProbabilityOfCoefficients}{pPCA_pointer}(model,
+  coefficients)
 
 \S4method{ComputeMahalanobisDistanceForDataset}{pPCA_pointer}(model, dataset)
 }

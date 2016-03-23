@@ -9,6 +9,7 @@
 \alias{ComputeCoefficientsForPointValues,pPCA,matrix,matrix,numeric-method}
 \alias{ComputeCoefficientsForPointValues,pPCA,matrix,numeric,numeric-method}
 \alias{ComputeCoefficientsForPointValues,pPCA,numeric,numeric,numeric-method}
+\alias{ComputeCoefficientsForPointValues,pPCA_pointer,matrix,matrix,numeric-method}
 \alias{ComputeCoefficientsForPointValues,pPCA_pointer,matrix,numeric,numeric-method}
 \alias{ComputeCoefficientsForPointValues,pPCA_pointer,numeric,numeric,numeric-method}
 \alias{ComputeCoefficientsForPointValuesWithCovariance}
@@ -165,6 +166,10 @@ GetPCScores(model, scaled = TRUE)
 
 
   \S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,numeric,numeric}(model,
+  sample, pt, ptNoise = 0)
+
+
+  \S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,matrix,numeric}(model,
   sample, pt, ptNoise = 0)
 
 
