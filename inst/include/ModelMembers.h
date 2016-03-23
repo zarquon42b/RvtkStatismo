@@ -58,4 +58,8 @@ RcppExport SEXP GetMeanVector(SEXP pPCA_);
 RcppExport SEXP GetNoiseVariance(SEXP pPCA_);
 
 RcppExport SEXP GetPCAVarianceVector(SEXP pPCA_);
+
+RcppExport SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
+
+  RcppExport SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
 #endif// _MODEL_MEMBERS_H__

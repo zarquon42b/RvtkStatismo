@@ -432,3 +432,30 @@ SEXP GetPCAVarianceVector(SEXP pPCA_) {
     ::Rf_error("unknown exception");
   }
 }
+
+SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
+   try {
+     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+     Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
+     const VectorXf coeffs = coeffs0.cast<float>();
+     double prob = model->ComputeLogProbabilityOfCoefficients(coeffs);
+     return wrap(prob);
+   } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
+}
+SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
+   try {
+     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+     Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
+     const VectorXf coeffs = coeffs0.cast<float>();
+     double prob = model->ComputeProbabilityOfCoefficients(coeffs);
+     return wrap(prob);
+   } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
+}

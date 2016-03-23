@@ -2,12 +2,16 @@
 % Please edit documentation in R/AllGeneric.r, R/ModelMembers.r, R/ModelMembersPointer.r
 \docType{methods}
 \name{StatismoSample}
+\alias{ComputeLogProbabilityOfCoefficients}
+\alias{ComputeLogProbabilityOfCoefficients,pPCA-method}
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeLogProbabilityOfDataset,pPCA-method}
 \alias{ComputeLogProbabilityOfDataset,pPCA_pointer-method}
 \alias{ComputeMahalanobisDistanceForDataset}
 \alias{ComputeMahalanobisDistanceForDataset,pPCA-method}
 \alias{ComputeMahalanobisDistanceForDataset,pPCA_pointer-method}
+\alias{ComputeProbabilityOfCoefficients}
+\alias{ComputeProbabilityOfCoefficients,pPCA-method}
 \alias{ComputeProbabilityOfDataset}
 \alias{ComputeProbabilityOfDataset,pPCA-method}
 \alias{ComputeProbabilityOfDataset,pPCA_pointer-method}
@@ -18,9 +22,17 @@ ComputeLogProbabilityOfDataset(model, dataset)
 
 ComputeProbabilityOfDataset(model, dataset)
 
+ComputeProbabilityOfCoefficients(model, coefficients)
+
+ComputeLogProbabilityOfCoefficients(model, coefficients)
+
 ComputeMahalanobisDistanceForDataset(model, dataset)
 
 \S4method{ComputeLogProbabilityOfDataset}{pPCA}(model, dataset)
+
+\S4method{ComputeProbabilityOfCoefficients}{pPCA}(model, coefficients)
+
+\S4method{ComputeLogProbabilityOfCoefficients}{pPCA}(model, coefficients)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA}(model, dataset)
 
@@ -30,16 +42,24 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA_pointer}(model, dataset)
 
+\S4method{ComputeProbabilityOfCoefficients}{pPCA}(model, coefficients)
+
+\S4method{ComputeLogProbabilityOfCoefficients}{pPCA}(model, coefficients)
+
 \S4method{ComputeMahalanobisDistanceForDataset}{pPCA_pointer}(model, dataset)
 }
 \arguments{
 \item{model}{model of class "pPCA"}
 
 \item{dataset}{a matrix or mesh3d aligned to the model's mean}
+
+\item{coefficients}{vector of coefficients}
 }
 \value{
 \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
 \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
+\item{ComputeProbabilityOfCoefficients}{returns the probability density for the coefficients}
+\item{ComputeLogProbabilityOfCoefficients}{returns the log-probability density for the coefficients}
 }
 \description{
 Retrieve information about a sample from the model

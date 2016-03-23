@@ -77,6 +77,25 @@ setMethod("ComputeLogProbabilityOfDataset",signature(model="pPCA"), function(mod
 })
 
 #' @rdname StatismoSample
+setMethod("ComputeProbabilityOfCoefficients",signature(model="pPCA"), function(model,coefficients) {
+    npc <- GetNumberOfPrincipalComponents(model)
+    if (length(coefficients) != npc)
+        warning("number of coefficients != number of PCs")
+    out <- ((2*pi)^(-0.5*npc))*exp(-0.5*sum(coefficients^2))
+    return(out)
+})
+
+#' @rdname StatismoSample
+setMethod("ComputeLogProbabilityOfCoefficients",signature(model="pPCA"), function(model,coefficients) {
+    npc <- GetNumberOfPrincipalComponents(model)
+    if (length(coefficients) != npc)
+        warning("number of coefficients != number of PCs")
+    out <- log((2*pi)^(-0.5*GetNumberOfPrincipalComponents(model)))-0.5*sum(coefficients^2)
+    return(out)
+})
+
+
+#' @rdname StatismoSample
 setMethod("ComputeProbabilityOfDataset",signature(model="pPCA"), function(model,dataset) {
     out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
     return(out)

@@ -89,6 +89,23 @@ setMethod("ComputeProbabilityOfDataset",signature(model="pPCA_pointer"), functio
     out <- .Call("ComputeLogProbabilityOfDataset",model,dataset2representer(dataset),FALSE)
     return(out)
 })
+#' @rdname StatismoSample
+setMethod("ComputeProbabilityOfCoefficients",signature(model="pPCA_pointer"), function(model,coefficients) {
+    npc <- GetNumberOfPrincipalComponents(model)
+    if (length(coefficients) != npc)
+        warning("number of coefficients != number of PCs")
+    out <- .Call("ComputeProbabilityOfCoefficients",model,coefficients)
+    return(out)
+})
+
+#' @rdname StatismoSample
+setMethod("ComputeLogProbabilityOfCoefficients",signature(model="pPCA_pointer"), function(model,coefficients) {
+    npc <- GetNumberOfPrincipalComponents(model)
+    if (length(coefficients) != npc)
+        warning("number of coefficients != number of PCs")
+    out <- .Call("ComputeLogProbabilityOfCoefficients",model,coefficients)
+    return(out)
+})
 
 #' @rdname StatismoSample
 setMethod("ComputeMahalanobisDistanceForDataset",signature(model="pPCA_pointer"), function(model,dataset) {

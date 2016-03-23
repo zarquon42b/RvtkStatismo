@@ -199,9 +199,12 @@ setGeneric("GetNumberOfPrincipalComponents", function(model) {
 #'
 #' @param model model of class "pPCA"
 #' @param dataset a matrix or mesh3d aligned to the model's mean
+#' @param coefficients vector of coefficients
 #' @return
 #' \item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
 #' \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
+#' \item{ComputeProbabilityOfCoefficients}{returns the probability density for the coefficients}
+#' \item{ComputeLogProbabilityOfCoefficients}{returns the log-probability density for the coefficients}
 #' @seealso \code{\link{getDataLikelihood}}
 #' @docType methods
 #' @name StatismoSample
@@ -219,6 +222,18 @@ setGeneric("ComputeLogProbabilityOfDataset", function(model,dataset) {
 setGeneric("ComputeProbabilityOfDataset", function(model,dataset) {
     standardGeneric("ComputeProbabilityOfDataset")
 })
+
+#' @rdname StatismoSample
+#' @export
+setGeneric("ComputeProbabilityOfCoefficients", function(model,coefficients) {
+    standardGeneric("ComputeProbabilityOfCoefficients")
+})
+
+#' @rdname StatismoSample
+#' @export
+setGeneric("ComputeLogProbabilityOfCoefficients", function(model,coefficients) {
+    standardGeneric("ComputeLogProbabilityOfCoefficients")
+})    
 
 #' @rdname StatismoSample
 #' @export
