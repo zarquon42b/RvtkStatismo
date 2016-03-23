@@ -180,7 +180,13 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA",coefficients="numeric",pt
         stop("pt must be an integer or a vector of length 3")
     
     
-    out <- (.Call("DrawSampleAtPoint",model,coefficients,meanpt,addNoise))
+    out <- .Call("DrawSampleAtPoint",model,coefficients,meanpt,addNoise)
+    return(out)
+})
+
+#' @rdname statismoMembers
+setMethod("DrawPCABasisSample",  signature(model="pPCA",pcaComponent="numeric"), function(model,pcaComponent) {
+    out <- output2sample(.Call("DrawPCABasisSample",model,pcaComponent))
     return(out)
 })
 

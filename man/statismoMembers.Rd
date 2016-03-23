@@ -31,6 +31,9 @@
 \alias{DrawMeanAtPoint}
 \alias{DrawMeanAtPoint,pPCA,numeric-method}
 \alias{DrawMeanAtPoint,pPCA_pointer,numeric-method}
+\alias{DrawPCABasisSample}
+\alias{DrawPCABasisSample,pPCA,numeric-method}
+\alias{DrawPCABasisSample,pPCA_pointer,numeric-method}
 \alias{DrawSample}
 \alias{DrawSample,pPCA-method}
 \alias{DrawSample,pPCA_pointer-method}
@@ -68,6 +71,8 @@ DrawSampleVector(model, coefficients, addNoise = FALSE)
 
 DrawSampleAtPoint(model, coefficients, pt, addNoise = FALSE)
 
+DrawPCABasisSample(model, pcaComponent)
+
 ComputeCoefficientsForDataset(model, dataset)
 
 ComputeCoefficientsForPointValues(model, sample, pt, ptNoise = 0)
@@ -95,6 +100,8 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawSampleAtPoint}{pPCA,numeric,numeric}(model, coefficients, pt,
   addNoise = FALSE)
+
+\S4method{DrawPCABasisSample}{pPCA,numeric}(model, pcaComponent)
 
 \S4method{ComputeCoefficientsForDataset}{pPCA}(model, dataset)
 
@@ -157,6 +164,8 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model, coefficients,
   pt, addNoise = FALSE)
+
+\S4method{DrawPCABasisSample}{pPCA_pointer,numeric}(model, pcaComponent)
 
 \S4method{ComputeCoefficientsForDataset}{pPCA_pointer}(model, dataset)
 
