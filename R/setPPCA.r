@@ -147,6 +147,7 @@ setReplaceMethod("SetVariance", "pPCA",function(x, value) {x@Variance <- value; 
 #' @rdname modelinfo-class
 #' @export
 setGeneric("AddModelInfoParams", function(x, value) standardGeneric("AddModelInfoParams"))
+
 #' @rdname modelinfo-class
 setMethod("AddModelInfoParams", signature("modelinfo"),function(x, value) {
     if (!is.list(value))
@@ -164,7 +165,7 @@ setMethod("AddModelInfoParams", signature("pPCA"),function(x, value) {
 #' @rdname ppcasetters
 setMethod("AddModelInfoParams", signature("pPCA_pointer"),function(x, value) {
     x <- pointer2pPCA(x)
-    AddModelInfoParams(x) <- value
+    AddModelInfoParams(x,value)
     x <- pPCA2pointer(x)
     x})
     
