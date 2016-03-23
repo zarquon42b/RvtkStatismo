@@ -24,13 +24,15 @@ statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
   ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,numeric}(model,
-  sample, pt, ptValueNoise, sdmax = 5, pointer = TRUE)
+  sample, pt, ptValueNoise, sdmax = 5, computeScores = TRUE,
+  pointer = TRUE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,matrix}(model, sample,
-  pt, ptValueNoise, sdmax = 5, pointer = TRUE)
+  pt, ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = TRUE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,numeric,numeric}(model,
-  sample, pt, ptValueNoise, sdmax = 5, pointer = TRUE)
+  sample, pt, ptValueNoise, sdmax = 5, computeScores = TRUE,
+  pointer = TRUE)
 }
 \arguments{
 \item{model}{object of class pPCA}

@@ -24,13 +24,13 @@ statismoConstrainModel(model, sample, pt, ptValueNoise, computeScores = TRUE,
   ptValueNoise, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModel}{pPCA_pointer,matrix,matrix}(model, sample, pt,
-  ptValueNoise, pointer = TRUE)
+  ptValueNoise, computeScores = TRUE, pointer = TRUE)
 
 \S4method{statismoConstrainModel}{pPCA_pointer,matrix,numeric}(model, sample,
-  pt, ptValueNoise, pointer = TRUE)
+  pt, ptValueNoise, computeScores = TRUE, pointer = TRUE)
 
 \S4method{statismoConstrainModel}{pPCA_pointer,numeric,numeric}(model, sample,
-  pt, ptValueNoise, pointer = TRUE)
+  pt, ptValueNoise, computeScores = TRUE, pointer = TRUE)
 }
 \arguments{
 \item{model}{object of class pPCA}

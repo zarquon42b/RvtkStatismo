@@ -38,38 +38,38 @@
 #' @docType methods
 #' @export
 setGeneric("statismoConstrainModel",function(model,sample,pt,ptValueNoise,computeScores=TRUE,pointer=FALSE){
-               standardGeneric("statismoConstrainModel")})
+    standardGeneric("statismoConstrainModel")})
 
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise, computeScores=TRUE, pointer=FALSE) {
-             
-              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-              mean <- t(pt)
-              sample <- t(sample)
-              out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
-              return(out)
-          })
+    
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
+    mean <- t(pt)
+    sample <- t(sample)
+    out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
+    return(out)
+})
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise,computeScores=TRUE, pointer=FALSE) {
-              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-              mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
-              sample <- t(sample)
-              out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
-              return(out)
-          })
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
+    mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    sample <- t(sample)
+    out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
+    return(out)
+})
 #' @rdname statismoConstrainModel
 setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,computeScores=TRUE, pointer=FALSE) {
-              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-              sample <- matrix(sample,3,1)
-              if (length(pt) == 3)
-                  mean <- matrix(pt,3,1)
-              else if (length(pt) == 1)
-                  mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
-              else
-                  stop("in this case pt must be a vector of length 3 or an integer")
-              out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
-              return(out)
-          })
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
+    sample <- matrix(sample,3,1)
+    if (length(pt) == 3)
+        mean <- matrix(pt,3,1)
+    else if (length(pt) == 1)
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        stop("in this case pt must be a vector of length 3 or an integer")
+    out <- .Call("PosteriorModel",model,sample, mean,ptValueNoise,computeScores,pointer)
+    return(out)
+})
 
 #' calculate a posterior model but only use likely correspondences
 #'
@@ -87,57 +87,57 @@ setMethod("statismoConstrainModel",signature(model="pPCA",sample="numeric",pt="n
 #' @name statismoConstrainModelSafe
 #' @export
 setGeneric("statismoConstrainModelSafe",function(model,sample,pt,ptValueNoise,sdmax=5,computeScores=TRUE, pointer=FALSE){
-               standardGeneric("statismoConstrainModelSafe")})
+    standardGeneric("statismoConstrainModelSafe")})
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5,computeScores=TRUE, pointer=FALSE) {
-              ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-              mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
-              sample <- t(sample)
-              mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
-              out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
-          })
+    ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
+    mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    sample <- t(sample)
+    mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
+    out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
+})
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="matrix",pt="matrix"), function(model,sample,pt,ptValueNoise,sdmax=5,computeScores=TRUE, pointer=FALSE) {
     ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-              mean <- t(pt)
-              sample <- t(sample)
-              mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
-              out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
-          })
+    mean <- t(pt)
+    sample <- t(sample)
+    mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
+    out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
+})
 
 #' @rdname statismoConstrainModelSafe
 setMethod("statismoConstrainModelSafe",signature(model="pPCA",sample="numeric",pt="numeric"), function(model,sample,pt,ptValueNoise,sdmax=5,computeScores=TRUE, pointer=FALSE) {
     ptValueNoise <- checkpointValueNoise(ptValueNoise,sample)
-               
-              sample <- matrix(sample,3,1)
-              if (length(pt) == 3)
-                  mean <- matrix(pt,3,1)
-              else if (length(pt) == 1)
-                  mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
-              else
-                  stop("in this case pt must be a vector of length 3 or an integer")
-              mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
-              out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
-          })
+    
+    sample <- matrix(sample,3,1)
+    if (length(pt) == 3)
+        mean <- matrix(pt,3,1)
+    else if (length(pt) == 1)
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        stop("in this case pt must be a vector of length 3 or an integer")
+    mahamax <- sqrt(qchisq(1-2*pnorm(sdmax,lower.tail=F),df=3))
+    out <- .Call("PosteriorModelSafe",model,sample, mean,ptValueNoise,mahamax,computeScores,pointer)
+})
 
 
 checkpointValueNoise <- function(ptValueNoise,sample) {
     if (!is.matrix(sample))
         sample <- as.matrix(sample)
-     if (length(ptValueNoise) == 1) {
-                  ptValueNoise <- max(1e-7,ptValueNoise)
-              } else if (is.vector(ptValueNoise)) {
-                  if (length(ptValueNoise) != nrow(sample))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              } else if (is.matrix(ptValueNoise)) {
-                   if (nrow(ptValueNoise) != (nrow(sample)*3))
-                      stop("each entries in ptValueNoise != number of sample points")
-                  ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
-              }
-              ptValueNoise <- as.matrix(ptValueNoise)
-     return(ptValueNoise)
+    if (length(ptValueNoise) == 1) {
+        ptValueNoise <- max(1e-7,ptValueNoise)
+    } else if (is.vector(ptValueNoise)) {
+        if (length(ptValueNoise) != nrow(sample))
+            stop("each entries in ptValueNoise != number of sample points")
+        ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
+    } else if (is.matrix(ptValueNoise)) {
+        if (nrow(ptValueNoise) != (nrow(sample)*3))
+            stop("each entries in ptValueNoise != number of sample points")
+        ptValueNoise[which(ptValueNoise < 1e-7)] <- 1e-7
+    }
+    ptValueNoise <- as.matrix(ptValueNoise)
+    return(ptValueNoise)
 }
-                                                         
+
