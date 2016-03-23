@@ -4,11 +4,14 @@
 \name{representer2sample}
 \alias{representer2sample}
 \alias{representer2sample,pPCA-method}
+\alias{representer2sample,pPCA_pointer-method}
 \title{get the representer from a model of class "pPCA"}
 \usage{
 representer2sample(model)
 
 \S4method{representer2sample}{pPCA}(model)
+
+\S4method{representer2sample}{pPCA_pointer}(model)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

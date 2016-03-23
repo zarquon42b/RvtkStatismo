@@ -35,18 +35,16 @@ dataset2representer <- function(x) {
         
 # get matrix of mean shape    
 getMeanMatrix <- function(model,transpose=TRUE) {
-    nvb <- ncol(model@representer$vb)
-    
-    x <- matrix(model@PCA$center,3,nvb)
+    meanvector <- GetMeanVector(model)
+    x <- matrix(meanvector,3,length(meanvector)/3)
     if (transpose)
         x <- t(x)
-    
     return(x)
 }
     
-## get the original standard deviations from a model given model the damped values and the estimated noiseVariance
+## get the original standard deviations from a model given model the dampened values and the estimated noiseVariance
 calcSdev <- function(model) {
-    sdevorig <- sqrt(model@PCA$sdev^2+model@sigma)
+    sdevorig <- sqrt(GetPCAVarianceVector(model)+GetNoiseVariance(model))
     return(sdevorig)
 }
 
@@ -62,12 +60,23 @@ setGeneric("representer2sample", function(model) {
 })
 #' @rdname representer2sample
 setMethod("representer2sample", signature(model="pPCA"), function(model) {
-    if (inherits(model@representer,"mesh3d")){
-        representer <- model@representer
+    representer <- GetRepresenter(model)
+    if (inherits(representer,"mesh3d")){
         if (nrow(representer$vb) == 3)
             representer$vb <- rbind(representer$vb,1)
     }   else
-        representer <- vert2points(model@representer)
+        representer <- vert2points(representer)
+    return(representer)
+})
+
+#' @rdname representer2sample
+setMethod("representer2sample", signature(model="pPCA_pointer"), function(model) {
+    representer <- GetRepresenter(model)
+    if (inherits(representer,"mesh3d")){
+        if (nrow(representer$vb) == 3)
+            representer$vb <- rbind(representer$vb,1)
+    }   else
+        representer <- vert2points(representer)
     return(representer)
 })
 
@@ -91,3 +100,13 @@ names2modelinfo <- function(x) {
     out <- lapply(ll,function(i) x <- c(paste("URI",i-1,sep="_"),x[i]))
     return(out)
 }
+
+GetRepresenter <- function(pPCA) {
+    if (inherits(pPCA,"pPCA"))
+        return(pPCA@representer)
+    else if (inherits(pPCA,"pPCA_pointer"))
+        return(DrawMean(pPCA))
+    else
+        stop("no object of class pPCA or pPCA_pointer")
+}
+        

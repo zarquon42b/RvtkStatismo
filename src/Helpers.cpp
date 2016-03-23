@@ -19,3 +19,5 @@ std::string getClassname(SEXP x) {
   std::string classname = as<std::string>(classname_);
   return classname;
 }
+
+  

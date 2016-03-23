@@ -169,7 +169,7 @@ getDataLikelihood.matrix <- function(x,model,align=FALSE, lmDataset=NULL, lmMode
     }
     sbres <- sb-mshape
     alpha <- GetProjectionMatrix(model)%*%as.vector(t(sbres))
-    sdl <- length(model@PCA$sdev)
+    sdl <- GetNumberOfPrincipalComponents(model)
     probs <- sum(alpha^2)
     probout <- pchisq(probs,lower.tail = F,df=sdl)
     return(probout)
@@ -200,12 +200,12 @@ getCoefficients <- function(x, model,align=TRUE, lmDataset=NULL, lmModel=NULL) {
 #' @references \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
 #' @export
 getCoordVar <- function(model) {
-    if (!inherits(model,"pPCA"))
-        stop("please provide model of class pPCA")
+    if (!inherits(model,"pPCA") && !inherits(model,"pPCA_pointer"))
+        stop("please provide model of class pPCA or pPCA_pointer")
     W <- GetPCABasisMatrix(model)
-    m <- ncol(model@representer$vb)
+    m <- nrow(GetDomainPoints(model))
     cov0 <- rowSums(W*W)
-    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = F)+model@sigma
+    mat <- matrix(cov0,nrow=(length(cov0)/m),m,byrow = F)+GetNoiseVariance(model)
     cov0 <- apply(mat,2,function(x) x <- sqrt(sum(x)))
     return(cov0)
 }
