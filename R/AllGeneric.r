@@ -9,13 +9,14 @@
 #' @param sample depending on the function a matrix, a numeric vector or a mesh3d (see methods below)
 #' @param pt either an integer pointing to a coordinate or a 3D-vector containing the coordinates of the domain point of interest. For \code{ComputeCoefficientsForPointValues}, this can also specify a matrix of coordinates on the domain.
 #' @param scaled logical: if TRUE, the scores are scaled by their standard deviation.
+#' @param pcaComponent integer > 1: which PC to evaluate
 #' @return
 #' \item{DrawMean}{Get the mean (either a matrix or a mesh3d)}
 #' \item{GetMeanVector}{Get the mean vector}
 #' \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 #' \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
 #' \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
-#' \item{DrawPCABasisSample}{Evaluate the model for a specific PC}
+#' \item{DrawPCABasisSample}{Evaluate the model for a specific PC at a value of 1 sd}
 #' \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
 #' \item{ComputeCoefficientsForDataset}{Computes the coefficients of the latent variables}
 #' \item{ComputeCoefficientsForPointValues}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points}
