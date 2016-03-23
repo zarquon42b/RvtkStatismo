@@ -4,11 +4,17 @@
 \name{statismoReducedVariance}
 \alias{statismoReducedVariance}
 \alias{statismoReducedVariance,pPCA-method}
+\alias{statismoReducedVariance,pPCA_pointer-method}
 \title{Reduce an existing statistical shape model}
 \usage{
-statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE)
+statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE,
+  pointer = FALSE)
 
-\S4method{statismoReducedVariance}{pPCA}(model, exVar = 1, npc = 0)
+\S4method{statismoReducedVariance}{pPCA}(model, exVar = 1, npc = 0,
+  pointer = FALSE)
+
+\S4method{statismoReducedVariance}{pPCA_pointer}(model, exVar = 1, npc = 0,
+  pointer = TRUE)
 }
 \arguments{
 \item{model}{statistical shape model of class 'pPCA'}
@@ -18,6 +24,11 @@ statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE)
 \item{npc}{number of PCs retained in the model (overrides \code{exVar})}
 
 \item{scores}{logical: if TRUE, the scores for the reduced model will be returned.}
+
+\item{pointer}{logical: if TRUE an object of class 'pPCA_pointer' is returned}
+}
+\value{
+returns a reduced model
 }
 \description{
 Reduce an existing statistical shape model either to first n PCs or by explained Variance
