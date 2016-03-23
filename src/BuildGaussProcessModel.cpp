@@ -54,6 +54,8 @@ XPtr<vtkMeshModel> BuildGPModel(XPtr<vtkMeshModel> model, SEXP mykernel_, SEXP n
 	  S4 IsoKernelR(additiveKernels[j]);
 	  vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
 	  tmpKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
+	  if (listsize == 1 && additiveKernels.size() == 1)
+	    numberOfComponents = 1;
 	} else if (classname == "StatisticalModelKernel") {
 	  tmpKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
 	}
