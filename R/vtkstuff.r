@@ -73,11 +73,7 @@ read.vtk <- function(filename) {
         type <- 2
 
     out <- .Call("vtkRead",filename,type)
-    out$vb <- rbind(out$vb,1)
-    if (ncol(out$it) == 0)
-        out$it <- NULL
-    else
-        out$it <- out$it+1
+    
     class(out) <- "mesh3d"
     return(out)
 }

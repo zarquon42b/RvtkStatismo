@@ -14,7 +14,7 @@ vtkTriangulate <- function(file,value=1,IJK2RAS=diag(c(-1,-1,1,1)),dicom=FALSE) 
     file <- path.expand(file)
     out <- .Call("vtkSegment2PolyData",file,value,dicom)
     class(out) <- "mesh3d"
-    out$vb <- rbind(out$vb,1)
+    #out$vb <- rbind(out$vb,1)
     out <- Morpho::applyTransform(out,IJK2RAS)
     return(out)
 }

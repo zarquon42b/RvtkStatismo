@@ -9,7 +9,7 @@
 vtkExtractOutsideMesh <- function(x) {
     bbox <- as.matrix(meshcube(x))
     out <- .Call("vtkExtractOutsideMesh",x,bbox)
-    out$vb <- rbind(out$vb,1)
+    #out$vb <- rbind(out$vb,1)
     return(out)
 }
 
@@ -24,6 +24,6 @@ vtkSurfaceReko <- function(x,sampleSpacing=0) {
     if (is.matrix(x))
         x <- list(vb=t(x))
     out <- .Call("vtkSurfaceReko",x,sampleSpacing)
-    out$vb <- rbind(out$vb,1)
+    #out$vb <- rbind(out$vb,1)
     return(out)
 }

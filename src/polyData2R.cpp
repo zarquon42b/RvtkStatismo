@@ -7,7 +7,8 @@ List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
   
     int np = polydata->GetNumberOfPoints();
     vtkPoints* points=polydata->GetPoints();
-    NumericMatrix vb(3,np);
+    NumericMatrix vb(4,np);
+    std::fill(vb.begin(),vb.end(),1);
     double point[3];
     for (int i=0; i< np;i++) {
       polydata->GetPoints()->GetPoint(i,point);

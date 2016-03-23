@@ -21,6 +21,6 @@ vtkBooleanOp <- function(mesh1 ,mesh2 ,type=0, reorient=TRUE, tol=1e-6) {
     if (nrow(mesh1$it) != 3 || nrow(mesh2$it) != 3 || ncol(mesh1$it) < 1 || ncol(mesh2$it) < 1)
         stop("no meshes without triangular faces allowed")
     out <- .Call("vtkBooleanOp",mesh1,mesh2,type,reorient, tol)
-    out$vb <- rbind(out$vb,1)
+    #out$vb <- rbind(out$vb,1)
     return(out)
 }

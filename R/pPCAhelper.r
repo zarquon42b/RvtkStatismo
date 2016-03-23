@@ -81,10 +81,11 @@ setMethod("representer2sample", signature(model="pPCA_pointer"), function(model)
 })
 
 output2sample <- function(out) {
-    if (inherits(out,"mesh3d"))
-        out$vb <- rbind(out$vb,1)
-    else
-        out <- t(out$vb)
+    if (inherits(out,"mesh3d")) {
+        if (nrow(out$vb) == 3)
+            out$vb <- rbind(out$vb,1)
+    } else
+        out <- t(out$vb[1:3,])
     return(out)
 }
 
