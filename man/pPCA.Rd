@@ -47,7 +47,7 @@ calculate or modify a probablistic PCA based on 3D-coordinates
 \examples{
 require(Morpho)
 data(boneData)
-model <- pPCA(boneLM[,,])
+model <- pPCA(boneLM[,,],align=TRUE)
 ## change parameters without recomputing Procrustes fit
 model1 <- UpdateModel(model, sigma=1, exVar=0.8)
 
