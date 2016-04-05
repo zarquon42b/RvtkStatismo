@@ -39,18 +39,22 @@ SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_, SEX
 	 
       vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
       vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+      PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
       if (ptValueNoise.rows() == 1) {
-	ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+	ptValueList.push_back(tmppair);
       } else if (ptValueNoise.cols() == 1) {
 	float scalarnoise =  ptValueNoise(i,0);
 	if (scalarnoise == 0)
 	  scalarnoise = 1e-6;
 	tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
+	 PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	  ptValueWithCovPair.push_back(covpair);
       } else if (ptValueNoise.cols() == 3) {
 	tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
 	if (tmpcov.isZero())
 	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
-	
+	PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	  ptValueWithCovPair.push_back(covpair);
       } else {
 	::Rf_error("noise must be vector or 3 column matrix\n");
       }
@@ -92,21 +96,25 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
       
       vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
       vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+      PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
       double mahaget = mahadist(model.get(),tmp0,tmp1);
       if (mahaget <= maha) {
 	  
 	if (ptValueNoise.rows() == 1) {
-	  ptValueList.push_back(PointValuePairType(tmp1,tmp0));
+	  ptValueList.push_back(tmppair);
 	} else if (ptValueNoise.cols() == 1) {
 	  float scalarnoise =  ptValueNoise(i,0);
 	  if (scalarnoise == 0)
 	    scalarnoise = 1e-6;
 	  tmpcov = Eigen::MatrixXf::Identity(3, 3) * scalarnoise;
+	  PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	  ptValueWithCovPair.push_back(covpair);
 	} else if (ptValueNoise.cols() == 3) {
 	  tmpcov = ptValueNoise.block<3,3>(i*3,0).cast<float>();
 	  if (tmpcov.isZero())
 	    tmpcov = Eigen::MatrixXf::Identity(3, 3) * 1e-6;
-	
+	  PointValueWithCovariancePairType covpair = PointValueWithCovariancePairType(tmppair,tmpcov);
+	  ptValueWithCovPair.push_back(covpair);
 	} else {
 	  ::Rf_error("noise must be vector or 3 column matrix\n");
 	}
