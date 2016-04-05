@@ -5,6 +5,7 @@
 \title{create Isosurface from image}
 \usage{
 vtkTriangulate(file, value = 1, IJK2RAS = diag(c(-1, -1, 1, 1)),
+  thresholding = FALSE, lower = 1, upper = 5000, kernel = c(0, 0, 0),
   dicom = FALSE)
 }
 \arguments{
@@ -14,7 +15,15 @@ vtkTriangulate(file, value = 1, IJK2RAS = diag(c(-1, -1, 1, 1)),
 
 \item{IJK2RAS}{4x4 IJK2RAS transform}
 
-\item{dicom}{logical: if TRUE, \code{file} points to a directory containing a set of DICOM files belonging to a single series. See notes.}
+\item{thresholding}{if TRUE, a thresholding and optional morphological operations are performed prior to surface generation}
+
+\item{lower}{lower threshold value (only used if \code{thresholding=TRUE})}
+
+\item{upper}{upper threshold value (only used if \code{thresholding=TRUE})}
+
+\item{kernel}{a 3 dimensional array defining a morphological opening and closing for x, y ans z axis (only used if \code{thresholding=TRUE})}
+
+\item{dicom}{logical: if TRUE, \code{file} points to a directory containing a set of DICOM files belonging to a single series. See notes}
 }
 \value{
 returns a triangular mesh of class mesh3d
