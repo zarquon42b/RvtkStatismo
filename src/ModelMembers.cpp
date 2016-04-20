@@ -108,7 +108,7 @@ SEXP LoadModel(SEXP modelname_, SEXP pointer_){
   }
 }
 
-SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
+SEXP ComputeLogProbability(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
   try {
     bool getlog = as<bool>(getlog_);
     List dataset(dataset_);
@@ -116,9 +116,9 @@ SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     if (getlog)
-      prob = model->ComputeLogProbabilityOfDataset(datasetRef);
+      prob = model->ComputeLogProbability(datasetRef);
     else
-      prob = model->ComputeProbabilityOfDataset(datasetRef);
+      prob = model->ComputeProbability(datasetRef);
     //return List::create(Named
     return wrap(prob);
   } catch (std::exception& e) {
@@ -128,13 +128,13 @@ SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
   }
 
 }
-SEXP ComputeMahalanobisDistanceForDataset(SEXP pPCA_, SEXP dataset_) {
+SEXP ComputeMahalanobisDistance(SEXP pPCA_, SEXP dataset_) {
   try {
     List dataset(dataset_);
     double mahadist;
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    mahadist = model->ComputeMahalanobisDistanceForDataset(datasetRef);
+    mahadist = model->ComputeMahalanobisDistance(datasetRef);
     //return List::create(Named
     return wrap(mahadist);
   } catch (std::exception& e) {
@@ -146,13 +146,13 @@ SEXP ComputeMahalanobisDistanceForDataset(SEXP pPCA_, SEXP dataset_) {
 }
 
 
-SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
+SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_){
   try {
     List dataset(dataset_);
     double prob;
     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    Eigen::VectorXf out = model->ComputeCoefficientsForDataset(datasetRef);	
+    Eigen::VectorXf out = model->ComputeCoefficients(datasetRef);	
     //return List::create(Named
     return wrap(out);
   } catch (std::exception& e) {
@@ -162,25 +162,26 @@ SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_){
   }
 
 }
-SEXP RobustlyComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_) {
-  try {
-    List dataset(dataset_);
-    double sigma2 = as<double>(sigma2_);
-    unsigned int niterations = as<unsigned int>(niterations_);
-    unsigned int nu = as<unsigned int>(nu_);
+
+// SEXP RobustlyComputeCoefficients(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_) {
+//   try {
+//     List dataset(dataset_);
+//     double sigma2 = as<double>(sigma2_);
+//     unsigned int niterations = as<unsigned int>(niterations_);
+//     unsigned int nu = as<unsigned int>(nu_);
     
-    const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
-    XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
-    Eigen::VectorXf out = model->RobustlyComputeCoefficientsForDataset(datasetRef,niterations,nu,sigma2);
-    //return List::create(Named
-    return wrap(out);
-  } catch (std::exception& e) {
-    ::Rf_error( e.what());
-  } catch (...) {
-    ::Rf_error("unknown exception");
-  }
+//     const vtkSmartPointer<vtkPolyData> datasetRef = R2polyData(dataset["vb"],dataset["it"]);
+//     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+//     Eigen::VectorXf out = model->RobustlyComputeCoefficients(datasetRef,niterations,nu,sigma2);
+//     //return List::create(Named
+//     return wrap(out);
+//   } catch (std::exception& e) {
+//     ::Rf_error( e.what());
+//   } catch (...) {
+//     ::Rf_error("unknown exception");
+//   }
 
-}
+// }
 
 typedef std::vector<vtkPoint> DomainPointsListType;
 SEXP GetDomainPoints(SEXP pPCA_) {

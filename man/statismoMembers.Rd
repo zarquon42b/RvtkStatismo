@@ -2,9 +2,9 @@
 % Please edit documentation in R/AllGeneric.r, R/ModelMembers.r, R/ModelMembersPointer.r
 \docType{methods}
 \name{StatismoModelMembers}
-\alias{ComputeCoefficientsForDataset}
-\alias{ComputeCoefficientsForDataset,pPCA-method}
-\alias{ComputeCoefficientsForDataset,pPCA_pointer-method}
+\alias{ComputeCoefficients}
+\alias{ComputeCoefficients,pPCA-method}
+\alias{ComputeCoefficients,pPCA_pointer-method}
 \alias{ComputeCoefficientsForPointValues}
 \alias{ComputeCoefficientsForPointValues,pPCA,matrix,matrix,numeric-method}
 \alias{ComputeCoefficientsForPointValues,pPCA,matrix,numeric,numeric-method}
@@ -68,7 +68,7 @@ DrawSampleVector(model, coefficients, addNoise = FALSE)
 
 DrawSampleAtPoint(model, coefficients, pt, addNoise = FALSE)
 
-ComputeCoefficientsForDataset(model, dataset)
+ComputeCoefficients(model, dataset)
 
 ComputeCoefficientsForPointValues(model, sample, pt, ptNoise = 0)
 
@@ -96,7 +96,7 @@ GetPCScores(model, scaled = TRUE)
 \S4method{DrawSampleAtPoint}{pPCA,numeric,numeric}(model, coefficients, pt,
   addNoise = FALSE)
 
-\S4method{ComputeCoefficientsForDataset}{pPCA}(model, dataset)
+\S4method{ComputeCoefficients}{pPCA}(model, dataset)
 
 \S4method{GetDomainPoints}{pPCA}(model)
 
@@ -158,7 +158,7 @@ GetPCScores(model, scaled = TRUE)
 \S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model, coefficients,
   pt, addNoise = FALSE)
 
-\S4method{ComputeCoefficientsForDataset}{pPCA_pointer}(model, dataset)
+\S4method{ComputeCoefficients}{pPCA_pointer}(model, dataset)
 
 \S4method{GetDomainPoints}{pPCA_pointer}(model)
 
@@ -228,7 +228,7 @@ GetPCScores(model, scaled = TRUE)
 \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
 \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
-\item{ComputeCoefficientsForDataset}{Computes the coefficients of the latent variables}
+\item{ComputeCoefficients}{Computes the coefficients of the latent variables}
 \item{ComputeCoefficientsForPointValues}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points}
  \item{ComputeCoefficientsForPointValuesWithCovariance}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points. In contrast to \code{ComputeCoefficientsForPointValues}, \code{ptNoise} can be set individually, either as vector of length \code{k} (assuming spherical noise) or a \eqn{(k*3) \times 3}{(k*3) x 3} matrix with the i-th \eqn{3 \times 3}{3x3} block containing the covariance matrix for the i-th coordinate.}
 \item{GetDomainPoints}{a matrix containing the points of the model's domain}

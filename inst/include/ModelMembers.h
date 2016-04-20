@@ -22,15 +22,15 @@ RcppExport SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP a
 
 RcppExport SEXP LoadModel(SEXP modelname_, SEXP pointer_);
 
-RcppExport SEXP ComputeLogProbabilityOfDataset(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
+RcppExport SEXP ComputeLogProbability(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
 
-RcppExport SEXP ComputeMahalanobisDistanceForDataset(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeMahalanobisDistance(SEXP pPCA_, SEXP dataset_);
 
-RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_);
 
-RcppExport SEXP ComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_);
 
-RcppExport SEXP RobustlyComputeCoefficientsForDataset(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_);
+// RcppExport SEXP RobustlyComputeCoefficients(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_);
 
 RcppExport SEXP GetDomainPoints(SEXP pPCA_);
 

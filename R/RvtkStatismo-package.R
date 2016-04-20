@@ -23,3 +23,31 @@
 #' @useDynLib libRvtkStatismo
 NULL
 
+#' document deprecated functions
+#'
+#' @title deprecated functions of Morpho
+#' @name deprecated
+#' @rdname RvtkStatismo-deprecated
+#' @keywords internal
+NULL
+
+#' @rdname RvtkStatismo-deprecated
+#' @export
+ComputeCoefficientsForDataset <- function(...) {
+    .Deprecated("ComputeCoefficients",package="RvtkStatismo")
+    ComputeCoefficients(...)
+}
+
+#' @rdname RvtkStatismo-deprecated
+#' @export
+ComputeLogProbabilityOfDataset <- function(...) {
+    .Deprecated("ComputeLogProbability",package="RvtkStatismo")
+    ComputeLogProbability(...)
+}
+
+#' @rdname RvtkStatismo-deprecated
+#' @export
+ComputeMahalanobisDistanceForDataset <- function(...) {
+    .Deprecated("ComputeMahalanobisDistance",package="RvtkStatismo")
+    ComputeMahalanobisDistance(...)
+}

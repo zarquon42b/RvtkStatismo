@@ -2,15 +2,15 @@
 % Please edit documentation in R/AllGeneric.r, R/ModelMembers.r, R/ModelMembersPointer.r
 \docType{methods}
 \name{StatismoSample}
+\alias{ComputeLogProbability}
+\alias{ComputeLogProbability,pPCA-method}
+\alias{ComputeLogProbability,pPCA_pointer-method}
 \alias{ComputeLogProbabilityOfCoefficients}
 \alias{ComputeLogProbabilityOfCoefficients,pPCA-method}
 \alias{ComputeLogProbabilityOfCoefficients,pPCA_pointer-method}
-\alias{ComputeLogProbabilityOfDataset}
-\alias{ComputeLogProbabilityOfDataset,pPCA-method}
-\alias{ComputeLogProbabilityOfDataset,pPCA_pointer-method}
-\alias{ComputeMahalanobisDistanceForDataset}
-\alias{ComputeMahalanobisDistanceForDataset,pPCA-method}
-\alias{ComputeMahalanobisDistanceForDataset,pPCA_pointer-method}
+\alias{ComputeMahalanobisDistance}
+\alias{ComputeMahalanobisDistance,pPCA-method}
+\alias{ComputeMahalanobisDistance,pPCA_pointer-method}
 \alias{ComputeProbabilityOfCoefficients}
 \alias{ComputeProbabilityOfCoefficients,pPCA-method}
 \alias{ComputeProbabilityOfCoefficients,pPCA_pointer-method}
@@ -20,7 +20,7 @@
 \alias{StatismoSample}
 \title{Retrieve information about a sample from the model}
 \usage{
-ComputeLogProbabilityOfDataset(model, dataset)
+ComputeLogProbability(model, dataset)
 
 ComputeProbabilityOfDataset(model, dataset)
 
@@ -28,9 +28,9 @@ ComputeProbabilityOfCoefficients(model, coefficients)
 
 ComputeLogProbabilityOfCoefficients(model, coefficients)
 
-ComputeMahalanobisDistanceForDataset(model, dataset)
+ComputeMahalanobisDistance(model, dataset)
 
-\S4method{ComputeLogProbabilityOfDataset}{pPCA}(model, dataset)
+\S4method{ComputeLogProbability}{pPCA}(model, dataset)
 
 \S4method{ComputeProbabilityOfCoefficients}{pPCA}(model, coefficients)
 
@@ -38,9 +38,9 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA}(model, dataset)
 
-\S4method{ComputeMahalanobisDistanceForDataset}{pPCA}(model, dataset)
+\S4method{ComputeMahalanobisDistance}{pPCA}(model, dataset)
 
-\S4method{ComputeLogProbabilityOfDataset}{pPCA_pointer}(model, dataset)
+\S4method{ComputeLogProbability}{pPCA_pointer}(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA_pointer}(model, dataset)
 
@@ -49,7 +49,7 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 \S4method{ComputeLogProbabilityOfCoefficients}{pPCA_pointer}(model,
   coefficients)
 
-\S4method{ComputeMahalanobisDistanceForDataset}{pPCA_pointer}(model, dataset)
+\S4method{ComputeMahalanobisDistance}{pPCA_pointer}(model, dataset)
 }
 \arguments{
 \item{model}{model of class "pPCA"}
@@ -59,7 +59,7 @@ ComputeMahalanobisDistanceForDataset(model, dataset)
 \item{coefficients}{vector of coefficients}
 }
 \value{
-\item{ComputeLogProbabilityOfDataset}{returns the log-probability density for the sample}
+\item{ComputeLogProbability}{returns the log-probability density for the sample}
 \item{ComputeProbabilityOfDataset}{returns the probability density for the sample}
 \item{ComputeProbabilityOfCoefficients}{returns the probability density for the coefficients}
 \item{ComputeLogProbabilityOfCoefficients}{returns the log-probability density for the coefficients}
