@@ -2,7 +2,7 @@
 #include <string.h>
 #include <RcppEigen.h>
 #include "pPCA2statismo.h"
-
+#include "StatismoIO.h"
 using namespace Rcpp;
 
 RcppExport SEXP SaveModel(SEXP pPCA_, SEXP filename_) {
@@ -11,7 +11,7 @@ RcppExport SEXP SaveModel(SEXP pPCA_, SEXP filename_) {
     const char *filename = str.c_str();
     
     XPtr<vtkMeshModel>model = pPCA2statismo(pPCA_);
-    model->Save(filename);
+    statismo::IO<vtkPolyData>::Save(model,filename);
     return wrap(1);
   } catch (std::exception& e) {
     ::Rf_error( e.what());

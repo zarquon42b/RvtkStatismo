@@ -98,7 +98,7 @@ SEXP LoadModel(SEXP modelname_, SEXP pointer_){
     XPtr<vtkStandardMeshRepresenter> representer(vtkStandardMeshRepresenter::Create());
     std::string modelFilename = as<std::string>(modelname);
   
-    XPtr<vtkMeshModel> model(vtkMeshModel::Load(representer.get(), modelFilename));
+    XPtr<vtkMeshModel> model(IO<vtkPolyData>::Load(representer.get(), modelFilename));
     return statismo2pPCA(model,pointer);
     
   } catch (std::exception& e) {
