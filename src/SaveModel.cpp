@@ -11,7 +11,7 @@ RcppExport SEXP SaveModel(SEXP pPCA_, SEXP filename_) {
     const char *filename = str.c_str();
     
     XPtr<vtkMeshModel>model = pPCA2statismo(pPCA_);
-    statismo::IO<vtkPolyData>::Save(model,filename);
+    statismo::IO<vtkPolyData>::SaveStatisticalModel(model,filename);
     return wrap(1);
   } catch (std::exception& e) {
     ::Rf_error( e.what());
