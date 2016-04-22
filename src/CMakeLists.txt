@@ -93,3 +93,4 @@ if(APPLE)
   set_property(TARGET RvtkStatismo PROPERTY SUFFIX "")
 endif()
 
+SET_TARGET_PROPERTIES(RvtkStatismo PROPERTIES PREFIX "")

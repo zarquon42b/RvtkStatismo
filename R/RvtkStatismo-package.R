@@ -20,7 +20,7 @@
 #' @references To be announced
 #' @keywords package
 #' @importFrom Rcpp evalCpp 
-#' @useDynLib libRvtkStatismo
+#' @useDynLib RvtkStatismo
 NULL
 
 #' document deprecated functions
