@@ -1,13 +1,13 @@
 #! /bin/sh
 # obtain and export Rs environment variables
 export R_HOME
-CXX=$(R CMD config CXX)
+CXX=$($R_HOME/bin/R CMD config CXX)
 #CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
-CXXFLAGS="$(R CMD config CXX1XFLAGS)"
+CXXFLAGS=$($R_HOME/bin/R CMD config CXX1XFLAGS)
 # $(R CMD config DYLIB_LDFLAGS)"
-CPPFLAGS=$(R CMD config CPPFLAGS)
-BLAS_LIBS=$(R CMD config BLAS_LIBS)
-LAPACK_LIBS=$(R CMD config LAPACK_LIBS)
+CPPFLAGS=$($R_HOME/bin/R CMD config CPPFLAGS)
+BLAS_LIBS=$($R_HOME/bin/R CMD config BLAS_LIBS)
+LAPACK_LIBS=$($R_HOME/bin/R CMD config LAPACK_LIBS)
 export CXX
 export CXXFLAGS
 export CPPFLAGS
@@ -20,8 +20,8 @@ SHLIB_OPENMP_CXXFLAGS=$(grep 'SHLIB_OPENMP_CXXFLAGS' $MAKECONFFILE | sed 's/^.*=
 
 export SHLIB_OPENMP_CXXFLAGS
 
-RCPP_DIR=$(Rscript -e "cat(system.file(package='Rcpp'))")
-RCPPEIGEN_DIR=$(Rscript -e "cat(system.file(package='RcppEigen'))")
+RCPP_DIR=$($R_HOME/bin/Rscript -e "cat(system.file(package='Rcpp'))")
+RCPPEIGEN_DIR=$($R_HOME/bin/Rscript -e "cat(system.file(package='RcppEigen'))")
 export RCPP_DIR
 export RCPPEIGEN_DIR
 cd src
