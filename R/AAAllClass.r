@@ -63,15 +63,14 @@ setValidity("modelinfo", .modelinfo.valid)
 #' \item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
 #' \item{sigma}{the noise estimation of the data}
 #' \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
-#' \item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 #' }
 #' @import methods
 #' @name pPCA-class
 #' @rdname pPCA-class
 #' @export
 setClass("pPCA",
-         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric",modelinfo="modelinfo"),
-         prototype = list(PCA=list(sdev=0,rotation=as.matrix(0),x=matrix(0,0,0),center=0),scale=FALSE,representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),modelinfo=new("modelinfo")
+         slots= c(PCA="list",scale="logical",representer="representer",sigma="numeric",modelinfo="modelinfo"),
+         prototype = list(PCA=list(sdev=0,rotation=as.matrix(0),x=matrix(0,0,0),center=0),scale=FALSE,representer=list(),sigma=numeric(0),modelinfo=new("modelinfo")
              )
          )
 
@@ -93,3 +92,106 @@ setClass("pPCA",
 setValidity("pPCA", .pPCA.valid)
 
 
+#' Documentation of kernel classes
+#'
+#' Documentation of kernel classes
+#'
+#' 
+#' Blow are all S4 kernel classes and their containing slots, where the parameters are stored, that later used when passed to statismo. All kernel-classes have a common slot:
+#' \itemize{
+#'  \item{\code{kerneltype} - character: containing kernel specifics}
+#' }
+#' 
+#' Available kernels are:
+#' MultiscaleBSplineKernel-class
+#' \itemize{
+#'  \item{\code{support} - numeric: the BSpline support}
+#'  \item{\code{scale} - numeric: scale factor}
+#'  \item{\code{levels} - integer: Number of levels}
+#' }
+#' 
+#' BSplineKernel-class:
+#' \itemize{
+#'  \item{\code{support} - numeric: the BSpline support}
+#' }
+#' 
+#' GaussianKernel-class
+#' \itemize{
+#'  \item{\code{sigma} - numeric: kernel bandwidth}
+#'  \item{\code{scale} - numeric: scale factor}
+#' }
+#' 
+#' IsoKernel-class
+#' \itemize{
+#'  \item{\code{centroid} - vector: centroid around which to be scaled}
+#'  \item{\code{scale} - numeric: scale factor}
+#' }
+#' 
+#' CombinedKernel-class
+#' \itemize{
+#'  \item{\code{kernel} - list(s) containing the kernel above}
+#' }
+#' @name kernel-classes
+#' @rdname kernel-classes
+NULL
+
+#' @rdname kernel-classes
+#' @export
+setClass("MultiscaleBSplineKernel",slots=c(support="numeric",scale="numeric",levels="integer", kerneltype="character"))
+
+#' @rdname kernel-classes
+#' @export
+setClass("BSplineKernel",slots=c(support="numeric",scale="numeric",kerneltype="character"))
+
+#' @rdname kernel-classes
+#' @export
+setClass("GaussianKernel",slots=c(sigma="numeric",scale="numeric",kerneltype="character"))
+
+
+#' @rdname kernel-classes
+#' @export
+setClass("IsoKernel",slots=c(centroid="numeric",scale="numeric",kerneltype="character"))
+
+
+#' @rdname kernel-classes
+#' @export
+setClass("StatisticalModelKernel",slots=c(kerneltype="character"))
+
+
+
+#' @rdname kernel-classes
+#' @export
+setClass("CombinedKernel",slots=c(kernels="list",kerneltype="character"))
+.CombinedKernel.valid <- function(object) {
+    validkernels <-  getValidKernels(FALSE)
+    kernels <- object@kernels
+    kernclass <- sapply(kernels,class)
+    if (length(grep("list",kernclass)) != length(kernclass))
+        return("slot kernel must only contain lists")
+    kerncheck <- unlist(lapply(kernels,function(x) lapply(x,class)))
+    if (prod(kerncheck %in% validkernels) == 0)
+        stop("each list in slot kernel must only contain valid kernels")
+    else
+        return(TRUE)
+}
+setValidity("CombinedKernel", .CombinedKernel.valid)
+
+containsStatisticalModelKernel <- function(x) {
+    if (!inherits(x,"CombinedKernel")) {
+        if (inherits(x,"StatisticalModelKernel"))
+            return(TRUE)
+    } else {
+        kernels <- x@kernels
+        kerncheck <- unlist(lapply(kernels,function(x) lapply(x,class)))
+        if ("StatisticalModelKernel" %in% kerncheck)
+            return(TRUE)
+    }
+    return(FALSE)
+}
+
+getValidKernels <- function(combined=TRUE) {
+    validkernels <- c("BSplineKernel","GaussianKernel","IsoKernel","StatisticalModelKernel","MultiscaleBSplineKernel")
+    if (combined)
+        validkernels <- c(validkernels,"CombinedKernel")
+    return(validkernels)
+}

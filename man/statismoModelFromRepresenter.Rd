@@ -4,24 +4,17 @@
 \alias{statismoModelFromRepresenter}
 \title{generate model from a representer using gaussian kernels}
 \usage{
-statismoModelFromRepresenter(representer, kernel = list(c(100, 70)),
-  ncomp = 10, nystroem = 500, combine = "sum", isoScale = 0,
-  centroid = NULL)
+statismoModelFromRepresenter(representer, kernel = GaussianKernel(100, 50),
+  ncomp = 10, nystroem = 500)
 }
 \arguments{
 \item{representer}{mesh3d or matrix used as representer}
 
-\item{kernel}{a list containing numeric vectors of length 2. Except the first entry of this list may be of length 2 and is then interpreted as Multiscale Bspline kernel. For a Gaussian Kernel, the first entry specifies the bandwidth and the second the scaling. For a Multiscale kernel, the additional 3rd entry sets the number of levels.}
+\item{kernel}{an object of class matrixKernel}
 
 \item{ncomp}{integer: number of PCs to approximate}
 
 \item{nystroem}{number of samples to compute Nystroem approximation of eigenvectors}
-
-\item{combine}{character determining how to combine the kernels: "sum" or "product" are supported.}
-
-\item{isoScale}{standard deviation of isotropic scaling.}
-
-\item{centroid}{specify the center of scaling. If NULL, the centroid will be used.}
 }
 \value{
 returns a shape model of class \code{\link{pPCA}}
@@ -32,7 +25,10 @@ generate model from a representer using gaussian kernels
 \examples{
 require(Rvcg)
 data(humface)
-hummodel <- statismoModelFromRepresenter(humface)
+kernel1 <- GaussianKernel(80,50)
+kernel2 <- GaussianKernel(20,20)
+combinedKernel <- SumKernels(kernel1,kernel2)
+hummodel <- statismoModelFromRepresenter(humface,combinedKernel)
 \dontrun{
 require(rgl)
 for (i in 1:5) wire3d(DrawSample(hummodel),col=i)

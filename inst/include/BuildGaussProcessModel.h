@@ -22,7 +22,7 @@ public:
   inline double operator()(const vtkPoint& x, const vtkPoint& y) const {
     VectorType r(3);
     r << x[0] - y[0], x[1] - y[1], x[2] - y[2];
-    return exp(-r.dot(r) / m_sigma2);
+    return exp(-r.dot(r) / (2 * m_sigma2));
   }
 
   std::string GetKernelInfo() const {
@@ -72,22 +72,67 @@ private:
   
 };
 
+class NeutralSumKernel: public MatrixValuedKernel<vtkPoint> {
+public:
+  
+  NeutralSumKernel() :
+    MatrixValuedKernel<vtkPoint>(3) {}
+  
+  
+  inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
+    MatrixType covar = MatrixType::Zero(3,3);
+    return covar;
+  }
+
+  std::string GetKernelInfo() const {
+    std::ostringstream os;
+    os << "NeutralSumKernel";
+    return os.str();
+  }
 
 
-vtkPoint vtkPointScale(vtkPoint x,double scale) {
+  
+  
+};
+
+class NeutralProductKernel: public MatrixValuedKernel<vtkPoint> {
+public:
+  
+  NeutralProductKernel() :
+    MatrixValuedKernel<vtkPoint>(3) {}
+  
+  
+  inline MatrixType operator()(const vtkPoint& x, const vtkPoint& y) const {
+    MatrixType covar = MatrixType::Identity(3,3);
+    return covar;
+  }
+
+  std::string GetKernelInfo() const {
+    std::ostringstream os;
+    os << "NeutralProductKernel";
+    return os.str();
+  }
+
+
+  
+  
+};
+
+
+inline vtkPoint vtkPointScale(vtkPoint x,double scale) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]*scale;
   }
   return x;
 }
 
-vtkPoint vtkPointSum(vtkPoint x,vtkPoint y) {
+inline vtkPoint vtkPointSum(vtkPoint x,vtkPoint y) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]+y[i];
   }
   return x;
 }
-vtkPoint vtkPointDif(vtkPoint x,vtkPoint y) {
+inline vtkPoint vtkPointDif(vtkPoint x,vtkPoint y) {
   for (unsigned int i=0; i < 3; i++) {
     x[i] = x[i]-y[i];
   }
@@ -228,7 +273,7 @@ typedef GaussianKernel GaussianKernelType;
 typedef MatrixValuedKernel<vtkPoint> MatrixValuedKernelType;
 typedef LowRankGPModelBuilder<vtkPolyData> ModelBuilderType;
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_ , SEXP isoScale_, SEXP centroid_);
+shared_ptr<vtkMeshModel> BuildGPModel(shared_ptr<vtkMeshModel> model, SEXP mykernel_, SEXP ncomp_,SEXP nystroem_);
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_, SEXP useEmp_, SEXP combine_, SEXP combineEmp_,SEXP isoScale_, SEXP centroid_);
+RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_);
 #endif //_BUILD_GP_MODEL_H__

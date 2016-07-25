@@ -1,111 +1,109 @@
 #include "BuildGaussProcessModel.h"
 #include "Helpers.h"
 
-shared_ptr<vtkMeshModel> BuildGPModel(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_,SEXP combineEmp_, SEXP isoScale_, SEXP centroid_) {
-  try { 
-    bool useEmp = as<bool>(useEmp_);
-    int combine = as<int>(combine_);
-    int combineEmp = as<int>(combineEmp_);
-    double isoScale = as<double>(isoScale_);
+shared_ptr<vtkMeshModel> BuildGPModel(shared_ptr<vtkMeshModel> model, SEXP mykernel_, SEXP ncomp_,SEXP nystroem_) {
+  try {
     unsigned int nystroem = as<unsigned int>(nystroem_);
     unsigned int numberOfComponents = as<unsigned int>(ncomp_);
+    //setup lists for keeping track of allocated pointers
     std::list<MatrixValuedKernelType*> mKerns;
-    std::list<GaussianKernel*> gKerns;
-    std::list<MultiscaleKernel*> bsKerns;
-    vtkPoint centroid = SEXP2vtkPoint(centroid_);
-    List kernels(kernels_);
-  
-    shared_ptr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    std::list<ScalarValuedKernel<vtkPoint>*> gKerns;
+
+    std::string classname = getClassname(mykernel_);
+    if (classname != "CombinedKernel")
+      ::Rf_error("pleas provid a valid kernel");
     MatrixValuedKernelType* mvKernel;
-    // set up the gaussian kernel to be incremented over a list of parameters
-    NumericVector params = kernels[0];
-    //if params[0] == 0 Gaussian Kernel
-    //else Multiscale kernel
-    if (params.size() == 2) {
-      GaussianKernel* gk = new GaussianKernel(params[0]);
-      gKerns.push_back(gk);
-      mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
-      
-    } else {
-      MultiscaleKernel* gk1 = new MultiscaleKernel(params[0],params[2]);
-      bsKerns.push_back(gk1);
-      mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk1, model->GetRepresenter()->GetDimensions());
-      
+    // create a multiplicative neutral matrixkernel
+    MatrixValuedKernelType* productKernel = new NeutralProductKernel();
+    
+    MatrixValuedKernelType* tmpKernel;
+    S4 CombinedKernelR(mykernel_);
+    List kernellist(CombinedKernelR.slot("kernels"));
+    int listsize = kernellist.size();
+    List additiveKernels;
+    // create an additive neutral matrixkernel
+    MatrixValuedKernelType* addKernel = new NeutralSumKernel();
+    // iterate over a list containing lists of kernels
+    for (unsigned int i = 0; i < listsize;i++) {
+      MatrixValuedKernelType* addKernel = new NeutralSumKernel();
+      additiveKernels = kernellist[i];
+      for (unsigned int j = 0; j < additiveKernels.size();j++){
+	classname = getClassname(additiveKernels[j]);
+	if (classname == "GaussianKernel") {
+	  S4 GaussianKernelR(additiveKernels[j]);
+	  GaussianKernel* gk = new GaussianKernel(as<double>(GaussianKernelR.slot("sigma")));
+	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+	  tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(GaussianKernelR.slot("scale")));
+	  gKerns.push_back(gk);
+	  mKerns.push_back(mvKernel);
+	} else if (classname == "BSplineKernel") {
+	  S4 BSplineKernelR(additiveKernels[j]);
+	  BSplineKernel* gk = new BSplineKernel(as<double>(BSplineKernelR.slot("support")));
+	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+	  tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(BSplineKernelR.slot("scale")));
+	  gKerns.push_back(gk);
+	  mKerns.push_back(mvKernel);
+	} else if (classname == "MultiscaleBSplineKernel") {
+	  S4 MultiscaleBSplineKernelR(additiveKernels[j]);
+	  MultiscaleKernel* gk = new MultiscaleKernel(as<double>(MultiscaleBSplineKernelR.slot("support")),as<int>(MultiscaleBSplineKernelR.slot("levels")));
+	  mvKernel = new UncorrelatedMatrixValuedKernel<vtkPoint>(gk, model->GetRepresenter()->GetDimensions());
+	  tmpKernel = new ScaledKernel<vtkPoint>(mvKernel,as<double>(MultiscaleBSplineKernelR.slot("scale")));
+	  gKerns.push_back(gk);
+	  mKerns.push_back(mvKernel);
+	} else if (classname == "IsoKernel") {
+	  S4 IsoKernelR(additiveKernels[j]);
+	  vtkPoint centroid = SEXP2vtkPoint(IsoKernelR.slot("centroid"));
+	  tmpKernel = new IsoKernel(3,as<double>(IsoKernelR.slot("scale")), centroid);
+	  if (listsize == 1 && additiveKernels.size() == 1)
+	    numberOfComponents = 1;
+	} else if (classname == "StatisticalModelKernel") {
+	  tmpKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
+	}
+	addKernel = new SumKernel<vtkPoint>(addKernel, tmpKernel);
+      }
+      productKernel = new ProductKernel<vtkPoint>(productKernel,addKernel);
+      mKerns.push_back(addKernel);
+      mKerns.push_back(tmpKernel);
     }
-      MatrixValuedKernelType* sumKernel = new ScaledKernel<vtkPoint>(mvKernel, params[1]);
-    //iterate over the remaining kernel parameters
-    for (unsigned int i = 1; i < kernels.size();i++) {
-      params = kernels[i];
-      GaussianKernel* gkNew = new GaussianKernel(params[0]);
-      MatrixValuedKernelType* mvGk = new UncorrelatedMatrixValuedKernel<vtkPoint>(gkNew, model->GetRepresenter()->GetDimensions());
-      MatrixValuedKernelType* scaledGk = new ScaledKernel<vtkPoint>(mvGk, params[1]);
-      //keep track of allocated objects
-      gKerns.push_back(gkNew);
-      mKerns.push_back(mvGk);
-      mKerns.push_back(scaledGk);
-      if (combine == 0)
-	sumKernel = new SumKernel<vtkPoint>(sumKernel, scaledGk);
-      else
-	sumKernel = new ProductKernel<vtkPoint>(sumKernel, scaledGk);
-    }
-    if (useEmp) {
-      // get the empiric kernel
-      MatrixValuedKernelType* statModelKernel = new StatisticalModelKernel<vtkPolyData>(model.get());
-      mKerns.push_back(statModelKernel);
-      // add the empiric kernel on top
-      if (combineEmp == 0)
-	sumKernel = new SumKernel<vtkPoint>(sumKernel, statModelKernel);
-      else
-	sumKernel = new ProductKernel<vtkPoint>(sumKernel, statModelKernel);
-    }
-    if (isoScale > 0) {
-      MatrixValuedKernelType* isoKernel = new IsoKernel(3,isoScale,centroid);
-      mKerns.push_back(isoKernel);
-      sumKernel = new SumKernel<vtkPoint>(sumKernel, isoKernel);
-    }
-    mKerns.push_back(sumKernel);
-    //build new model
+    
+    mKerns.push_back(productKernel);
+    // build the model
     shared_ptr<ModelBuilderType> modelBuilder(ModelBuilderType::Create(model->GetRepresenter()));
-    shared_ptr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *sumKernel, numberOfComponents,nystroem));
-    //tidy up
+    shared_ptr<vtkMeshModel> combinedModel(modelBuilder->BuildNewModel(model->DrawMean(), *productKernel, numberOfComponents,nystroem));    
+    // house cleaning
+    for (std::list<ScalarValuedKernel<vtkPoint>*>::iterator it = gKerns.begin(); it != gKerns.end(); it++) {
+      if (*it != NULL) {
+	delete *it;
+      }
+    }
     for (std::list<MatrixValuedKernelType*>::iterator it = mKerns.begin(); it != mKerns.end(); it++) {
       if (*it != NULL) {
 	delete *it;
       }
     }
-    for (std::list<GaussianKernel*>::iterator it = gKerns.begin(); it != gKerns.end(); it++) {
-      if (*it != NULL) {
-	delete *it;
-      }
-    }
-    for (std::list<MultiscaleKernel*>::iterator it = bsKerns.begin(); it != bsKerns.end(); it++) {
-      if (*it != NULL) {
-	delete *it;
-      }
-    }
+    // end house cleaning
+    
     return combinedModel;
   
   } catch (StatisticalModelException& e) {
     ::Rf_error("Exception occured while building the shape model\n");
     ::Rf_error("%s\n",  e.what());
-    //shared_ptr<vtkMeshModel> model(NULL);
-    //return model;
   } catch (std::exception& e) {
     ::Rf_error( e.what());
-    //shared_ptr<vtkMeshModel> model(NULL);    
-    //return model;
   } catch (...) {
     ::Rf_error("unknown exception");
-    //shared_ptr<vtkMeshModel> model(NULL);
-    //return model;
   }
 }
 
-RcppExport SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_,SEXP useEmp_, SEXP combine_, SEXP combineEmp_,SEXP isoScale_,SEXP centroid_){
-  
-  shared_ptr<vtkMeshModel> model = BuildGPModel(pPCA_,kernels_,ncomp_,nystroem_,useEmp_,combine_,combineEmp_,isoScale_,centroid_);
-  //return statismo2pPCA(model);
-  return statismo2pPCA(model);
-  
+SEXP BuildGPModelExport(SEXP pPCA_,SEXP kernels_, SEXP ncomp_,SEXP nystroem_) {
+  try {
+    shared_ptr<vtkMeshModel> modelin = pPCA2statismo(pPCA_);
+    shared_ptr<vtkMeshModel> model = BuildGPModel(modelin,kernels_,ncomp_,nystroem_);
+    return statismo2pPCA(model);
+  } catch (std::exception& e) {
+    ::Rf_error( e.what());
+  } catch (...) {
+    ::Rf_error("unknown exception");
+  }
 }
 
