@@ -63,14 +63,16 @@ setValidity("modelinfo", .modelinfo.valid)
 #' \item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
 #' \item{sigma}{the noise estimation of the data}
 #' \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
+#' \item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
+
 #' }
 #' @import methods
 #' @name pPCA-class
 #' @rdname pPCA-class
 #' @export
 setClass("pPCA",
-         slots= c(PCA="list",scale="logical",representer="representer",sigma="numeric",modelinfo="modelinfo"),
-         prototype = list(PCA=list(sdev=0,rotation=as.matrix(0),x=matrix(0,0,0),center=0),scale=FALSE,representer=list(),sigma=numeric(0),modelinfo=new("modelinfo")
+         slots= c(PCA="list",scale="logical",representer="representer",rawdata="matrix",sigma="numeric",modelinfo="modelinfo"),
+         prototype = list(PCA=list(sdev=0,rotation=as.matrix(0),x=matrix(0,0,0),center=0),scale=FALSE,representer=list(),rawdata=matrix(0,0,0),sigma=numeric(0),modelinfo=new("modelinfo")
              )
          )
 

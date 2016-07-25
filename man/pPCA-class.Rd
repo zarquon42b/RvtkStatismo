@@ -24,6 +24,7 @@ The class contains the the follwing slots (still not yet set in stone)
 \item{representer}{an object of class mesh3d or a list with entry \code{vb} being a matrix with the columns containing coordinates and \code{it} a 0x0 matrix}
 \item{sigma}{the noise estimation of the data}
 \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
+\item{rawdata}{optional data: a matrix with rows containing the mean centred coordinates in order \code{(x1,y1,z1, x2, y2,z2, ..., xn,yn,zn)}}
 }
 }
 
