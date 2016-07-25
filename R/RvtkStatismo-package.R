@@ -19,7 +19,9 @@
 #' Maintainer: Stefan Schlager <zarquon42@@gmail.com>
 #' @references To be announced
 #' @keywords package
-#' @importFrom Rcpp evalCpp 
+#' @importFrom Rcpp evalCpp
+#' @importFrom stats pchisq pnorm prcomp qchisq
+#' @importFrom utils write.table
 #' @useDynLib RvtkStatismo
 NULL
 
