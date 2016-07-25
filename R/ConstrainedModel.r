@@ -9,7 +9,7 @@
 #' @examples
 #' require(Rvcg)
 #' data(humface)
-#' hummodel <- statismoModelFromRepresenter(humface,kernel=list(c(80,50),c(20,40)))
+#' hummodel <- statismoModelFromRepresenter(humface)
 #' GPmodConstUnif <- statismoConstrainModel(hummodel,humface.lm,humface.lm,ptValueNoise = 1)
 #' \dontrun{
 #' ## sample from model
