@@ -14,6 +14,7 @@
 statismoSaveModel <- function(model, modelname=dataname) {
     dataname <- deparse(substitute(model))
     dataname <- paste0(dataname,".h5")
+    modelname <- path.expand(modelname)
     storage.mode(modelname) <- "character"
     if (!inherits(model,"pPCA") && !inherits(model,"pPCA_pointer"))
         stop("model must be of class pPCA")
