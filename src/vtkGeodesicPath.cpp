@@ -42,26 +42,27 @@ try {
   int idsize = idlist->GetNumberOfIds();
   double mydistance = 0;
   IntegerVector myids(idlist->GetNumberOfIds());
-  for (unsigned int i=0; i < idsize;i++) {
+  for (int i=0; i < idsize;i++) {
     myids[i] = idlist->GetId(i);
-    if (i < idsize) {
-      double dist=0;
-      double p0[3], p1[3], diff[3];
-      vtkmesh->GetPoint(idlist->GetId(i),p0);
-      vtkmesh->GetPoint(idlist->GetId(i+1),p1);
-      for (unsigned int j=0; j < 3; j++) {
-	double tmp = p0[j]-p1[j];
-	tmp *= tmp;
-	dist += tmp;
-      }
-      mydistance += sqrt(dist);
-    }
+    if (i < (idsize-1)) {
+       double dist=0;
+       double p0[3], p1[3], diff[3];
+       vtkmesh->GetPoint(idlist->GetId(i),p0);
+       vtkmesh->GetPoint(idlist->GetId(i+1),p1);
+       for (unsigned int j=0; j < 3; j++) {
+	 double tmp = p0[j]-p1[j];
+	 tmp *= tmp;
+	 dist += tmp;
+	 
+       }
+       mydistance += sqrt(dist);
+     }
   }
   List out;
   
   
-  return List::create(Named("index")=myids,
-		      Named("distance")=mydistance
+  return List::create(Named("index") = myids,
+		      Named("distance") = mydistance
 		      );
 wrap(mydistance);
  } catch (std::exception& e) {
