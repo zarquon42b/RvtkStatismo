@@ -21,4 +21,16 @@ list containing
 \description{
 Compute Geodesic path between two vertices
 }
+\examples{
+require(Rvcg)
+data(humface)
+gp <- vtkGeodesicPath(humface,1,1000)
+\dontrun{
+require(rgl)
+points3d(vert2points(humface)[gp$index,])
+lines3d(vert2points(humface)[gp$index,],col="blue",lwd=2)
+spheres3d(vert2points(humface)[c(1,1000),],col=2)
+wire3d(humface,col=3)
+}
+}
 
