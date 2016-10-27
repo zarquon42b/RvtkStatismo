@@ -13,7 +13,7 @@
 #' data(humface)
 #' gp <- vtkGeodesicPath(humface,1,1000)
 #' \dontrun{
-#' require(rgl)
+#' require(rgl);require(Morpho)
 #' points3d(vert2points(humface)[gp$index,])
 #' lines3d(vert2points(humface)[gp$index,],col="blue",lwd=2)
 #' spheres3d(vert2points(humface)[c(1,1000),],col=2)
@@ -44,7 +44,7 @@ vtkGeodesicPath <- function(x,start, end) {
 #' data(humface)
 #' gp <- vtkGeodesicPathForPointPair(humface,humface.lm[1,],humface.lm[2,])
 #' \dontrun{
-#' require(rgl)
+#' require(rgl);require(Morpho)
 #' points3d(vert2points(humface)[gp$index,])
 #' lines3d(vert2points(humface)[gp$index,],col="blue",lwd=2)
 #' spheres3d(humface.lm[1:2,],col=2)
