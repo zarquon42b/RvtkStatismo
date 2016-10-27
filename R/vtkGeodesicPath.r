@@ -21,6 +21,10 @@
 #' }
 #' @export
 vtkGeodesicPath <- function(x,start, end) {
+    nv <- ncol(x$vb)
+    if (start < 1 || start > nv || end < 1 || end > nv)
+        stop("start and end must be valid indices")
+
     start <- start-1
     end <- end-1
     out <- .Call("vtkGeodesicPath",x,end,start)
@@ -54,7 +58,6 @@ vtkGeodesicPath <- function(x,start, end) {
 vtkGeodesicPathForPointPair <- function(x,start, end) {
     mat <- rbind(start,end)
     inds <- vcgKDtree(x,mat,k=1)$index-1
-    
     out <- .Call("vtkGeodesicPath",x,inds[2],inds[1])
     out$index <- out$index+1
     return(out)
