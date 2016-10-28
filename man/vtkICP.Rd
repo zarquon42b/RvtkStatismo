@@ -5,7 +5,8 @@
 \title{Iteratively closest point registration}
 \usage{
 vtkICP(refmesh, tarmesh, iterations = 10, center = FALSE, type = c("none",
-  "scale", "affine"), sample = 200)
+  "scale", "affine"), sample = 200, meandistmode = c("RMS", "absolute"),
+  tol = 0.01, matchCentroids = FALSE, getTransform = FALSE)
 }
 \arguments{
 \item{refmesh}{moving mesh}
@@ -19,6 +20,14 @@ vtkICP(refmesh, tarmesh, iterations = 10, center = FALSE, type = c("none",
 \item{type}{type of transform to be used: "none"=rigid,"scale"=similarity transform, "affine"=affine transform.}
 
 \item{sample}{number of random samples to use}
+
+\item{meandistmode}{how to compute distance to between two iterations. RMS=square root of the average of the sum of squares of the closest point distance. absolute=the mean of the sum of absolute values of the closest point distance.}
+
+\item{tol}{convergence threshold. The algorithm stops when the mean distance is below this value.}
+
+\item{matchCentroids}{logical: if TRUE, the process by is started by translating source centroid to target centroid.}
+
+\item{getTransform}{logical: if TRUE a list containing the transformed mesh and a 4x4 transformation matrix will be returned}
 }
 \description{
 Iteratively closest point registration

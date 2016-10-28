@@ -6,7 +6,7 @@
 #include <vtkVersion.h>
 #include "R2polyData.h"
 #include "polyData2R.h"
-RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_) {
+RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_, SEXP meandistmode_, SEXP tol_, SEXP matchCentroids_) {
   try {
     std::string type = as<std::string>(type_);
     int sample = as<int>(sample_);
@@ -16,6 +16,9 @@ RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP cen
     SEXP tarvb = tarmesh["vb"];
     SEXP tarit = tarmesh["it"];
     int iterations = as<int>(iterations_);
+    int meandistmode = as<int>(meandistmode_);
+    double tol = as<double>(tol_);
+    bool matchCentroids = as<bool>(matchCentroids_);
     vtkSmartPointer<vtkPolyData> source = R2polyData(refmesh["vb"],refmesh["it"]);
     
     vtkSmartPointer<vtkPolyData> target = R2polyData(tarmesh["vb"],tarmesh["it"]);
@@ -32,12 +35,19 @@ RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP cen
     icp->StartByMatchingCentroidsOn();
   icp->SetMaximumNumberOfLandmarks(sample);
   icp->SetMaximumNumberOfIterations(iterations);
-  //icp->StartByMatchingCentroidsOn();
+  if (meandistmode != 0)
+    icp->SetMeanDistanceModeToAbsoluteValue();
+  icp->SetMaximumMeanDistance(tol);
+  if (matchCentroids)
+    icp->StartByMatchingCentroidsOn();
   icp->Modified();
   icp->Update();
-  
+  vtkMatrix4x4* mat = icp->GetMatrix();
+  NumericMatrix Rmat(4,4);
+  for (int i = 0; i < 4; i++)
+    for(int j = 0; j < 4; j++)
+      Rmat(i,j) = mat->GetElement(i,j);
   // Get the resulting transformation matrix (this matrix takes the source points to the target points)
-  vtkSmartPointer<vtkMatrix4x4> m = icp->GetMatrix();
   vtkSmartPointer<vtkTransformPolyDataFilter> icpTransformFilter =
     vtkSmartPointer<vtkTransformPolyDataFilter>::New();
 #if VTK_MAJOR_VERSION <= 5
@@ -49,10 +59,12 @@ RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP cen
   icpTransformFilter->Update();
   
   vtkSmartPointer<vtkPolyData> mapped = icpTransformFilter->GetOutput();
- 
- List out = polyData2R(mapped);
+ return List::create(Named("mesh") = polyData2R(mapped),
+		      Named("transform") = Rmat
+		      );
+ //List out = polyData2R(mapped);
   //return out;
-  return out;
+ 
  } catch (std::exception& e) {
     ::Rf_error( e.what());
   } catch (...) {
