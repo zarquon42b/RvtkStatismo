@@ -58,9 +58,7 @@ try {
        mydistance += sqrt(dist);
      }
   }
-  List out;
-  
-  
+    
   return List::create(Named("index") = myids,
 		      Named("distance") = mydistance
 		      );
