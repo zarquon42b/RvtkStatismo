@@ -122,7 +122,9 @@ manageConditioningData <- function(trainingData) {
     catVar <- which(surrogateInfo==0)
     if (length(catVar)) {
         for(i in 1:length(catVar)) {
-            encode[[names(orig)[i]]] <- unique(data.frame(orig[,catVar[i]],trainingData[,catVar[i]],row.names = NULL))
+            encode[[names(orig)[catVar[i]]]] <- unique(data.frame(orig[,catVar[i]],trainingData[,catVar[i]],row.names = NULL))
+            colnames(encode[[names(orig)[catVar[i]]]]) <- c("original_coded","dummy_coded")
+            rownames(encode[[names(orig)[catVar[i]]]]) <- NULL
         }
         out$encode <- encode
     }
