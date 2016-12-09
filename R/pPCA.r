@@ -153,6 +153,7 @@ getDataLikelihood <- function(x,model,align=FALSE, lmDataset=NULL, lmModel=NULL)
 #' @rdname getDataLikelihood
 #' @export
 getDataLikelihood.matrix <- function(x,model,align=FALSE, lmDataset=NULL, lmModel=NULL) {
+    hasLM <- FALSE
     mshape <- getMeanMatrix(model,transpose=TRUE)
     if (!is.null(lmDataset) && !is.null(lmModel))
         hasLM <- TRUE
