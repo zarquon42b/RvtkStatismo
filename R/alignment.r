@@ -28,7 +28,7 @@ partialAlign <- function(array,use.lm=NULL,scale=FALSE,reference=NULL,reflection
             procMod <- ProcGPA(array[use.lm,,],scale=scale,CSinit=F,reflection=reflection,silent = TRUE)##register all data using Procrustes fitting based on the non-missing coordinates
             tmp <- array
             a.list <-  1:(dim(array)[3])
-            tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[use.lm,,i],scale=scale,reflection = reflection);return(mat)})
+            tmp <- lapply(a.list, function(i) {mat <- rotonmat(array[,,i],array[use.lm,,i],procMod$rotated[,,i],scale=scale,reflection = reflection);return(mat)})
             tmp1 <- Morpho::list2array(tmp)
             procMod$rotated <- tmp1
             procMod$mshape <- arrMean3(tmp1)
