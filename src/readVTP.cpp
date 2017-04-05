@@ -67,10 +67,10 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
 	  
 	  vtkSmartPointer<vtkAppendPolyData> appendFilter = vtkSmartPointer<vtkAppendPolyData>::New();
 #if VTK_MAJOR_VERSION <= 5
-	  appendFilter->AddInputConnection(polydata->GetProducerPort());
+	  //appendFilter->AddInputConnection(polydata->GetProducerPort());
 	  appendFilter->AddInputConnection(polydatatmp->GetProducerPort());
 #else
-	  appendFilter->AddInputData(polydata);
+	  //appendFilter->AddInputData(polydata);
 	  appendFilter->AddInputData(polydatatmp);
 #endif
 	  appendFilter->Update();
