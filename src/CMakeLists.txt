@@ -65,6 +65,7 @@ if(VTK_MAJOR_VERSION GREATER 5)
       vtkIOImport
       vtkRenderingCore
       vtkImagingMorphological
+      vtkIOPLY
      # vtkRenderingOpenGL
       )
     if(VTK_RENDERING_BACKEND) #in vtk 7, the rendering backend is exported as a var.

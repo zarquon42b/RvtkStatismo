@@ -63,15 +63,16 @@ vtkMeshWrite <- function(mesh, filename=dataname,type=c("vtk","vtp"),ascii=FALSE
 #' @export
 read.vtk <- function(filename) {
     filename <- path.expand(as.character(filename))
-    ext <- gsub("(.*)[.](vtk|vtp|wrl)$", "\\2", tolower(filename));
+    ext <- gsub("(.*)[.](vtk|vtp|wrl|ply)$", "\\2", tolower(filename));
     type <- 1
-    if (! ext %in% c("vtk", "vtp","wrl"))
+    if (! ext %in% c("vtk", "vtp","wrl","ply"))
         stop("unknown file format")
     else if (ext == "vtk")
         type <- 0
-    else
+    else if (ext == "wrl")
         type <- 2
-
+    else
+        type <- 3
     out <- .Call("vtkRead",filename,type)
     
     class(out) <- "mesh3d"
@@ -81,3 +82,7 @@ read.vtk <- function(filename) {
 #' @rdname vtkIO
 #' @export
 read.wrl <- read.vtk
+
+#' @rdname vtkIO
+#' @export
+read.ply <- read.vtk

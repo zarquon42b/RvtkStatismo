@@ -3,11 +3,14 @@
 \name{read.vtk}
 \alias{read.vtk}
 \alias{read.wrl}
+\alias{read.ply}
 \title{imports vtk, vtp and wrl files containing meshes}
 \usage{
 read.vtk(filename)
 
 read.wrl(filename)
+
+read.ply(filename)
 }
 \arguments{
 \item{filename}{character string}
@@ -22,4 +25,3 @@ imports vtk, vtp and wrl files containing meshes
 read.wrl is simply an alias for read.vtk.
 All structures will be converted to triangular meshes.
 }
-

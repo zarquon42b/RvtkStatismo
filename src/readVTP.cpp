@@ -21,6 +21,8 @@
 #include <vtkAppendPolyData.h>
 #include <vtkTriangleFilter.h>
 #include <vtkDataSetSurfaceFilter.h>
+#include <vtkPLYReader.h>
+
 #include "polyData2R.h"
 using namespace Rcpp;
 
@@ -83,6 +85,14 @@ RcppExport SEXP vtkRead(SEXP filename_, SEXP type_) {
 #if VTK_MAJOR_VERSION == 6 && VTK_MINOR_VERSION != 1
       reader->Delete();
 #endif	
+    } else if (type == 3) {
+      vtkSmartPointer<vtkPLYReader> reader = vtkSmartPointer<vtkPLYReader>::New();
+      if (reader->CanReadFile(filename[0])) {
+	reader->SetFileName(filename[0]);
+	reader->Update();
+	if(reader->GetOutput() != NULL)
+	  polydata = reader->GetOutput();
+      }
     }
     //convert polydata to triangle mesh
     vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
