@@ -22,4 +22,3 @@ isokernel <- IsoKernel(humface,scale=0.01)
 \description{
 create an isotropic kernel
 }
-

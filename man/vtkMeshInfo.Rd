@@ -20,4 +20,3 @@ get Infos about a triangular mesh
 \details{
 see documentation of vtkMassProperties for details
 }
-

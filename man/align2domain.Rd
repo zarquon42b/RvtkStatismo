@@ -46,4 +46,3 @@ deformGrid3d(align1,DrawMean(mymod))
 deformGrid3d(alignAffine,DrawMean(mymod))
 }
 }
-

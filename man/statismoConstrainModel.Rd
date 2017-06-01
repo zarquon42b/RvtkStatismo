@@ -78,4 +78,3 @@ GPmodCov <- statismoConstrainModel(hummodel,humface.lm[1,,drop=FALSE],
 ## now we constrain the rest
 GPmodCov <- statismoConstrainModel(GPmodCov,humface.lm[-1,],humface.lm[-1,],ptValueNoise = 0.01)
 }
-

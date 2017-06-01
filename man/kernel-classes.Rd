@@ -2,13 +2,13 @@
 % Please edit documentation in R/AAAllClass.r
 \docType{class}
 \name{kernel-classes}
+\alias{kernel-classes}
+\alias{MultiscaleBSplineKernel-class}
 \alias{BSplineKernel-class}
-\alias{CombinedKernel-class}
 \alias{GaussianKernel-class}
 \alias{IsoKernel-class}
-\alias{MultiscaleBSplineKernel-class}
 \alias{StatisticalModelKernel-class}
-\alias{kernel-classes}
+\alias{CombinedKernel-class}
 \title{Documentation of kernel classes}
 \description{
 Documentation of kernel classes
@@ -49,4 +49,3 @@ CombinedKernel-class
  \item{\code{kernel} - list(s) containing the kernel above}
 }
 }
-

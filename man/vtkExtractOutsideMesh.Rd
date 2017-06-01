@@ -15,4 +15,3 @@ returns only those segments visible from the outside of the mesh
 \description{
 get outer mesh and discard enclosed segments
 }
-

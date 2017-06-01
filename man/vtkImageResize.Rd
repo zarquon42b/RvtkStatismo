@@ -18,4 +18,3 @@ vtkImageResize(image, outname, spacing = c(1, 1, 1), interpolate = 2)
 \description{
 Resample an image and write to file.
 }
-

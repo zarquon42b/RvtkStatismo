@@ -43,4 +43,3 @@ out <- competingPoints(mymod,rbind(align[,,1],myconfused)[perturb,],c(1:10,mycon
 all.equal(align[,,1],out$goodverts)
 
 }
-

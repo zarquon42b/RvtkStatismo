@@ -22,4 +22,3 @@ create a scalar valued kernel of type MultiscaleBSplineKernel
 \examples{
 kernel1 <- MultiscaleBSplineKernel(100,5)
 }
-

@@ -2,36 +2,36 @@
 % Please edit documentation in R/setPPCA.r
 \docType{methods}
 \name{Set-pPCA-class}
-\alias{AddModelInfoParams,pPCA-method}
-\alias{AddModelInfoParams,pPCA_pointer-method}
 \alias{Set-pPCA-class}
-\alias{SetMeanVector<-}
-\alias{SetMeanVector<-,pPCA-method}
-\alias{SetModelDataInfo<-,pPCA-method}
-\alias{SetModelDataInfo<-,pPCA_pointer-method}
-\alias{SetModelInfoParams<-,pPCA-method}
-\alias{SetModelInfoParams<-,pPCA_pointer-method}
 \alias{SetNoiseVariance<-}
 \alias{SetNoiseVariance<-,pPCA-method}
-\alias{SetPCA<-}
-\alias{SetPCA<-,pPCA-method}
 \alias{SetPCBasisMatrix<-}
 \alias{SetPCBasisMatrix<-,pPCA-method}
 \alias{SetPCBasisMatrix<-,pPCA_pointer-method}
 \alias{SetPCsdev<-}
 \alias{SetPCsdev<-,pPCA-method}
 \alias{SetPCsdev<-,pPCA_pointer-method}
+\alias{SetMeanVector<-}
+\alias{SetMeanVector<-,pPCA-method}
+\alias{SetScores<-}
+\alias{SetScores<-,pPCA-method}
+\alias{SetScores<-,pPCA_pointer-method}
 \alias{SetRepresenter<-}
 \alias{SetRepresenter<-,pPCA-method}
 \alias{SetRepresenter<-,pPCA_pointer-method}
 \alias{SetScale<-}
 \alias{SetScale<-,pPCA-method}
 \alias{SetScale<-,pPCA_pointer-method}
-\alias{SetScores<-}
-\alias{SetScores<-,pPCA-method}
-\alias{SetScores<-,pPCA_pointer-method}
+\alias{SetPCA<-}
+\alias{SetPCA<-,pPCA-method}
 \alias{SetVariance<-}
 \alias{SetVariance<-,pPCA-method}
+\alias{AddModelInfoParams,pPCA-method}
+\alias{AddModelInfoParams,pPCA_pointer-method}
+\alias{SetModelInfoParams<-,pPCA-method}
+\alias{SetModelInfoParams<-,pPCA_pointer-method}
+\alias{SetModelDataInfo<-,pPCA-method}
+\alias{SetModelDataInfo<-,pPCA_pointer-method}
 \title{Low level methods to set pPCA class content}
 \usage{
 SetNoiseVariance(x) <- value
@@ -104,4 +104,3 @@ returns an updated pPCA object
 Low level methods to set pPCA class content - not to be invoked directly
 }
 \keyword{internals}
-

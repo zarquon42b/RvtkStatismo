@@ -33,4 +33,3 @@ mod <- statismoLoadModel(system.file("extdata","mandibles.h5",package="RvtkStati
 shapes <- restoreSamples(mod)
 newalign <- meshalign(shapes,reference=1)
 }
-

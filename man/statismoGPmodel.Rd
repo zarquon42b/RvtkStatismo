@@ -56,4 +56,3 @@ deformGrid3d(PC1orig,DrawMean(GPmod),ngrid=0,col1=5,add=TRUE)
 \code{\link{pPCA}, \link{pPCA-class}}
 }
 \keyword{StatisticalModel<representer>}
-

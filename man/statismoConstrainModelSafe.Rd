@@ -3,11 +3,11 @@
 \docType{methods}
 \name{statismoConstrainModelSafe}
 \alias{statismoConstrainModelSafe}
-\alias{statismoConstrainModelSafe,pPCA,matrix,matrix-method}
 \alias{statismoConstrainModelSafe,pPCA,matrix,numeric-method}
+\alias{statismoConstrainModelSafe,pPCA,matrix,matrix-method}
 \alias{statismoConstrainModelSafe,pPCA,numeric,numeric-method}
-\alias{statismoConstrainModelSafe,pPCA_pointer,matrix,matrix-method}
 \alias{statismoConstrainModelSafe,pPCA_pointer,matrix,numeric-method}
+\alias{statismoConstrainModelSafe,pPCA_pointer,matrix,matrix-method}
 \alias{statismoConstrainModelSafe,pPCA_pointer,numeric,numeric-method}
 \title{calculate a posterior model but only use likely correspondences}
 \usage{
@@ -58,4 +58,3 @@ calculate a posterior model but only use likely correspondences
 \note{
 to specify per-point covariance matrices, one first has to setup the matrices at each point and then combine them via rbind.
 }
-

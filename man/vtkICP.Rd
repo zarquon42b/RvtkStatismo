@@ -32,4 +32,3 @@ vtkICP(refmesh, tarmesh, iterations = 10, center = FALSE, type = c("none",
 \description{
 Iteratively closest point registration
 }
-

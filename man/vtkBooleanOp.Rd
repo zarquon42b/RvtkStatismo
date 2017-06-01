@@ -31,4 +31,3 @@ myplane <- list(vb=rbind(cbind(c(1,0,0),c(0,1,0),c(0,0,1)),1),
 myplane <- scalemesh(myplane,5)
 cutsphere <- vtkBooleanOp(sphere,myplane,type = 2)
 }
-

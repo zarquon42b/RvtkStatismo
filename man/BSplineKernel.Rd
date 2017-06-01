@@ -20,4 +20,3 @@ create a scalar valued kernel of type BSplineKernel
 \examples{
 kernel1 <- BSplineKernel(100,50)
 }
-

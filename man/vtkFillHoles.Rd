@@ -20,4 +20,3 @@ fill holes in triangular mesh
 \details{
 see documentation of vtkFillHolesFilter for details
 }
-

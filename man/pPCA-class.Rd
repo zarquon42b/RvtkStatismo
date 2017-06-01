@@ -26,4 +26,3 @@ The class contains the the follwing slots (still not yet set in stone)
 \item{Variance}{a data.frame containing the Variance, cumulative Variance and Variance explained by each Principal component}
 }
 }
-

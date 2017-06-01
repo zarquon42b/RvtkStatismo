@@ -33,4 +33,3 @@ spheres3d(vert2points(humface)[c(1,1000),],col=2)
 wire3d(humface,col=3)
 }
 }
-

@@ -24,4 +24,3 @@ the variables will be resorted with the first being continuous variables and the
 \seealso{
 \code{\link{statismoBuildConditionalModel}}
 }
-

@@ -22,4 +22,3 @@ an object of class mesh3d or matrix, depending whether a point cloud or a triang
 \description{
 get the representer from a model of class "pPCA"
 }
-

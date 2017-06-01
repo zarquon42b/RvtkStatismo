@@ -18,4 +18,3 @@ returns an object of class pPCA or pPCA_pointer
 \description{
 convert an object of class pPCA to pPCA_pointer and vice versa
 }
-

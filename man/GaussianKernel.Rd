@@ -20,4 +20,3 @@ create a scalar valued kernel of type GaussianKernel
 \examples{
 gkernel <- GaussianKernel(2)
 }
-

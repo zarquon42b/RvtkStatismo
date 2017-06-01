@@ -28,4 +28,3 @@ a list containing
 \description{
 Fast Procrustes align of coordinates
 }
-

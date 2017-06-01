@@ -2,13 +2,13 @@
 % Please edit documentation in R/AAAllClass.r, R/setPPCA.r
 \docType{class}
 \name{modelinfo-class}
+\alias{modelinfo-class}
 \alias{AddModelInfoParams}
 \alias{AddModelInfoParams,modelinfo-method}
-\alias{SetModelDataInfo<-}
-\alias{SetModelDataInfo<-,modelinfo-method}
 \alias{SetModelInfoParams<-}
 \alias{SetModelInfoParams<-,modelinfo-method}
-\alias{modelinfo-class}
+\alias{SetModelDataInfo<-}
+\alias{SetModelDataInfo<-,modelinfo-method}
 \title{Documentation of class modelinfo}
 \usage{
 AddModelInfoParams(x, value)
@@ -40,4 +40,3 @@ The class has the following slots
 These can be modified using addParams and setParaminfo
 with
 }
-

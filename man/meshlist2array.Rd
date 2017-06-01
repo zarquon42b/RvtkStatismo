@@ -15,4 +15,3 @@ returns an array with k x 3 x n dimensions where k=number of vertices, and n=sam
 \description{
 convert meshes to array consisting of vertex coordinates
 }
-

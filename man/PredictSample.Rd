@@ -82,4 +82,3 @@ predict or restrict a mesh or matrix based on a statistical model
 \seealso{
 \code{\link{StatismoModelMembers}}
 }
-

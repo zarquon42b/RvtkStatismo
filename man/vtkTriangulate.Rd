@@ -34,4 +34,3 @@ create Isosurface from image
 \note{
 the dicom functionality only works for unencapsulated raw dicom files. In case of errors, deencapsulate your files first. This can be done, for example, with the command line tool \code{gdcmconv}.
 }
-

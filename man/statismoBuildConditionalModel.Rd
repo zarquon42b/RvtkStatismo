@@ -62,4 +62,3 @@ R. Blanc, M. Reyes, C. Seiler and G. Szekely. 2009. Conditional Variability of S
 \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}, \link{manageConditioningData}}
 }
 \keyword{StatisticalModel<representer>}
-

@@ -28,4 +28,3 @@ require(rgl)
 shade3d(DrawSample(hummodel0),col=3)
 }
 }
-

@@ -12,4 +12,3 @@ returns object of class StatisticalModelKernel
 \description{
 Create empirical StatisticalModelKernel
 }
-

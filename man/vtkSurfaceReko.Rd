@@ -17,4 +17,3 @@ mesh of class mesh3d
 \description{
 create surface from pointcloud or mesh
 }
-

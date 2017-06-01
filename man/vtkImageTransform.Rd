@@ -29,4 +29,3 @@ returns (invisible)  TRUE if successful, else FALSE
 \description{
 Transform an image based on landmark configuration
 }
-

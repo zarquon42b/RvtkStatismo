@@ -30,4 +30,3 @@ rest <- restoreSamples(mymod)
 deformGrid3d(rest[[1]],align[,,1])
 }
 }
-

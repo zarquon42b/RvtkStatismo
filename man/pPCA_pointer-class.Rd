@@ -13,4 +13,3 @@ It has the following slots
  \item{\code{scale} - logical: contains information whether the data to build the model was aligned including scaling}
 }
 }
-

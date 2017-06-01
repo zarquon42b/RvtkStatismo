@@ -3,9 +3,9 @@
 \docType{methods}
 \encoding{utf8}
 \name{pPCA}
+\alias{pPCA}
 \alias{UpdateModel}
 \alias{UpdateModel,pPCA-method}
-\alias{pPCA}
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
 pPCA(x, align = FALSE, use.lm = NULL, deselect = FALSE, sigma = NULL,
@@ -56,4 +56,3 @@ model1 <- UpdateModel(model, sigma=1, exVar=0.8)
 \references{
 \enc{Lüthi}{Luethi} M, Albrecht T, Vetter T. 2009. Probabilistic modeling and visualization of the flexibility in morphable models. In: Mathematics of Surfaces XIII. Springer. p 251-264
 }
-

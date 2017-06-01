@@ -17,4 +17,3 @@ object of class CombinedKernel
 \description{
 Multiply two kernels
 }
-

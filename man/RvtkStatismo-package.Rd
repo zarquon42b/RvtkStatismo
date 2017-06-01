@@ -2,8 +2,8 @@
 % Please edit documentation in R/RvtkStatismo-package.R
 \docType{package}
 \name{RvtkStatismo-package}
-\alias{RvtkStatismo}
 \alias{RvtkStatismo-package}
+\alias{RvtkStatismo}
 \title{Integrating  statismo and R using the vtkStandardMeshRepresente}
 \description{
 Integrating statismo and R using the vtkStandardMeshRepresenter.
@@ -18,13 +18,12 @@ Date: \tab 2016-03-23\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr }
 }
+\references{
+To be announced
+}
 \author{
 Stefan Schlager
 
 Maintainer: Stefan Schlager <zarquon42@gmail.com>
 }
-\references{
-To be announced
-}
 \keyword{package}
-

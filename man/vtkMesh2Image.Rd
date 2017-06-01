@@ -31,4 +31,3 @@ require(Rvcg)
 data(dummyhead)
 vtkMesh2Image(dummyhead.mesh)
 }
-

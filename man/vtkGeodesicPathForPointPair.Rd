@@ -33,4 +33,3 @@ spheres3d(humface.lm[1:2,],col=2)
 wire3d(humface,col=3)
 }
 }
-

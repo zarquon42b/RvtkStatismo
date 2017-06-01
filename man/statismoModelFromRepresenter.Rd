@@ -36,4 +36,3 @@ require(rgl)
 for (i in 1:5) wire3d(DrawSample(hummodel),col=i)
 }
 }
-

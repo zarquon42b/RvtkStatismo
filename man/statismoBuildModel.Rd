@@ -40,4 +40,3 @@ statismoSaveModel(mymod,"mymod.h5")
 \code{\link{pPCA}, \link{pPCA-class}, \link{rigidAlign}, \link{meshalign}}
 }
 \keyword{StatisticalModel<representer>}
-

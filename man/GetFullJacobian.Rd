@@ -24,4 +24,3 @@ get Jacobian for all model points or a subset
 \seealso{
 \code{\link{GetJacobian}}
 }
-

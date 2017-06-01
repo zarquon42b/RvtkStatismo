@@ -17,4 +17,3 @@ object of class CombinedKernel
 \description{
 Add two kernels
 }
-

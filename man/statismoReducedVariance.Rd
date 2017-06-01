@@ -40,4 +40,3 @@ align <- rigidAlign(boneLM)$rotated
 mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
 reducemod <- statismoReducedVariance(mymod,0.5)
 }
-

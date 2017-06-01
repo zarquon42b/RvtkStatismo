@@ -21,4 +21,3 @@ vtkImageBlend(image1, image2, outname = "out.mha", opacity1 = 0.5,
 \description{
 Blend two Images using vtkImageBlend
 }
-
