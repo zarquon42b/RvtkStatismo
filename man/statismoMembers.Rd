@@ -227,7 +227,6 @@ GetPCScores(model, scaled = TRUE)
 \item{GetMeanVector}{Get the mean vector}
 \item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 \item{DrawSample}{Draw a sample from the model (either a matrix or a mesh3d)}
-\item{DrawMeanAtPoint}{Get a specific point of the  mean (numeric vector)}
 \item{DrawSampleAtPoint}{Draw a sample of a specific point from the model (numeric vector)  }
 \item{ComputeCoefficients}{Computes the coefficients of the latent variables}
 \item{ComputeCoefficientsForPointValues}{Returns the coefficients of the latent variables for the given values provided in two k x 3 matrices or two vectors of length 3, or one matrix/vector and a vector containing the indices on the domain  corresponding to these points}
@@ -242,5 +241,18 @@ Implementation/Emulation of the statismo StatisticalModel class.
 }
 \details{
 see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
+}
+\examples{
+require(Morpho)
+data(boneData)
+align <- rigidAlign(boneLM)$rotated
+mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+mymean <- DrawMean(mymod)
+mymeanvector <- GetMeanVector(mymod)
+mymean1 <- DrawMeanAtPoint(mymod,1)
+mysample <- DrawSample(mymod)
+mysample1 <- DrawSampleAtPoint(mymod,coefficients=3,pt=1)
+mycoeff <- ComputeCoefficients(mymod,align[,,1])
+mycoeffpoint <- ComputeCoefficientsForPointValues(mymod,sample=align[1,,1],pt=1,ptNoise=0)
 }
 \keyword{StatisticalModel<representer>}
