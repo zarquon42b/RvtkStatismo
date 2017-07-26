@@ -10,57 +10,57 @@
 
 
 
-RcppExport SEXP DrawMean(SEXP pPCA_);
+RcppExport SEXP DrawMeanCpp(SEXP pPCA_);
 
-RcppExport SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_);
+RcppExport SEXP DrawMeanCppAtPoint(SEXP pPCA_, SEXP meanpt_);
 
-RcppExport SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_= Rcpp::wrap(false));
+RcppExport SEXP DrawSampleCpp(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_= Rcpp::wrap(false));
 
-RcppExport SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_);
+RcppExport SEXP DrawSampleCppVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_);
 
-RcppExport SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_);
+RcppExport SEXP DrawSampleCppAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_);
 
 RcppExport SEXP LoadModel(SEXP modelname_, SEXP pointer_);
 
-RcppExport SEXP ComputeLogProbability(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
+RcppExport SEXP ComputeLogProbabilityCpp(SEXP pPCA_, SEXP dataset_, SEXP getlog_= wrap(false));
 
-RcppExport SEXP ComputeMahalanobisDistance(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeMahalanobisDistanceCpp(SEXP pPCA_, SEXP dataset_);
 
-RcppExport SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeCoefficientsCpp(SEXP pPCA_, SEXP dataset_);
 
-RcppExport SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_);
+RcppExport SEXP ComputeCoefficientsCpp(SEXP pPCA_, SEXP dataset_);
 
 // RcppExport SEXP RobustlyComputeCoefficients(SEXP pPCA_, SEXP dataset_, SEXP niterations_, SEXP nu_, SEXP sigma2_);
 
-RcppExport SEXP GetDomainPoints(SEXP pPCA_);
+RcppExport SEXP GetDomainPointsCpp(SEXP pPCA_);
 
 RcppExport SEXP GetCovarianceAtPointId(SEXP pPCA_, SEXP pt1_, SEXP pt2_);
 
 RcppExport SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_);
 
-RcppExport SEXP GetCovarianceMatrix(SEXP pPCA_);
+RcppExport SEXP GetCovarianceMatrixCpp(SEXP pPCA_);
 
-RcppExport SEXP GetJacobian(SEXP pPCA_, SEXP pt_);
+RcppExport SEXP GetJacobianCpp(SEXP pPCA_, SEXP pt_);
 
-RcppExport SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
+RcppExport SEXP ComputeCoefficientsCppForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
 
-RcppExport SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
+RcppExport SEXP ComputeCoefficientsCppForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_);
 
-RcppExport SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_);
+RcppExport SEXP EvaluateSampleAtPointCpp(SEXP pPCA_, SEXP dataset_, SEXP meanpt_);
 
-RcppExport SEXP GetPCABasisMatrix(SEXP pPCA_);
+RcppExport SEXP GetPCABasisMatrixCpp(SEXP pPCA_);
 
-RcppExport SEXP GetOrthonormalPCABasisMatrix(SEXP pPCA_);
+RcppExport SEXP GetOrthonormalPCABasisMatrixCpp(SEXP pPCA_);
 
-RcppExport SEXP GetNumberOfPrincipalComponents(SEXP pPCA_);
+RcppExport SEXP GetNumberOfPrincipalComponentsCpp(SEXP pPCA_);
 
-RcppExport SEXP GetMeanVector(SEXP pPCA_);
+RcppExport SEXP GetMeanVectorCpp(SEXP pPCA_);
 
-RcppExport SEXP GetNoiseVariance(SEXP pPCA_);
+RcppExport SEXP GetNoiseVarianceCpp(SEXP pPCA_);
 
-RcppExport SEXP GetPCAVarianceVector(SEXP pPCA_);
+RcppExport SEXP GetPCAVarianceVectorCpp(SEXP pPCA_);
 
-RcppExport SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
+RcppExport SEXP ComputeLogProbabilityCppOfCoefficients(SEXP pPCA_, SEXP coeffs_);
 
-  RcppExport SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_);
+  RcppExport SEXP ComputeProbabilityOfCoefficientsCpp(SEXP pPCA_, SEXP coeffs_);
 #endif// _MODEL_MEMBERS_H__

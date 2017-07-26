@@ -7,7 +7,7 @@
 #include "R2polyData.h"
 #include "polyData2R.h"
 
-RcppExport SEXP vtkExtractOutsideMesh(SEXP mesh_, SEXP bbox_) {
+RcppExport SEXP vtkExtractOutsideMeshCpp(SEXP mesh_, SEXP bbox_) {
 try {
   List mesh(mesh_);
   vtkSmartPointer<vtkPolyData> polyData;

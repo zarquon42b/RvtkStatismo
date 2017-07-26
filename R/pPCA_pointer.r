@@ -8,7 +8,7 @@
 pPCA2pointer <- function(x) {
     if (!inherits(x,"pPCA"))
         stop("x must be of class pPCA")
-    out <- .Call("pPCA2pointer",x)
+    out <- .Call("pPCA2pointerCpp",x)
     out@scale <- x@scale
     return(out)
 }
@@ -18,7 +18,7 @@ pPCA2pointer <- function(x) {
 pointer2pPCA <- function(x) {
     if (!inherits(x,"pPCA_pointer"))
         stop("x must be of class pPCA_pointer")
-    out <- .Call("pointer2pPCA",x)
+    out <- .Call("pointer2pPCACpp",x)
     out@scale <- x@scale
     return(out)
 }

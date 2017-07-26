@@ -16,7 +16,7 @@ vtkImageTransform <- function(image,sourceLM,targetLM,outname="default.mha",type
     type <- tolower(substr(type[1],1L,1L))
     sourceLM <-  sourceLM%*%RAS2IJK
     targetLM <-  targetLM%*%RAS2IJK
-    out <- .Call("vtkImageTransform",image,t(sourceLM),t(targetLM),outname,type,interpolation)
+    out <- .Call("vtkImageTransformCpp",image,t(sourceLM),t(targetLM),outname,type,interpolation)
     invisible(!as.logical(out))
     
 }

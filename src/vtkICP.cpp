@@ -6,7 +6,7 @@
 #include <vtkVersion.h>
 #include "R2polyData.h"
 #include "polyData2R.h"
-RcppExport SEXP vtkICP(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_, SEXP meandistmode_, SEXP tol_, SEXP matchCentroids_) {
+RcppExport SEXP vtkICPCpp(SEXP refmesh_, SEXP tarmesh_ , SEXP iterations_, SEXP center_, SEXP type_, SEXP sample_, SEXP meandistmode_, SEXP tol_, SEXP matchCentroids_) {
   try {
     std::string type = as<std::string>(type_);
     int sample = as<int>(sample_);

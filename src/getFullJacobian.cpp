@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace Eigen;
 
-RcppExport SEXP GetFullJacobian(SEXP pPCA_, SEXP pts_) {
+RcppExport SEXP GetFullJacobianCpp(SEXP pPCA_, SEXP pts_) {
   try {
     NumericMatrix pts(pts_);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);

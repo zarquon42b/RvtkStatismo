@@ -21,6 +21,6 @@ setMethod("GetFullJacobian", signature(model="pPCA"), function(model,pt) {
         pt <- GetDomainPoints(model)[pt,]
     # lse
       
-    out <- .Call("GetFullJacobian",model,pt)
+    out <- .Call("GetFullJacobianCpp",model,pt)
     return(out)
 })

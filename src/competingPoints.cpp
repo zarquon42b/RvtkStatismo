@@ -15,7 +15,7 @@ IntegerVector sortInt(IntegerVector x) {
    return y;
 }
 
-SEXP competingPoints(SEXP pPCA_,SEXP sample_, SEXP indices_, SEXP maha_) {
+SEXP competingPointsCpp(SEXP pPCA_,SEXP sample_, SEXP indices_, SEXP maha_) {
 
    try {
      bool maha = as<bool>(maha_);

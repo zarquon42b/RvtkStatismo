@@ -22,7 +22,7 @@
 #include "vtkImageIO.h"
 
 
-RcppExport SEXP vtkBooleanOp(SEXP mesh0_,SEXP mesh1_, SEXP optype_, SEXP reorient_, SEXP tolerance_) {
+RcppExport SEXP vtkBooleanOpCpp(SEXP mesh0_,SEXP mesh1_, SEXP optype_, SEXP reorient_, SEXP tolerance_) {
 try {
   List mesh0(mesh0_);
   List mesh1(mesh1_);

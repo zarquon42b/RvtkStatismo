@@ -25,7 +25,7 @@
 
 static vtkSmartPointer<vtkPolyData> transform_back(vtkSmartPointer<vtkPoints> pt, vtkSmartPointer<vtkPolyData> pd);
 
-RcppExport SEXP vtkSurfaceReko(SEXP mesh_, SEXP sampSpace_=wrap(0)) {
+RcppExport SEXP vtkSurfaceRekoCpp(SEXP mesh_, SEXP sampSpace_=wrap(0)) {
 try {
   double sampSpace = as<double>(sampSpace_);
   List mesh(mesh_);

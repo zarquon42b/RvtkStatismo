@@ -4,7 +4,7 @@
 #include <vtkMassProperties.h>
 #include <vtkFillHolesFilter.h>
 
-RcppExport SEXP vtkMeshInfo(SEXP refmesh_) {
+RcppExport SEXP vtkMeshInfoCpp(SEXP refmesh_) {
   try {
     List out;
     List refmesh(refmesh_);

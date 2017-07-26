@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace Eigen;
 
-SEXP DrawMean(SEXP pPCA_){
+SEXP DrawMeanCpp(SEXP pPCA_){
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     vtkPolyData* reference = model->DrawMean();
@@ -18,7 +18,7 @@ SEXP DrawMean(SEXP pPCA_){
   }
 }
 
-SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
+SEXP DrawMeanCppAtPoint(SEXP pPCA_, SEXP meanpt_){
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(meanpt_);
@@ -33,7 +33,7 @@ SEXP DrawMeanAtPoint(SEXP pPCA_, SEXP meanpt_){
   }
 }
 
-SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
+SEXP DrawSampleCpp(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     vtkPolyData* reference;
@@ -55,7 +55,7 @@ SEXP DrawSample(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   }
 }
 
-SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
+SEXP DrawSampleCppVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
@@ -71,7 +71,7 @@ SEXP DrawSampleVector(SEXP pPCA_, SEXP coeffs_, SEXP addNoise_){
     ::Rf_error("unknown exception");
   }
 }
-SEXP DrawSampleAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
+SEXP DrawSampleCppAtPoint(SEXP pPCA_, SEXP coeffs_, SEXP meanpt_, SEXP addNoise_){
   try {
     bool addNoise = as<bool>(addNoise_);
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
@@ -108,7 +108,7 @@ SEXP LoadModel(SEXP modelname_, SEXP pointer_){
   }
 }
 
-SEXP ComputeLogProbability(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
+SEXP ComputeLogProbabilityCpp(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
   try {
     bool getlog = as<bool>(getlog_);
     List dataset(dataset_);
@@ -128,7 +128,7 @@ SEXP ComputeLogProbability(SEXP pPCA_, SEXP dataset_, SEXP getlog_){
   }
 
 }
-SEXP ComputeMahalanobisDistance(SEXP pPCA_, SEXP dataset_) {
+SEXP ComputeMahalanobisDistanceCpp(SEXP pPCA_, SEXP dataset_) {
   try {
     List dataset(dataset_);
     double mahadist;
@@ -146,7 +146,7 @@ SEXP ComputeMahalanobisDistance(SEXP pPCA_, SEXP dataset_) {
 }
 
 
-SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_){
+SEXP ComputeCoefficientsCpp(SEXP pPCA_, SEXP dataset_){
   try {
     List dataset(dataset_);
     double prob;
@@ -184,7 +184,7 @@ SEXP ComputeCoefficients(SEXP pPCA_, SEXP dataset_){
 // }
 
 typedef std::vector<vtkPoint> DomainPointsListType;
-SEXP GetDomainPoints(SEXP pPCA_) {
+SEXP GetDomainPointsCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     const DomainPointsListType domainPoints = model->GetDomain().GetDomainPoints();
@@ -235,7 +235,7 @@ SEXP GetCovarianceAtPointPt(SEXP pPCA_, SEXP pt1_, SEXP pt2_) {
   }
 
 }
-SEXP GetCovarianceMatrix(SEXP pPCA_) {
+SEXP GetCovarianceMatrixCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     MatrixXf cov = model->GetCovarianceMatrix();
@@ -248,7 +248,7 @@ SEXP GetCovarianceMatrix(SEXP pPCA_) {
   }
 }
 
-SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
+SEXP GetJacobianCpp(SEXP pPCA_, SEXP pt_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     vtkPoint pt = SEXP2vtkPoint(pt_);
@@ -265,7 +265,7 @@ SEXP GetJacobian(SEXP pPCA_, SEXP pt_) {
 typedef std::pair<vtkPoint, vtkPoint> PointValuePairType;
 typedef std::list<PointValuePairType> PointValueListType;
 
-SEXP ComputeCoefficientsForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
+SEXP ComputeCoefficientsCppForPointValues(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
   try {
     double noise = as<double>(noise_);
     NumericMatrix sample(sample_);
@@ -295,7 +295,7 @@ typedef MatrixType 	PointCovarianceMatrixType;
 typedef std::pair < PointValuePairType, PointCovarianceMatrixType> 	PointValueWithCovariancePairType;
 typedef std::list < PointValueWithCovariancePairType > 	PointValueWithCovarianceListType;
 
-SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
+SEXP ComputeCoefficientsCppForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, SEXP mean_, SEXP noise_) {
   try {
     Map<MatrixXd> ptValueNoise(as<Map<MatrixXd> >(noise_));
     NumericMatrix sample(sample_);
@@ -339,7 +339,7 @@ SEXP ComputeCoefficientsForPointValuesWithCovariance(SEXP pPCA_, SEXP sample_, S
   }
 }
 
-SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_) {
+SEXP EvaluateSampleAtPointCpp(SEXP pPCA_, SEXP dataset_, SEXP meanpt_) {
   try {
     List dataset(dataset_);
     const vtkSmartPointer<vtkPolyData> sample = R2polyData(dataset["vb"],dataset["it"]);
@@ -356,7 +356,7 @@ SEXP EvaluateSampleAtPoint(SEXP pPCA_, SEXP dataset_, SEXP meanpt_) {
   }
 }
 
-SEXP GetPCABasisMatrix(SEXP pPCA_) {
+SEXP GetPCABasisMatrixCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     MatrixXf pcaBasis = model->GetPCABasisMatrix();
@@ -369,7 +369,7 @@ SEXP GetPCABasisMatrix(SEXP pPCA_) {
   }
 }
 
-SEXP GetOrthonormalPCABasisMatrix(SEXP pPCA_) {
+SEXP GetOrthonormalPCABasisMatrixCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     MatrixXf pcaBasis = model->GetOrthonormalPCABasisMatrix();
@@ -383,7 +383,7 @@ SEXP GetOrthonormalPCABasisMatrix(SEXP pPCA_) {
 }
 
 
-SEXP GetNumberOfPrincipalComponents(SEXP pPCA_) {
+SEXP GetNumberOfPrincipalComponentsCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     unsigned int nofPCS = model->GetNumberOfPrincipalComponents();
@@ -396,7 +396,7 @@ SEXP GetNumberOfPrincipalComponents(SEXP pPCA_) {
   }
 }
 
-SEXP GetMeanVector(SEXP pPCA_) {
+SEXP GetMeanVectorCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     VectorXf meanVector  = model->GetMeanVector();
@@ -408,7 +408,7 @@ SEXP GetMeanVector(SEXP pPCA_) {
     ::Rf_error("unknown exception");
   }
 }
-SEXP GetNoiseVariance(SEXP pPCA_) {
+SEXP GetNoiseVarianceCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     double noise  = model->GetNoiseVariance();
@@ -421,7 +421,7 @@ SEXP GetNoiseVariance(SEXP pPCA_) {
   }
 }
 
-SEXP GetPCAVarianceVector(SEXP pPCA_) {
+SEXP GetPCAVarianceVectorCpp(SEXP pPCA_) {
   try {
     XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
     VectorXf pcaVector  = model->GetPCAVarianceVector();
@@ -434,7 +434,7 @@ SEXP GetPCAVarianceVector(SEXP pPCA_) {
   }
 }
 
-SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
+SEXP ComputeLogProbabilityCppOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
    try {
      XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));
@@ -447,7 +447,7 @@ SEXP ComputeLogProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
     ::Rf_error("unknown exception");
   }
 }
-SEXP ComputeProbabilityOfCoefficients(SEXP pPCA_, SEXP coeffs_) {
+SEXP ComputeProbabilityOfCoefficientsCpp(SEXP pPCA_, SEXP coeffs_) {
    try {
      XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
      Map<VectorXd> coeffs0(as<Map<VectorXd> >(coeffs_));

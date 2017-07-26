@@ -1,6 +1,6 @@
 #include "pPCA2statismo.h"
 
-RcppExport SEXP pPCA2pointer(SEXP pPCA_) {
+RcppExport SEXP pPCA2pointerCpp(SEXP pPCA_) {
   try {
   XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
   return statismo2pPCA(model,true);
@@ -10,7 +10,7 @@ RcppExport SEXP pPCA2pointer(SEXP pPCA_) {
     ::Rf_error("unknown exception");
   }
 }
-RcppExport SEXP pointer2pPCA(SEXP pPCA_) {
+RcppExport SEXP pointer2pPCACpp(SEXP pPCA_) {
   try {
   XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
   return statismo2pPCA(model,false);

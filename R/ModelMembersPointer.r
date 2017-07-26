@@ -2,13 +2,13 @@
 
 #' @rdname StatismoMatrices
 setMethod("GetPCABasisMatrix", signature(model = "pPCA_pointer"), function(model) {
-    W <- .Call("GetPCABasisMatrix",model) ##Matrix to project scaled PC-scores back into the config space
+    W <- .Call("GetPCABasisMatrixCpp",model) ##Matrix to project scaled PC-scores back into the config space
     return(W)
 })
 
 #' @rdname StatismoMatrices
 setMethod("GetOrthonormalPCABasisMatrix" ,signature(model="pPCA_pointer"),function(model) {
-    return(.Call("GetOrthonormalPCABasisMatrix",model))
+    return(.Call("GetOrthonormalPCABasisMatrixCpp",model))
 })
 
 #' @rdname StatismoMatrices
@@ -26,7 +26,7 @@ setMethod("GetCovarianceAtPoint", signature(model="pPCA_pointer",pt1="numeric",p
 
 #' @rdname StatismoMatrices
 setMethod("GetCovarianceMatrix", signature(model="pPCA_pointer"), function(model) {
-    out <- .Call("GetCovarianceMatrix",model)
+    out <- .Call("GetCovarianceMatrixCpp",model)
     return(out)
 })
 
@@ -34,7 +34,7 @@ setMethod("GetCovarianceMatrix", signature(model="pPCA_pointer"), function(model
 setMethod("GetJacobian", signature(model="pPCA_pointer", pt="numeric"), function(model,pt) {
     if (length(pt) == 1)
         pt <- GetDomainPoints(model)[pt,]
-    out <- .Call("GetJacobian",model,pt)
+    out <- .Call("GetJacobianCpp",model,pt)
     return(out)
 })
 
@@ -53,23 +53,23 @@ setMethod("GetProjectionMatrix", signature(model="pPCA_pointer"), function(model
 
 #' @rdname statismoParameters
 setMethod("GetNoiseVariance",signature(model = "pPCA_pointer"), function(model) {
-    return(.Call("GetNoiseVariance",model))
+    return(.Call("GetNoiseVarianceCpp",model))
 })
 
 #' @rdname statismoParameters
 setMethod("GetMeanVector",signature(model = "pPCA_pointer"), function(model) {
-    return(.Call("GetMeanVector",model))
+    return(.Call("GetMeanVectorCpp",model))
 })
 
 #' @rdname statismoParameters
 setMethod("GetPCAVarianceVector", signature(model="pPCA_pointer"), function(model) {
-    return (.Call("GetPCAVarianceVector",model))
+    return (.Call("GetPCAVarianceVectorCpp",model))
     #return(model@PCA$sdev^2)
 })
 
 #' @rdname statismoParameters
 setMethod("GetNumberOfPrincipalComponents",signature(model = "pPCA_pointer"), function(model) {
-    return(.Call("GetNumberOfPrincipalComponents",model))
+    return(.Call("GetNumberOfPrincipalComponentsCpp",model))
 })
 
 
@@ -78,7 +78,7 @@ setMethod("GetNumberOfPrincipalComponents",signature(model = "pPCA_pointer"), fu
 
 #' @rdname StatismoSample
 setMethod("ComputeLogProbability",signature(model="pPCA_pointer"), function(model,dataset) {
-    out <- .Call("ComputeLogProbability",model,dataset2representer(dataset),TRUE)
+    out <- .Call("ComputeLogProbabilityCpp",model,dataset2representer(dataset),TRUE)
     return(out)
 })
 
@@ -86,7 +86,7 @@ setMethod("ComputeLogProbability",signature(model="pPCA_pointer"), function(mode
 
 #' @rdname StatismoSample
 setMethod("ComputeProbabilityOfDataset",signature(model="pPCA_pointer"), function(model,dataset) {
-    out <- .Call("ComputeLogProbability",model,dataset2representer(dataset),FALSE)
+    out <- .Call("ComputeLogProbabilityCpp",model,dataset2representer(dataset),FALSE)
     return(out)
 })
 #' @rdname StatismoSample
@@ -94,7 +94,7 @@ setMethod("ComputeProbabilityOfCoefficients",signature(model="pPCA_pointer"), fu
     npc <- GetNumberOfPrincipalComponents(model)
     if (length(coefficients) != npc)
         warning("number of coefficients != number of PCs")
-    out <- .Call("ComputeProbabilityOfCoefficients",model,coefficients)
+    out <- .Call("ComputeProbabilityOfCoefficientsCpp",model,coefficients)
     return(out)
 })
 
@@ -103,19 +103,19 @@ setMethod("ComputeLogProbabilityOfCoefficients",signature(model="pPCA_pointer"),
     npc <- GetNumberOfPrincipalComponents(model)
     if (length(coefficients) != npc)
         warning("number of coefficients != number of PCs")
-    out <- .Call("ComputeLogProbabilityOfCoefficients",model,coefficients)
+    out <- .Call("ComputeLogProbabilityCppOfCoefficients",model,coefficients)
     return(out)
 })
 
 #' @rdname StatismoSample
 setMethod("ComputeMahalanobisDistance",signature(model="pPCA_pointer"), function(model,dataset) {
-    out <- .Call("ComputeMahalanobisDistance",model,dataset2representer(dataset),FALSE)
+    out <- .Call("ComputeMahalanobisDistanceCpp",model,dataset2representer(dataset),FALSE)
     return(out)
 })
 
 #' @rdname statismoMembers
 setMethod("DrawMean",  signature(model="pPCA_pointer"), function(model) {
-    out <- output2sample(.Call("DrawMean",model))
+    out <- output2sample(.Call("DrawMeanCpp",model))
     return(out)
 })
 
@@ -127,7 +127,7 @@ setMethod("DrawMeanAtPoint",  signature(model="pPCA_pointer",pt="numeric"), func
         meanpt <- pt
     else
         stop("pt must be an integer or a vector of length 3")
-    out <- .Call("DrawMeanAtPoint",model,meanpt)
+    out <- .Call("DrawMeanCppAtPoint",model,meanpt)
     return(out)
 })
 
@@ -145,7 +145,7 @@ setMethod("DrawSample",  signature(model="pPCA_pointer"), function(model,coeffic
             message(paste0("  NOTE: only first ", npc, " coefficients used"))
         }
     }
-    out <- output2sample(.Call("DrawSample",model,coefficients,addNoise))
+    out <- output2sample(.Call("DrawSampleCpp",model,coefficients,addNoise))
     return(out)
 })
 
@@ -162,7 +162,7 @@ setMethod("DrawSampleVector",  signature(model="pPCA_pointer"), function(model,c
         message(paste0("  NOTE: only first ", npc, " coefficients used"))
     }
     
-    out <- .Call("DrawSampleVector",model,coefficients,addNoise)
+    out <- .Call("DrawSampleCppVector",model,coefficients,addNoise)
     return(out)
 })
 
@@ -186,13 +186,13 @@ setMethod("DrawSampleAtPoint",  signature(model="pPCA_pointer",coefficients="num
         stop("pt must be an integer or a vector of length 3")
     
     
-    out <- (.Call("DrawSampleAtPoint",model,coefficients,meanpt,addNoise))
+    out <- (.Call("DrawSampleCppAtPoint",model,coefficients,meanpt,addNoise))
     return(out)
 })
 
 #' @rdname statismoMembers
 setMethod("ComputeCoefficients",signature(model="pPCA_pointer"), function(model,dataset) {
-    out <- .Call("ComputeCoefficients",model,dataset2representer(dataset))
+    out <- .Call("ComputeCoefficientsCpp",model,dataset2representer(dataset))
     return(out)
 })
 
@@ -204,7 +204,7 @@ setMethod("ComputeCoefficients",signature(model="pPCA_pointer"), function(model,
 
 #' @rdname statismoMembers
 setMethod("GetDomainPoints", signature(model="pPCA_pointer"), function(model) {
-    out <- t(.Call("GetDomainPoints",model))
+    out <- t(.Call("GetDomainPointsCpp",model))
     return(out)
 })
 
@@ -218,7 +218,7 @@ setMethod("GetDomainSize", signature(model="pPCA_pointer"), function(model) {
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", sample="matrix",pt="numeric",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
     sample <- t(sample)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
-    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValues",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -226,7 +226,7 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", s
 setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", sample="matrix",pt="matrix",ptNoise="numeric"), function(model,sample,pt,ptNoise=0) {
     sample <- t(sample)
     mean <- t(pt)
-    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValues",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -239,7 +239,7 @@ setMethod("ComputeCoefficientsForPointValues", signature(model="pPCA_pointer", s
         mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
     else
         stop("in this case pt must be a vector of length 3 or an integer")
-    out <- .Call("ComputeCoefficientsForPointValues",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValues",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -252,7 +252,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     sample <- t(sample)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
      storage.mode(ptNoise) ="numeric"
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -263,7 +263,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     storage.mode(ptNoise) ="numeric"
     sample <- t(sample)
     mean <- t(pt)
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -280,7 +280,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     else
         stop("in this case pt must be a vector of length 3 or an integer")
     storage.mode(ptNoise) ="numeric"
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -291,7 +291,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     sample <- t(sample)
     mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
     storage.mode(ptNoise) ="numeric"
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -302,7 +302,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     sample <- t(sample)
     mean <- t(pt)
     storage.mode(ptNoise) ="numeric"
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -318,7 +318,7 @@ setMethod("ComputeCoefficientsForPointValuesWithCovariance", signature(model="pP
     else
         stop("in this case pt must be a vector of length 3 or an integer")
     storage.mode(ptNoise) ="numeric"
-    out <- .Call("ComputeCoefficientsForPointValuesWithCovariance",model,sample,mean,ptNoise)
+    out <- .Call("ComputeCoefficientsCppForPointValuesWithCovariance",model,sample,mean,ptNoise)
     return(out)
 })
 
@@ -333,7 +333,7 @@ setMethod("EvaluateSampleAtPoint", signature(model="pPCA_pointer", sample="matri
         meanpt <- pt
     else
         stop("pt must be an integer or a vector of length 3")
-    out <- .Call("EvaluateSampleAtPoint",model,sample,meanpt)
+    out <- .Call("EvaluateSampleAtPointCpp",model,sample,meanpt)
     return(out)
 })
 

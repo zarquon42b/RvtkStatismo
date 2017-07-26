@@ -34,6 +34,6 @@ setMethod("competingPoints", signature(model="pPCA",sample="matrix",index="numer
     if (length(index) != nrow(sample))
         stop("each point needs an index assigned")
     index <- index-1L
-    out <- .Call("competingPoints",model,sample,index,mahalanobis)
+    out <- .Call("competingPointsCpp",model,sample,index,mahalanobis)
     return(out)
 })

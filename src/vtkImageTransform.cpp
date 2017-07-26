@@ -23,7 +23,7 @@
 using namespace Rcpp;
 
 
-SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_) {
+SEXP vtkImageTransformCpp(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_) {
   try{ 
     int interpolation = as<int>(interpolation_);
     std::string type = as<std::string>(type_);

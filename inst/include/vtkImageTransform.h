@@ -24,6 +24,6 @@
 #include <RcppEigen.h>
 using namespace Rcpp;
 
-RcppExport SEXP vtkImageTransform(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_);
+RcppExport SEXP vtkImageTransformCpp(SEXP images_, SEXP reflm_, SEXP tarlm_ , SEXP outname_,SEXP type_, SEXP interpolation_);
 
 #endif //_VTKIMAGETRANSFORM_H__

@@ -9,7 +9,7 @@
 #' @details see documentation of vtkMassProperties for details
 #' @export
 vtkMeshInfo <- function(mesh) {
-    out <- .Call("vtkMeshInfo",mesh)
+    out <- .Call("vtkMeshInfoCpp",mesh)
     return(out)
 }
 
