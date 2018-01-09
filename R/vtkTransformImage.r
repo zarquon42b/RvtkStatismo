@@ -20,3 +20,6 @@ vtkImageTransform <- function(image,sourceLM,targetLM,outname="default.mha",type
     invisible(!as.logical(out))
     
 }
+vtkDicom2Nifti <- function(input,output) {
+    out <- .Call("vtkDicom2Nifti",input,output)
+}
