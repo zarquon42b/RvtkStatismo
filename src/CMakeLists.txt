@@ -1,3 +1,5 @@
+
+
 cmake_minimum_required(VERSION 2.6)
 #set(VTK_DIR ".")
 if( POLICY CMP0042 )
@@ -14,9 +16,9 @@ set(RCPP_DIR "$ENV{RCPP_DIR}/include")
 set(RCPPEIGEN_DIR "$ENV{RCPPEIGEN_DIR}/include")
 #set(BH_DIR "$ENV{BH_DIR}/include")
 set(R_INCLUDE_DIR "$ENV{R_INCLUDE_DIR}")
-set(CXX "$ENV{CXX}")
+set(CMAKE_CXX_COMPILER "$ENV{CXX}")
 set(SHLIB_OPENMP_CXXFLAGS "$ENV{SHLIB_OPENMP_CXXFLAGS}")
-
+## message("$ENV{CXX}")
 set(CXXFLAGS "$ENV{CXXFLAGS}")
 set(CPPFLAGS "$ENV{CPPFLAGS}")
 set(BLAS_LIBS "$ENV{BLAS_LIBS}")
@@ -24,7 +26,6 @@ set(LAPACK_LIBS "$ENV{LAPACK_LIBS}")
 ## set variables accordingly
 set(CMAKE_CXX_FLAGS "${CXXFLAGS} ${SHLIB_OPENMP_CXXFLAGS}")
 set(CMAKE_C_FLAGS "${CPPFLAGS} ${CFLAGS}")
-SET(CMAKE_CXX_COMPILER::string "${CXX}")
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 project(RvtkStatismo CXX)
@@ -76,9 +77,9 @@ if(VTK_MAJOR_VERSION GREATER 5)
   find_package( VTK REQUIRED COMPONENTS ${required_vtk_modules} )
 endif(VTK_MAJOR_VERSION GREATER 5)
 
-message(${HDF5_INCLUDE_DIRS})
-LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIR} )
-include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} ${HDF5_INCLUDE_DIR} "../inst/include/")
+## message(${HDF5_INCLUDE_DIRS})
+LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_DIR} ${Boost_LIBRARY_DIR} ${VTK_LIBRARY_DIR} )
+include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} ${HDF5_INCLUDE_DIRS} "../inst/include/")
 include(${VTK_USE_FILE})
 include(${ITK_USE_FILE})
 add_library(RvtkStatismo SHARED RvtkStatismo_init.c BuildConditionalModel.cpp BuildGaussProcessModel.cpp BuildModel.cpp checkListNames.cpp competingPoints.cpp ConstrainedModel.cpp getFullJacobian.cpp Helpers.cpp ModelMembers.cpp polyData2R.cpp pPCA2statismo.cpp pPCA_pointer.cpp R2polyData.cpp R2vtkPoints.cpp readVTP.cpp ReducedModel.cpp SaveModel.cpp SetScale.cpp vtkBooleanOp.cpp vtkDicom2Nifti.cpp vtkExtractOutsideMesh.cpp vtkGeodesicPath.cpp vtkICP.cpp vtkImageBlend.cpp vtkImageIO.cpp vtkImageTransform.cpp vtkpoly2unstruct.cpp vtkPolyData2vtkImageData.cpp vtkPolyToImageData.cpp vtkPolyVolume.cpp vtkSegment2PolyData.cpp vtkSurfaceReko.cpp vtkVisualize.cpp writeToVTK.cpp)
@@ -90,11 +91,14 @@ else()
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SHLIB_OPENMP_CXXFLAGS}")
 endif(LINK_STATIC_LIBSTDC)
 
+## message("${VTK_DIR}")
+
 target_link_libraries(RvtkStatismo ${VTK_LIBRARIES} ${STATISMO_HDF5_LIBRARIES} R ${Boost_LIBRARIES} ${statismo_LIBRARIES})
 if(APPLE)
   SET_TARGET_PROPERTIES(RvtkStatismo PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
   set_property(TARGET RvtkStatismo PROPERTY OUTPUT_NAME "RvtkStatismo.so")
   set_property(TARGET RvtkStatismo PROPERTY SUFFIX "")
 endif()
+
 
 SET_TARGET_PROPERTIES(RvtkStatismo PROPERTIES PREFIX "")
