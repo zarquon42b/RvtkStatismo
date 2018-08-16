@@ -85,7 +85,7 @@ There are two ways to tell R, where the libraries reside:
 
 
 
-#####Install *devtools*#####
+##### Install *devtools* #####
 from within R (Ubuntu/Debian users will have to install *libcurl4-gnutls-dev* beforehand):
 
         
