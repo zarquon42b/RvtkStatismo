@@ -16,6 +16,8 @@
 #' @export
 vtkMesh2Image <- function(mesh,spacing=c(0.5,0.5,0.5),filename="default.mha",IJK2RAS=diag(c(-1,-1,1)),margin=0.1,col=255,tol=0) {
     mesh$vb[1:3,] <- IJK2RAS%*%mesh$vb[1:3,]
+    if(!Rvcg:::checkNormOrient(mesh))
+    	mesh <- Morpho::invertFaces(mesh)
     out <- .Call("vtkPolyToImageData",mesh,filename,spacing,margin,col,tol)
     return(!as.logical(out))
 }
