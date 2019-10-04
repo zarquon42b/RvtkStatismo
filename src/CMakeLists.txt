@@ -16,7 +16,7 @@ endif()
  set(RCPPEIGEN_DIR "$ENV{RCPPEIGEN_DIR}/include")
  #set(BH_DIR "$ENV{BH_DIR}/include")
  set(R_INCLUDE_DIR "$ENV{R_INCLUDE_DIR}")
- set(CMAKE_CXX_COMPILER "$ENV{CXX}")
+ set(CMAKE_CXX_COMPILER $ENV{CXX11})
  set(SHLIB_OPENMP_CXXFLAGS "$ENV{SHLIB_OPENMP_CXXFLAGS}")
  ## message("$ENV{CXX}")
  set(CXXFLAGS "$ENV{CXXFLAGS}")
@@ -29,7 +29,7 @@ endif()
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CXX "/usr/bin/c++")
 project(RvtkStatismo CXX)
-
+message($CXX)
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(statismo REQUIRED)
 
