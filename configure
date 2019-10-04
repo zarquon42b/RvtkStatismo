@@ -3,7 +3,7 @@
 export R_HOME
 CXX=$($R_HOME/bin/R CMD config CXX)
 #CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
-CXXFLAGS=$($R_HOME/bin/R CMD config CXX1XFLAGS)
+#CXXFLAGS=$($R_HOME/bin/R CMD config CXX1XFLAGS)
 # $(R CMD config DYLIB_LDFLAGS)"
 CPPFLAGS=$($R_HOME/bin/R CMD config CPPFLAGS)
 BLAS_LIBS=$($R_HOME/bin/R CMD config BLAS_LIBS)
