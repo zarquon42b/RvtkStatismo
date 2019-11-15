@@ -90,7 +90,8 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawMeanAtPoint}{pPCA,numeric}(model, pt)
 
-\S4method{DrawSample}{pPCA}(model, coefficients = NULL, addNoise = FALSE)
+\S4method{DrawSample}{pPCA}(model, coefficients = NULL,
+  addNoise = FALSE)
 
 \S4method{DrawSampleVector}{pPCA}(model, coefficients, addNoise = FALSE)
 
@@ -107,7 +108,8 @@ GetPCScores(model, scaled = TRUE)
   \S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,numeric,numeric}(model,
   sample, pt, ptNoise = 0)
 
-\S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,matrix,numeric}(model,
+
+  \S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,matrix,numeric}(model,
   sample, pt, ptNoise = 0)
 
 
@@ -156,8 +158,8 @@ GetPCScores(model, scaled = TRUE)
 \S4method{DrawSampleVector}{pPCA_pointer}(model, coefficients,
   addNoise = FALSE)
 
-\S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model, coefficients,
-  pt, addNoise = FALSE)
+\S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model,
+  coefficients, pt, addNoise = FALSE)
 
 \S4method{ComputeCoefficients}{pPCA_pointer}(model, dataset)
 
@@ -201,9 +203,11 @@ GetPCScores(model, scaled = TRUE)
   \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,numeric,numeric,matrix}(model,
   sample, pt, ptNoise = 0)
 
-\S4method{EvaluateSampleAtPoint}{pPCA_pointer,matrix,numeric}(model, sample, pt)
+\S4method{EvaluateSampleAtPoint}{pPCA_pointer,matrix,numeric}(model,
+  sample, pt)
 
-\S4method{EvaluateSampleAtPoint}{pPCA_pointer,mesh3d,numeric}(model, sample, pt)
+\S4method{EvaluateSampleAtPoint}{pPCA_pointer,mesh3d,numeric}(model,
+  sample, pt)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

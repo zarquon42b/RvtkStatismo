@@ -45,7 +45,8 @@ ComputeMahalanobisDistance(model, dataset)
 
 \S4method{ComputeProbabilityOfDataset}{pPCA_pointer}(model, dataset)
 
-\S4method{ComputeProbabilityOfCoefficients}{pPCA_pointer}(model, coefficients)
+\S4method{ComputeProbabilityOfCoefficients}{pPCA_pointer}(model,
+  coefficients)
 
 \S4method{ComputeLogProbabilityOfCoefficients}{pPCA_pointer}(model,
   coefficients)

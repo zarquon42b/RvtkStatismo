@@ -4,8 +4,8 @@
 \alias{statismoModelFromRepresenter}
 \title{generate model from a representer using gaussian kernels}
 \usage{
-statismoModelFromRepresenter(representer, kernel = GaussianKernel(100, 50),
-  ncomp = 10, nystroem = 500, pointer = FALSE)
+statismoModelFromRepresenter(representer, kernel = GaussianKernel(100,
+  50), ncomp = 10, nystroem = 500, pointer = FALSE)
 }
 \arguments{
 \item{representer}{mesh3d or matrix used as representer}

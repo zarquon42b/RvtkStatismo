@@ -8,8 +8,9 @@
 \alias{UpdateModel,pPCA-method}
 \title{calculate or modify a probablistic PCA based on 3D-coordinates}
 \usage{
-pPCA(x, align = FALSE, use.lm = NULL, deselect = FALSE, sigma = NULL,
-  exVar = 1, scale = FALSE, computeScores = TRUE, representer = NULL)
+pPCA(x, align = FALSE, use.lm = NULL, deselect = FALSE,
+  sigma = NULL, exVar = 1, scale = FALSE, computeScores = TRUE,
+  representer = NULL)
 
 UpdateModel(model, sigma = NULL, exVar = 1, computeScores = TRUE)
 

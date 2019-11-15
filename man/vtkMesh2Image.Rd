@@ -4,8 +4,9 @@
 \alias{vtkMesh2Image}
 \title{convert a 3D triangular mesh into a voxel image}
 \usage{
-vtkMesh2Image(mesh, spacing = c(0.5, 0.5, 0.5), filename = "default.mha",
-  IJK2RAS = diag(c(-1, -1, 1)), margin = 0.1, col = 255, tol = 0)
+vtkMesh2Image(mesh, spacing = c(0.5, 0.5, 0.5),
+  filename = "default.mha", IJK2RAS = diag(c(-1, -1, 1)),
+  margin = 0.1, col = 255, tol = 0)
 }
 \arguments{
 \item{mesh}{triangular mesh of class mesh3d}

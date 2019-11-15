@@ -5,7 +5,8 @@
 \title{generate a statistical model using an array of superimposed landmarks or a list of meshes}
 \usage{
 statismoBuildConditionalModel(x, representer, sigma = 0, scale = FALSE,
-  trainingData, conditioningData, surrogateInfo, exVar = 1, pointer = FALSE)
+  trainingData, conditioningData, surrogateInfo, exVar = 1,
+  pointer = FALSE)
 }
 \arguments{
 \item{x}{array of aligned 3D-coordinates or a list of aligned registered meshes.}

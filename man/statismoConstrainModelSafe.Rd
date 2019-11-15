@@ -14,21 +14,22 @@
 statismoConstrainModelSafe(model, sample, pt, ptValueNoise, sdmax = 5,
   computeScores = TRUE, pointer = FALSE)
 
-\S4method{statismoConstrainModelSafe}{pPCA,matrix,numeric}(model, sample, pt,
-  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModelSafe}{pPCA,matrix,numeric}(model, sample,
+  pt, ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
-\S4method{statismoConstrainModelSafe}{pPCA,matrix,matrix}(model, sample, pt,
-  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModelSafe}{pPCA,matrix,matrix}(model, sample,
+  pt, ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
-\S4method{statismoConstrainModelSafe}{pPCA,numeric,numeric}(model, sample, pt,
-  ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModelSafe}{pPCA,numeric,numeric}(model, sample,
+  pt, ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = FALSE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,numeric}(model,
   sample, pt, ptValueNoise, sdmax = 5, computeScores = TRUE,
   pointer = TRUE)
 
-\S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,matrix}(model, sample,
-  pt, ptValueNoise, sdmax = 5, computeScores = TRUE, pointer = TRUE)
+\S4method{statismoConstrainModelSafe}{pPCA_pointer,matrix,matrix}(model,
+  sample, pt, ptValueNoise, sdmax = 5, computeScores = TRUE,
+  pointer = TRUE)
 
 \S4method{statismoConstrainModelSafe}{pPCA_pointer,numeric,numeric}(model,
   sample, pt, ptValueNoise, sdmax = 5, computeScores = TRUE,

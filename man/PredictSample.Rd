@@ -15,35 +15,36 @@ PredictSample(model, dataset, representer = TRUE, ...)
 
 \S4method{PredictSample}{pPCA,matrix}(model, dataset, representer = TRUE,
   origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
-  mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
-  posteriorMean = FALSE, ptValueNoise = 1, ...)
+  mahaprob = c("none", "chisq", "dist"), align = TRUE,
+  addNoise = FALSE, posteriorMean = FALSE, ptValueNoise = 1, ...)
 
 \S4method{PredictSample}{pPCA,mesh3d}(model, dataset, representer = TRUE,
   origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
-  mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
-  posteriorMean = FALSE, ptValueNoise = 1, ...)
+  mahaprob = c("none", "chisq", "dist"), align = TRUE,
+  addNoise = FALSE, posteriorMean = FALSE, ptValueNoise = 1, ...)
 
-\S4method{PredictSample}{pPCA,missing}(model, dataset, representer = TRUE,
-  origSpace = TRUE, lmDataset = NULL, lmModel = NULL, sdmax = NULL,
-  mahaprob = c("none", "chisq", "dist"), align = TRUE, addNoise = FALSE,
-  posteriorMean = FALSE, ptValueNoise = 1, ...)
+\S4method{PredictSample}{pPCA,missing}(model, dataset,
+  representer = TRUE, origSpace = TRUE, lmDataset = NULL,
+  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq",
+  "dist"), align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
+  ptValueNoise = 1, ...)
 
 \S4method{PredictSample}{pPCA_pointer,matrix}(model, dataset,
   representer = TRUE, origSpace = TRUE, lmDataset = NULL,
-  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq", "dist"),
-  align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
+  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq",
+  "dist"), align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
   ptValueNoise = 1, ...)
 
 \S4method{PredictSample}{pPCA_pointer,mesh3d}(model, dataset,
   representer = TRUE, origSpace = TRUE, lmDataset = NULL,
-  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq", "dist"),
-  align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
+  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq",
+  "dist"), align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
   ptValueNoise = 1, ...)
 
 \S4method{PredictSample}{pPCA_pointer,missing}(model, dataset,
   representer = TRUE, origSpace = TRUE, lmDataset = NULL,
-  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq", "dist"),
-  align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
+  lmModel = NULL, sdmax = NULL, mahaprob = c("none", "chisq",
+  "dist"), align = TRUE, addNoise = FALSE, posteriorMean = FALSE,
   ptValueNoise = 1, ...)
 }
 \arguments{

@@ -52,7 +52,8 @@ GetProjectionMatrix(model)
 
 \S4method{GetOrthonormalPCABasisMatrix}{pPCA_pointer}(model)
 
-\S4method{GetCovarianceAtPoint}{pPCA_pointer,numeric,numeric}(model, pt1, pt2)
+\S4method{GetCovarianceAtPoint}{pPCA_pointer,numeric,numeric}(model, pt1,
+  pt2)
 
 \S4method{GetCovarianceMatrix}{pPCA_pointer}(model)
 
