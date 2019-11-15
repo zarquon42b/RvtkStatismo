@@ -1,3 +1,13 @@
+#include <R.h>
+#include <Rinternals.h>
+#include <stdlib.h> // for NULL
+#include <R_ext/Rdynload.h>
+
+/* FIXME: 
+   Check these declarations against the C/Fortran source code.
+*/
+
+/* .Call calls */
 extern SEXP BuildConditionalModelExport(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP BuildGPModelExport(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP BuildModelExport(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -36,6 +46,7 @@ extern SEXP ReducedModel(SEXP, SEXP, SEXP, SEXP);
 extern SEXP SaveModel(SEXP, SEXP);
 extern SEXP SetScale(SEXP, SEXP);
 extern SEXP vtkBooleanOpCpp(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP vtkDicom2Nifti(SEXP, SEXP);
 extern SEXP vtkExtractOutsideMeshCpp(SEXP, SEXP);
 extern SEXP vtkFillHole(SEXP, SEXP);
 extern SEXP vtkGeodesicPath(SEXP, SEXP, SEXP);
@@ -90,6 +101,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"SaveModel",                                          (DL_FUNC) &SaveModel,                                          2},
     {"SetScale",                                           (DL_FUNC) &SetScale,                                           2},
     {"vtkBooleanOpCpp",                                    (DL_FUNC) &vtkBooleanOpCpp,                                    5},
+    {"vtkDicom2Nifti",                                     (DL_FUNC) &vtkDicom2Nifti,                                     2},
     {"vtkExtractOutsideMeshCpp",                           (DL_FUNC) &vtkExtractOutsideMeshCpp,                           2},
     {"vtkFillHole",                                        (DL_FUNC) &vtkFillHole,                                        2},
     {"vtkGeodesicPath",                                    (DL_FUNC) &vtkGeodesicPath,                                    3},

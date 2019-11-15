@@ -1,7 +1,7 @@
-src/CMakeList.txt
 src/getenv
 src/upOBJ.sh
 .gitignore
 .travis.yml
 debian
 src/CMakeCache*
+
