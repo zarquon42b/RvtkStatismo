@@ -22,7 +22,8 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom stats pchisq pnorm prcomp qchisq
 #' @importFrom utils write.table
-#' @useDynLib RvtkStatismo
+#' @useDynLib RvtkStatismo , .registration=TRUE
+
 NULL
 
 #' document deprecated functions
