@@ -2,7 +2,7 @@
 # obtain and export Rs environment variables
 export R_HOME
 CXX11=$($R_HOME/bin/R CMD config CXX11)
-CXX11STD==$($R_HOME/bin/R CMD config CXX11STD)
+CXX11STD=$($R_HOME/bin/R CMD config CXX11STD)
 #CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
 CXX11FLAGS=$($R_HOME/bin/R CMD config CXX11FLAGS)
 # $(R CMD config DYLIB_LDFLAGS)"
