@@ -2,13 +2,16 @@
 # obtain and export Rs environment variables
 export R_HOME
 CXX11=$($R_HOME/bin/R CMD config CXX11)
+CXX11STD==$($R_HOME/bin/R CMD config CXX11STD)
 #CXXFLAGS="$(R CMD config CXX1XSTD) $(R CMD config CXX1XFLAGS)"
-#CXXFLAGS=$($R_HOME/bin/R CMD config CXX1XFLAGS)
+CXX11FLAGS=$($R_HOME/bin/R CMD config CXX11FLAGS)
 # $(R CMD config DYLIB_LDFLAGS)"
 CPPFLAGS=$($R_HOME/bin/R CMD config CPPFLAGS)
 BLAS_LIBS=$($R_HOME/bin/R CMD config BLAS_LIBS)
 LAPACK_LIBS=$($R_HOME/bin/R CMD config LAPACK_LIBS)
 export CXX11
+export CXX11FLAGS
+export CXX11STD
 export CXXFLAGS
 export CPPFLAGS
 export BLAS_LIBS
