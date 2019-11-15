@@ -4,10 +4,12 @@
 \alias{restoreSamples}
 \title{restores original samples from a model with stored PC-scores}
 \usage{
-restoreSamples(model)
+restoreSamples(model, n = NULL)
 }
 \arguments{
 \item{model}{shape model model of class "pPCA"}
+
+\item{n}{only use the first n PCscores}
 }
 \value{
 returns a list of restored shapes
