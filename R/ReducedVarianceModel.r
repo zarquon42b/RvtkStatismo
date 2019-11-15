@@ -21,17 +21,21 @@ setGeneric("statismoReducedVariance", function(model,exVar=1,npc=0,scores=TRUE,p
 
 
 #' @rdname statismoReducedVariance
-setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0,pointer=FALSE) {
+setMethod("statismoReducedVariance", signature(model="pPCA"), function(model, exVar=1,npc=0,scores=TRUE,pointer=FALSE) {
     modVar <- GetNumberOfPrincipalComponents(model)
     npc <- min(npc,modVar)
     out <- .Call("ReducedModel",model,npc,exVar,pointer)
+    if (!scores)
+        SetScores(out) <- matrix(0,0,0)
     return(out)
 })
     
 #' @rdname statismoReducedVariance
-setMethod("statismoReducedVariance", signature(model="pPCA_pointer"), function(model, exVar=1,npc=0,pointer=TRUE) {
+setMethod("statismoReducedVariance", signature(model="pPCA_pointer"), function(model, exVar=1,npc=0,scores=TRUE,pointer=TRUE) {
     modVar <- GetNumberOfPrincipalComponents(model)
     npc <- min(npc,modVar)
     out <- .Call("ReducedModel",model,npc,exVar,pointer)
+    if (!scores)
+        SetScores(out) <- matrix(0,0,0)
     return(out)
 })

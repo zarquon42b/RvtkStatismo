@@ -11,10 +11,10 @@ statismoReducedVariance(model, exVar = 1, npc = 0, scores = TRUE,
   pointer = FALSE)
 
 \S4method{statismoReducedVariance}{pPCA}(model, exVar = 1, npc = 0,
-  pointer = FALSE)
+  scores = TRUE, pointer = FALSE)
 
-\S4method{statismoReducedVariance}{pPCA_pointer}(model, exVar = 1, npc = 0,
-  pointer = TRUE)
+\S4method{statismoReducedVariance}{pPCA_pointer}(model, exVar = 1,
+  npc = 0, scores = TRUE, pointer = TRUE)
 }
 \arguments{
 \item{model}{statistical shape model of class 'pPCA'}
