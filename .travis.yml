@@ -9,6 +9,26 @@ sudo: required
 cache: packages
 warnings_are_errors: false
 
+compiler:
+  - gcc
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-7
+      - g++-7
+      - cmake
+script:
+  # Link gcc-6 and g++-7 to their standard commands
+  - ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  - ln -s /usr/bin/g++-7 /usr/local/bin/g++
+  # Export CC and CXX to tell cmake which compiler to use
+  - export CC=/usr/bin/gcc-6
+  - export CXX=/usr/bin/g++-6
+  # Check versions of gcc, g++ and cmake
+  - gcc -v && g++ -v && cmake --version
+
 before_install:
   
   - if [ "$TRAVIS_BRANCH" == "master" ]; then sudo add-apt-repository ppa:zarquon42/ppa -y; fi
