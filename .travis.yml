@@ -24,8 +24,8 @@ script:
   - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
   - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
   # Export CC and CXX to tell cmake which compiler to use
-  - sudo export CC=/usr/bin/gcc-7
-  - sudo export CXX=/usr/bin/g++-7
+  - export CC=/usr/bin/gcc-7
+  - export CXX=/usr/bin/g++-7
   # Check versions of gcc, g++ and cmake
   - sudo gcc -v && g++ -v && cmake --version
 
