@@ -6,18 +6,8 @@
 
 language: c
 sudo: required
-dist: trusty
+dist: bionic
 
-compiler:
-  - gcc
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-7
-      - g++-7
-      - cmake
 
 before_install:
   
@@ -26,10 +16,6 @@ before_install:
   - if [ "$TRAVIS_BRANCH" != "master" ]; then sudo add-apt-repository ppa:zarquon42/statismo-develop -y; fi
   - sudo apt-get update -qq
   - sudo apt-get install -y statismo-dev cmake
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  - export CC=/usr/bin/gcc-7
-  - export CXX=/usr/bin/g++-7
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - export RGL_USE_NULL=TRUE
   - chmod 755 ./travis-tool.sh
@@ -53,5 +39,4 @@ env:
     - R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
     - _R_CHECK_FORCE_SUGGESTS_: false
     - RGL_USE_NULL: true
-    - CC: /usr/bin/gcc-7
-    - CXX: /usr/bin/g++-7
+ 
