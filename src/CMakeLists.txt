@@ -93,7 +93,7 @@ else()
 endif(LINK_STATIC_LIBSTDC)
 
 ## message("${VTK_DIR}")
-
+target_compile_options(RvtkStatismo PRIVATE "-w")
 target_link_libraries(RvtkStatismo ${VTK_LIBRARIES} ${STATISMO_HDF5_LIBRARIES} R ${Boost_LIBRARIES} ${statismo_LIBRARIES})
 if(APPLE)
   SET_TARGET_PROPERTIES(RvtkStatismo PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
