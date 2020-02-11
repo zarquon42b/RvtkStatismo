@@ -11,7 +11,6 @@ dist: bionic
 
 before_install:
   
-  - sudo add-apt-repository ppa:zarquon42/travis-trusty -y
   - if [ "$TRAVIS_BRANCH" == "master" ]; then sudo add-apt-repository ppa:zarquon42/ppa -y; fi
   - if [ "$TRAVIS_BRANCH" != "master" ]; then sudo add-apt-repository ppa:zarquon42/statismo-develop -y; fi
   - sudo apt-get update -qq
