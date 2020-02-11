@@ -19,15 +19,6 @@ addons:
       - gcc-7
       - g++-7
       - cmake
-script:
-  # Link gcc-6 and g++-7 to their standard commands
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  # Export CC and CXX to tell cmake which compiler to use
-  - export CC=/usr/bin/gcc-7
-  - export CXX=/usr/bin/g++-7
-  # Check versions of gcc, g++ and cmake
-  - sudo gcc -v && g++ -v && cmake --version
 
 before_install:
   
@@ -35,7 +26,12 @@ before_install:
   - if [ "$TRAVIS_BRANCH" != "master" ]; then sudo add-apt-repository ppa:zarquon42/statismo-develop -y; fi
   - sudo apt-get update -qq
   - sudo apt-get install --install-recommends -y statismo-dev cmake
-
+    - sudo apt-get install --install-recommends -y statismo-dev cmake
+  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+  - export CC=/usr/bin/gcc-7
+  - export CXX=/usr/bin/g++-7
+  
 repos:
   CRAN: https://cloud.r-project.org
 
