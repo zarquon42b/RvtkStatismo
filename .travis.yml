@@ -31,12 +31,6 @@ before_install:
 repos:
   CRAN: https://cloud.r-project.org
 
-r_binary_packages:
- - rgl
- - rvcg
- - morpho
- - testthat 
-
 notifications:
   email:
     on_success: change
