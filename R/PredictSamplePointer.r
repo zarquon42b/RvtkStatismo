@@ -1,7 +1,7 @@
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA_pointer",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1, ...) {
+setMethod("PredictSample", signature(model="pPCA_pointer",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10, ...) {
     #mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- GetDomainPoints(model)
     hasLM <- FALSE
@@ -19,10 +19,21 @@ setMethod("PredictSample", signature(model="pPCA_pointer",dataset="matrix"),func
     } else
         sb <- dataset
    
-    if (hasLM && posteriorMean) 
+   if (hasLM && posteriorMean) {
+        clearData <- clearByMaha(model,lmDataset,lmModel,mahasafe)
+        lmDataset <- clearData$lmDataset
+        lmModel <- clearData$lmModel
         alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
-    else 
-        alpha <- ComputeCoefficients(model,sb)
+    } else {
+        if (mahasafe < 1e10) {
+            clearData <- clearByMaha(model,sb,1:nrow(sb),mahasafe)
+            lmDataset <- clearData$lmDataset
+            lmModel <- clearData$lmModel
+            alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
+        } else
+            alpha <- ComputeCoefficients(model,sb)
+        
+    }
     sdl <- GetNumberOfPrincipalComponents(model)
     if (!is.null(sdmax)) {
         alpha <- constrainParams(alpha,sdmax=sdmax,mahaprob=mahaprob)
@@ -44,15 +55,15 @@ setMethod("PredictSample", signature(model="pPCA_pointer",dataset="matrix"),func
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA_pointer",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1, ...) {
+setMethod("PredictSample",signature(model="pPCA_pointer",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10, ...) {
     mat <- t(dataset$vb[1:3,])
-    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,posteriorMean=posteriorMean,ptValueNoise=ptValueNoise,addNoise=addNoise,...)
+    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,posteriorMean=posteriorMean,ptValueNoise=ptValueNoise,addNoise=addNoise,mahasafe=mahasafe,...)
     return(estim)
 })
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA_pointer",dataset="missing"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,...) {
+setMethod("PredictSample",signature(model="pPCA_pointer",dataset="missing"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10,...) {
     hasLM <- FALSE
     if (!is.null(lmDataset) && !is.null(lmModel))
         hasLM <- TRUE
@@ -63,6 +74,11 @@ setMethod("PredictSample",signature(model="pPCA_pointer",dataset="missing"), fun
         lmDataset <- rotsb$yrot
     }
     posteriorMean <- TRUE
+    clearData <- clearByMaha(model,lmDataset,lmModel,mahasafe)
+    lmDataset <- clearData$lmDataset
+    lmModel <- clearData$lmModel
+    if (length(ptValueNoise) > 1)
+        ptValueNoise <- ptValueNoise[clearData$good,]
     alpha <- ComputeCoefficientsForPointValuesWithCovariance(model,lmDataset,lmModel,ptNoise = ptValueNoise)
     sdl <- GetNumberOfPrincipalComponents(model)
     if (!is.null(sdmax)) {

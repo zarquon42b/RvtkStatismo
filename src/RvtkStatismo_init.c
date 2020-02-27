@@ -61,6 +61,7 @@ extern SEXP vtkSegment2PolyData(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP vtkSurfaceRekoCpp(SEXP, SEXP);
 extern SEXP vtkVisualize(SEXP, SEXP, SEXP);
 extern SEXP vtkWrite(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP GetMahalanobisForPointSets(SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"BuildConditionalModelExport",                        (DL_FUNC) &BuildConditionalModelExport,                        8},
@@ -116,6 +117,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"vtkSurfaceRekoCpp",                                  (DL_FUNC) &vtkSurfaceRekoCpp,                                  2},
     {"vtkVisualize",                                       (DL_FUNC) &vtkVisualize,                                       3},
     {"vtkWrite",                                           (DL_FUNC) &vtkWrite,                                           5},
+    {"GetMahalanobisForPointSets",                         (DL_FUNC) &GetMahalanobisForPointSets,                         3},
     {NULL, NULL, 0}
 };
 

@@ -12,4 +12,5 @@ RcppExport SEXP PosteriorModel(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValue
 
 RcppExport SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,SEXP maha_, SEXP computeScores_, SEXP pointer_);
 
+RcppExport SEXP GetMahalanobisForPointSets(SEXP pPCA_,SEXP sample_, SEXP mean_);
 #endif 

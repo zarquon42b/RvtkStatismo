@@ -135,3 +135,26 @@ SEXP PosteriorModelSafe(SEXP pPCA_,SEXP sample_, SEXP mean_, SEXP ptValueNoise_,
     ::Rf_error("unknown exception");
   }
 }
+
+
+SEXP GetMahalanobisForPointSets(SEXP pPCA_,SEXP sample_, SEXP mean_) {
+
+   try {
+    NumericMatrix sample(sample_);
+    NumericMatrix mean(mean_);
+    XPtr<vtkMeshModel> model = pPCA2statismo(pPCA_);
+    std::vector<double> mahaout;
+    for (int i = 0; i < mean.ncol();i++) {
+      vtkPoint tmp0 = SEXP2vtkPoint(wrap(sample(_,i)));
+      vtkPoint tmp1 = SEXP2vtkPoint(wrap(mean(_,i)));
+      PointValuePairType tmppair = PointValuePairType(tmp1,tmp0);
+      double mahaget = mahadist(model.get(),tmp0,tmp1);
+      mahaout.push_back(mahaget);
+    }
+    return(wrap(mahaout));
+   }  catch (std::exception& e) {
+     ::Rf_error( e.what());
+   } catch (...) {
+     ::Rf_error("unknown exception");
+   }
+}

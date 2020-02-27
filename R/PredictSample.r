@@ -14,6 +14,7 @@
 #' @param addNoise re-add noise while reprojecting from latent into shape space.
 #' @param posteriorMean if TRUE, instead the shape will be the mean of the posterior model using the coordinates defined by \code{lmModel} and \code{lmDataset}.
 #' @param ptValueNoise numeric: set global noise assumed in the data when \code{posteriorMean = TRUE}
+#' @param mahasafe set a value to specify the maximum (squared) Mahalanobisdistance to be allowed for correspondences to be  valid.
 #' @param ... currently not in use.
 #' 
 #' @return \code{PredictSample} returns a matrix/mesh3d restricted to the boundaries given by the modelspace.
@@ -32,7 +33,7 @@ setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1, ...) {
+setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(model, dataset,representer=TRUE,origSpace=TRUE,lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE, addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10,...) {
     #mahaprob <- substr(mahaprob[1],1L,1L)
     mshape <- getMeanMatrix(model,transpose=TRUE)
     hasLM <- FALSE
@@ -49,11 +50,22 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
         }
     } else
         sb <- dataset
-   
-    if (hasLM && posteriorMean) 
+    
+    if (hasLM && posteriorMean) {
+        clearData <- clearByMaha(model,lmDataset,lmModel,mahasafe)
+        lmDataset <- clearData$lmDataset
+        lmModel <- clearData$lmModel
         alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
-    else 
-        alpha <- ComputeCoefficients(model,sb)
+    } else {
+        if (mahasafe < 1e10) {
+            clearData <- clearByMaha(model,sb,1:nrow(sb),mahasafe)
+            lmDataset <- clearData$lmDataset
+            lmModel <- clearData$lmModel
+            alpha <- ComputeCoefficientsForPointValues(model,lmDataset,lmModel,ptNoise = ptValueNoise)
+        } else
+            alpha <- ComputeCoefficients(model,sb)
+        
+    }
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
         alpha <- constrainParams(alpha,sdmax=sdmax,mahaprob=mahaprob)
@@ -75,15 +87,15 @@ setMethod("PredictSample", signature(model="pPCA",dataset="matrix"),function(mod
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1, ...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="mesh3d"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10, ...) {
     mat <- t(dataset$vb[1:3,])
-    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,posteriorMean=posteriorMean,ptValueNoise=ptValueNoise,addNoise=addNoise,...)
+    estim <- PredictSample(model,vert2points(dataset),align=align,representer=representer,sdmax=sdmax,origSpace=origSpace,lmDataset=lmDataset, lmModel=lmModel,mahaprob=mahaprob,posteriorMean=posteriorMean,ptValueNoise=ptValueNoise,addNoise=addNoise,mahasafe=mahasafe,...)
     return(estim)
 })
 
 #' @rdname PredictSample
 #' @export
-setMethod("PredictSample",signature(model="pPCA",dataset="missing"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,...) {
+setMethod("PredictSample",signature(model="pPCA",dataset="missing"), function(model,dataset,representer=TRUE,origSpace=TRUE, lmDataset=NULL, lmModel=NULL,sdmax=NULL,mahaprob=c("none","chisq","dist"),align=TRUE,addNoise=FALSE,posteriorMean=FALSE,ptValueNoise=1,mahasafe=1e10,...) {
     hasLM <- FALSE
     if (!is.null(lmDataset) && !is.null(lmModel))
         hasLM <- TRUE
@@ -94,6 +106,11 @@ setMethod("PredictSample",signature(model="pPCA",dataset="missing"), function(mo
         lmDataset <- rotsb$yrot
     }
     posteriorMean <- TRUE
+    clearData <- clearByMaha(model,lmDataset,lmModel,mahasafe)
+    lmDataset <- clearData$lmDataset
+    lmModel <- clearData$lmModel
+    if (length(ptValueNoise) > 1)
+        ptValueNoise <- ptValueNoise[clearData$good,]
     alpha <- ComputeCoefficientsForPointValuesWithCovariance(model,lmDataset,lmModel,ptNoise = ptValueNoise)
     sdl <- length(model@PCA$sdev)
     if (!is.null(sdmax)) {
@@ -141,4 +158,21 @@ constrainParams <- function(alpha,sdmax=3,mahaprob=c("none","chisq","dist")) {
         alpha <- alpha*signalpha
     }
     return(alpha)
+}
+
+
+clearByMaha <- function(model,lmDataset,lmModel,mahasafe) {
+    if (is.vector(lmModel))
+        lmModel <- GetDomainPoints(model)[lmModel,]
+    getMaha <- GetMahalanobisForPointSets(model,lmDataset,lmModel)
+    good <- which(getMaha < mahasafe)
+    if (!length(good))
+        stop("no valid correspondences found")
+    else {
+        lmModel <- lmModel[good,]
+        lmDataset <- lmDataset[good,]
+    }
+    return(list(lmModel=lmModel,lmDataset=lmDataset,good=good))
+        
+    
 }

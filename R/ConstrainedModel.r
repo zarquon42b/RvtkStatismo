@@ -141,3 +141,28 @@ checkpointValueNoise <- function(ptValueNoise,sample) {
     return(ptValueNoise)
 }
 
+
+#' Get pointwise Mahalanobis Distances based on Per-Coordinate Covariance Matrices
+#'
+#' Get pointwise Mahalanobis Distances based on Per-Coordinate Covariance Matrices
+#' @param model shape model
+#' @param sample matrix with sample landmarks to be tested
+#' @param pt matrix with coordinates on the model mean or indices
+#' @return returns a vector of Mahalanobis distances
+#' @examples
+#' require(Morpho)
+#' data(boneData)
+#' align <- rigidAlign(boneLM)$rotated
+#' mymod <- statismoBuildModel(align,representer=align[,,1],sigma=2,scale=TRUE)
+#' mahadists <- GetMahalanobisForPointSets(mymod,align[,,1],1:10)
+#' @export
+GetMahalanobisForPointSets <- function(model,sample,pt) {
+    if (is.vector(pt))
+        mean <- t(GetDomainPoints(model))[,pt,drop=FALSE]
+    else
+        mean <- t(pt)
+    sample <- t(sample)
+    out <- .Call("GetMahalanobisForPointSets",model,sample,mean)
+    return(out)
+}
+    
