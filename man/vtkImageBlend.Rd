@@ -4,8 +4,13 @@
 \alias{vtkImageBlend}
 \title{Blend two Images using vtkImageBlend}
 \usage{
-vtkImageBlend(image1, image2, outname = "out.mha", opacity1 = 0.5,
-  opacity2 = 0.5)
+vtkImageBlend(
+  image1,
+  image2,
+  outname = "out.mha",
+  opacity1 = 0.5,
+  opacity2 = 0.5
+)
 }
 \arguments{
 \item{image1}{character: path to first image}

@@ -73,8 +73,7 @@ ComputeCoefficients(model, dataset)
 
 ComputeCoefficientsForPointValues(model, sample, pt, ptNoise = 0)
 
-ComputeCoefficientsForPointValuesWithCovariance(model, sample, pt,
-  ptNoise = 0)
+ComputeCoefficientsForPointValuesWithCovariance(model, sample, pt, ptNoise = 0)
 
 GetDomainPoints(model)
 
@@ -90,13 +89,11 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawMeanAtPoint}{pPCA,numeric}(model, pt)
 
-\S4method{DrawSample}{pPCA}(model, coefficients = NULL,
-  addNoise = FALSE)
+\S4method{DrawSample}{pPCA}(model, coefficients = NULL, addNoise = FALSE)
 
 \S4method{DrawSampleVector}{pPCA}(model, coefficients, addNoise = FALSE)
 
-\S4method{DrawSampleAtPoint}{pPCA,numeric,numeric}(model, coefficients, pt,
-  addNoise = FALSE)
+\S4method{DrawSampleAtPoint}{pPCA,numeric,numeric}(model, coefficients, pt, addNoise = FALSE)
 
 \S4method{ComputeCoefficients}{pPCA}(model, dataset)
 
@@ -104,41 +101,23 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{GetDomainSize}{pPCA}(model)
 
+\S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,matrix,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValues}{pPCA,numeric,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA,matrix,matrix,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,matrix,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA,numeric,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,numeric,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,numeric,matrix}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,matrix,matrix}(model, sample, pt, ptNoise = 0)
 
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,matrix,numeric}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,numeric,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,numeric,matrix}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,matrix,matrix,matrix}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,numeric,numeric,matrix}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA,numeric,numeric,matrix}(model, sample, pt, ptNoise = 0)
 
 \S4method{EvaluateSampleAtPoint}{pPCA,matrix,numeric}(model, sample, pt)
 
@@ -152,14 +131,11 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{DrawMeanAtPoint}{pPCA_pointer,numeric}(model, pt)
 
-\S4method{DrawSample}{pPCA_pointer}(model, coefficients = NULL,
-  addNoise = FALSE)
+\S4method{DrawSample}{pPCA_pointer}(model, coefficients = NULL, addNoise = FALSE)
 
-\S4method{DrawSampleVector}{pPCA_pointer}(model, coefficients,
-  addNoise = FALSE)
+\S4method{DrawSampleVector}{pPCA_pointer}(model, coefficients, addNoise = FALSE)
 
-\S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model,
-  coefficients, pt, addNoise = FALSE)
+\S4method{DrawSampleAtPoint}{pPCA_pointer,numeric,numeric}(model, coefficients, pt, addNoise = FALSE)
 
 \S4method{ComputeCoefficients}{pPCA_pointer}(model, dataset)
 
@@ -167,47 +143,27 @@ GetPCScores(model, scaled = TRUE)
 
 \S4method{GetDomainSize}{pPCA_pointer}(model)
 
+\S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,matrix,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,numeric,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,matrix,matrix,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,matrix,numeric}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValues}{pPCA_pointer,numeric,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,numeric,numeric,numeric}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,numeric,matrix}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,matrix,matrix}(model, sample, pt, ptNoise = 0)
 
+\S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,numeric,numeric,matrix}(model, sample, pt, ptNoise = 0)
 
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,matrix,numeric}(model,
-  sample, pt, ptNoise = 0)
+\S4method{EvaluateSampleAtPoint}{pPCA_pointer,matrix,numeric}(model, sample, pt)
 
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,numeric,numeric,numeric}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,numeric,matrix}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,matrix,matrix,matrix}(model,
-  sample, pt, ptNoise = 0)
-
-
-  \S4method{ComputeCoefficientsForPointValuesWithCovariance}{pPCA_pointer,numeric,numeric,matrix}(model,
-  sample, pt, ptNoise = 0)
-
-\S4method{EvaluateSampleAtPoint}{pPCA_pointer,matrix,numeric}(model,
-  sample, pt)
-
-\S4method{EvaluateSampleAtPoint}{pPCA_pointer,mesh3d,numeric}(model,
-  sample, pt)
+\S4method{EvaluateSampleAtPoint}{pPCA_pointer,mesh3d,numeric}(model, sample, pt)
 }
 \arguments{
 \item{model}{object of class \code{\link{pPCA}}}

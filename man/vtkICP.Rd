@@ -4,10 +4,18 @@
 \alias{vtkICP}
 \title{Iteratively closest point registration}
 \usage{
-vtkICP(refmesh, tarmesh, iterations = 10, center = FALSE,
-  type = c("none", "scale", "affine"), sample = 200,
-  meandistmode = c("RMS", "absolute"), tol = 0.01,
-  matchCentroids = FALSE, getTransform = FALSE)
+vtkICP(
+  refmesh,
+  tarmesh,
+  iterations = 10,
+  center = FALSE,
+  type = c("none", "scale", "affine"),
+  sample = 200,
+  meandistmode = c("RMS", "absolute"),
+  tol = 0.01,
+  matchCentroids = FALSE,
+  getTransform = FALSE
+)
 }
 \arguments{
 \item{refmesh}{moving mesh}

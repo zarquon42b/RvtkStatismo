@@ -4,9 +4,16 @@
 \alias{vtkTriangulate}
 \title{create Isosurface from image}
 \usage{
-vtkTriangulate(file, value = 1, IJK2RAS = diag(c(-1, -1, 1, 1)),
-  thresholding = FALSE, lower = 1, upper = 5000, kernel = c(0, 0,
-  0), dicom = FALSE)
+vtkTriangulate(
+  file,
+  value = 1,
+  IJK2RAS = diag(c(-1, -1, 1, 1)),
+  thresholding = FALSE,
+  lower = 1,
+  upper = 5000,
+  kernel = c(0, 0, 0),
+  dicom = FALSE
+)
 }
 \arguments{
 \item{file}{3D-image file mha/nii.gz - depending of your system's VTK version}

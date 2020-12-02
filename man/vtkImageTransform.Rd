@@ -4,9 +4,15 @@
 \alias{vtkImageTransform}
 \title{Transform an image based on landmark configuration}
 \usage{
-vtkImageTransform(image, sourceLM, targetLM, outname = "default.mha",
-  type = c("none", "scale", "affine"), RAS2IJK = diag(c(-1, -1, 1)),
-  interpolation = 2)
+vtkImageTransform(
+  image,
+  sourceLM,
+  targetLM,
+  outname = "default.mha",
+  type = c("none", "scale", "affine"),
+  RAS2IJK = diag(c(-1, -1, 1)),
+  interpolation = 2
+)
 }
 \arguments{
 \item{image}{path to 3D-image (tiff, mhd)}

@@ -7,17 +7,13 @@
 \alias{getCoefficients}
 \title{calculate probability/coefficients for a matrix/mesh given a statistical model}
 \usage{
-getDataLikelihood(x, model, align = FALSE, lmDataset = NULL,
-  lmModel = NULL)
+getDataLikelihood(x, model, align = FALSE, lmDataset = NULL, lmModel = NULL)
 
-\method{getDataLikelihood}{matrix}(x, model, align = FALSE,
-  lmDataset = NULL, lmModel = NULL)
+\method{getDataLikelihood}{matrix}(x, model, align = FALSE, lmDataset = NULL, lmModel = NULL)
 
-\method{getDataLikelihood}{mesh3d}(x, model, align = FALSE,
-  lmDataset = NULL, lmModel = NULL)
+\method{getDataLikelihood}{mesh3d}(x, model, align = FALSE, lmDataset = NULL, lmModel = NULL)
 
-getCoefficients(x, model, align = TRUE, lmDataset = NULL,
-  lmModel = NULL)
+getCoefficients(x, model, align = TRUE, lmDataset = NULL, lmModel = NULL)
 }
 \arguments{
 \item{x}{matrix or mesh3d}

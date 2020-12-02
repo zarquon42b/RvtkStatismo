@@ -23,6 +23,7 @@ removePointsFromModel <- function(model,pointind) {
         pointer <- TRUE
         model <- pointer2pPCA(model)
     }
+    
     model@PCA$x <- matrix(0,0,0)
     rminds <- (pointind-1)*3
     rminds <- c(rminds+1,rminds+2,rminds+3)

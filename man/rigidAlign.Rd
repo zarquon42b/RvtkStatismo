@@ -4,8 +4,14 @@
 \alias{rigidAlign}
 \title{Fast Procrustes align of coordinates}
 \usage{
-rigidAlign(array, scale = FALSE, use.lm = NULL, deselect = FALSE,
-  reference = NULL, reflection = FALSE)
+rigidAlign(
+  array,
+  scale = FALSE,
+  use.lm = NULL,
+  deselect = FALSE,
+  reference = NULL,
+  reflection = FALSE
+)
 }
 \arguments{
 \item{array}{array of coordinates}

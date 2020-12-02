@@ -11,26 +11,68 @@
 \alias{statismoConstrainModel,pPCA_pointer,numeric,numeric-method}
 \title{constrain a model of class pPCA}
 \usage{
-statismoConstrainModel(model, sample, pt, ptValueNoise,
-  computeScores = TRUE, pointer = FALSE)
+statismoConstrainModel(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = FALSE
+)
 
-\S4method{statismoConstrainModel}{pPCA,matrix,matrix}(model, sample, pt,
-  ptValueNoise, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModel}{pPCA,matrix,matrix}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = FALSE
+)
 
-\S4method{statismoConstrainModel}{pPCA,matrix,numeric}(model, sample, pt,
-  ptValueNoise, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModel}{pPCA,matrix,numeric}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = FALSE
+)
 
-\S4method{statismoConstrainModel}{pPCA,numeric,numeric}(model, sample, pt,
-  ptValueNoise, computeScores = TRUE, pointer = FALSE)
+\S4method{statismoConstrainModel}{pPCA,numeric,numeric}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = FALSE
+)
 
-\S4method{statismoConstrainModel}{pPCA_pointer,matrix,matrix}(model,
-  sample, pt, ptValueNoise, computeScores = TRUE, pointer = TRUE)
+\S4method{statismoConstrainModel}{pPCA_pointer,matrix,matrix}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = TRUE
+)
 
-\S4method{statismoConstrainModel}{pPCA_pointer,matrix,numeric}(model,
-  sample, pt, ptValueNoise, computeScores = TRUE, pointer = TRUE)
+\S4method{statismoConstrainModel}{pPCA_pointer,matrix,numeric}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = TRUE
+)
 
-\S4method{statismoConstrainModel}{pPCA_pointer,numeric,numeric}(model,
-  sample, pt, ptValueNoise, computeScores = TRUE, pointer = TRUE)
+\S4method{statismoConstrainModel}{pPCA_pointer,numeric,numeric}(
+  model,
+  sample,
+  pt,
+  ptValueNoise,
+  computeScores = TRUE,
+  pointer = TRUE
+)
 }
 \arguments{
 \item{model}{object of class pPCA}

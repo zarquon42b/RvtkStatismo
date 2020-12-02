@@ -20,11 +20,6 @@
 #'
 #' @seealso \code{\link{StatismoModelMembers}}
 #' @name PredictSample
-#' @rdname PredictSample
-#' @export
-
-
-#' @rdname PredictSample
 #' @export
 setGeneric("PredictSample",function(model,dataset,representer=TRUE,...) {
     standardGeneric("PredictSample")

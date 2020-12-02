@@ -4,8 +4,15 @@
 \alias{meshalign}
 \title{align meshes stored in a list by their vertices}
 \usage{
-meshalign(meshlist, scale = FALSE, use.lm = NULL, deselect = FALSE,
-  array = FALSE, reference = NULL, reflection = FALSE)
+meshalign(
+  meshlist,
+  scale = FALSE,
+  use.lm = NULL,
+  deselect = FALSE,
+  array = FALSE,
+  reference = NULL,
+  reflection = FALSE
+)
 }
 \arguments{
 \item{meshlist}{list containing triangular meshes of class "mesh3d"}

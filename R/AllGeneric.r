@@ -177,8 +177,8 @@ setGeneric("GetProjectionMatrix", function(model) {
 #' @details see \url{http://statismo.github.io/docs/api/v0.10/html/classstatismo_1_1StatisticalModel.html} for details.
 #' @docType methods
 #' @name StatismoParameters
-#' @rdname statismoParameters
 NULL
+
 
 #' @rdname statismoParameters
 #' @export

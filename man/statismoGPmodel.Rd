@@ -4,8 +4,13 @@
 \alias{statismoGPmodel}
 \title{expands a models variability by adding a Gaussian kernel function}
 \usage{
-statismoGPmodel(model, kernel = GaussianKernel(50, 10), ncomp = 10,
-  nystroem = 500, pointer = FALSE)
+statismoGPmodel(
+  model,
+  kernel = GaussianKernel(50, 10),
+  ncomp = 10,
+  nystroem = 500,
+  pointer = FALSE
+)
 }
 \arguments{
 \item{model}{shape model of class \code{\link{pPCA}}}
