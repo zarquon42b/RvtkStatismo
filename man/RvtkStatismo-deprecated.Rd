@@ -5,6 +5,8 @@
 \alias{ComputeCoefficientsForDataset}
 \alias{ComputeLogProbabilityOfDataset}
 \alias{ComputeMahalanobisDistanceForDataset}
+\alias{read.fcsv}
+\alias{write.fcsv}
 \title{deprecated functions of Morpho}
 \usage{
 ComputeCoefficientsForDataset(...)
@@ -12,6 +14,10 @@ ComputeCoefficientsForDataset(...)
 ComputeLogProbabilityOfDataset(...)
 
 ComputeMahalanobisDistanceForDataset(...)
+
+read.fcsv(...)
+
+write.fcsv(...)
 }
 \description{
 document deprecated functions
