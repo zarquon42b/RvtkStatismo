@@ -58,13 +58,13 @@ ComputeMahalanobisDistanceForDataset <- function(...) {
 #' @rdname RvtkStatismo-deprecated
 #' @export
 read.fcsv <- function(...) {
-    .Deprecated("read.fcsv",package="RvtkStatismo")
+    .Deprecated("Morpho::read.fcsv",package="RvtkStatismo")
     Morpho::read.fcsv(...)
 }
 
 #' @rdname RvtkStatismo-deprecated
 #' @export
 write.fcsv <- function(...) {
-    .Deprecated("write.fcsv",package="RvtkStatismo")
+    .Deprecated("Morpho::write.fcsv",package="RvtkStatismo")
     Morpho::write.fcsv(...)
 }
