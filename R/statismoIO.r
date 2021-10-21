@@ -33,8 +33,13 @@ statismoLoadModel <- function(modelname,pointer=FALSE,scale=FALSE) {
     
     out <- (.Call("LoadModel",modelname,pointer))
     if (!pointer) {
-        if (!pairNameCheck(out@modelinfo@paraminfo,"scale"))
+        pc <- pairNameCheck(out@modelinfo@paraminfo,"scale")
+        if (!pc)
             SetScale(out) <- scale
+        else if (out@modelinfo@paraminfo[[pc]][2]=="true")
+            SetScale(out) <- TRUE
+        else
+            SetScale(out) <- FALSE
     }
     return(out)
 }
