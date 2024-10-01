@@ -46,10 +46,10 @@ extern SEXP ReducedModel(SEXP, SEXP, SEXP, SEXP);
 extern SEXP SaveModel(SEXP, SEXP);
 extern SEXP SetScale(SEXP, SEXP);
 extern SEXP vtkBooleanOpCpp(SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP vtkDicom2Nifti(SEXP, SEXP);
+extern SEXP vtkDicom2NiftiCpp(SEXP, SEXP);
 extern SEXP vtkExtractOutsideMeshCpp(SEXP, SEXP);
 extern SEXP vtkFillHole(SEXP, SEXP);
-extern SEXP vtkGeodesicPath(SEXP, SEXP, SEXP);
+extern SEXP vtkGeodesicPathCpp(SEXP, SEXP, SEXP);
 extern SEXP vtkICPCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP vtkImageBlender(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP vtkImageReSize(SEXP, SEXP, SEXP, SEXP);
@@ -101,10 +101,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"SaveModel",                                          (DL_FUNC) &SaveModel,                                          2},
     {"SetScale",                                           (DL_FUNC) &SetScale,                                           2},
     {"vtkBooleanOpCpp",                                    (DL_FUNC) &vtkBooleanOpCpp,                                    5},
-    {"vtkDicom2Nifti",                                     (DL_FUNC) &vtkDicom2Nifti,                                     2},
+    {"vtkDicom2NiftiCpp",                                  (DL_FUNC) &vtkDicom2NiftiCpp,                                  2},
     {"vtkExtractOutsideMeshCpp",                           (DL_FUNC) &vtkExtractOutsideMeshCpp,                           2},
     {"vtkFillHole",                                        (DL_FUNC) &vtkFillHole,                                        2},
-    {"vtkGeodesicPath",                                    (DL_FUNC) &vtkGeodesicPath,                                    3},
+    {"vtkGeodesicPathCpp",                                 (DL_FUNC) &vtkGeodesicPathCpp,                                 3},
     {"vtkICPCpp",                                          (DL_FUNC) &vtkICPCpp,                                          9},
     {"vtkImageBlender",                                    (DL_FUNC) &vtkImageBlender,                                    5},
     {"vtkImageReSize",                                     (DL_FUNC) &vtkImageReSize,                                     4},

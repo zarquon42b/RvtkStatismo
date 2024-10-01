@@ -27,7 +27,7 @@ vtkGeodesicPath <- function(x,start, end) {
 
     start <- start-1
     end <- end-1
-    out <- .Call("vtkGeodesicPath",x,end,start)
+    out <- .Call("vtkGeodesicPathCpp",x,end,start)
     out$index <- out$index+1
     return(out)
 }
@@ -58,7 +58,7 @@ vtkGeodesicPath <- function(x,start, end) {
 vtkGeodesicPathForPointPair <- function(x,start, end) {
     mat <- rbind(start,end)
     inds <- vcgKDtree(x,mat,k=1)$index-1
-    out <- .Call("vtkGeodesicPath",x,inds[2],inds[1])
+    out <- .Call("vtkGeodesicPathCpp",x,inds[2],inds[1])
     out$index <- out$index+1
     return(out)
 }

@@ -17,7 +17,8 @@ List polyData2R(vtkSmartPointer<vtkPolyData> polydata) {
     }
     //points->Delete();
     int h;
-    vtkIdType npts=3,*pts; 
+    vtkIdType npts=3;
+    const vtkIdType *pts;
     int nit = polydata->GetNumberOfPolys();
     std::vector<int> it;
     vtkSmartPointer<vtkCellArray> oCellArr= vtkSmartPointer<vtkCellArray>::New();

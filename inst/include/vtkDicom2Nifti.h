@@ -15,4 +15,4 @@
 #include "RcppEigen.h"
 using namespace Rcpp;
 
-RcppExport SEXP vtkDicom2Nifti(SEXP inputFilename_, SEXP outputFilename);
+RcppExport SEXP vtkDicom2NiftiCpp(SEXP inputFilename_, SEXP outputFilename);

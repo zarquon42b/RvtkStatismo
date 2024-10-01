@@ -24,7 +24,7 @@
 #include "vtkImageIO.h"
 #include <vtkDijkstraGraphGeodesicPath.h>
 
-RcppExport SEXP vtkGeodesicPath(SEXP mesh_, SEXP start_, SEXP end_){
+RcppExport SEXP vtkGeodesicPathCpp(SEXP mesh_, SEXP start_, SEXP end_){
 try {
   
   List mesh(mesh_);

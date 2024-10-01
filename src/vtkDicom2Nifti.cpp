@@ -1,6 +1,6 @@
 #include "vtkDicom2Nifti.h"
 
-RcppExport SEXP vtkDicom2Nifti(SEXP inputFilename_, SEXP outputFilename_) {
+RcppExport SEXP vtkDicom2NiftiCpp(SEXP inputFilename_, SEXP outputFilename_) {
    try {
      std::string inputFilename = as<std::string>(inputFilename_);
      std::string outputFilename = as<std::string>(outputFilename_);
