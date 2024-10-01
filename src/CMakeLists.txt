@@ -29,7 +29,7 @@ endif()
  set(CMAKE_C_FLAGS "${CPPFLAGS} ${CFLAGS}")
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 #set(CXX "/usr/bin/c++")
-project(RvtkStatismo CXX)
+project(RvtkStatismo CXX C)
 # message("${CXX11STD}")
 ## look for statismo and ask statismos cmake file about hdf5 whereabouts
 FIND_PACKAGE(statismo REQUIRED)
@@ -45,36 +45,37 @@ if(VTK_MAJOR_VERSION GREATER 5)
   
  
     set( required_vtk_modules
-      vtkCommonComputationalGeometry
-      vtkCommonCore
-      vtkCommonDataModel
-      vtkCommonExecutionModel
-      vtkCommonMath
-      vtkCommonMisc
-      vtkCommonSystem
-      vtkCommonTransforms
-      vtkFiltersCore
-      vtkFiltersGeneral
-      vtkIOCore
-      vtkIOGeometry
-      vtkIOLegacy
-      vtkIOXML
-      vtkIOXMLParser
-      vtkImagingHybrid
-      vtkImagingStencil
-      vtkFiltersModeling
-      vtkFiltersHybrid
-      vtkIOImport
-      vtkRenderingCore
-      vtkImagingMorphological
-      vtkIOPLY
+      CommonComputationalGeometry
+      CommonCore
+      CommonDataModel
+      CommonExecutionModel
+      CommonMath
+      CommonMisc
+      CommonSystem
+      CommonTransforms
+      FiltersCore
+      FiltersGeneral
+      IOCore
+      IOGeometry
+      IOLegacy
+      IOXML
+      IOXMLParser
+      ImagingHybrid
+      ImagingStencil
+      FiltersModeling
+      FiltersHybrid
+      IOImport
+      RenderingCore
+      ImagingMorphological
+      IOPLY
      # vtkRenderingOpenGL
       )
-    if(VTK_RENDERING_BACKEND) #in vtk 7, the rendering backend is exported as a var.
-       LIST(APPEND required_vtk_modules vtkRendering${VTK_RENDERING_BACKEND})
-    else(VTK_RENDERING_BACKEND)
-      LIST(APPEND required_vtk_modules vtkRenderingOpenGL)
-    endif(VTK_RENDERING_BACKEND)
+    #if(VTK_RENDERING_BACKEND) #in vtk 7, the rendering backend is exported as a var.
+    #  LIST(APPEND required_vtk_modules ${VTK_RENDERING_BACKEND})
+   #   MESSAGE(${VTK_RENDERING_BACKEND})
+  ##  else(VTK_RENDERING_BACKEND)
+   #   LIST(APPEND required_vtk_modules)
+   # endif(VTK_RENDERING_BACKEND)
   find_package( VTK REQUIRED COMPONENTS ${required_vtk_modules} )
 endif(VTK_MAJOR_VERSION GREATER 5)
 
@@ -93,6 +94,7 @@ if (LINK_STATIC_LIBSTDC)
 else()
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${SHLIB_OPENMP_CXXFLAGS}")
 endif(LINK_STATIC_LIBSTDC)
+## message(${VTK_LIBRARY_DIR})
 
 ## message("${VTK_DIR}")
 target_compile_options(RvtkStatismo PRIVATE "-w")
