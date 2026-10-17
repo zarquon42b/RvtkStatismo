@@ -1,13 +1,11 @@
 
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
 #set(VTK_DIR ".")
 if( POLICY CMP0042 )
   cmake_policy( SET CMP0042 NEW )
 endif()
-if( POLICY CMP0054 )
-  cmake_policy( SET CMP0054 OLD )
-endif()
+
 ## GET R-specific ENV variables
  set(R_HOME $ENV{R_HOME})
  SET(RLIB "${R_HOME}/lib")
@@ -80,7 +78,13 @@ if(VTK_MAJOR_VERSION GREATER 5)
 endif(VTK_MAJOR_VERSION GREATER 5)
 
 ## message(${HDF5_INCLUDE_DIRS})
-set( REQUIRED_BOOST_COMPONENTS thread system date_time filesystem program_options)
+## check boost version and include boost::system for older versions
+find_package(Boost)
+set( REQUIRED_BOOST_COMPONENTS thread date_time filesystem program_options)
+if (Boost_VERSION_STRING VERSION_LESS "1.89")
+set( REQUIRED_BOOST_COMPONENTS thread date_time filesystem program_options system)
+endif()
+
 find_package( Boost 1.50 COMPONENTS ${REQUIRED_BOOST_COMPONENTS} REQUIRED )
 LINK_DIRECTORIES(${RLIB} ${STATISMO_HDF5_LIBRARY_DIR} ${VTK_DIR} ${VTK_LIBRARY_DIR} ${Boost_LIBRARY_DIRS})
 include_directories(BEFORE ${R_INCLUDE_DIR} ${RCPP_DIR} ${RCPPEIGEN_DIR} ${STATISMO_HDF5_INCLUDE_DIRS} ${statismo_INCLUDE_DIRS} ${VTK_INCLUDE_DIR} ${HDF5_INCLUDE_DIRS} "../inst/include/")
